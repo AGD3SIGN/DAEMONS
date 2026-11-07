@@ -4,6 +4,30 @@ Newest entries at the top. Each entry: what's done, decisions, what's next.
 
 ---
 
+## 2026-11-07 — Phase 1b: DaemonInstance + stat math ✅
+
+**Done**
+- `data/config_profiles.json`: 25 Config Profiles (5 neutral), validated (every up/down pair once, no Uptime). Includes Aggressive, Defensive and Power-Saver from the design doc.
+- `scripts/daemon/growth_rate.gd` (GrowthRate): the 6 EXP curves + level_for_exp.
+- `scripts/daemon/daemon_instance.gd` (DaemonInstance): species, nickname, level, total_exp, current_uptime, status, 4 move slots with PP, build_quality, experience_logs, config_profile, original_trainer_id.
+  - `create(species, level, rng)`: seeded random Build Quality + profile, last 4 learnable moves, full Uptime.
+  - Stat formulas from docs/design.md (integer math, floored).
+  - `gain_exp()` / `level_up()` return events: level_up (with stat gains), move_learned, move_learn_pending (4 moves already; UI asks which to forget, then `learn_move(id, slot)`).
+  - `add_experience_logs()` with 252/510 caps. `heal_full()`.
+  - `check_evolution("level" | "item", item_id | "sync")` + `evolve()` (damage taken carries over).
+  - `to_dict()` / `from_dict()`, safe after a JSON round trip; returns null for unknown species.
+- Tests: `tests/test_daemon_instance.gd` (21). 50/50 passing overall.
+
+**Decisions**
+- Field is `total_exp` (not `exp`) because `exp()` is a built-in GDScript function.
+- Uptime goes up by the level-up gain (fainted Daemons stay at 0).
+- Moves learned while 4 slots are full are not auto-replaced; the event lets the UI ask.
+- Evolution is only checked/applied; deciding *when* (after battle, on item use, on Sync) is the caller's job.
+
+**Next:** Phase 2a — headless battle sim: BattleState, actions, turn order, BattleEvents, seeded RNG.
+
+---
+
 ## 2026-11-07 — Phase 1a: Data layer ✅
 
 **Done**

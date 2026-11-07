@@ -9,6 +9,7 @@ const FILES := {
 	"moves": "moves.json",
 	"species": "species.json",
 	"items": "items.json",
+	"config_profiles": "config_profiles.json",
 }
 
 var types: Dictionary = {}       # id -> {id, name, color}
@@ -16,6 +17,7 @@ var type_chart: Dictionary = {}  # attacker id -> {defender id -> multiplier}; m
 var moves: Dictionary = {}
 var species: Dictionary = {}
 var items: Dictionary = {}
+var config_profiles: Dictionary = {}  # id -> {id, name, up, down}; up/down null = neutral
 
 ## Problems from the last load. Empty means the data is clean.
 var errors: PackedStringArray = []
@@ -61,6 +63,7 @@ func load_from(raw: Dictionary, report: bool = true) -> bool:
 	moves = validator.moves
 	species = validator.species
 	items = validator.items
+	config_profiles = validator.config_profiles
 	if report:
 		_report()
 	return errors.is_empty()
@@ -89,7 +92,7 @@ func type_multiplier(attack_type: String, defender_types: Array) -> float:
 
 func _report() -> void:
 	if errors.is_empty():
-		print("DataRegistry: %d types, %d moves, %d species, %d items loaded" % [types.size(), moves.size(), species.size(), items.size()])
+		print("DataRegistry: %d types, %d moves, %d species, %d items, %d config profiles loaded" % [types.size(), moves.size(), species.size(), items.size(), config_profiles.size()])
 		return
 	for e in errors:
 		push_error("DataRegistry: " + e)

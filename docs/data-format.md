@@ -57,3 +57,14 @@ Move effects:
 | effect | `heal_uptime {amount}`, `full_restore`, `revive {fraction}`, `repel {steps}`, `escape`, `capture {bonus}`, `level_up`, `evolve` |
 
 Starter design rule so far: each starter line has base stat totals of 310 / 405 / 530.
+
+## config_profiles.json
+25 profiles. Each raises one stat by 10% and lowers another by 10% (`up`, `down`), or is neutral
+(`up` and `down` both `null`; there are 5 neutral ones). Uptime is never affected.
+Each non-neutral up/down pair appears exactly once.
+
+## How stats are calculated (scripts/daemon/daemon_instance.gd)
+- Uptime = floor((2×Base + BuildQuality + floor(Logs/4)) × Level / 100) + Level + 10
+- Others = floor((floor((2×Base + BuildQuality + floor(Logs/4)) × Level / 100) + 5) × profile), profile = 1.1 / 1.0 / 0.9
+- Build Quality: 0–31 per stat (random when created). Experience Logs: 0–252 per stat, 510 total.
+- EXP curves: `scripts/daemon/growth_rate.gd`. Total EXP to reach level 100: fast 800,000 · medium_fast 1,000,000 · medium_slow 1,059,860 · slow 1,250,000 · erratic 600,000 · fluctuating 1,640,000.

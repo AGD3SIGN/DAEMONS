@@ -46,12 +46,15 @@ var type_chart: Dictionary = {}  # attacker id -> {defender id -> multiplier}
 var moves: Dictionary = {}
 var species: Dictionary = {}
 var items: Dictionary = {}
+var config_profiles: Dictionary = {}
 
 
-## raw = {"types": <types.json>, "moves": <moves.json>, "species": <species.json>, "items": <items.json>}
+## raw = {"types": ..., "moves": ..., "species": ..., "items": ..., "config_profiles": ...}
+## (each value is the parsed JSON of that file)
 func validate(raw: Dictionary) -> PackedStringArray:
 	errors = PackedStringArray()
 	_validate_types(raw.get("types"))
+	_validate_profiles(raw.get("config_profiles"))
 	moves = _index(raw.get("moves"), "moves")
 	items = _index(raw.get("items"), "items")
 	species = _index(raw.get("species"), "species")
@@ -99,6 +102,33 @@ func _validate_types(raw: Variant) -> void:
 				_err("types › chart › %s › %s" % [atk, def], "multiplier must be 0, 0.5 or 2 (blank = 1)")
 			else:
 				type_chart[atk][def] = float(row[def])
+
+
+# --- config profiles ---------------------------------------------------------
+
+## 25 profiles: each non-Uptime stat pair (up, down) once, plus 5 neutral ones (up/down null).
+func _validate_profiles(raw: Variant) -> void:
+	config_profiles = _index(raw, "config_profiles")
+	var battle_stats := Array(STATS).slice(1)  # everything except uptime
+	var seen_pairs := {}
+	for id: String in config_profiles:
+		var p: Dictionary = config_profiles[id]
+		var where := "config_profiles › " + id
+		_string(p, "name", where)
+		var up: Variant = p.get("up")
+		var down: Variant = p.get("down")
+		if up == null and down == null:
+			continue
+		if not up in battle_stats or not down in battle_stats:
+			_err(where, "'up' and 'down' must both be null (neutral) or one of: %s" % ", ".join(PackedStringArray(battle_stats)))
+		elif up == down:
+			_err(where, "'up' and 'down' are the same stat; use null for a neutral profile")
+		elif seen_pairs.has([up, down]):
+			_err(where, "same up/down pair as '%s'" % seen_pairs[[up, down]])
+		else:
+			seen_pairs[[up, down]] = id
+	if typeof(raw) == TYPE_ARRAY and config_profiles.size() != 25:
+		_err("config_profiles", "expected 25 profiles, found %d" % config_profiles.size())
 
 
 # --- moves -------------------------------------------------------------------
