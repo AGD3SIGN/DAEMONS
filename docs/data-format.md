@@ -12,6 +12,8 @@ Ids are `lower_snake_case` and unique within a file. Lists, not objects, so dupl
   "chart": { "hardware": { "software": 2, "network": 0.5 } } }
 ```
 `chart[attacker][defender]` is 0, 0.5 or 2. Anything missing = 1.
+Optional `"status_immunities": ["overheated"]` on a type: Daemons of that type can't get those statuses.
+Current: Hardware can't Overheat, Power can't be Throttled, Malware can't be Corrupted.
 Dual types multiply: `DataRegistry.type_multiplier("network", ["hardware", "power"])`.
 
 ## moves.json

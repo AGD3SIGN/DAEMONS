@@ -83,7 +83,7 @@ func test_throttled_halves_bandwidth() -> void:
 	var state := _battle([pingo], [bunny])
 	assert_eq(BattleSim.effective_bandwidth(state, BattleState.FOE), 18.0)
 	var events := BattleSim.run_turn(state, BattleAction.fight(_slot(pingo, "ping")), BattleAction.fight(0))
-	assert_eq(_move_order(events), [BattleState.PLAYER, BattleState.FOE])
+	assert_eq(_move_order(events)[0], BattleState.PLAYER, "Throttled may also skip the foe's turn")
 
 
 func test_bandwidth_stages_count() -> void:
@@ -117,7 +117,7 @@ func test_switch_happens_before_moves() -> void:
 	var pingo := _daemon("pingo", 20)
 	var state := _battle([pingo], [_daemon("dustbunny", 20), _daemon("wormby", 20)])
 	var events := BattleSim.run_turn(state, BattleAction.fight(_slot(pingo, "fast_ethernet")), BattleAction.switch_to(1))
-	assert_eq(_types(events), ["turn_start", "switch_out", "switch_in", "move_used", "turn_end"])
+	assert_eq(_types(events), ["turn_start", "switch_out", "switch_in", "move_used", "damage", "turn_end"])
 	assert_eq(events[3]["target"], "Wormby", "the move hits whoever is in now")
 
 
@@ -166,7 +166,7 @@ func test_coffee_heals_and_is_used_up() -> void:
 	var events := BattleSim.run_turn(state, BattleAction.item("coffee", 0), BattleAction.fight(0))
 	var heal: Dictionary = events.filter(func(e: Dictionary) -> bool: return e["type"] == "heal")[0]
 	assert_eq(heal["amount"], 12, "capped at what's missing")
-	assert_eq(pingo.current_uptime, pingo.max_uptime())
+	assert_eq(heal["uptime"], pingo.max_uptime(), "full before the foe's attack lands")
 	assert_false(state.sides[0].items.has("coffee"))
 
 
@@ -178,7 +178,7 @@ func test_pizza_friday_clears_status() -> void:
 	var events := BattleSim.run_turn(state, BattleAction.item("pizza_friday", 0), BattleAction.fight(0))
 	assert_true("status_cured" in _types(events))
 	assert_eq(pingo.status, "")
-	assert_eq(pingo.current_uptime, pingo.max_uptime())
+	assert_eq(events.filter(func(e: Dictionary) -> bool: return e["type"] == "heal")[0]["uptime"], pingo.max_uptime())
 	assert_eq(state.sides[0].items["pizza_friday"], 2)
 
 

@@ -22,6 +22,7 @@ var level: int = 1
 var total_exp: int = 0                    # total exp earned, not exp into the current level
 var current_uptime: int = 0
 var status: String = ""                   # "" = healthy, else a status id (e.g. "corrupted")
+var status_turns: int = 0                 # Standby: turns left before it wakes
 var moves: Array[Dictionary] = []         # up to 4 of {"id": "ping", "pp": 35}
 var build_quality: Dictionary = {}        # stat -> 0..31, hidden per-Daemon variance
 var experience_logs: Dictionary = {}      # stat -> 0..252, total <= 510
@@ -109,6 +110,7 @@ func is_fainted() -> bool:
 func heal_full() -> void:
 	current_uptime = max_uptime()
 	status = ""
+	status_turns = 0
 	for slot in moves:
 		slot["pp"] = _max_pp(slot["id"])
 
@@ -263,6 +265,7 @@ func to_dict() -> Dictionary:
 		"exp": total_exp,
 		"uptime": current_uptime,
 		"status": status,
+		"status_turns": status_turns,
 		"moves": moves.duplicate(true),
 		"build_quality": build_quality.duplicate(),
 		"experience_logs": experience_logs.duplicate(),
@@ -283,6 +286,7 @@ static func from_dict(d: Dictionary) -> DaemonInstance:
 	out.level = clampi(int(d.get("level", 1)), 1, MAX_LEVEL)
 	out.total_exp = maxi(int(d.get("exp", 0)), GrowthRate.exp_for_level(out.growth_rate(), out.level))
 	out.status = String(d.get("status", ""))
+	out.status_turns = maxi(0, int(d.get("status_turns", 0)))
 	var saved_bq: Dictionary = d.get("build_quality", {})
 	var saved_logs: Dictionary = d.get("experience_logs", {})
 	for stat in STATS:

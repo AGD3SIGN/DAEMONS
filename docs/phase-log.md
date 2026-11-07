@@ -4,6 +4,33 @@ Newest entries at the top. Each entry: what's done, decisions, what's next.
 
 ---
 
+## 2026-11-07 — Phase 2b: Damage, statuses, effects, EXP ✅
+
+**Done** (`scripts/battle/sim/battle_sim.gd`; full event list at the top of the file)
+- Damage: floor(floor(floor(2L/5+2) × Power × Atk/Def) / 50) + 2, then crit ×1.5 (1/16), roll 85–100%, STAB ×1.5, type chart. Min 1 unless immune. `calc_damage()` takes crit + roll as arguments so tests can check exact numbers.
+- Physical = Throughput vs Hardening; special = Compute vs Encryption. Crits ignore the attacker's drops and the defender's boosts. Overheated halves physical damage.
+- Accuracy with accuracy/evasion stages (3-based multipliers). Accuracy 0 never misses.
+- Statuses: Throttled (half Bandwidth, 25% skip), Corrupted (1/8 per turn), Overheated (1/16 per turn, half physical), Standby (1–3 turns, no PP used), Hung (20%/turn recovery), Looping (2–5 turns, 1/3 self-hit at 40 power). One major status at a time; Looping stacks on top.
+- Status immunities by type (data): Hardware/Overheated, Power/Throttled, Malware/Corrupted.
+- Move effects are a registry of small handlers keyed by effect id: status_chance, stat_change, drain, recoil, heal, multi_hit (2–5 hits weighted 3/3/1/1 out of 8).
+- Crashing: `fainted` → EXP to the player → `switch_needed` or `battle_end`. `BattleSim.forced_switch()` sends in a replacement; turns are refused until it's done.
+- EXP = floor(base_exp × foe level / 7), ×1.5 vs trainers, split between participants still standing. Each participant gets the foe's full Experience Logs. Level-ups (and learned moves) happen mid-battle.
+- `upgrade_ready` events come after `battle_end` for anyone who levelled up into an upgrade. The caller calls `evolve()`.
+- `DaemonInstance.status_turns` added (saved) for Standby.
+- Tests: `tests/test_battle_damage.gd` (25). 97/97 passing overall.
+
+**Decisions**
+- Status immunities are my pick (mirroring the classic type/status pairs). Easy to change in types.json.
+- Crashed Daemons lose their status.
+- Exp formula is the simple Gen-3 one (no level scaling).
+
+**Not yet**
+- No "Struggle" when every move is out of PP: a trainer battle could soft-lock. Add in 2c.
+
+**Next:** Phase 2c — run chance, Quarantine capture, trainer AI tiers, console text battle.
+
+---
+
 ## 2026-11-07 — Phase 2a: Battle sim structure ✅
 
 **Done** (all in `scripts/battle/sim/`, no nodes/UI/audio)

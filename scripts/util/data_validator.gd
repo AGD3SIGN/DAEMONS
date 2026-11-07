@@ -82,6 +82,13 @@ func _validate_types(raw: Variant) -> void:
 		var color: Variant = types[id].get("color")
 		if typeof(color) != TYPE_STRING or not Color.html_is_valid(color):
 			_err(where, "'color' must be a hex color like \"#e0703c\"")
+		var immunities: Variant = types[id].get("status_immunities", [])
+		if typeof(immunities) != TYPE_ARRAY:
+			_err(where, "'status_immunities' must be a list of status ids")
+		else:
+			for status: Variant in immunities:
+				if not status in STATUSES:
+					_err(where, "unknown status '%s' in status_immunities" % str(status))
 	var chart: Variant = raw.get("chart")
 	if typeof(chart) != TYPE_DICTIONARY:
 		_err("types", "'chart' must be an object")
