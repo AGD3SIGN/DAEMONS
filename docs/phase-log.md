@@ -4,6 +4,14 @@ Newest entries at the top. Each entry: what's done, decisions, what's next.
 
 ---
 
+## 2026-11-07 — Phase 0 fix: black borders at odd window sizes ✅
+
+**Problem:** Godot's built-in integer stretch expands the view to the window's shape, then rounds the scale down, so most window sizes showed thick black borders.
+**Fix:** `autoload/screen_fitter.gd` (ScreenFitter) picks scale = floor(min(window / 320x180)), then sets the view to window / scale. Borders are now under one scaled pixel, and extra space shows more world. Min window size 320x180. Tests: `tests/test_screen_fitter.gd` (10/10 passing overall).
+**Note:** at 1x in a large window you see a lot of extra space around a small title; that's expected and only happens when the window is under 640 wide or 360 tall.
+
+---
+
 ## 2026-11-07 — Phase 0: Project setup ✅
 
 **Done**
