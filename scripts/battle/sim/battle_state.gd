@@ -1,0 +1,31 @@
+class_name BattleState
+extends RefCounted
+## Everything about one battle in progress. BattleSim reads and changes it.
+## All randomness comes from `rng`, so a battle with the same seed and the same actions
+## always plays out the same way.
+
+const PLAYER := 0
+const FOE := 1
+
+var sides: Array[BattleSide] = []
+var rng: RandomNumberGenerator
+var is_wild: bool = true
+var turn: int = 0
+var field: Dictionary = {}          # field-wide effects (none yet)
+var escape_attempts: int = 0        # used by the run formula (Phase 2c)
+var outcome: String = ""            # "" while ongoing, then "player_won", "player_lost" or "fled"
+var end_reported: bool = false
+
+
+func _init(player: BattleSide, foe: BattleSide, p_rng: RandomNumberGenerator, p_is_wild: bool = true) -> void:
+	sides = [player, foe]
+	rng = p_rng
+	is_wild = p_is_wild
+
+
+func is_over() -> bool:
+	return outcome != ""
+
+
+static func opponent(side: int) -> int:
+	return 1 - side

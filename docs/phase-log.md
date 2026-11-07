@@ -4,6 +4,33 @@ Newest entries at the top. Each entry: what's done, decisions, what's next.
 
 ---
 
+## 2026-11-07 — Phase 2a: Battle sim structure ✅
+
+**Done** (all in `scripts/battle/sim/`, no nodes/UI/audio)
+- `BattleAction`: fight(slot), switch_to(index), item(item_id, target_index), run().
+- `BattleSide`: stack, active Daemon, items (copied back to the bag by the caller), stat stages and volatile effects (reset on switch).
+- `BattleState`: two sides, seeded RNG, turn counter, field, wild/trainer, outcome.
+- `BattleSim`: `start()`, `run_turn()`, `validate_action()`, `turn_order()`, `effective_bandwidth()`, `stage_multiplier()`.
+  - Order: run → switch → item → fight; then move priority; then Bandwidth (stages, Throttled halves); then a seeded coin flip.
+  - Invalid actions return one `invalid_action` event with a readable reason; the turn isn't played.
+  - Battle items work now: Coffee/Energy Drink (heal, capped), Pizza Friday (heal + cure), Hard Reboot (revive at half).
+  - Event list is documented at the top of `battle_sim.gd`.
+- Tests: `tests/test_battle_turn_order.gd` (19). 72/72 passing overall.
+
+**Placeholders for later steps**
+- `_resolve_move()` is empty: moves use PP and emit `move_used` but do no damage yet (Phase 2b).
+- Running always succeeds in wild battles (Phase 2c adds the Bandwidth-based chance).
+- Quarantine Keys are rejected in battle until Phase 2c.
+
+**Decisions**
+- The sim changes the real DaemonInstances (Uptime, PP, status carry over after battle, like the classic games). Stat stages and volatile effects live on BattleSide and vanish after battle.
+- The sim reads species/move/item data from DataRegistry (data only, no scene access).
+- The tie-break roll happens every turn, even without a tie, so the RNG sequence never depends on which actions were picked.
+
+**Next:** Phase 2b — damage, accuracy, crits, STAB, type effectiveness, stat stages, statuses, move effects, fainting, EXP.
+
+---
+
 ## 2026-11-07 — Debug: Daemon Lab
 
 `scenes/debug/daemon_lab.tscn` is a hands-on test screen for Phase 1. Debug builds open it when you press Start on the title.
