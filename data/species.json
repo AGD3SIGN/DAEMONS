@@ -1,0 +1,196 @@
+[
+  { "id": "chipmunk", "name": "Chipmunk", "types": ["hardware"],
+    "base_stats": { "uptime": 44, "throughput": 58, "hardening": 48, "compute": 60, "encryption": 48, "bandwidth": 52 },
+    "growth_rate": "medium_slow", "catch_rate": 45, "base_exp": 62, "log_yield": { "compute": 1 },
+    "learnset": [
+      { "level": 1, "move": "bump" }, { "level": 1, "move": "screen_glare" }, { "level": 7, "move": "heatsink_slam" },
+      { "level": 10, "move": "chassis_guard" }, { "level": 13, "move": "double_click" }
+    ],
+    "evolutions": [ { "to": "motherboar", "trigger": "level", "level": 16 } ],
+    "cmdb": { "category": "Rodent / Thermal Unit", "entry": "Stores waste heat in its heatsink cheeks. Keeps a lap warm all winter. Do not pet after heavy use." } },
+  { "id": "motherboar", "name": "Motherboar", "types": ["hardware"],
+    "base_stats": { "uptime": 60, "throughput": 75, "hardening": 66, "compute": 78, "encryption": 60, "bandwidth": 66 },
+    "growth_rate": "medium_slow", "catch_rate": 45, "base_exp": 142, "log_yield": { "compute": 1, "throughput": 1 },
+    "learnset": [
+      { "level": 1, "move": "bump" }, { "level": 1, "move": "screen_glare" }, { "level": 1, "move": "heatsink_slam" },
+      { "level": 10, "move": "chassis_guard" }, { "level": 13, "move": "double_click" }, { "level": 20, "move": "overclock" },
+      { "level": 26, "move": "thermal_runaway" }, { "level": 31, "move": "hard_reset" }
+    ],
+    "evolutions": [ { "to": "mainframe", "trigger": "level", "level": 34 } ],
+    "cmdb": { "category": "Boar / Logic Board", "entry": "PCB plating covers its back. Charges anything that blocks its airflow." } },
+  { "id": "mainframe", "name": "Mainframe", "types": ["hardware"],
+    "base_stats": { "uptime": 80, "throughput": 98, "hardening": 90, "compute": 100, "encryption": 78, "bandwidth": 84 },
+    "growth_rate": "medium_slow", "catch_rate": 45, "base_exp": 236, "log_yield": { "compute": 3 },
+    "learnset": [
+      { "level": 1, "move": "bump" }, { "level": 1, "move": "heatsink_slam" }, { "level": 1, "move": "chassis_guard" },
+      { "level": 13, "move": "double_click" }, { "level": 20, "move": "overclock" }, { "level": 26, "move": "thermal_runaway" },
+      { "level": 31, "move": "hard_reset" }, { "level": 42, "move": "defrag" }
+    ],
+    "evolutions": [],
+    "cmdb": { "category": "Beast / Enterprise System", "entry": "Has run payroll without a reboot since before anyone can remember. Fills an entire room." } },
+
+  { "id": "pingo", "name": "Pingo", "types": ["network"],
+    "base_stats": { "uptime": 48, "throughput": 50, "hardening": 58, "compute": 52, "encryption": 56, "bandwidth": 46 },
+    "growth_rate": "medium_slow", "catch_rate": 45, "base_exp": 63, "log_yield": { "hardening": 1 },
+    "learnset": [
+      { "level": 1, "move": "bump" }, { "level": 1, "move": "screen_glare" }, { "level": 7, "move": "ping" },
+      { "level": 10, "move": "fast_ethernet" }, { "level": 13, "move": "bandwidth_hog" }
+    ],
+    "evolutions": [ { "to": "routeroo", "trigger": "level", "level": 16 } ],
+    "cmdb": { "category": "Penguin / Echo Unit", "entry": "Calls out \"ping\" and waits for a reply. Gets anxious if nobody answers within 4 ms." } },
+  { "id": "routeroo", "name": "Routeroo", "types": ["network"],
+    "base_stats": { "uptime": 62, "throughput": 66, "hardening": 76, "compute": 68, "encryption": 72, "bandwidth": 61 },
+    "growth_rate": "medium_slow", "catch_rate": 45, "base_exp": 142, "log_yield": { "hardening": 1, "encryption": 1 },
+    "learnset": [
+      { "level": 1, "move": "bump" }, { "level": 1, "move": "screen_glare" }, { "level": 1, "move": "ping" },
+      { "level": 10, "move": "fast_ethernet" }, { "level": 13, "move": "bandwidth_hog" }, { "level": 19, "move": "latency_spike" },
+      { "level": 27, "move": "packet_flood" }
+    ],
+    "evolutions": [ { "to": "meshkraken", "trigger": "level", "level": 34 } ],
+    "cmdb": { "category": "Kangaroo / Router", "entry": "Hops packets from pouch to pouch. Picks the fastest route even when nobody asked." } },
+  { "id": "meshkraken", "name": "Meshkraken", "types": ["network"],
+    "base_stats": { "uptime": 82, "throughput": 86, "hardening": 100, "compute": 88, "encryption": 96, "bandwidth": 78 },
+    "growth_rate": "medium_slow", "catch_rate": 45, "base_exp": 239, "log_yield": { "hardening": 3 },
+    "learnset": [
+      { "level": 1, "move": "bump" }, { "level": 1, "move": "ping" }, { "level": 1, "move": "fast_ethernet" },
+      { "level": 13, "move": "bandwidth_hog" }, { "level": 19, "move": "latency_spike" }, { "level": 27, "move": "packet_flood" },
+      { "level": 40, "move": "cloud_burst" }
+    ],
+    "evolutions": [],
+    "cmdb": { "category": "Kraken / Mesh Network", "entry": "Each tentacle is a patch cable. Cut one and traffic simply reroutes through the others." } },
+
+  { "id": "bitling", "name": "Bitling", "types": ["software"],
+    "base_stats": { "uptime": 45, "throughput": 48, "hardening": 46, "compute": 62, "encryption": 55, "bandwidth": 54 },
+    "growth_rate": "medium_slow", "catch_rate": 45, "base_exp": 64, "log_yield": { "compute": 1 },
+    "learnset": [
+      { "level": 1, "move": "bump" }, { "level": 1, "move": "screen_glare" }, { "level": 7, "move": "code_injection" },
+      { "level": 10, "move": "infinite_loop" }, { "level": 13, "move": "patch_up" }
+    ],
+    "evolutions": [ { "to": "scriptor", "trigger": "level", "level": 16 } ],
+    "cmdb": { "category": "Sprite / Cursor", "entry": "A blinking cursor that wandered off a terminal. Follows whoever types the fastest." } },
+  { "id": "scriptor", "name": "Scriptor", "types": ["software"],
+    "base_stats": { "uptime": 58, "throughput": 62, "hardening": 60, "compute": 82, "encryption": 72, "bandwidth": 71 },
+    "growth_rate": "medium_slow", "catch_rate": 45, "base_exp": 142, "log_yield": { "compute": 2 },
+    "learnset": [
+      { "level": 1, "move": "bump" }, { "level": 1, "move": "screen_glare" }, { "level": 1, "move": "code_injection" },
+      { "level": 10, "move": "infinite_loop" }, { "level": 13, "move": "patch_up" }, { "level": 19, "move": "refactor" },
+      { "level": 27, "move": "data_dump" }
+    ],
+    "evolutions": [ { "to": "compilox", "trigger": "level", "level": 34 } ],
+    "cmdb": { "category": "Scribe / Script Runner", "entry": "Its robes are woven from source code. Mutters comments nobody will ever read." } },
+  { "id": "compilox", "name": "Compilox", "types": ["software"],
+    "base_stats": { "uptime": 78, "throughput": 82, "hardening": 80, "compute": 106, "encryption": 94, "bandwidth": 90 },
+    "growth_rate": "medium_slow", "catch_rate": 45, "base_exp": 240, "log_yield": { "compute": 3 },
+    "learnset": [
+      { "level": 1, "move": "bump" }, { "level": 1, "move": "code_injection" }, { "level": 1, "move": "infinite_loop" },
+      { "level": 13, "move": "patch_up" }, { "level": 19, "move": "refactor" }, { "level": 27, "move": "data_dump" },
+      { "level": 40, "move": "firewall_up" }
+    ],
+    "evolutions": [],
+    "cmdb": { "category": "Ox / Compiler", "entry": "Hauls raw code uphill and turns it into anything. Warnings only make it angrier." } },
+
+  { "id": "wormby", "name": "Wormby", "types": ["malware"],
+    "base_stats": { "uptime": 40, "throughput": 50, "hardening": 35, "compute": 30, "encryption": 35, "bandwidth": 60 },
+    "growth_rate": "erratic", "catch_rate": 190, "base_exp": 55, "log_yield": { "bandwidth": 1 },
+    "learnset": [
+      { "level": 1, "move": "bump" }, { "level": 5, "move": "infect" }, { "level": 12, "move": "worm_burrow" },
+      { "level": 18, "move": "keyboard_smash" }
+    ],
+    "evolutions": [ { "to": "wormhole", "trigger": "level", "level": 22 } ],
+    "cmdb": { "category": "Worm / Self-Replicator", "entry": "Tunnels through cable jackets. Where there is one, there are soon a hundred." } },
+  { "id": "wormhole", "name": "Wormhole", "types": ["malware"],
+    "base_stats": { "uptime": 70, "throughput": 90, "hardening": 65, "compute": 70, "encryption": 65, "bandwidth": 110 },
+    "growth_rate": "erratic", "catch_rate": 90, "base_exp": 158, "log_yield": { "bandwidth": 2 },
+    "learnset": [
+      { "level": 1, "move": "bump" }, { "level": 1, "move": "infect" }, { "level": 12, "move": "worm_burrow" },
+      { "level": 18, "move": "keyboard_smash" }, { "level": 26, "move": "phish" }, { "level": 34, "move": "cloud_burst" }
+    ],
+    "evolutions": [],
+    "cmdb": { "category": "Worm / Spacetime Exploit", "entry": "Folds the network so two distant hosts touch. Packets arrive before they were sent." } },
+
+  { "id": "spamlet", "name": "Spamlet", "types": ["malware"],
+    "base_stats": { "uptime": 50, "throughput": 30, "hardening": 40, "compute": 55, "encryption": 40, "bandwidth": 45 },
+    "growth_rate": "fast", "catch_rate": 190, "base_exp": 58, "log_yield": { "compute": 1 },
+    "learnset": [
+      { "level": 1, "move": "bump" }, { "level": 4, "move": "spam_blast" }, { "level": 11, "move": "phish" },
+      { "level": 17, "move": "infect" }
+    ],
+    "evolutions": [ { "to": "spamwich", "trigger": "level", "level": 25 } ],
+    "cmdb": { "category": "Envelope / Junk Mail", "entry": "Claims you have won a prize. You have not won a prize." } },
+  { "id": "spamwich", "name": "Spamwich", "types": ["malware"],
+    "base_stats": { "uptime": 85, "throughput": 60, "hardening": 75, "compute": 90, "encryption": 75, "bandwidth": 60 },
+    "growth_rate": "fast", "catch_rate": 75, "base_exp": 160, "log_yield": { "uptime": 2 },
+    "learnset": [
+      { "level": 1, "move": "bump" }, { "level": 1, "move": "spam_blast" }, { "level": 11, "move": "phish" },
+      { "level": 17, "move": "infect" }, { "level": 28, "move": "data_dump" }
+    ],
+    "evolutions": [],
+    "cmdb": { "category": "Sandwich / Bulk Mailer", "entry": "Layers of unread letters stacked between two slices of bread. Nobody knows who ordered it." } },
+
+  { "id": "dustbunny", "name": "Dustbunny", "types": ["peripheral"],
+    "base_stats": { "uptime": 40, "throughput": 45, "hardening": 35, "compute": 30, "encryption": 35, "bandwidth": 70 },
+    "growth_rate": "medium_fast", "catch_rate": 255, "base_exp": 50, "log_yield": { "bandwidth": 1 },
+    "learnset": [
+      { "level": 1, "move": "bump" }, { "level": 4, "move": "screen_glare" }, { "level": 9, "move": "double_click" },
+      { "level": 15, "move": "keyboard_smash" }
+    ],
+    "evolutions": [],
+    "cmdb": { "category": "Rabbit / Lint Trap", "entry": "Collects behind desktop towers. Scrappy, sneezy, and impossible to get rid of." } },
+
+  { "id": "fanbat", "name": "Fanbat", "types": ["hardware", "power"],
+    "base_stats": { "uptime": 55, "throughput": 65, "hardening": 50, "compute": 60, "encryption": 50, "bandwidth": 95 },
+    "growth_rate": "medium_fast", "catch_rate": 120, "base_exp": 110, "log_yield": { "bandwidth": 2 },
+    "learnset": [
+      { "level": 1, "move": "bump" }, { "level": 5, "move": "static_zap" }, { "level": 10, "move": "heatsink_slam" },
+      { "level": 16, "move": "bandwidth_hog" }, { "level": 22, "move": "brownout" }, { "level": 28, "move": "sleep_mode" }
+    ],
+    "evolutions": [],
+    "cmdb": { "category": "Bat / Case Fan", "entry": "Its wings are 120 mm case fans. Swarms hang from server room ceilings, humming at night." } },
+
+  { "id": "cablesnake", "name": "Cablesnake", "types": ["network"],
+    "base_stats": { "uptime": 45, "throughput": 60, "hardening": 45, "compute": 40, "encryption": 45, "bandwidth": 65 },
+    "growth_rate": "slow", "catch_rate": 190, "base_exp": 58, "log_yield": { "bandwidth": 1 },
+    "learnset": [
+      { "level": 1, "move": "bump" }, { "level": 5, "move": "fast_ethernet" }, { "level": 10, "move": "latency_spike" },
+      { "level": 16, "move": "ping" }
+    ],
+    "evolutions": [ { "to": "patchviper", "trigger": "level", "level": 24 } ],
+    "cmdb": { "category": "Snake / Ethernet Run", "entry": "Lives in cable tangles and is often mistaken for one. Bites when unplugged." } },
+  { "id": "patchviper", "name": "Patchviper", "types": ["network"],
+    "base_stats": { "uptime": 70, "throughput": 90, "hardening": 70, "compute": 65, "encryption": 70, "bandwidth": 95 },
+    "growth_rate": "slow", "catch_rate": 90, "base_exp": 155, "log_yield": { "throughput": 2 },
+    "learnset": [
+      { "level": 1, "move": "bump" }, { "level": 1, "move": "fast_ethernet" }, { "level": 10, "move": "latency_spike" },
+      { "level": 16, "move": "ping" }, { "level": 24, "move": "packet_flood" }, { "level": 30, "move": "bandwidth_hog" }
+    ],
+    "evolutions": [],
+    "cmdb": { "category": "Viper / Patch Panel", "entry": "Coils around patch panels and decides which ports get to talk. Strikes at unlabeled cables." } },
+
+  { "id": "floppit", "name": "Floppit", "types": ["legacy"],
+    "base_stats": { "uptime": 45, "throughput": 40, "hardening": 55, "compute": 45, "encryption": 55, "bandwidth": 60 },
+    "growth_rate": "fluctuating", "catch_rate": 190, "base_exp": 60, "log_yield": { "encryption": 1 },
+    "learnset": [
+      { "level": 1, "move": "bump" }, { "level": 5, "move": "defrag" }, { "level": 11, "move": "blue_screen" },
+      { "level": 17, "move": "double_click" }
+    ],
+    "evolutions": [ { "to": "diskette", "trigger": "item", "item": "legacy_driver" } ],
+    "cmdb": { "category": "Rabbit / 3.5\" Floppy", "entry": "Its ears are a metal shutter that snaps shut when startled. Holds exactly 1.44 MB of memories." } },
+  { "id": "diskette", "name": "Diskette", "types": ["legacy"],
+    "base_stats": { "uptime": 65, "throughput": 55, "hardening": 75, "compute": 70, "encryption": 75, "bandwidth": 75 },
+    "growth_rate": "fluctuating", "catch_rate": 90, "base_exp": 140, "log_yield": { "encryption": 2 },
+    "learnset": [
+      { "level": 1, "move": "bump" }, { "level": 1, "move": "defrag" }, { "level": 11, "move": "blue_screen" },
+      { "level": 17, "move": "double_click" }, { "level": 25, "move": "data_dump" }
+    ],
+    "evolutions": [ { "to": "zipdrive", "trigger": "sync" } ],
+    "cmdb": { "category": "Hare / Disk Drive", "entry": "Whirs and clicks while it thinks. Insists the old format was better." } },
+  { "id": "zipdrive", "name": "Zipdrive", "types": ["legacy"],
+    "base_stats": { "uptime": 85, "throughput": 70, "hardening": 95, "compute": 95, "encryption": 95, "bandwidth": 85 },
+    "growth_rate": "fluctuating", "catch_rate": 45, "base_exp": 230, "log_yield": { "encryption": 3 },
+    "learnset": [
+      { "level": 1, "move": "bump" }, { "level": 1, "move": "defrag" }, { "level": 1, "move": "blue_screen" },
+      { "level": 17, "move": "double_click" }, { "level": 25, "move": "data_dump" }, { "level": 35, "move": "firewall_up" }
+    ],
+    "evolutions": [],
+    "cmdb": { "category": "Jackrabbit / Removable Storage", "entry": "Can make a sudden clicking sound that ruins everything nearby. Collectors pay a fortune for working ones." } }
+]

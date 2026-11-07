@@ -1,0 +1,30 @@
+{
+  "types": [
+    { "id": "hardware",   "name": "Hardware",   "color": "#e0703c" },
+    { "id": "network",    "name": "Network",    "color": "#3c8ee0" },
+    { "id": "software",   "name": "Software",   "color": "#4cc06a" },
+    { "id": "power",      "name": "Power",      "color": "#f2c63a" },
+    { "id": "cloud",      "name": "Cloud",      "color": "#9fc8ec" },
+    { "id": "data",       "name": "Data",       "color": "#8b6fd6" },
+    { "id": "security",   "name": "Security",   "color": "#5a6f8c" },
+    { "id": "malware",    "name": "Malware",    "color": "#b23a6b" },
+    { "id": "legacy",     "name": "Legacy",     "color": "#a8916a" },
+    { "id": "mobile",     "name": "Mobile",     "color": "#46c2b8" },
+    { "id": "ai",         "name": "AI",         "color": "#e070c8" },
+    { "id": "peripheral", "name": "Peripheral", "color": "#9a9aa6" }
+  ],
+  "chart": {
+    "hardware":   { "hardware": 0.5, "network": 0.5, "software": 2, "legacy": 2, "peripheral": 2 },
+    "network":    { "hardware": 2, "network": 0.5, "software": 0.5, "cloud": 2, "mobile": 2 },
+    "software":   { "hardware": 0.5, "network": 2, "software": 0.5, "data": 2 },
+    "power":      { "hardware": 2, "power": 0.5, "mobile": 2, "peripheral": 2 },
+    "cloud":      { "cloud": 0.5, "data": 2, "legacy": 2 },
+    "data":       { "data": 0.5, "ai": 2 },
+    "security":   { "security": 0.5, "malware": 2 },
+    "malware":    { "software": 2, "data": 2, "security": 0, "malware": 0.5, "mobile": 2 },
+    "legacy":     { "hardware": 2, "cloud": 0.5, "legacy": 0.5, "ai": 0.5 },
+    "mobile":     { "network": 2, "power": 0.5, "legacy": 2, "mobile": 0.5 },
+    "ai":         { "software": 2, "data": 2, "security": 0.5, "ai": 0.5 },
+    "peripheral": { "power": 0.5, "peripheral": 0.5 }
+  }
+}

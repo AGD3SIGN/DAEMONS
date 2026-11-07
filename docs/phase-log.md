@@ -4,6 +4,32 @@ Newest entries at the top. Each entry: what's done, decisions, what's next.
 
 ---
 
+## 2026-11-07 — Phase 1a: Data layer ✅
+
+**Done**
+- `data/types.json`: 12 types + the type chart from docs/design.md (only non-1 cells stored), plus a UI color per type.
+- `data/moves.json`: 30 original moves across 9 types, using effects none, status_chance, stat_change, drain, recoil, heal, multi_hit.
+- `data/species.json`: 20 Daemons. The 3 starter lines (BST 310/405/530, upgrade at 16/34), plus Wormby→Wormhole (22), Spamlet→Spamwich (25), Dustbunny, Fanbat, Cablesnake→Patchviper (24), Floppit→Diskette (Legacy Driver item)→Zipdrive (Sync). Every growth rate is used at least once.
+- `data/items.json`: the 11 items from the doc + **Legacy Driver** (needed for Floppit's item upgrade).
+- `scripts/util/data_validator.gd` (DataValidator): required fields, ranges, enums, effect params, and cross-references (types, learnset moves, evolution targets, evolution items). One readable line per error.
+- DataRegistry loads all 4 files at boot, reports JSON parse errors with file + line, exposes `get_species/get_move/get_item` and `type_multiplier(attack, defender_types)`.
+- `docs/data-format.md`: field reference for editing data by hand.
+- Tests: `tests/test_data_registry.gd` (19). 29/29 passing overall. Game boots with "12 types, 30 moves, 20 species, 12 items loaded".
+
+**Decisions**
+- Data files are lists with an `id` field (not objects keyed by id) so duplicate ids get caught.
+- Move `accuracy: 0` means "never misses" (self-buffs, heals).
+- Added `log_yield` to species (Experience Logs given on defeat; Phase 2b needs it). Max 3 total.
+- Status moves use `status_chance` with chance 100 rather than a separate effect.
+- Records stay plain Dictionaries from JSON. Numbers come back as floats; cast with int().
+
+**Watch for later**
+- Phase 8: export presets need `*.json` in the "non-resource files" filter or data won't ship.
+
+**Next:** Phase 1b — DaemonInstance, stat formulas, EXP curves, level up, evolution checks, save dicts.
+
+---
+
 ## 2026-11-07 — Phase 0 fix: black borders at odd window sizes ✅
 
 **Problem:** Godot's built-in integer stretch expands the view to the window's shape, then rounds the scale down, so most window sizes showed thick black borders.
