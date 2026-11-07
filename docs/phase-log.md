@@ -4,6 +4,33 @@ Newest entries at the top. Each entry: what's done, decisions, what's next.
 
 ---
 
+## 2026-11-07 — Phase 2c: Capture, running, AI, console battle ✅
+
+**Done**
+- **Run chance:** equal or faster always escapes; otherwise floor(mine × 128 / theirs) + 30 × attempts out of 256. A failed escape uses the turn (`run_failed`).
+- **Quarantine capture** (wild battles, player only): a = floor((3·Max − 2·Current) × catch_rate × key bonus / (3·Max)) × status bonus (2 Standby/Hung, 1.5 Throttled/Corrupted/Overheated). a ≥ 255 always catches; otherwise 4 checks against floor(1048560 / ⁴√(16711680 / a)). Events: `capture_shake` (1–3), then `captured` (outcome "caught", `state.captured`) or `capture_failed {shakes}`. Measured: Thumb Drive on a full-Uptime Dustbunny catches ~1 in 3; in Standby ~2 in 3; Root Key always.
+- **BattleAI** (`scripts/battle/sim/battle_ai.gd`): random / basic / smart, plus `choose_replacement()`. Smart inflicts status on healthy targets, boosts early, heals under 40%, and switches out of super-effective matchups (max 2 voluntary switches per battle so two smart sides can't ping-pong). Uses state.rng, so AI battles replay exactly.
+- **BattleText** (`scripts/battle/ui/battle_text.gd`): event → text-box line, all original IT-flavored wording ("A wild Dustbunny spawned!", "Pingo ran Ping!", "Done! Floppit was Quarantined!"). Phase 3 reuses it.
+- **Console battle** (`scenes/debug/console_battle.tscn`): play in the terminal, or `--auto` for AI vs AI. Options: `--trainer` (Kevin, 3 Daemons, smart AI), `--seed N`, `--ai random|basic|smart`.
+- Added `daemon` names to heal/revived/drain/recoil events for text.
+- Tests: `tests/test_battle_capture_ai.gd` (15). 112/112 passing overall.
+- Batch check: 60 auto battles (30 wild, 30 vs Kevin) all finish; avg 3.4 / 17.8 turns, max 23.
+
+**Run it**
+```
+godot --headless --path . res://scenes/debug/console_battle.tscn
+godot --headless --path . res://scenes/debug/console_battle.tscn -- --trainer --seed 3
+godot --headless --path . res://scenes/debug/console_battle.tscn -- --auto --trainer
+```
+
+**Notes for later**
+- Bug #2 (no fallback move at 0 PP) is still open; deferred to the bug review. The console stops with "Stuck" if it ever happens.
+- The test team won all 60 auto battles. That team is a few levels above Kevin's, so this isn't real balance data; check in Phase 11.
+
+**Phase 2 complete. Next:** Phase 3 — battle UI (GBA layout, menus, animated event playback).
+
+---
+
 ## 2026-11-07 — Phase 2b: Damage, statuses, effects, EXP ✅
 
 **Done** (`scripts/battle/sim/battle_sim.gd`; full event list at the top of the file)

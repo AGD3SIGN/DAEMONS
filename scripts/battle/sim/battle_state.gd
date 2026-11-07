@@ -13,7 +13,8 @@ var is_wild: bool = true
 var turn: int = 0
 var field: Dictionary = {}          # field-wide effects (none yet)
 var escape_attempts: int = 0        # used by the run formula (Phase 2c)
-var outcome: String = ""            # "" while ongoing, then "player_won", "player_lost" or "fled"
+var outcome: String = ""            # "" while ongoing, then "player_won", "player_lost", "fled" or "caught"
+var captured: DaemonInstance = null # set when outcome is "caught"; the caller adds it to the stack/rack
 var end_reported: bool = false
 ## A side whose active Daemon crashed and still has others must pick one with
 ## BattleSim.forced_switch() before the next turn.

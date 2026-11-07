@@ -9,6 +9,7 @@ var active_index: int = -1
 var items: Dictionary = {}      # item_id -> count. The caller copies it back to the bag after battle.
 var stages: Dictionary = {}     # stat -> -6..6 (DataValidator.STAGE_STATS)
 var volatile: Dictionary = {}   # e.g. {"looping_turns": 2}; cleared on switch
+var voluntary_switches: int = 0 # switches chosen as an action (not after a crash); the AI caps these
 
 
 func _init(p_name: String, p_stack: Array[DaemonInstance], p_items: Dictionary = {}) -> void:

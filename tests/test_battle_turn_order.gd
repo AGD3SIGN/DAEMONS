@@ -138,7 +138,7 @@ func test_item_goes_after_switch_and_before_moves() -> void:
 
 
 func test_run_goes_first_and_ends_wild_battle() -> void:
-	var state := _battle([_daemon("pingo", 20)], [_daemon("dustbunny", 20)])
+	var state := _battle([_daemon("pingo", 20)], [_daemon("dustbunny", 5)])  # faster, so escape is certain
 	var events := BattleSim.run_turn(state, BattleAction.run(), BattleAction.fight(0))
 	assert_eq(_types(events), ["turn_start", "fled", "battle_end"])
 	assert_eq(state.outcome, "fled")
@@ -213,7 +213,6 @@ func test_invalid_actions_are_rejected_without_playing_the_turn() -> void:
 	_assert_invalid(state, BattleAction.item("coffee", 1), "Hard Reboot first")
 	_assert_invalid(state, BattleAction.item("hard_reboot", 0), "hasn't crashed")
 	_assert_invalid(state, BattleAction.item("firewall_rule", 0), "can't be used in battle")
-	_assert_invalid(state, BattleAction.item("thumb_drive", 0), "Phase 2c")
 	pingo.moves[0]["pp"] = 0
 	_assert_invalid(state, BattleAction.fight(0), "no PP")
 	assert_eq(state.turn, 0, "no turn was played")

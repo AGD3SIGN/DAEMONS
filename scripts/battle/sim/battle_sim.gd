@@ -14,8 +14,8 @@ extends RefCounted
 ##   switch_out        {side, daemon}
 ##   switch_in         {side, daemon, index, uptime, max_uptime}
 ##   item_used         {side, item, item_name, target, target_index}
-##   heal              {side, target_index, amount, uptime, max_uptime}
-##   revived           {side, target_index, uptime, max_uptime}
+##   heal              {side, daemon, target_index, amount, uptime, max_uptime}
+##   revived           {side, daemon, target_index, uptime, max_uptime}
 ##   move_used         {side, user, move, move_name, target_side, target}
 ##   move_missed       {side, user}
 ##   move_failed       {side, reason}                          reason: "no_target" | "full_uptime"
@@ -24,8 +24,8 @@ extends RefCounted
 ##   hit_count         {count}                                 after a multi-hit move
 ##   effectiveness     {multiplier}                            only when not 1x
 ##   no_effect         {side, target}                          the target's type is immune
-##   drain             {side, amount, uptime, max_uptime}      user healed by a draining move
-##   recoil            {side, amount, uptime, max_uptime}      user hurt by its own move
+##   drain             {side, daemon, amount, uptime, max_uptime}   user healed by a draining move
+##   recoil            {side, daemon, amount, uptime, max_uptime}   user hurt by its own move
 ##   stat_changed      {side, daemon, stat, delta, stage}
 ##   stat_change_failed {side, daemon, stat, direction}        already at +6 / -6
 ##   status_applied    {side, daemon, status}
@@ -40,7 +40,10 @@ extends RefCounted
 ##   exp_gained        {side, index, daemon, amount}
 ##   level_up / move_learned / move_learn_pending  (from DaemonInstance, plus side, index, daemon)
 ##   switch_needed     {side}
-##   fled              {side}
+##   fled              {side}                                  run_failed {side}
+##   capture_shake     {n}                                     1..3, one per passed check
+##   captured          {side, daemon, species}                 outcome becomes "caught"
+##   capture_failed    {shakes}                                0..3 shakes before it broke free
 ##   battle_end        {outcome}
 ##   upgrade_ready     {side, index, daemon, to}               after battle_end; caller calls evolve()
 ##   invalid_action    {side, reason}                          turn not played; ask again
@@ -67,6 +70,7 @@ const LOOPING_TURNS := Vector2i(2, 5)
 const CORRUPTED_FRACTION := 8     # loses 1/8 max Uptime per turn
 const OVERHEATED_FRACTION := 16   # loses 1/16 max Uptime per turn
 const TRAINER_EXP_BONUS := 1.5
+const CAPTURE_CHECKS := 4
 
 static var _effect_handlers: Dictionary = {}
 
@@ -144,7 +148,7 @@ static func validate_action(state: BattleState, side: int, action: BattleAction)
 		BattleAction.Kind.SWITCH:
 			return _validate_switch_target(s, action.index)
 		BattleAction.Kind.ITEM:
-			return _validate_item(s, action)
+			return _validate_item(state, side, action)
 		BattleAction.Kind.RUN:
 			if not state.is_wild:
 				return "you can't run from a trainer battle"
@@ -269,14 +273,25 @@ static func _execute(state: BattleState, side: int, action: BattleAction, events
 			_do_fight(state, side, action.slot, events)
 
 
+## Faster (or equal) always escapes. Otherwise odds = floor(mine * 128 / theirs) + 30 * attempts,
+## out of 256. Each failed attempt makes the next one likelier.
 static func _do_run(state: BattleState, side: int, events: Array[Dictionary]) -> void:
-	# Phase 2c replaces this with the bandwidth-based escape chance.
 	state.escape_attempts += 1
-	state.outcome = "fled"
-	events.append(_ev("fled", {"side": side}))
+	var mine := effective_bandwidth(state, side)
+	var theirs := effective_bandwidth(state, BattleState.opponent(side))
+	var escaped := mine >= theirs
+	if not escaped:
+		var odds := floori(mine * 128.0 / maxf(1.0, theirs)) + 30 * state.escape_attempts
+		escaped = odds >= 256 or state.rng.randi_range(0, 255) < odds
+	if escaped:
+		state.outcome = "fled"
+		events.append(_ev("fled", {"side": side}))
+	else:
+		events.append(_ev("run_failed", {"side": side}))
 
 
 static func _do_switch(state: BattleState, side: int, index: int, events: Array[Dictionary]) -> void:
+	state.sides[side].voluntary_switches += 1
 	events.append(_ev("switch_out", {"side": side, "daemon": state.sides[side].active().display_name()}))
 	_bring_in(state, side, index)
 	events.append(_switch_in_event(state, side))
@@ -295,10 +310,16 @@ static func _bring_in(state: BattleState, side: int, index: int) -> void:
 static func _do_item(state: BattleState, side: int, action: BattleAction, events: Array[Dictionary]) -> void:
 	var s := state.sides[side]
 	var item := DataRegistry.get_item(action.item_id)
-	var target := s.stack[action.index]
 	s.items[action.item_id] = int(s.items[action.item_id]) - 1
 	if int(s.items[action.item_id]) <= 0:
 		s.items.erase(action.item_id)
+	if item["effect"]["id"] == "capture":
+		var foe := state.sides[BattleState.opponent(side)].active()
+		events.append(_ev("item_used", {"side": side, "item": action.item_id, "item_name": item["name"],
+			"target": foe.display_name(), "target_index": -1}))
+		_attempt_capture(state, float(item["effect"]["params"]["bonus"]), events)
+		return
+	var target := s.stack[action.index]
 	events.append(_ev("item_used", {"side": side, "item": action.item_id, "item_name": item["name"],
 		"target": target.display_name(), "target_index": action.index}))
 	var params: Dictionary = item["effect"]["params"]
@@ -315,7 +336,7 @@ static func _do_item(state: BattleState, side: int, action: BattleAction, events
 			target.current_uptime = maxi(1, floori(target.max_uptime() * float(params["fraction"])))
 			target.status = ""
 			target.status_turns = 0
-			events.append(_ev("revived", {"side": side, "target_index": action.index,
+			events.append(_ev("revived", {"side": side, "daemon": target.display_name(), "target_index": action.index,
 				"uptime": target.current_uptime, "max_uptime": target.max_uptime()}))
 
 
@@ -324,7 +345,7 @@ static func _heal(side: int, index: int, target: DaemonInstance, amount: int, ev
 	if healed <= 0:
 		return
 	target.current_uptime += healed
-	events.append(_ev("heal", {"side": side, "target_index": index, "amount": healed,
+	events.append(_ev("heal", {"side": side, "daemon": target.display_name(), "target_index": index, "amount": healed,
 		"uptime": target.current_uptime, "max_uptime": target.max_uptime()}))
 
 
@@ -543,7 +564,7 @@ static func _fx_drain(ctx: Dictionary) -> void:
 	if amount <= 0:
 		return
 	user.current_uptime += amount
-	ctx["events"].append(_ev("drain", {"side": ctx["side"], "amount": amount, "uptime": user.current_uptime, "max_uptime": user.max_uptime()}))
+	ctx["events"].append(_ev("drain", {"side": ctx["side"], "daemon": user.display_name(), "amount": amount, "uptime": user.current_uptime, "max_uptime": user.max_uptime()}))
 
 
 static func _fx_recoil(ctx: Dictionary) -> void:
@@ -553,7 +574,7 @@ static func _fx_recoil(ctx: Dictionary) -> void:
 		return
 	var amount := mini(maxi(1, floori(dealt * float(ctx["params"]["fraction"]))), user.current_uptime)
 	user.current_uptime -= amount
-	ctx["events"].append(_ev("recoil", {"side": ctx["side"], "amount": amount, "uptime": user.current_uptime, "max_uptime": user.max_uptime()}))
+	ctx["events"].append(_ev("recoil", {"side": ctx["side"], "daemon": user.display_name(), "amount": amount, "uptime": user.current_uptime, "max_uptime": user.max_uptime()}))
 
 
 static func _fx_heal(ctx: Dictionary) -> void:
@@ -564,6 +585,47 @@ static func _fx_heal(ctx: Dictionary) -> void:
 		ctx["events"].append(_ev("move_failed", {"side": side, "reason": "full_uptime"}))
 		return
 	_heal(side, s.active_index, user, floori(user.max_uptime() * float(ctx["params"]["fraction"])), ctx["events"])
+
+
+# --- Quarantine (capture) ----------------------------------------------------
+
+## a = floor((3*Max - 2*Current) * catch_rate * key_bonus / (3*Max)) x status bonus
+## Status bonus: 2 for Standby/Hung, 1.5 for Throttled/Corrupted/Overheated. a >= 255 always catches.
+static func capture_value(foe: DaemonInstance, key_bonus: float) -> int:
+	var max_up := foe.max_uptime()
+	var catch_rate := int(foe.species_data()["catch_rate"])
+	var a := floorf((3 * max_up - 2 * foe.current_uptime) * catch_rate * key_bonus / (3.0 * max_up))
+	match foe.status:
+		"standby", "hung":
+			a *= 2.0
+		"throttled", "corrupted", "overheated":
+			a *= 1.5
+	return floori(a)
+
+
+## Each of the 4 checks passes if a random 0..65535 is below this.
+static func shake_threshold(a: int) -> int:
+	if a <= 0:
+		return 0
+	if a >= 255:
+		return 65536
+	return floori(1048560.0 / sqrt(sqrt(16711680.0 / a)))
+
+
+static func _attempt_capture(state: BattleState, key_bonus: float, events: Array[Dictionary]) -> void:
+	var foe := state.sides[BattleState.FOE].active()
+	var threshold := shake_threshold(capture_value(foe, key_bonus))
+	var passed := 0
+	while passed < CAPTURE_CHECKS and (threshold >= 65536 or state.rng.randi_range(0, 65535) < threshold):
+		passed += 1
+	for n in mini(passed, 3):
+		events.append(_ev("capture_shake", {"n": n + 1}))
+	if passed == CAPTURE_CHECKS:
+		state.outcome = "caught"
+		state.captured = foe
+		events.append(_ev("captured", {"side": BattleState.FOE, "daemon": foe.display_name(), "species": foe.species_id}))
+	else:
+		events.append(_ev("capture_failed", {"shakes": mini(passed, 3)}))
 
 
 # --- end of turn, crashes, EXP -----------------------------------------------
@@ -669,7 +731,8 @@ static func _validate_switch_target(s: BattleSide, index: int) -> String:
 	return ""
 
 
-static func _validate_item(s: BattleSide, action: BattleAction) -> String:
+static func _validate_item(state: BattleState, side: int, action: BattleAction) -> String:
+	var s := state.sides[side]
 	if int(s.items.get(action.item_id, 0)) <= 0:
 		return "you don't have any of that item"
 	var item := DataRegistry.get_item(action.item_id)
@@ -677,7 +740,14 @@ static func _validate_item(s: BattleSide, action: BattleAction) -> String:
 		return "unknown item"
 	var effect: String = item["effect"]["id"]
 	if effect == "capture":
-		return "Quarantine Keys aren't wired up yet (Phase 2c)"
+		if not state.is_wild:
+			return "you can't Quarantine another trainer's Daemon"
+		if side != BattleState.PLAYER:
+			return "only the player can use Quarantine Keys"
+		var foe := state.sides[BattleState.opponent(side)].active()
+		if foe == null or foe.is_fainted():
+			return "there's nothing to Quarantine"
+		return ""
 	if not effect in BATTLE_ITEM_EFFECTS:
 		return "that can't be used in battle"
 	if action.index < 0 or action.index >= s.stack.size():
