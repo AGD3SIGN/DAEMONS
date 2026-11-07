@@ -4,6 +4,7 @@ extends Control
 signal start_pressed
 
 const BLINK_SEC := 0.5
+const DAEMON_LAB_SCENE := "res://scenes/debug/daemon_lab.tscn"
 
 @onready var _prompt: Label = %Prompt
 
@@ -20,4 +21,6 @@ func _unhandled_input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 		start_pressed.emit()
 		# No game to start yet; Phase 7 routes this to the intro / continue menu.
-		print("Start pressed")
+		# Until then, debug builds open the Daemon Lab test screen.
+		if OS.is_debug_build():
+			SceneRouter.goto(DAEMON_LAB_SCENE)

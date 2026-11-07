@@ -4,6 +4,15 @@ Newest entries at the top. Each entry: what's done, decisions, what's next.
 
 ---
 
+## 2026-11-07 — Debug: Daemon Lab
+
+`scenes/debug/daemon_lab.tscn` is a hands-on test screen for Phase 1. Debug builds open it when you press Start on the title.
+Controls: Left/Right = Daemon, Up/Down = level, Z = Overclock Chip (+1 level, shows learned moves),
+Shift = reroll Build Quality/profile, Space = upgrade, X = back. It re-checks save/load on every change.
+Remove the title-screen hook when Phase 7 adds the real intro. Tests: `tests/test_daemon_lab.gd` (53/53 overall).
+
+---
+
 ## 2026-11-07 — Phase 1b: DaemonInstance + stat math ✅
 
 **Done**
