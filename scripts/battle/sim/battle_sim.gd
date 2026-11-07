@@ -31,7 +31,7 @@ extends RefCounted
 ##   status_applied    {side, daemon, status}
 ##   status_failed     {side, daemon, status}                  a status move didn't stick
 ##   status_blocked    {side, daemon, status}                  couldn't act this turn
-##   status_cured      {side, daemon, status}                  woke up / recovered / item
+##   status_cured      {side, daemon, target_index, status}    woke up / recovered / item
 ##   looping           {side, daemon}                          still Looping (may hit itself)
 ##   hurt_itself       {side, daemon}                          followed by a damage event
 ##   looping_ended     {side, daemon}
@@ -329,7 +329,7 @@ static func _do_item(state: BattleState, side: int, action: BattleAction, events
 		"full_restore":
 			_heal(side, action.index, target, target.max_uptime(), events)
 			if not target.status.is_empty():
-				events.append(_ev("status_cured", {"side": side, "daemon": target.display_name(), "status": target.status}))
+				events.append(_ev("status_cured", {"side": side, "daemon": target.display_name(), "target_index": action.index, "status": target.status}))
 				target.status = ""
 				target.status_turns = 0
 		"revive":
@@ -377,10 +377,10 @@ static func _can_act(state: BattleState, side: int, events: Array[Dictionary]) -
 				d.status_turns -= 1
 				events.append(_ev("status_blocked", info.duplicate()))
 				return false
-			_cure(d, side, events)
+			_cure(state, side, events)
 		"hung":
 			if state.rng.randf() < HUNG_RECOVER_CHANCE:
-				_cure(d, side, events)
+				_cure(state, side, events)
 			else:
 				events.append(_ev("status_blocked", info.duplicate()))
 				return false
@@ -404,8 +404,9 @@ static func _can_act(state: BattleState, side: int, events: Array[Dictionary]) -
 	return true
 
 
-static func _cure(d: DaemonInstance, side: int, events: Array[Dictionary]) -> void:
-	events.append(_ev("status_cured", {"side": side, "daemon": d.display_name(), "status": d.status}))
+static func _cure(state: BattleState, side: int, events: Array[Dictionary]) -> void:
+	var d := state.sides[side].active()
+	events.append(_ev("status_cured", {"side": side, "daemon": d.display_name(), "target_index": state.sides[side].active_index, "status": d.status}))
 	d.status = ""
 	d.status_turns = 0
 

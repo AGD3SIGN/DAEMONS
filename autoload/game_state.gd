@@ -14,6 +14,21 @@ var cmdb_seen: Dictionary = {}      # species_id -> true
 var cmdb_caught: Dictionary = {}    # species_id -> true
 
 
+const MAX_STACK := 6
+
+
+## Adds a Daemon to the Active Stack, or the Server Rack if the stack is full.
+## Returns "stack" or "rack".
+func add_daemon(d: DaemonInstance) -> String:
+	cmdb_seen[d.species_id] = true
+	cmdb_caught[d.species_id] = true
+	if active_stack.size() < MAX_STACK:
+		active_stack.append(d)
+		return "stack"
+	server_rack.append(d)
+	return "rack"
+
+
 ## Clears everything for a new game.
 func reset() -> void:
 	player_name = ""

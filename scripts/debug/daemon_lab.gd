@@ -3,7 +3,7 @@ extends Control
 ## roll new Build Quality / profiles, level up, upgrade, and check save/load on every change.
 ## Not part of the real game. Opens from the title screen in debug builds.
 
-const TITLE_SCENE := "res://scenes/ui/title_screen.tscn"
+const TITLE_SCENE := "res://scenes/debug/debug_menu.tscn"  # "back" returns to the debug menu
 const STAT_LABELS := {
 	"uptime": "Uptime", "throughput": "Thrpt", "hardening": "Hardn",
 	"compute": "Compt", "encryption": "Encry", "bandwidth": "Bandw",
@@ -26,7 +26,7 @@ func _ready() -> void:
 	_species_ids = DataRegistry.species.keys()
 	var bg := ColorRect.new()
 	bg.color = Color("10142a")
-	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
+	bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(bg)
 	_left = _make_label(Vector2(4, 4), Vector2(154, 150))
 	_right = _make_label(Vector2(164, 4), Vector2(154, 150))

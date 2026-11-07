@@ -4,6 +4,36 @@ Newest entries at the top. Each entry: what's done, decisions, what's next.
 
 ---
 
+## 2026-11-07 — Phase 3: Battle UI ✅
+
+**Done**
+- `scenes/battle/battle_scene.tscn` + `scripts/battle/battle_scene.gd` (BattleScene): GBA layout at 320x180, anchored so bigger views still fit. Foe top-right on a platform with its panel top-left; your Daemon (back sprite) bottom-left with Uptime numbers + EXP bar bottom-right; text box along the bottom.
+- Turn loop on top of BattleSim: command menu (FIGHT / STACK / BAG / RUN), move menu (PP + type), stack list (crashed/in-battle greyed out), bag (battle items + Quarantine Keys; keys disabled vs trainers), forced replacement after a crash, AI foe, "uninstall a move?" prompt when a 5th move comes in.
+- `BattlePlayer` plays every event: typewriter text, slide in/out, attack lunge, hit blink + shake, smooth Uptime/EXP bars with live numbers, crash drop, stat up/down tint, status tags (THR/COR/OVH/SBY/HNG), Quarantine Key throw → absorb → shakes → break free or dim, level-up stat popup.
+- After battle: "Your X is upgrading!" sequence (flashing silhouettes, X/Esc cancels), new moves from the new form, caught Daemon goes to the Active Stack (or Server Rack when full), CMDB seen/caught updated.
+- `BattleTextBox`, `BattleInfoPanel`, `BattleMenu`, `CursorButton`, `UiTheme`, `DaemonSprites` (placeholder 64x64 front/back generated from type colors, id-based shape, size by base stat total; real PNGs in assets/sprites/daemons/<id>_front.png / _back.png are used automatically).
+- Input: every menu works with keyboard, gamepad (ui_* actions) and mouse/touch (hover moves the cursor, click/tap selects, BACK buttons for touch). Text advances on Z/X/click/tap.
+- Debug menu (`scenes/debug/debug_menu.tscn`, title → Start in debug builds): wild Dustbunny, random wild, Kevin, watch AI vs Kevin, heal + restock, Daemon Lab. Gives a starter team + bag on first visit.
+- Opening the battle scene directly (F6) runs a demo vs Dustbunny (`-- --auto` to watch).
+- `SceneRouter.goto(path, params)` passes data to the next scene. `GameState.add_daemon()`.
+- Tests: `tests/test_battle_ui.gd` (10). Full wild battle, Root Key capture, Kevin with forced switches, level-up → upgrade, all through the real screen at time_scale 0. 122/122 passing overall.
+
+**Bugs found and fixed while building**
+- Menus collapsed to zero size: `set_anchors_preset()` on a node already in the tree keeps its old (zero) rect. Switched to `set_anchors_and_offsets_preset()` everywhere; added a layout test.
+- Command menu text touched the edge; move info overflowed ("PERIPHERAL PHYS"). Widened and simplified.
+
+**Decisions**
+- UI is built in code (layout constants in `battle_scene.gd`), not in .tscn files. Faster to iterate now; can move to scenes when real art arrives.
+- Battle text waits for a button press (GBA feel) except "X ran Y!", key shakes and switch-outs, which pause briefly.
+- Move category (physical/special) isn't shown in the move menu, like Gen 3.
+
+**Not verified by eye**
+- The capture and upgrade animations were checked by tests, not by watching them.
+
+**Next:** Phase 4a — overworld: grid movement, TileSet custom data, Onboarding Town.
+
+---
+
 ## 2026-11-07 — Phase 2c: Capture, running, AI, console battle ✅
 
 **Done**
