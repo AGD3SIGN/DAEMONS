@@ -1,5 +1,5 @@
 extends SceneTree
-## Draws the placeholder overworld tileset (16 tiles, 16x16 each, 8 per row) to
+## Draws the placeholder overworld tileset (24 tiles, 16x16 each, 8 per row) to
 ## res://assets/tiles/placeholder_overworld.png. Run from the repo root:
 ##   godot --headless -s res://tools/build_placeholder_tiles.gd
 ## Tile names/collision/behavior live in data/tiles.json; the order here must match its atlas coords.
@@ -31,9 +31,10 @@ var img: Image
 
 
 func _init() -> void:
-	img = Image.create(T * 8, T * 2, false, Image.FORMAT_RGBA8)
+	img = Image.create(T * 8, T * 3, false, Image.FORMAT_RGBA8)
 	var painters: Array[Callable] = [_grass, _path, _cable_tangle, _water, _tree, _fence, _flowers, _roof_red,
-		_roof_blue, _wall, _window, _door, _ledge, _sign, _floor, _counter]
+		_roof_blue, _wall, _window, _door, _ledge, _sign, _floor, _counter,
+		_exit_mat, _interior_wall, _rug, _table, _bed, _server_rack, _plant, _bookshelf]
 	for i in painters.size():
 		painters[i].call(Vector2i(i % 8, i / 8) * T)
 	var err := img.save_png(ProjectSettings.globalize_path(OUT))
@@ -186,3 +187,67 @@ func _counter(o: Vector2i) -> void:
 	_floor(o)
 	_rect(o, Rect2i(0, 2, 16, 10), WOOD_DARK)
 	_rect(o, Rect2i(0, 2, 16, 3), Color("e0d8c8"))
+
+
+func _exit_mat(o: Vector2i) -> void:
+	_floor(o)
+	_rect(o, Rect2i(2, 4, 12, 9), Color("a83838"))
+	_rect(o, Rect2i(3, 5, 10, 7), Color("c85050"))
+	for x in [5, 8, 11]:
+		_px(o, x, 8, Color("f0d060"))
+
+
+func _interior_wall(o: Vector2i) -> void:
+	_fill(o, Color("c8b8a0"))
+	_rect(o, Rect2i(0, 12, 16, 4), Color("8a7860"))
+	_rect(o, Rect2i(0, 11, 16, 1), Color("6a5848"))
+
+
+func _rug(o: Vector2i) -> void:
+	_floor(o)
+	_rect(o, Rect2i(0, 1, 16, 14), Color("4868a8"))
+	_rect(o, Rect2i(0, 3, 16, 1), Color("88a8e0"))
+	_rect(o, Rect2i(0, 12, 16, 1), Color("88a8e0"))
+
+
+func _table(o: Vector2i) -> void:
+	_floor(o)
+	_rect(o, Rect2i(1, 3, 14, 8), WOOD)
+	_rect(o, Rect2i(1, 3, 14, 2), Color("c89868"))
+	_rect(o, Rect2i(2, 11, 2, 4), WOOD_DARK)
+	_rect(o, Rect2i(12, 11, 2, 4), WOOD_DARK)
+
+
+func _bed(o: Vector2i) -> void:
+	_floor(o)
+	_rect(o, Rect2i(1, 0, 14, 16), WOOD_DARK)
+	_rect(o, Rect2i(2, 1, 12, 4), Color.WHITE)
+	_rect(o, Rect2i(2, 5, 12, 10), Color("4890d0"))
+
+
+func _server_rack(o: Vector2i) -> void:
+	_floor(o)
+	_rect(o, Rect2i(2, 0, 12, 16), Color("303840"))
+	for y in range(2, 15, 3):
+		_rect(o, Rect2i(3, y, 10, 2), Color("485058"))
+		_px(o, 4, y, Color("60f080"))
+		_px(o, 6, y, Color("f0c040") if y % 2 == 0 else Color("60f080"))
+
+
+func _plant(o: Vector2i) -> void:
+	_floor(o)
+	_rect(o, Rect2i(5, 10, 6, 6), Color("b06838"))
+	for y in 11:
+		for x in T:
+			if Vector2(x - 7.5, y - 5.5).length() <= 5.5:
+				_px(o, x, y, TREE if (x + y) % 3 else TREE_DARK)
+
+
+func _bookshelf(o: Vector2i) -> void:
+	_fill(o, WOOD_DARK)
+	var colors: Array[Color] = [Color("c04040"), Color("4060c0"), Color("40a060"), Color("e0c040")]
+	for shelf in 2:
+		var y := 2 + shelf * 7
+		_rect(o, Rect2i(1, y + 5, 14, 1), WOOD)
+		for i in 6:
+			_rect(o, Rect2i(2 + i * 2, y, 2, 5), colors[(i + shelf) % 4])

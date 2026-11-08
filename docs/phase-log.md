@@ -4,6 +4,30 @@ Newest entries at the top. Each entry: what's done, decisions, what's next.
 
 ---
 
+## 2026-11-07 — Phase 4b: Map events + dialogue ✅
+
+**Done**
+- Event nodes in `scripts/overworld/events/` (exported properties, built from each map's `events` list): WarpEvent, SignEvent, NpcEvent (solid, faces you, optional wander, move_path), TriggerEvent (zone + once/requires/unless flags), HiddenItemEvent.
+- Dialogue system: `data/dialogue/*.json` scripts with text + speaker, yes/no choices, if_flag branches, and commands set_flag, give_item, give_daemon, heal_party, start_battle, move_npc. `{player}` fills in the name ("New Hire" until the intro asks). `DialogueRunner` runs them; the overworld shows a typewriter text box (shared `TextBox`, renamed from BattleTextBox), a speaker name tab, and the YES/NO menu.
+- Press A facing an NPC / sign / hidden item to interact; counters reach one tile further.
+- Warps fade out/in. Battles started from dialogue return you to the same spot (GameState.location now includes facing).
+- Validation: every dialogue step and command, every map event (dialogue ids, items, species, warp targets, NPCs on walkable tiles).
+- 8 interior tiles (exit mat, interior wall, rug, table, bed, server rack, plant, bookshelf).
+- New maps: Your House (Mom gives 3 Coffee once), Kevin's House, Help Desk (heal across the counter; intern offers a Dustbunny), Route 1: Cable Run stub (signs, hidden 2x Thumb Drive, road north "closed for maintenance").
+- Onboarding Town events: 3 doors + north exit, 3 signs, Kevin (offers a battle), a wandering townsperson, a kid who "dances" (move_npc), a one-time warning trigger at the north exit, a hidden Coffee.
+- Fixes: camera offset ignored map limits (8px strip past the edge) → camera now positioned instead; background is black around small rooms.
+- Tests: `tests/test_map_events.gd` (13). 147/147 passing overall.
+
+**Phase 4 complete.** Done-when met: walk out of your house, talk to people, read signs, go through doors between maps.
+
+**Notes**
+- Trainer line-of-sight, defeat text and prize money are Phase 6; Kevin's battle is a plain dialogue → battle for now.
+- The townsperson wanders with unseeded randomness (fine for the overworld; battles stay seeded).
+
+**Next:** Phase 5 — wild encounters in cable tangles, Active Stack menu, Server Rack, Bag, CMDB, Help Desk heal, Supply Closet shop.
+
+---
+
 ## 2026-11-07 — Phase 4a: Overworld movement + Onboarding Town ✅
 
 **Done**

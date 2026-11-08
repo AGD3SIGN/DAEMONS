@@ -1,0 +1,60 @@
+{
+  "id": "kevin_house",
+  "name": "Kevin's House",
+  "legend": {
+    "_": "floor",
+    "I": "interior_wall",
+    "M": "exit_mat",
+    "k": "bookshelf",
+    "c": "server_rack",
+    "b": "bed",
+    "t": "table",
+    "p": "plant",
+    "r": "rug",
+    "C": "counter"
+  },
+  "rows": [
+    "IIIIIIIIII",
+    "IIIIIIIIII",
+    "Icc_____kI",
+    "I___tt___I",
+    "I________I",
+    "I___rrr__I",
+    "Ip_______I",
+    "IIIIIMIIII"
+  ],
+  "spawns": {
+    "default": {
+      "x": 5,
+      "y": 6,
+      "facing": "up"
+    }
+  },
+  "events": [
+    {
+      "type": "warp",
+      "x": 5,
+      "y": 7,
+      "to_map": "onboarding_town",
+      "to_spawn": "from_kevin"
+    },
+    {
+      "type": "npc",
+      "id": "kevins_mom",
+      "x": 3,
+      "y": 4,
+      "facing": "right",
+      "dialogue": "kevins_mom",
+      "look": {
+        "shirt": "#40a080",
+        "hair": "#202020"
+      }
+    },
+    {
+      "type": "sign",
+      "x": 1,
+      "y": 2,
+      "dialogue": "kevin_servers"
+    }
+  ]
+}

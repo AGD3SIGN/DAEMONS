@@ -1,0 +1,87 @@
+{
+  "id": "route_1",
+  "name": "Route 1: Cable Run",
+  "legend": {
+    ".": "grass",
+    ",": "path",
+    "\"": "cable_tangle",
+    "T": "tree",
+    "f": "flowers",
+    "S": "sign",
+    "L": "ledge"
+  },
+  "rows": [
+    "TTTTTTTTTTTTTTTTTTTT",
+    "TTTTTTTTTTTTTTTTTTTT",
+    "TT.......,,.......TT",
+    "TT...f...,,S......TT",
+    "TT.......,,.......TT",
+    "TT\"\"\"\"\"\".,,.......TT",
+    "TT\"\"\"\"\"\".,,....f..TT",
+    "TT\"\"\"\"\"\".,,.......TT",
+    "TT\"\"\"\"\"\".,,LLLLLLLTT",
+    "TT\"\"\"\"\"\".,,.......TT",
+    "TT.......,,.......TT",
+    "TT.......,,.\"\"\"\"\"\"TT",
+    "TT..f....,,.\"\"\"\"\"\"TT",
+    "TT.......,,.\"\"\"\"\"\"TT",
+    "TT.......,,.\"\"\"\"\"\"TT",
+    "TT.......,,.\"\"\"\"\"\"TT",
+    "TT\"\"\"\"\"..,,.\"\"\"\"\"\"TT",
+    "TT\"\"\"\"\"..,,.......TT",
+    "TT\"\"\"\"\"..,,.......TT",
+    "TT\"\"\"\"\"..,,.......TT",
+    "TT.......,,..f....TT",
+    "TT......S,,.......TT",
+    "TT.......,,.......TT",
+    "TT.......,,.......TT"
+  ],
+  "spawns": {
+    "default": {
+      "x": 9,
+      "y": 21,
+      "facing": "up"
+    },
+    "south": {
+      "x": 9,
+      "y": 21,
+      "facing": "up"
+    }
+  },
+  "events": [
+    {
+      "type": "warp",
+      "x": 9,
+      "y": 23,
+      "to_map": "onboarding_town",
+      "to_spawn": "route_1"
+    },
+    {
+      "type": "warp",
+      "x": 10,
+      "y": 23,
+      "to_map": "onboarding_town",
+      "to_spawn": "route_1"
+    },
+    {
+      "type": "sign",
+      "x": 8,
+      "y": 21,
+      "dialogue": "route_1_sign"
+    },
+    {
+      "type": "sign",
+      "x": 11,
+      "y": 3,
+      "dialogue": "route_1_closed"
+    },
+    {
+      "type": "hidden_item",
+      "x": 15,
+      "y": 6,
+      "item": "thumb_drive",
+      "count": 2,
+      "flag": "hidden_route_1_keys"
+    }
+  ]
+}

@@ -143,7 +143,7 @@ func test_list_cancel_with_ui_cancel() -> void:
 
 
 func test_text_box_waits_for_input() -> void:
-	var box := BattleTextBox.new()
+	var box := TextBox.new()
 	box.size = Vector2(316, 46)
 	add_child_autofree(box)
 	box.time_scale = 0.0

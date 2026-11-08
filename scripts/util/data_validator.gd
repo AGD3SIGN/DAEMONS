@@ -15,6 +15,21 @@ const POCKETS: PackedStringArray = ["items", "keys", "scripts", "key_items"]
 const MULTIPLIERS: Array[float] = [0.0, 0.5, 2.0]
 const TILE_BEHAVIORS: PackedStringArray = ["none", "hot_zone", "ledge_down", "water", "door", "counter"]
 const FACINGS: PackedStringArray = ["up", "down", "left", "right"]
+const DIALOGUE_COMMANDS := {
+	"set_flag": ["flag"],
+	"give_item": ["item"],
+	"give_daemon": ["species", "level"],
+	"heal_party": [],
+	"start_battle": ["foe"],
+	"move_npc": ["npc", "path"],
+}
+const EVENT_TYPES := {
+	"warp": ["to_map", "to_spawn"],
+	"sign": ["dialogue"],
+	"npc": ["id", "dialogue", "facing"],
+	"trigger": ["dialogue"],
+	"hidden_item": ["item", "flag"],
+}
 
 ## effect id -> required param names
 const MOVE_EFFECTS := {
@@ -50,6 +65,7 @@ var species: Dictionary = {}
 var items: Dictionary = {}
 var config_profiles: Dictionary = {}
 var tiles: Dictionary = {}   # tile name -> {name, atlas, collision, behavior}
+var dialogues: Dictionary = {}  # dialogue id -> list of steps
 
 
 ## raw = {"types": ..., "moves": ..., "species": ..., "items": ..., "config_profiles": ...}
@@ -68,6 +84,7 @@ func validate(raw: Dictionary) -> PackedStringArray:
 		_validate_item(items[id], "items › " + id)
 	for id: String in species:
 		_validate_species(species[id], "species › " + id)
+	_validate_dialogue_files(raw.get("dialogue", {}))
 	return errors
 
 
@@ -190,7 +207,153 @@ func validate_map(m: Variant, map_id: String) -> PackedStringArray:
 		var tile: Dictionary = tiles.get(legend.get(ch, ""), {})
 		if tile.get("collision", true) or tile.get("behavior") == "water":
 			_err(sw, "spawn is on a tile you can't stand on")
+	_validate_events(m.get("events", []), where, rows, legend)
 	return errors.slice(before)
+
+
+func _validate_events(events: Variant, where: String, rows: Array, legend: Dictionary) -> void:
+	if typeof(events) != TYPE_ARRAY:
+		_err(where, "'events' must be a list")
+		return
+	var npc_ids := {}
+	var width := String(rows[0]).length()
+	for i in events.size():
+		var e: Variant = events[i]
+		var ew := "%s › events[%d]" % [where, i]
+		if typeof(e) != TYPE_DICTIONARY or not _one_of(e, "type", ew, EVENT_TYPES.keys()):
+			continue
+		ew += " (%s)" % e["type"]
+		if not _int(e, "x", ew, 0, width - 1) or not _int(e, "y", ew, 0, rows.size() - 1):
+			continue
+		var missing := false
+		for key: String in EVENT_TYPES[e["type"]]:
+			if not e.has(key):
+				_err(ew, "needs '%s'" % key)
+				missing = true
+		if missing:
+			continue
+		var row := String(rows[int(e["y"])])
+		var tile: Dictionary = tiles.get(legend.get(row[int(e["x"])], ""), {}) if int(e["x"]) < row.length() else {}
+		if e.has("dialogue") and not dialogues.has(e["dialogue"]):
+			_err(ew, "unknown dialogue '%s'" % str(e["dialogue"]))
+		match e["type"]:
+			"warp":
+				if not FileAccess.file_exists("res://data/maps/%s.json" % e["to_map"]):
+					_err(ew, "warp to unknown map '%s'" % str(e["to_map"]))
+			"npc":
+				_one_of(e, "facing", ew, FACINGS)
+				if npc_ids.has(e["id"]):
+					_err(ew, "duplicate npc id '%s'" % str(e["id"]))
+				npc_ids[e["id"]] = true
+				if tile.get("collision", true):
+					_err(ew, "NPC stands on a solid tile")
+			"trigger":
+				if e.has("w"):
+					_int(e, "w", ew, 1, width)
+				if e.has("h"):
+					_int(e, "h", ew, 1, rows.size())
+			"hidden_item":
+				if not items.has(e["item"]):
+					_err(ew, "unknown item '%s'" % str(e["item"]))
+				_string(e, "flag", ew)
+
+
+# --- dialogue ----------------------------------------------------------------
+
+## raw = {file name: {dialogue id: [steps]}}. Ids must be unique across all files.
+func _validate_dialogue_files(raw: Variant) -> void:
+	dialogues = {}
+	if typeof(raw) != TYPE_DICTIONARY:
+		_err("dialogue", "dialogue files didn't load")
+		return
+	for file: String in raw:
+		var content: Variant = raw[file]
+		if typeof(content) != TYPE_DICTIONARY:
+			_err("dialogue › " + file, "must be an object of dialogue id -> steps")
+			continue
+		for id: String in content:
+			if dialogues.has(id):
+				_err("dialogue › %s › %s" % [file, id], "duplicate dialogue id")
+				continue
+			dialogues[id] = content[id]
+			_validate_steps(content[id], "dialogue › %s › %s" % [file, id])
+
+
+func _validate_steps(steps: Variant, where: String) -> void:
+	if typeof(steps) != TYPE_ARRAY:
+		_err(where, "must be a list of steps")
+		return
+	for i in steps.size():
+		var step: Variant = steps[i]
+		var sw := "%s[%d]" % [where, i]
+		if typeof(step) != TYPE_DICTIONARY:
+			_err(sw, "each step must be an object")
+			continue
+		var kinds := 0
+		for key in ["text", "choice", "if_flag", "cmd"]:
+			if step.has(key):
+				kinds += 1
+		if kinds != 1:
+			_err(sw, "needs exactly one of text, choice, if_flag or cmd")
+			continue
+		if step.has("text"):
+			_string(step, "text", sw)
+		elif step.has("choice"):
+			_string(step, "choice", sw)
+			_validate_steps(step.get("yes", []), sw + " › yes")
+			_validate_steps(step.get("no", []), sw + " › no")
+		elif step.has("if_flag"):
+			_string(step, "if_flag", sw)
+			_validate_steps(step.get("then", []), sw + " › then")
+			_validate_steps(step.get("else", []), sw + " › else")
+		else:
+			_validate_command(step, sw)
+
+
+func _validate_command(step: Dictionary, where: String) -> void:
+	if not _one_of(step, "cmd", where, DIALOGUE_COMMANDS.keys()):
+		return
+	for key: String in DIALOGUE_COMMANDS[step["cmd"]]:
+		if not step.has(key):
+			_err(where, "'%s' needs '%s'" % [step["cmd"], key])
+			return
+	match step["cmd"]:
+		"set_flag":
+			_string(step, "flag", where)
+			if step.has("value") and typeof(step["value"]) != TYPE_BOOL:
+				_err(where, "'value' must be true or false")
+		"give_item":
+			if not items.has(step["item"]):
+				_err(where, "unknown item '%s'" % str(step["item"]))
+			if step.has("count"):
+				_int(step, "count", where, 1, 99)
+		"give_daemon":
+			if not species.has(step["species"]):
+				_err(where, "unknown species '%s'" % str(step["species"]))
+			_int(step, "level", where, 1, 100)
+		"start_battle":
+			_validate_team(step["foe"], where + " › foe")
+			if step.has("ai"):
+				_one_of(step, "ai", where, ["random", "basic", "smart"])
+		"move_npc":
+			_string(step, "npc", where)
+			var path: Variant = step["path"]
+			if typeof(path) != TYPE_ARRAY or path.is_empty():
+				_err(where, "'path' must be a list like [\"left\", \"left\"]")
+			else:
+				for dir: Variant in path:
+					if not dir in FACINGS:
+						_err(where, "unknown direction '%s' in path" % str(dir))
+
+
+## [[species_id, level], ...]
+func _validate_team(team: Variant, where: String) -> void:
+	if typeof(team) != TYPE_ARRAY or team.is_empty() or team.size() > 6:
+		_err(where, "must be a list of 1 to 6 [species, level] pairs")
+		return
+	for entry: Variant in team:
+		if typeof(entry) != TYPE_ARRAY or entry.size() != 2 or not species.has(entry[0]) or not _is_int(entry[1]) or entry[1] < 1 or entry[1] > 100:
+			_err(where, "bad entry %s (want [species_id, level 1-100])" % JSON.stringify(entry))
 
 
 # --- config profiles ---------------------------------------------------------

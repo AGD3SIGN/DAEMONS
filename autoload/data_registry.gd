@@ -13,6 +13,7 @@ const FILES := {
 	"tiles": "tiles.json",
 }
 const MAPS_DIR := "res://data/maps/"
+const DIALOGUE_DIR := "res://data/dialogue/"
 
 var types: Dictionary = {}       # id -> {id, name, color}
 var type_chart: Dictionary = {}  # attacker id -> {defender id -> multiplier}; missing = 1
@@ -21,6 +22,7 @@ var species: Dictionary = {}
 var items: Dictionary = {}
 var config_profiles: Dictionary = {}  # id -> {id, name, up, down}; up/down null = neutral
 var tiles: Dictionary = {}            # tile name -> {name, atlas, collision, behavior}
+var dialogues: Dictionary = {}        # dialogue id -> list of steps (from every data/dialogue/*.json)
 
 var _validator: DataValidator
 var _maps: Dictionary = {}            # map id -> validated map data (loaded on first use)
@@ -57,6 +59,16 @@ func read_raw(out_errors: PackedStringArray = PackedStringArray()) -> Dictionary
 			out_errors.append("%s line %d: %s" % [path, json.get_error_line(), json.get_error_message()])
 			continue
 		raw[key] = json.data
+	var dialogue_files := {}
+	for file in DirAccess.get_files_at(DIALOGUE_DIR):
+		if not file.ends_with(".json"):
+			continue
+		var json := JSON.new()
+		if json.parse(FileAccess.get_file_as_string(DIALOGUE_DIR + file)) != OK:
+			out_errors.append("%s%s line %d: %s" % [DIALOGUE_DIR, file, json.get_error_line(), json.get_error_message()])
+			continue
+		dialogue_files[file] = json.data
+	raw["dialogue"] = dialogue_files
 	return raw
 
 
@@ -73,6 +85,7 @@ func load_from(raw: Dictionary, report: bool = true) -> bool:
 	items = validator.items
 	config_profiles = validator.config_profiles
 	tiles = validator.tiles
+	dialogues = validator.dialogues
 	if report:
 		_report()
 	return errors.is_empty()
@@ -115,6 +128,10 @@ func check_map(map_data: Variant, map_id: String) -> PackedStringArray:
 	return _validator.validate_map(map_data, map_id)
 
 
+func get_dialogue(id: String) -> Array:
+	return dialogues.get(id, [])
+
+
 func get_species(id: String) -> Dictionary:
 	return species.get(id, {})
 
@@ -138,7 +155,7 @@ func type_multiplier(attack_type: String, defender_types: Array) -> float:
 
 func _report() -> void:
 	if errors.is_empty():
-		print("DataRegistry: %d types, %d moves, %d species, %d items, %d config profiles, %d tiles loaded" % [types.size(), moves.size(), species.size(), items.size(), config_profiles.size(), tiles.size()])
+		print("DataRegistry: %d types, %d moves, %d species, %d items, %d config profiles, %d tiles, %d dialogues loaded" % [types.size(), moves.size(), species.size(), items.size(), config_profiles.size(), tiles.size(), dialogues.size()])
 		return
 	for e in errors:
 		push_error("DataRegistry: " + e)

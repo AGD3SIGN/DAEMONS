@@ -50,10 +50,128 @@
       "y": 8,
       "facing": "down"
     },
+    "from_kevin": {
+      "x": 21,
+      "y": 8,
+      "facing": "down"
+    },
+    "from_help_desk": {
+      "x": 20,
+      "y": 19,
+      "facing": "down"
+    },
     "route_1": {
       "x": 14,
       "y": 2,
       "facing": "down"
     }
-  }
+  },
+  "events": [
+    {
+      "type": "warp",
+      "x": 7,
+      "y": 7,
+      "to_map": "player_house",
+      "to_spawn": "default"
+    },
+    {
+      "type": "warp",
+      "x": 21,
+      "y": 7,
+      "to_map": "kevin_house",
+      "to_spawn": "default"
+    },
+    {
+      "type": "warp",
+      "x": 20,
+      "y": 18,
+      "to_map": "help_desk",
+      "to_spawn": "default"
+    },
+    {
+      "type": "warp",
+      "x": 14,
+      "y": 0,
+      "to_map": "route_1",
+      "to_spawn": "south"
+    },
+    {
+      "type": "warp",
+      "x": 15,
+      "y": 0,
+      "to_map": "route_1",
+      "to_spawn": "south"
+    },
+    {
+      "type": "sign",
+      "x": 13,
+      "y": 3,
+      "dialogue": "town_sign"
+    },
+    {
+      "type": "sign",
+      "x": 10,
+      "y": 8,
+      "dialogue": "player_house_sign"
+    },
+    {
+      "type": "sign",
+      "x": 22,
+      "y": 19,
+      "dialogue": "help_desk_sign"
+    },
+    {
+      "type": "npc",
+      "id": "kevin",
+      "x": 22,
+      "y": 9,
+      "facing": "left",
+      "dialogue": "kevin_town",
+      "look": {
+        "shirt": "#40a0e0",
+        "hair": "#e0b040"
+      }
+    },
+    {
+      "type": "npc",
+      "id": "townsperson",
+      "x": 11,
+      "y": 14,
+      "facing": "down",
+      "wander": true,
+      "dialogue": "townsperson",
+      "look": {
+        "shirt": "#70a040",
+        "hair": "#303030"
+      }
+    },
+    {
+      "type": "npc",
+      "id": "kid",
+      "x": 11,
+      "y": 18,
+      "facing": "left",
+      "dialogue": "kid",
+      "look": {
+        "shirt": "#e05050",
+        "hair": "#c08040"
+      }
+    },
+    {
+      "type": "trigger",
+      "x": 14,
+      "y": 4,
+      "w": 2,
+      "h": 1,
+      "dialogue": "route_1_warning",
+      "once_flag": "warned_route_1"
+    },
+    {
+      "type": "hidden_item",
+      "x": 25,
+      "y": 20,
+      "item": "coffee",
+      "flag": "hidden_coffee_town"
+    }
+  ]
 }

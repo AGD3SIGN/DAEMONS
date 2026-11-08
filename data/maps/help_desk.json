@@ -1,0 +1,73 @@
+{
+  "id": "help_desk",
+  "name": "Help Desk",
+  "legend": {
+    "_": "floor",
+    "I": "interior_wall",
+    "M": "exit_mat",
+    "k": "bookshelf",
+    "c": "server_rack",
+    "b": "bed",
+    "t": "table",
+    "p": "plant",
+    "r": "rug",
+    "C": "counter"
+  },
+  "rows": [
+    "IIIIIIIIIIIII",
+    "IIIIIIIIIIIII",
+    "Ip________ccI",
+    "I__CCCCCCC__I",
+    "I___________I",
+    "I___________I",
+    "Ik___rrr___pI",
+    "I____rrr____I",
+    "IIIIIIMIIIIII"
+  ],
+  "spawns": {
+    "default": {
+      "x": 6,
+      "y": 7,
+      "facing": "up"
+    }
+  },
+  "events": [
+    {
+      "type": "warp",
+      "x": 6,
+      "y": 8,
+      "to_map": "onboarding_town",
+      "to_spawn": "from_help_desk"
+    },
+    {
+      "type": "npc",
+      "id": "tech",
+      "x": 6,
+      "y": 2,
+      "facing": "down",
+      "dialogue": "help_desk_tech",
+      "look": {
+        "shirt": "#3858c0",
+        "hair": "#f0d070"
+      }
+    },
+    {
+      "type": "npc",
+      "id": "intern",
+      "x": 3,
+      "y": 6,
+      "facing": "right",
+      "dialogue": "intern",
+      "look": {
+        "shirt": "#e0a030",
+        "hair": "#603018"
+      }
+    },
+    {
+      "type": "sign",
+      "x": 10,
+      "y": 2,
+      "dialogue": "server_rack_soon"
+    }
+  ]
+}

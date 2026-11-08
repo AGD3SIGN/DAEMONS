@@ -40,7 +40,7 @@ var foe_sprite: TextureRect
 var player_sprite: TextureRect
 var foe_panel: BattleInfoPanel
 var player_panel: BattleInfoPanel
-var text_box: BattleTextBox
+var text_box: TextBox
 var menu: BattleMenu
 var key_sprite: TextureRect
 var stat_popup: Panel
@@ -388,7 +388,7 @@ func _build() -> void:
 	_upgrade_sprite.offset_bottom = 32
 	_upgrade_overlay.add_child(_upgrade_sprite)
 
-	text_box = BattleTextBox.new()
+	text_box = TextBox.new()
 	_place(text_box, Vector4(0, 1, 1, 1), Rect2(2, -48, -4, 46))
 	menu = BattleMenu.new()
 	add_child(menu)

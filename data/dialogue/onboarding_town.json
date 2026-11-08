@@ -1,0 +1,105 @@
+{
+  "town_sign": [
+    { "text": "ONBOARDING TOWN" },
+    { "text": "Where every career starts with a password reset." }
+  ],
+  "player_house_sign": [
+    { "text": "Your house. The Wi-Fi password is on the fridge." }
+  ],
+  "help_desk_sign": [
+    { "text": "HELP DESK - Daemons restored free of charge." },
+    { "text": "Please describe your issue in detail. Tickets that say \"it's broken\" will be closed." }
+  ],
+  "route_1_warning": [
+    { "speaker": "Kevin", "text": "Hey! Hold up!" },
+    { "speaker": "Kevin", "text": "Wild Daemons live in those cable tangles up north. Don't go in without a Daemon of your own!" },
+    { "speaker": "Kevin", "text": "I've CC'd the whole town on this, by the way." }
+  ],
+  "kevin_town": [
+    { "speaker": "Kevin", "text": "Oh, it's you! Did you see my email? The one with 47 attachments?" },
+    { "speaker": "Kevin", "choice": "Want to test our Daemons? Quick battle?",
+      "yes": [
+        { "speaker": "Kevin", "text": "Replying all to this challenge!" },
+        { "cmd": "start_battle", "trainer_name": "Kevin", "ai": "basic", "foe": [["spamlet", 6], ["cablesnake", 7]] }
+      ],
+      "no": [
+        { "speaker": "Kevin", "text": "Fine. I'll schedule a meeting about it." }
+      ]
+    }
+  ],
+  "townsperson": [
+    { "speaker": "Townsperson", "text": "Wild Daemons hide in tangled cables. Nobody ever labels them." },
+    { "speaker": "Townsperson", "text": "Some say the cable tangles were here before the town. Some say the IT department just gave up." }
+  ],
+  "kid": [
+    { "speaker": "Kid", "text": "My Dustbunny does a little dance when it's happy! Watch!" },
+    { "cmd": "move_npc", "npc": "self", "path": ["up", "down", "up", "down"] },
+    { "speaker": "Kid", "text": "...That was me. The Dustbunny is shy." }
+  ],
+  "mom": [
+    { "if_flag": "got_mom_coffee",
+      "then": [
+        { "speaker": "Mom", "text": "Stay hydrated! Coffee counts. Probably." }
+      ],
+      "else": [
+        { "speaker": "Mom", "text": "First day at the Help Desk! I'm so proud of you, {player}." },
+        { "speaker": "Mom", "text": "Take these. Nobody fixes a printer on an empty stomach." },
+        { "cmd": "give_item", "item": "coffee", "count": 3 },
+        { "cmd": "set_flag", "flag": "got_mom_coffee" }
+      ]
+    }
+  ],
+  "home_pc": [
+    { "text": "It's your PC. 214 unread emails. All from Kevin." }
+  ],
+  "kevins_mom": [
+    { "speaker": "Kevin's Mom", "text": "Kevin replied-all to the whole town again. I've changed the router password." },
+    { "speaker": "Kevin's Mom", "text": "Don't tell him it's \"password2\"." }
+  ],
+  "kevin_servers": [
+    { "text": "Kevin's home lab. It's mostly blinking lights and one very warm Fanbat." }
+  ],
+  "help_desk_tech": [
+    { "speaker": "Help Desk", "text": "Welcome to the Help Desk!" },
+    { "speaker": "Help Desk", "choice": "Want me to restore your Daemons?",
+      "yes": [
+        { "speaker": "Help Desk", "text": "Have you tried turning it off and on again?" },
+        { "cmd": "heal_party" },
+        { "speaker": "Help Desk", "text": "...There. All fixed. Please rate your experience 1 to 5." }
+      ],
+      "no": [
+        { "speaker": "Help Desk", "text": "Ticket closed. Come back anytime!" }
+      ]
+    }
+  ],
+  "intern": [
+    { "if_flag": "got_intern_dustbunny",
+      "then": [
+        { "speaker": "Intern", "text": "How's the Dustbunny? Don't let it near the keyboards." }
+      ],
+      "else": [
+        { "speaker": "Intern", "text": "I found this Dustbunny living behind Server 3." },
+        { "speaker": "Intern", "choice": "Do you want it?",
+          "yes": [
+            { "cmd": "give_daemon", "species": "dustbunny", "level": 5 },
+            { "cmd": "set_flag", "flag": "got_intern_dustbunny" },
+            { "speaker": "Intern", "text": "Take good care of it. It sneezes on everything." }
+          ],
+          "no": [
+            { "speaker": "Intern", "text": "That's okay. It's kind of growing on me." }
+          ]
+        }
+      ]
+    }
+  ],
+  "server_rack_soon": [
+    { "text": "A Server Rack for storing Daemons. The login screen says: \"Coming soon.\"" }
+  ],
+  "route_1_sign": [
+    { "text": "ROUTE 1: CABLE RUN" },
+    { "text": "Onboarding Town is just south." }
+  ],
+  "route_1_closed": [
+    { "text": "SCHEDULED MAINTENANCE: The road to Patch Town is closed until further notice." }
+  ]
+}

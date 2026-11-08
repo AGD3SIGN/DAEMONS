@@ -92,3 +92,28 @@ Regenerate the placeholder PNG: `godot --headless -s res://tools/build_placehold
 ```
 Each row is one line of the map; every row must be the same width. Each character must be in the
 legend. Spawns must be on a walkable tile. Maps load on first use and are validated then.
+
+### Map events (`"events": [...]` in a map file)
+| type | fields | what it does |
+|---|---|---|
+| warp | x, y, to_map, to_spawn | step on it → fade to that map's spawn. Put on doors, exit mats, route edges |
+| sign | x, y, dialogue | press A facing it |
+| npc | id, x, y, facing, dialogue, wander (opt), look {shirt, hair} (opt) | solid; press A facing it (turns to you). Wanders within 2 tiles if wander is true |
+| trigger | x, y, w, h (opt), dialogue, once_flag / requires_flag / unless_flag (opt) | runs when you walk into the zone |
+| hidden_item | x, y, item, count (opt), flag | press A facing that tile to find it, once |
+
+Counters let you talk across them (A reaches one tile further).
+
+## dialogue/*.json
+Every file is an object of `dialogue id → list of steps`. Ids must be unique across all files.
+| step | example |
+|---|---|
+| text | `{"speaker": "Mom", "text": "Hi, {player}!"}` |
+| yes/no | `{"choice": "Heal your Daemons?", "yes": [steps], "no": [steps]}` |
+| flag check | `{"if_flag": "got_coffee", "then": [steps], "else": [steps]}` |
+| set_flag | `{"cmd": "set_flag", "flag": "met_kevin", "value": true}` |
+| give_item | `{"cmd": "give_item", "item": "coffee", "count": 3}` |
+| give_daemon | `{"cmd": "give_daemon", "species": "dustbunny", "level": 5}` |
+| heal_party | `{"cmd": "heal_party"}` |
+| start_battle | `{"cmd": "start_battle", "trainer_name": "Kevin", "ai": "basic", "foe": [["spamlet", 6]]}` (ends the dialogue; you come back to the same spot) |
+| move_npc | `{"cmd": "move_npc", "npc": "self", "path": ["up", "down"]}` |

@@ -48,7 +48,7 @@ func _ready() -> void:
 	_sprite.vframes = 4
 	add_child(_sprite)
 	camera = Camera2D.new()
-	camera.offset = Vector2(TILE / 2.0, TILE / 2.0)
+	camera.position = Vector2(TILE / 2.0, TILE / 2.0)  # center on the tile (offset would ignore the map limits)
 	add_child(camera)
 	camera.make_current()
 	_set_frame(0)

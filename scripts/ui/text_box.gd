@@ -1,6 +1,6 @@
-class_name BattleTextBox
+class_name TextBox
 extends Panel
-## The text box along the bottom of the battle screen. Types text out character by character;
+## The text box along the bottom of the screen (battles and overworld dialogue). Types text out character by character;
 ## Z/Enter/X, a click or a tap skips the typing, then advances once the arrow shows.
 
 signal advanced
