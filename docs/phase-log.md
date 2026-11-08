@@ -4,6 +4,29 @@ Newest entries at the top. Each entry: what's done, decisions, what's next.
 
 ---
 
+## 2026-11-07 — Phase 4a: Overworld movement + Onboarding Town ✅
+
+**Done**
+- Placeholder tileset `assets/tiles/placeholder_overworld.png` (16 tiles, drawn by `tools/build_placeholder_tiles.gd`) + `data/tiles.json` (name, atlas, collision, behavior). `OverworldTiles` builds a TileSet with custom data layers "name"/"collision"/"behavior".
+- Maps are text grids in `data/maps/<id>.json` (legend + rows + spawns), validated on load. `MapView` builds a TileMapLayer and answers tile_info / is_walkable from the TileSet custom data.
+- **Onboarding Town** (30x25): your house, Kevin's house, the Help Desk (blue roof), pond with fences, flowers, 3 signs, 3 cable tangle patches (hot zones), ledges, exit north to Route 1.
+- `PlayerController`: one tile per step, 4 tiles/sec walking, 8 running (hold run). Tap turns in place, hold walks, direction changes mid-walk don't pause. Walls bump with a sound (throttled) and walk-in-place. Ledges hop down 2 tiles with an arc + shadow, can't climb up. Signals `stepped(cell, behavior)` and `bumped`.
+- Camera follows the player and stays inside the map. Area-name banner slides in on arrival.
+- Placeholder character sheet (3 frames × 4 directions, 16x16) in `CharacterSprites`; real art at `assets/sprites/characters/<id>.png` overrides.
+- `AudioManager.play_sfx()` with synthesized placeholder blips (bump, select, confirm); real files in `assets/audio/sfx/` override.
+- `GameState.location` tracks map + cell (for saves in Phase 6).
+- Debug menu: "Overworld: Onboarding Town". In the overworld, Space/Tab (menu) returns to the debug menu for now.
+- Tests: `tests/test_overworld.gd` (12). 134/134 passing overall.
+
+**Decisions**
+- Maps are text grids in JSON instead of painted in the Godot editor. Readable, diffable, easy for me to build; behavior still comes from TileSet custom data. A converter to editor-paintable scenes can come later if you want to paint maps by hand.
+- Tile behavior lives in tiles.json and is loaded into the TileSet at runtime (no hand-made .tres yet).
+- Single tile layer for now (no roofs drawn over the player).
+
+**Next:** Phase 4b — warps (doors, Route 1 exit), signs, NPCs, triggers, hidden items, dialogue system.
+
+---
+
 ## 2026-11-07 — Phase 3: Battle UI ✅
 
 **Done**

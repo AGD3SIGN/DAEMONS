@@ -1,0 +1,59 @@
+{
+  "id": "onboarding_town",
+  "name": "Onboarding Town",
+  "legend": {
+    ".": "grass",
+    ",": "path",
+    "\"": "cable_tangle",
+    "~": "water",
+    "T": "tree",
+    "F": "fence",
+    "f": "flowers",
+    "R": "roof_red",
+    "B": "roof_blue",
+    "W": "wall",
+    "w": "window",
+    "D": "door",
+    "L": "ledge",
+    "S": "sign"
+  },
+  "rows": [
+    "TTTTTTTTTTTTTT,,TTTTTTTTTTTTTT",
+    "TTTTTTTTTTTTTT,,TTTTTTTTTTTTTT",
+    "TT\"\"\"\"\".......,,.......\"\"\"\"\"TT",
+    "TT\"\"\"\"\"......S,,.......\"\"\"\"\"TT",
+    "TT\"\"\"\"\".......,,.......\"\"\"\"\"TT",
+    "TT...RRRRR....,,...RRRRR....TT",
+    "TT...RRRRR....,,...RRRRR....TT",
+    "TT...WwDwW..f.,,.f.WwDwW....TT",
+    "TT.f...,..S...,,.....,...f..TT",
+    "TT.....,......,,.....,....f.TT",
+    "TTLLLLL,LLLLL.,,.LLLL,LLLLLLTT",
+    "TT.....,......,,.....,......TT",
+    "TT..,,,,,,,,,,,,,,,,,,,,,,..TT",
+    "TT..,,,,,,,,,,,,,,,,,,,,,,..TT",
+    "TT............,,............TT",
+    "TT.FFFFFFF....,,.BBBBBBB....TT",
+    "TT..~~~~~.f...,,.BBBBBBB....TT",
+    "TT..~~~~~..f..,,.BBBBBBB....TT",
+    "TT..~~~~~.f...,,.WwwDwwW....TT",
+    "TT..~~~~~.....,,,,,,,.S.....TT",
+    "TT.FFFFFFF....,,,,,,,....f..TT",
+    "TT....................\"\"\"\"\"\"TT",
+    "TT.f........f.........\"\"\"\"\"\"TT",
+    "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTT",
+    "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"
+  ],
+  "spawns": {
+    "default": {
+      "x": 7,
+      "y": 8,
+      "facing": "down"
+    },
+    "route_1": {
+      "x": 14,
+      "y": 2,
+      "facing": "down"
+    }
+  }
+}

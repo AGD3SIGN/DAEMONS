@@ -13,6 +13,8 @@ const CATEGORIES: PackedStringArray = ["physical", "special", "status"]
 const GROWTH_RATES: PackedStringArray = ["fast", "medium_fast", "medium_slow", "slow", "erratic", "fluctuating"]
 const POCKETS: PackedStringArray = ["items", "keys", "scripts", "key_items"]
 const MULTIPLIERS: Array[float] = [0.0, 0.5, 2.0]
+const TILE_BEHAVIORS: PackedStringArray = ["none", "hot_zone", "ledge_down", "water", "door", "counter"]
+const FACINGS: PackedStringArray = ["up", "down", "left", "right"]
 
 ## effect id -> required param names
 const MOVE_EFFECTS := {
@@ -47,6 +49,7 @@ var moves: Dictionary = {}
 var species: Dictionary = {}
 var items: Dictionary = {}
 var config_profiles: Dictionary = {}
+var tiles: Dictionary = {}   # tile name -> {name, atlas, collision, behavior}
 
 
 ## raw = {"types": ..., "moves": ..., "species": ..., "items": ..., "config_profiles": ...}
@@ -55,6 +58,7 @@ func validate(raw: Dictionary) -> PackedStringArray:
 	errors = PackedStringArray()
 	_validate_types(raw.get("types"))
 	_validate_profiles(raw.get("config_profiles"))
+	_validate_tiles(raw.get("tiles"))
 	moves = _index(raw.get("moves"), "moves")
 	items = _index(raw.get("items"), "items")
 	species = _index(raw.get("species"), "species")
@@ -109,6 +113,84 @@ func _validate_types(raw: Variant) -> void:
 				_err("types › chart › %s › %s" % [atk, def], "multiplier must be 0, 0.5 or 2 (blank = 1)")
 			else:
 				type_chart[atk][def] = float(row[def])
+
+
+# --- overworld tiles and maps ------------------------------------------------
+
+func _validate_tiles(raw: Variant) -> void:
+	tiles = {}
+	if typeof(raw) != TYPE_ARRAY:
+		_err("tiles", "tiles.json is missing or isn't a list")
+		return
+	var seen_atlas := {}
+	for i in raw.size():
+		var t: Variant = raw[i]
+		var where := "tiles[%d]" % i
+		if typeof(t) != TYPE_DICTIONARY or not _string(t, "name", where):
+			continue
+		where = "tiles › " + String(t["name"])
+		if tiles.has(t["name"]):
+			_err(where, "duplicate tile name")
+			continue
+		tiles[t["name"]] = t
+		var atlas: Variant = t.get("atlas")
+		if typeof(atlas) != TYPE_ARRAY or atlas.size() != 2 or not _is_int(atlas[0]) or not _is_int(atlas[1]) or atlas[0] < 0 or atlas[1] < 0:
+			_err(where, "'atlas' must be [column, row]")
+		elif seen_atlas.has(str(atlas)):
+			_err(where, "same atlas cell as '%s'" % seen_atlas[str(atlas)])
+		else:
+			seen_atlas[str(atlas)] = t["name"]
+		if typeof(t.get("collision")) != TYPE_BOOL:
+			_err(where, "'collision' must be true or false")
+		_one_of(t, "behavior", where, TILE_BEHAVIORS)
+
+
+## Checks one map file (data/maps/<id>.json). Needs tiles validated first.
+func validate_map(m: Variant, map_id: String) -> PackedStringArray:
+	var before := errors.size()
+	var where := "maps › " + map_id
+	if typeof(m) != TYPE_DICTIONARY:
+		_err(where, "must be an object")
+		return errors.slice(before)
+	if m.get("id") != map_id:
+		_err(where, "'id' must match the file name")
+	_string(m, "name", where)
+	var legend: Variant = m.get("legend")
+	if typeof(legend) != TYPE_DICTIONARY or legend.is_empty():
+		_err(where, "'legend' must map characters to tile names")
+		legend = {}
+	for ch: String in legend:
+		if ch.length() != 1:
+			_err(where + " › legend", "key '%s' must be one character" % ch)
+		elif not tiles.has(legend[ch]):
+			_err(where + " › legend", "'%s' is an unknown tile '%s'" % [ch, str(legend[ch])])
+	var rows: Variant = m.get("rows")
+	if typeof(rows) != TYPE_ARRAY or rows.is_empty():
+		_err(where, "'rows' must be a non-empty list of strings")
+		return errors.slice(before)
+	var width := String(rows[0]).length()
+	for y in rows.size():
+		var row := String(rows[y])
+		if row.length() != width:
+			_err(where, "row %d is %d wide, expected %d" % [y, row.length(), width])
+		for x in row.length():
+			if not legend.has(row[x]):
+				_err(where, "unknown character '%s' at (%d, %d)" % [row[x], x, y])
+	var spawns: Variant = m.get("spawns")
+	if typeof(spawns) != TYPE_DICTIONARY or not spawns.has("default"):
+		_err(where, "'spawns' must include \"default\"")
+		return errors.slice(before)
+	for spawn_name: String in spawns:
+		var sp: Dictionary = spawns[spawn_name]
+		var sw := where + " › spawns › " + spawn_name
+		if not _int(sp, "x", sw, 0, width - 1) or not _int(sp, "y", sw, 0, rows.size() - 1):
+			continue
+		_one_of(sp, "facing", sw, FACINGS)
+		var ch: String = String(rows[int(sp["y"])])[int(sp["x"])]
+		var tile: Dictionary = tiles.get(legend.get(ch, ""), {})
+		if tile.get("collision", true) or tile.get("behavior") == "water":
+			_err(sw, "spawn is on a tile you can't stand on")
+	return errors.slice(before)
 
 
 # --- config profiles ---------------------------------------------------------

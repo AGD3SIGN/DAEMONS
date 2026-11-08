@@ -42,6 +42,7 @@ func _ready() -> void:
 	panel.add_child(buttons)
 	var first: CursorButton = null
 	for entry: Array in [
+		["Overworld: Onboarding Town", func() -> void: SceneRouter.goto(Overworld.SCENE, {"map": "onboarding_town"})],
 		["Wild battle: Dustbunny Lv5", _wild_dustbunny],
 		["Wild battle: random", _wild_random],
 		["Trainer battle: Kevin", _kevin],

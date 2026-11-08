@@ -1,0 +1,18 @@
+[
+  { "name": "grass",        "atlas": [0, 0], "collision": false, "behavior": "none" },
+  { "name": "path",         "atlas": [1, 0], "collision": false, "behavior": "none" },
+  { "name": "cable_tangle", "atlas": [2, 0], "collision": false, "behavior": "hot_zone" },
+  { "name": "water",        "atlas": [3, 0], "collision": false, "behavior": "water" },
+  { "name": "tree",         "atlas": [4, 0], "collision": true,  "behavior": "none" },
+  { "name": "fence",        "atlas": [5, 0], "collision": true,  "behavior": "none" },
+  { "name": "flowers",      "atlas": [6, 0], "collision": false, "behavior": "none" },
+  { "name": "roof_red",     "atlas": [7, 0], "collision": true,  "behavior": "none" },
+  { "name": "roof_blue",    "atlas": [0, 1], "collision": true,  "behavior": "none" },
+  { "name": "wall",         "atlas": [1, 1], "collision": true,  "behavior": "none" },
+  { "name": "window",       "atlas": [2, 1], "collision": true,  "behavior": "none" },
+  { "name": "door",         "atlas": [3, 1], "collision": false, "behavior": "door" },
+  { "name": "ledge",        "atlas": [4, 1], "collision": false, "behavior": "ledge_down" },
+  { "name": "sign",         "atlas": [5, 1], "collision": true,  "behavior": "none" },
+  { "name": "floor",        "atlas": [6, 1], "collision": false, "behavior": "none" },
+  { "name": "counter",      "atlas": [7, 1], "collision": true,  "behavior": "counter" }
+]

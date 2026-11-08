@@ -12,6 +12,7 @@ var flags: Dictionary = {}          # story flag -> bool
 var certifications: PackedStringArray = []
 var cmdb_seen: Dictionary = {}      # species_id -> true
 var cmdb_caught: Dictionary = {}    # species_id -> true
+var location: Dictionary = {}       # {"map": id, "x": cell x, "y": cell y}
 
 
 const MAX_STACK := 6
@@ -41,3 +42,4 @@ func reset() -> void:
 	certifications.clear()
 	cmdb_seen.clear()
 	cmdb_caught.clear()
+	location.clear()

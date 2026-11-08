@@ -70,3 +70,25 @@ Each non-neutral up/down pair appears exactly once.
 - Others = floor((floor((2×Base + BuildQuality + floor(Logs/4)) × Level / 100) + 5) × profile), profile = 1.1 / 1.0 / 0.9
 - Build Quality: 0–31 per stat (random when created). Experience Logs: 0–252 per stat, 510 total.
 - EXP curves: `scripts/daemon/growth_rate.gd`. Total EXP to reach level 100: fast 800,000 · medium_fast 1,000,000 · medium_slow 1,059,860 · slow 1,250,000 · erratic 600,000 · fluctuating 1,640,000.
+
+## tiles.json (overworld tiles)
+One entry per 16x16 tile in `assets/tiles/placeholder_overworld.png` (8 per row).
+| Field | Values |
+|---|---|
+| name | unique id used by map legends |
+| atlas | [column, row] in the PNG |
+| collision | true = can't walk onto it |
+| behavior | none, hot_zone (wild encounters, Phase 5), ledge_down (hop down only), water (blocked until surfing), door (warp, Phase 4b), counter (talk across) |
+
+These become TileSet custom data ("name", "collision", "behavior"), which movement reads.
+Regenerate the placeholder PNG: `godot --headless -s res://tools/build_placeholder_tiles.gd`.
+
+## maps/<id>.json
+```json
+{ "id": "onboarding_town", "name": "Onboarding Town",
+  "legend": { ".": "grass", "T": "tree" },
+  "rows": [ "TTTT", "T..T", "TTTT" ],
+  "spawns": { "default": { "x": 1, "y": 1, "facing": "down" } } }
+```
+Each row is one line of the map; every row must be the same width. Each character must be in the
+legend. Spawns must be on a walkable tile. Maps load on first use and are validated then.

@@ -10,7 +10,9 @@ const FILES := {
 	"species": "species.json",
 	"items": "items.json",
 	"config_profiles": "config_profiles.json",
+	"tiles": "tiles.json",
 }
+const MAPS_DIR := "res://data/maps/"
 
 var types: Dictionary = {}       # id -> {id, name, color}
 var type_chart: Dictionary = {}  # attacker id -> {defender id -> multiplier}; missing = 1
@@ -18,6 +20,10 @@ var moves: Dictionary = {}
 var species: Dictionary = {}
 var items: Dictionary = {}
 var config_profiles: Dictionary = {}  # id -> {id, name, up, down}; up/down null = neutral
+var tiles: Dictionary = {}            # tile name -> {name, atlas, collision, behavior}
+
+var _validator: DataValidator
+var _maps: Dictionary = {}            # map id -> validated map data (loaded on first use)
 
 ## Problems from the last load. Empty means the data is clean.
 var errors: PackedStringArray = []
@@ -57,6 +63,8 @@ func read_raw(out_errors: PackedStringArray = PackedStringArray()) -> Dictionary
 ## Validates already-parsed data and swaps it in. Used by load_all() and by tests.
 func load_from(raw: Dictionary, report: bool = true) -> bool:
 	var validator := DataValidator.new()
+	_validator = validator
+	_maps = {}
 	errors = validator.validate(raw)
 	types = validator.types
 	type_chart = validator.type_chart
@@ -64,9 +72,47 @@ func load_from(raw: Dictionary, report: bool = true) -> bool:
 	species = validator.species
 	items = validator.items
 	config_profiles = validator.config_profiles
+	tiles = validator.tiles
 	if report:
 		_report()
 	return errors.is_empty()
+
+
+## Loads data/maps/<id>.json on first use and validates it. Returns {} (and reports why)
+## if it's missing or broken.
+func get_map(map_id: String) -> Dictionary:
+	if _maps.has(map_id):
+		return _maps[map_id]
+	var path := MAPS_DIR + map_id + ".json"
+	var text := FileAccess.get_file_as_string(path)
+	if text.is_empty():
+		push_error("DataRegistry: can't read map %s" % path)
+		return {}
+	var json := JSON.new()
+	if json.parse(text) != OK:
+		push_error("DataRegistry: %s line %d: %s" % [path, json.get_error_line(), json.get_error_message()])
+		return {}
+	var map_errors := _validator.validate_map(json.data, map_id)
+	for e in map_errors:
+		push_error("DataRegistry: " + e)
+	if not map_errors.is_empty():
+		return {}
+	_maps[map_id] = json.data
+	return json.data
+
+
+## Every map id in data/maps/.
+func map_ids() -> PackedStringArray:
+	var ids := PackedStringArray()
+	for file in DirAccess.get_files_at(MAPS_DIR):
+		if file.ends_with(".json"):
+			ids.append(file.get_basename())
+	return ids
+
+
+## Checks a map without caching or reporting (for tests).
+func check_map(map_data: Variant, map_id: String) -> PackedStringArray:
+	return _validator.validate_map(map_data, map_id)
 
 
 func get_species(id: String) -> Dictionary:
@@ -92,7 +138,7 @@ func type_multiplier(attack_type: String, defender_types: Array) -> float:
 
 func _report() -> void:
 	if errors.is_empty():
-		print("DataRegistry: %d types, %d moves, %d species, %d items, %d config profiles loaded" % [types.size(), moves.size(), species.size(), items.size(), config_profiles.size()])
+		print("DataRegistry: %d types, %d moves, %d species, %d items, %d config profiles, %d tiles loaded" % [types.size(), moves.size(), species.size(), items.size(), config_profiles.size(), tiles.size()])
 		return
 	for e in errors:
 		push_error("DataRegistry: " + e)
