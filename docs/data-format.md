@@ -19,7 +19,7 @@ Dual types multiply: `DataRegistry.type_multiplier("network", ["hardware", "powe
 ## moves.json
 | Field | Values |
 |---|---|
-| type | a type id |
+| type | a type id, or `none` (typeless: always 1x, no STAB) |
 | category | `physical` (Throughput vs Hardening), `special` (Compute vs Encryption), `status` |
 | power | 0 for status moves, 1–250 otherwise |
 | accuracy | 1–100, or **0 = never misses** |
@@ -37,6 +37,10 @@ Move effects:
 | `recoil` | `fraction` of damage dealt taken back |
 | `heal` | `fraction` of max Uptime |
 | `multi_hit` | `min`, `max` hits |
+
+**Force Quit** (`force_quit`) is the 0-PP fallback: when every move a Daemon knows is out of PP, choosing
+FIGHT uses it automatically (fight slot `BattleSim.FALLBACK_SLOT`). Typeless, power 50, never misses, 1/4 recoil.
+It's never put in a learnset. Change it here; the id is `BattleSim.FALLBACK_MOVE`.
 
 ## species.json
 | Field | Values |
@@ -160,6 +164,7 @@ NPC events can also have `"hide_if_flag": "flag"` to disappear once that flag is
 `{"version", "save_count", "saved_at", "checksum" (sha256 of the data), "data": GameState.to_dict()}`.
 Saves alternate between the two files; loading picks the newest one whose checksum matches.
 When the save format changes, bump `SaveManager.SAVE_VERSION` and add a step to `migrate()`.
+v2 (2026-11-08) renamed the redesigned species ids (`SaveManager.V2_SPECIES_RENAMES`).
 Options live separately in user://settings.cfg.
 
 ## Phase 7 additions

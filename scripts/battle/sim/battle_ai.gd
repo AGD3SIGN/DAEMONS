@@ -27,9 +27,9 @@ static func choose_action(state: BattleState, side: int, tier: String) -> Battle
 		if int(user.moves[i]["pp"]) > 0:
 			usable.append(i)
 	if usable.is_empty():
-		# No PP anywhere (see Bug #2). Switch if possible, otherwise this action is invalid.
+		# No PP anywhere: switch if possible, otherwise Force Quit (Bug #2).
 		var bench := _first_usable_bench(state, side)
-		return BattleAction.switch_to(bench) if bench >= 0 else BattleAction.fight(0)
+		return BattleAction.switch_to(bench) if bench >= 0 else BattleAction.fight(BattleSim.FALLBACK_SLOT)
 	if tier == "random":
 		return BattleAction.fight(usable[state.rng.randi_range(0, usable.size() - 1)])
 

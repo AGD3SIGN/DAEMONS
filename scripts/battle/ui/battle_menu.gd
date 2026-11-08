@@ -46,14 +46,15 @@ func choose_command() -> String:
 	return result
 
 
-func choose_move(d: DaemonInstance) -> int:
+## needs_pp: grey out moves with 0 PP (choosing a move to use; not when replacing one).
+func choose_move(d: DaemonInstance, needs_pp: bool = false) -> int:
 	_hide_all()
 	_shown_moves = d
 	for i in 4:
 		var button := _move_buttons[i]
 		if i < d.moves.size():
 			button.label_text = DataRegistry.get_move(d.moves[i]["id"])["name"]
-			button.set_enabled(true)
+			button.set_enabled(not needs_pp or int(d.moves[i]["pp"]) > 0)
 		else:
 			button.label_text = "-"
 			button.set_enabled(false)

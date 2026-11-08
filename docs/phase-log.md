@@ -4,6 +4,19 @@ Newest entries at the top. Each entry: what's done, decisions, what's next.
 
 ---
 
+## 2026-11-08 — Bug review
+
+**Done**
+- **Bug #2 fixed (0 PP soft-lock):** new typeless move **Force Quit** (power 50, never misses, 1/4 recoil, never
+  learned). With no PP on any move, FIGHT uses it automatically for the player; the AI switches if it can,
+  otherwise Force Quits. Before, the AI picked a 0-PP move, the sim rejected it, and the battle repeated forever.
+  0-PP moves are now greyed out in the FIGHT menu; "X has no PP left!" is shown first.
+- **Bug #14 (iOS "Mouse is not supported" at startup):** comes from Godot itself (`scene/main/window.cpp`, root
+  window enter-tree asks for the mouse position without checking the device has one). Harmless; won't fix here.
+- Tests: 212/212 (4 new, including an end-to-end trainer battle that starts with 0 PP).
+
+---
+
 ## 2026-11-08 — Art pipeline: first real Daemon sprites
 
 **Done**

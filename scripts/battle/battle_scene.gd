@@ -156,7 +156,7 @@ func _run() -> void:
 		if events.size() == 1 and events[0]["type"] == "invalid_action":
 			await text_box.show_text(_sentence(events[0]["reason"]))
 			if auto:
-				break  # nothing valid left (Bug #2); don't loop forever
+				break  # safety net: never loop forever on an invalid action
 			continue
 		await _player.play(events)
 	await _after_battle()
@@ -191,7 +191,9 @@ func _choose_player_action() -> BattleAction:
 		text_box.set_reserved_right(134)
 		match await menu.choose_command():
 			"fight":
-				var slot := await menu.choose_move(d)
+				if not BattleSim.has_pp(d):
+					return BattleAction.fight(BattleSim.FALLBACK_SLOT)  # "X has no PP left!" -> Force Quit
+				var slot := await menu.choose_move(d, true)
 				if slot >= 0:
 					return BattleAction.fight(slot)
 			"stack":

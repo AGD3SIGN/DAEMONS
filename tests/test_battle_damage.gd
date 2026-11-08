@@ -388,3 +388,61 @@ func test_player_loses_when_everyone_crashes() -> void:
 	assert_eq(_of(events, "move_used").size(), 1, "Pingo never got to act")
 	assert_eq(_of(events, "fainted")[0]["side"], 0)
 	assert_eq(_of(events, "switch_needed").size(), 0)
+
+
+# --- Bug #2: out of PP everywhere -> Force Quit --------------------------------
+
+func _drain_pp(d: DaemonInstance) -> void:
+	for slot: Dictionary in d.moves:
+		slot["pp"] = 0
+
+
+func test_out_of_pp_uses_force_quit_with_recoil() -> void:
+	var pingo := _daemon("pingo", 20)
+	var bunny := _daemon("dustbunny", 20)
+	var state := _battle([pingo], [bunny], false)
+	_drain_pp(bunny)
+	assert_false(BattleSim.has_pp(bunny))
+	var foe_action := BattleAI.choose_action(state, BattleState.FOE, "basic")
+	assert_eq(foe_action.kind, BattleAction.Kind.FIGHT)
+	assert_eq(foe_action.slot, BattleSim.FALLBACK_SLOT, "no bench and no PP: Force Quit")
+	var events := BattleSim.run_turn(state, _fight(pingo, "ping"), foe_action)
+	var types := events.map(func(e: Dictionary) -> String: return e["type"])
+	assert_false("invalid_action" in types, "the turn goes through (used to soft-lock)")
+	assert_true("out_of_pp" in types)
+	var used := events.filter(func(e: Dictionary) -> bool: return e["type"] == "move_used" and e["side"] == BattleState.FOE)
+	assert_eq(used[0]["move"], "force_quit")
+	assert_true(events.any(func(e: Dictionary) -> bool: return e["type"] == "recoil" and e["side"] == BattleState.FOE), "recoil hurts the user")
+	assert_string_ends_with(BattleText.describe(events[types.find("out_of_pp")], false, "Kevin"), "Dustbunny has no PP left!")
+
+
+func test_force_quit_only_when_every_move_is_empty() -> void:
+	var pingo := _daemon("pingo", 20)
+	var state := _battle([pingo], [_daemon("dustbunny", 20)])
+	assert_ne(BattleSim.validate_action(state, BattleState.PLAYER, BattleAction.fight(BattleSim.FALLBACK_SLOT)), "",
+		"not allowed while a move has PP")
+	pingo.moves[0]["pp"] = 0
+	assert_ne(BattleSim.validate_action(state, BattleState.PLAYER, BattleAction.fight(0)), "", "a 0-PP move is still refused")
+	_drain_pp(pingo)
+	assert_eq(BattleSim.validate_action(state, BattleState.PLAYER, BattleAction.fight(BattleSim.FALLBACK_SLOT)), "")
+
+
+func test_out_of_pp_switches_first_if_the_bench_can_fight() -> void:
+	var bunny := _daemon("dustbunny", 20)
+	var state := _battle([_daemon("pingo", 20)], [bunny, _daemon("wormby", 20)], false)
+	_drain_pp(bunny)
+	var action := BattleAI.choose_action(state, BattleState.FOE, "random")
+	assert_eq(action.kind, BattleAction.Kind.SWITCH)
+
+
+func test_trainer_battle_with_no_pp_finishes() -> void:
+	# The soft-lock scenario end to end: an auto battle where the foe starts with no PP at all.
+	var scene: BattleScene = load(BattleScene.SCENE).instantiate()
+	var team: Array[DaemonInstance] = [_daemon("pingo", 12)]
+	scene.setup({"foe": [["dustbunny", 30]], "trainer_name": "Kevin", "ai": "basic", "player_stack": team,
+		"items": {}, "auto": true, "time_scale": 0.0})
+	add_child(scene)
+	_drain_pp(scene.state.sides[BattleState.FOE].stack[0])
+	await wait_for_signal(scene.finished, 30.0)
+	assert_true(scene.state.is_over(), "the battle ends instead of looping")
+	scene.free()

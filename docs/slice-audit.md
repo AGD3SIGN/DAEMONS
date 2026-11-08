@@ -28,4 +28,4 @@
 - trainer jogger_jo: levels [6]
 - trainer signal_hunter_hal: levels [7, 7]
 - trainer phisher_pete: levels [8, 8]
-- Bug #2 (no fallback at 0 PP): lowest total PP at Lv 5 is 55 (chipmunk). Slice battles are 1-3 Daemons, so running out needs 40+ turns of one Daemon. Low risk in the slice; still open.
+- PP: lowest total at Lv 5 is 55 (chipmunk). 0-PP fallback (Force Quit): in place.

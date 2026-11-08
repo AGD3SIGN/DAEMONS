@@ -26,6 +26,7 @@ extends RefCounted
 ##   no_effect         {side, target}                          the target's type is immune
 ##   drain             {side, daemon, amount, uptime, max_uptime}   user healed by a draining move
 ##   recoil            {side, daemon, amount, uptime, max_uptime}   user hurt by its own move
+##   out_of_pp         {side, daemon}                          before Force Quit (no PP left anywhere)
 ##   stat_changed      {side, daemon, stat, delta, stage}
 ##   stat_change_failed {side, daemon, stat, direction}        already at +6 / -6
 ##   status_applied    {side, daemon, status}
@@ -56,6 +57,9 @@ const ACTION_RANK := {
 }
 const BATTLE_ITEM_EFFECTS: PackedStringArray = ["heal_uptime", "full_restore", "revive"]
 
+## Used when every move is out of PP (fight slot FALLBACK_SLOT), so a battle can always continue.
+const FALLBACK_MOVE := "force_quit"
+const FALLBACK_SLOT := -1
 const CRIT_CHANCE := 1.0 / 16.0
 const CRIT_MULTIPLIER := 1.5
 const STAB_MULTIPLIER := 1.5
@@ -141,6 +145,8 @@ static func validate_action(state: BattleState, side: int, action: BattleAction)
 			var user := s.active()
 			if user == null or user.is_fainted():
 				return "the active Daemon has crashed"
+			if action.slot == FALLBACK_SLOT:
+				return "" if not has_pp(user) else "it still has moves with PP"
 			if action.slot < 0 or action.slot >= user.moves.size():
 				return "there's no move in that slot"
 			if int(user.moves[action.slot]["pp"]) <= 0:
@@ -154,6 +160,14 @@ static func validate_action(state: BattleState, side: int, action: BattleAction)
 				return "you can't run from a trainer battle"
 	return ""
 
+
+
+## True if any of the Daemon's moves has PP left.
+static func has_pp(d: DaemonInstance) -> bool:
+	for slot: Dictionary in d.moves:
+		if int(slot["pp"]) > 0:
+			return true
+	return false
 
 ## Order the two sides act in this turn. Always rolls the tie-breaker so the RNG
 ## advances the same way whatever the actions are.
@@ -355,12 +369,18 @@ static func _do_fight(state: BattleState, side: int, slot: int, events: Array[Di
 		return  # crashed before it could act
 	if not _can_act(state, side, events):
 		return
-	var move_slot: Dictionary = user.moves[slot]
-	move_slot["pp"] = int(move_slot["pp"]) - 1
-	var move := DataRegistry.get_move(move_slot["id"])
+	var move_id: String
+	if slot == FALLBACK_SLOT:
+		move_id = FALLBACK_MOVE
+		events.append(_ev("out_of_pp", {"side": side, "daemon": user.display_name()}))
+	else:
+		var move_slot: Dictionary = user.moves[slot]
+		move_slot["pp"] = int(move_slot["pp"]) - 1
+		move_id = move_slot["id"]
+	var move := DataRegistry.get_move(move_id)
 	var target_side := BattleState.opponent(side)
 	var target := state.sides[target_side].active()
-	events.append(_ev("move_used", {"side": side, "user": user.display_name(), "move": move_slot["id"],
+	events.append(_ev("move_used", {"side": side, "user": user.display_name(), "move": move_id,
 		"move_name": move["name"], "target_side": target_side,
 		"target": target.display_name() if target != null else ""}))
 	_resolve_move(state, side, move, events)

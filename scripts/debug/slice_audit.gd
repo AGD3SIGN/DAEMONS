@@ -287,7 +287,7 @@ func _level_curve() -> PackedStringArray:
 	return out
 
 
-## Bug #2 check: how much PP do slice Daemons carry? A soft-lock needs every move at 0 PP.
+## PP check: how much PP do slice Daemons carry, and is the 0-PP fallback (Force Quit) in place?
 func _pp_note() -> String:
 	var lowest := 9999
 	var who := ""
@@ -301,4 +301,5 @@ func _pp_note() -> String:
 		if total < lowest:
 			lowest = total
 			who = species_id
-	return "Bug #2 (no fallback at 0 PP): lowest total PP at Lv 5 is %d (%s). Slice battles are 1-3 Daemons, so running out needs 40+ turns of one Daemon. Low risk in the slice; still open." % [lowest, who]
+	var fallback := "in place" if not DataRegistry.get_move(BattleSim.FALLBACK_MOVE).is_empty() else "MISSING (battles can soft-lock at 0 PP)"
+	return "PP: lowest total at Lv 5 is %d (%s). 0-PP fallback (Force Quit): %s." % [lowest, who, fallback]

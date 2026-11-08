@@ -47,7 +47,7 @@ func test_real_data_has_no_errors() -> void:
 
 func test_expected_counts() -> void:
 	assert_eq(DataRegistry.types.size(), 12)
-	assert_eq(DataRegistry.moves.size(), 30)
+	assert_eq(DataRegistry.moves.size(), 31, "30 learnable + Force Quit")
 	assert_eq(DataRegistry.species.size(), 22)
 	assert_eq(DataRegistry.items.size(), 12)
 

@@ -101,7 +101,7 @@ static func run(opts: Dictionary) -> Dictionary:
 		if events.size() == 1 and events[0]["type"] == "invalid_action":
 			_say(out, echo, "  (can't do that: %s)" % events[0]["reason"])
 			if not interactive:
-				_say(out, echo, "Stuck: no valid action left (see Bug #2).")
+				_say(out, echo, "Stuck: no valid action left.")
 				break
 			continue
 		_say(out, echo, "")

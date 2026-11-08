@@ -29,6 +29,8 @@ static func describe(e: Dictionary, is_wild: bool, foe_trainer: String = "") -> 
 			return "%s restored %d Uptime." % [_name(e, is_wild), e["amount"]]
 		"revived":
 			return "%s rebooted!" % _name(e, is_wild)
+		"out_of_pp":
+			return "%s has no PP left!" % _name(e, is_wild)
 		"move_used":
 			return "%s ran %s!" % [_named(e["user"], e["side"], is_wild), e["move_name"]]
 		"move_missed":

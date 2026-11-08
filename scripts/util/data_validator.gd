@@ -542,7 +542,7 @@ func _validate_profiles(raw: Variant) -> void:
 func _validate_move(m: Dictionary, where: String) -> void:
 	_string(m, "name", where)
 	_string(m, "description", where)
-	_one_of(m, "type", where, types.keys())
+	_one_of(m, "type", where, types.keys() + ["none"])  # "none" = typeless (Force Quit)
 	var category_ok := _one_of(m, "category", where, CATEGORIES)
 	if _int(m, "power", where, 0, 250) and category_ok:
 		var is_status: bool = m["category"] == "status"
