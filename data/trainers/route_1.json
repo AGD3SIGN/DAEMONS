@@ -1,0 +1,22 @@
+{
+  "intern_ian": {
+    "name": "Intern Ian",
+    "team": [["dustbunny", 4], ["wormby", 4]],
+    "ai": "basic",
+    "prize": 160,
+    "sight": 3,
+    "intro": "Hey! You look like you know how to restart things. Battle me!",
+    "defeat": "I should have opened a ticket first...",
+    "after": "I'm still on probation. Please don't tell my manager."
+  },
+  "sysadmin_sam": {
+    "name": "Sysadmin Sam",
+    "team": [["cablesnake", 6]],
+    "ai": "basic",
+    "prize": 240,
+    "sight": 4,
+    "intro": "Nobody walks through my cable run without a change request!",
+    "defeat": "Fine. Change approved.",
+    "after": "Label your cables. I'm begging you."
+  }
+}

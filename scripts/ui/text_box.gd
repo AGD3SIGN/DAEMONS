@@ -5,7 +5,6 @@ extends Panel
 
 signal advanced
 
-const CHARS_PER_SEC := 60.0
 const AUTO_PAUSE := 0.6   # seconds a line stays up when it doesn't wait for input
 
 var time_scale: float = 1.0   # 0 = instant (tests)
@@ -72,9 +71,10 @@ func show_text(text: String, wait: bool = true) -> void:
 	_typing = true
 	var total := _label.get_total_character_count()
 	var shown := 0.0
-	while _typing and time_scale > 0.0 and _label.visible_characters < total:
+	var speed := Settings.chars_per_second()  # Options > Text speed; 0 = instant
+	while _typing and time_scale > 0.0 and speed > 0.0 and _label.visible_characters < total:
 		await get_tree().process_frame
-		shown += get_process_delta_time() * CHARS_PER_SEC / time_scale
+		shown += get_process_delta_time() * speed / time_scale
 		_label.visible_characters = mini(total, int(shown))
 	_typing = false
 	_label.visible_characters = -1

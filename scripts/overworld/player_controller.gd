@@ -156,6 +156,11 @@ func _bump(target: Vector2i) -> void:
 	bumped.emit(target)
 
 
+func face(direction: Vector2i) -> void:
+	facing = direction
+	_set_frame(0)
+
+
 func _held_direction() -> Vector2i:
 	var held: Array[Vector2i] = []
 	for action: String in DIRECTIONS:

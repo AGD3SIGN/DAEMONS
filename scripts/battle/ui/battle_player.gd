@@ -162,8 +162,9 @@ func _sprite(side: int) -> TextureRect:
 	return view.player_sprite if side == BattleState.PLAYER else view.foe_sprite
 
 
+## Animation speed: the battle's time_scale, or 0 (instant) when battle animations are off in Options.
 func _ts() -> float:
-	return view.time_scale
+	return view.time_scale if Settings.battle_animations else 0.0
 
 
 func _tween() -> Tween:

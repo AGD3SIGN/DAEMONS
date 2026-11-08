@@ -16,6 +16,10 @@ extends Control
 ##   auto: bool — the AI plays your side and text advances by itself
 ##   auto_policy: "smart" | "capture" (auto only: throw Quarantine Keys first)
 ##   time_scale: float — animation speed multiplier, 0 = instant
+##   trainer_id, prize, defeat_text, cert — trainer battles (see BattleScene.trainer_config())
+## Winning a trainer battle marks them beaten (flag "trainer_<id>"), pays the prize and may award a
+## certification. Losing any battle is a black-out: half your credits, team healed, back to the
+## last Help Desk.
 
 signal finished(result: Dictionary)
 
@@ -64,6 +68,17 @@ func _ready() -> void:
 		_setup_demo()  # opened directly (F6 in the editor)
 	if state != null and not _started:
 		_start()
+
+
+## Battle config for a trainer from data/trainers/*.json.
+static func trainer_config(trainer_id: String) -> Dictionary:
+	var t: Dictionary = DataRegistry.trainers[trainer_id]
+	return {"foe": t["team"], "wild": false, "trainer_name": t["name"], "ai": t["ai"], "trainer_id": trainer_id,
+		"prize": int(t["prize"]), "defeat_text": t["defeat"], "cert": t.get("cert", "")}
+
+
+static func trainer_flag(trainer_id: String) -> String:
+	return "trainer_" + trainer_id
 
 
 func setup(cfg: Dictionary) -> void:
@@ -237,8 +252,14 @@ func _after_battle() -> void:
 		var d := state.sides[BattleState.PLAYER].stack[int(e["index"])]
 		if not d.is_fainted():
 			await _play_upgrade(d, int(e["index"]), e["to"])
+	match state.outcome:
+		"player_won":
+			await _trainer_rewards()
+		"player_lost":
+			await _black_out()
 	if state.outcome == "caught" and state.captured != null:
 		var caught := state.captured
+		caught.original_trainer_id = GameState.trainer_id
 		GameState.cmdb_caught[caught.species_id] = true
 		if config.get("add_captured", true):
 			var where := GameState.add_daemon(caught)
@@ -251,6 +272,39 @@ func _after_battle() -> void:
 					await text_box.show_text("Every rack is full! %s had to be released." % caught.display_name())
 	result = {"outcome": state.outcome, "turns": state.turn, "captured": state.captured}
 	await get_tree().create_timer(0.2 * time_scale).timeout
+
+
+# --- results -----------------------------------------------------------------
+
+func _trainer_rewards() -> void:
+	var trainer_id: String = config.get("trainer_id", "")
+	if trainer_id.is_empty():
+		return
+	GameState.flags[trainer_flag(trainer_id)] = true
+	var defeat: String = config.get("defeat_text", "")
+	if not defeat.is_empty():
+		await text_box.show_text("%s: %s" % [trainer_name, defeat])
+	var prize := int(config.get("prize", 0))
+	if prize > 0:
+		GameState.credits += prize
+		AudioManager.play_sfx("confirm")
+		await text_box.show_text("You got %d CR for winning!" % prize)
+	var cert: String = config.get("cert", "")
+	if not cert.is_empty() and not cert in GameState.certifications:
+		GameState.certifications.append(cert)
+		AudioManager.play_sfx("confirm")
+		await text_box.show_text("You earned the %s!" % DataRegistry.certifications[cert]["name"])
+
+
+## Lose half your credits, heal up, wake at the last Help Desk.
+func _black_out() -> void:
+	var lost := GameState.credits / 2
+	GameState.credits -= lost
+	GameState.heal_stack()
+	GameState.location = GameState.last_help_desk.duplicate()
+	GameState.repel_steps = 0
+	var dropped := " You dropped %d CR in the panic" % lost if lost > 0 else ""
+	await text_box.show_text("Everything went dark...%s and rushed back to the Help Desk." % dropped)
 
 
 # --- upgrading ---------------------------------------------------------------

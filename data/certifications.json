@@ -1,0 +1,10 @@
+[
+  { "id": "desktop_support", "name": "Desktop Support Cert", "department": "Desktop Support", "type": "hardware", "order": 1 },
+  { "id": "networking",      "name": "Networking Cert",      "department": "Networking",      "type": "network",  "order": 2 },
+  { "id": "software",        "name": "Software Cert",        "department": "DevOps",          "type": "software", "order": 3 },
+  { "id": "facilities",      "name": "Facilities Cert",      "department": "Facilities",      "type": "power",    "order": 4 },
+  { "id": "security",        "name": "Security Cert",        "department": "SecOps",          "type": "security", "order": 5 },
+  { "id": "data",            "name": "Data Cert",            "department": "Data & Analytics", "type": "data",    "order": 6 },
+  { "id": "mobile",          "name": "Mobile Cert",          "department": "Mobile",          "type": "mobile",   "order": 7 },
+  { "id": "ai",              "name": "AI Lab Cert",          "department": "AI Lab",          "type": "ai",       "order": 8 }
+]

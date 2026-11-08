@@ -1,0 +1,11 @@
+{
+  "kevin_town": {
+    "name": "Kevin",
+    "team": [["spamlet", 6], ["cablesnake", 7]],
+    "ai": "basic",
+    "prize": 300,
+    "intro": "Replying all to this challenge!",
+    "defeat": "Ugh. I'm sending a follow-up email about this.",
+    "after": "Next time I'm bringing a bigger attachment."
+  }
+}

@@ -20,7 +20,8 @@ const DIALOGUE_COMMANDS := {
 	"give_item": ["item"],
 	"give_daemon": ["species", "level"],
 	"heal_party": [],
-	"start_battle": ["foe"],
+	"start_battle": [],  # needs "trainer" (id from data/trainers) or "foe"
+	"give_cert": ["cert"],
 	"move_npc": ["npc", "path"],
 	"open_shop": ["stock"],
 	"open_rack": [],
@@ -28,7 +29,7 @@ const DIALOGUE_COMMANDS := {
 const EVENT_TYPES := {
 	"warp": ["to_map", "to_spawn"],
 	"sign": ["dialogue"],
-	"npc": ["id", "dialogue", "facing"],
+	"npc": ["id", "facing"],  # plus "dialogue" and/or "trainer"
 	"trigger": ["dialogue"],
 	"hidden_item": ["item", "flag"],
 }
@@ -69,6 +70,8 @@ var config_profiles: Dictionary = {}
 var tiles: Dictionary = {}   # tile name -> {name, atlas, collision, behavior}
 var dialogues: Dictionary = {}  # dialogue id -> list of steps
 var encounters: Dictionary = {}  # map id -> {rate, zones: {tile name: [slots]}}
+var trainers: Dictionary = {}    # trainer id -> {name, team, ai, prize, sight, intro, defeat, after, cert}
+var certifications: Dictionary = {}  # cert id -> {id, name, department, type, order}
 
 
 ## raw = {"types": ..., "moves": ..., "species": ..., "items": ..., "config_profiles": ...}
@@ -87,6 +90,8 @@ func validate(raw: Dictionary) -> PackedStringArray:
 		_validate_item(items[id], "items › " + id)
 	for id: String in species:
 		_validate_species(species[id], "species › " + id)
+	_validate_certifications(raw.get("certifications"))
+	_validate_trainers(raw.get("trainers", {}))
 	_validate_dialogue_files(raw.get("dialogue", {}))
 	_validate_encounters(raw.get("encounters", {}))
 	return errors
@@ -246,6 +251,10 @@ func _validate_events(events: Variant, where: String, rows: Array, legend: Dicti
 					_err(ew, "warp to unknown map '%s'" % str(e["to_map"]))
 			"npc":
 				_one_of(e, "facing", ew, FACINGS)
+				if not e.has("dialogue") and not e.has("trainer"):
+					_err(ew, "an NPC needs 'dialogue', 'trainer' or both")
+				if e.has("trainer") and not trainers.has(e["trainer"]):
+					_err(ew, "unknown trainer '%s'" % str(e["trainer"]))
 				if npc_ids.has(e["id"]):
 					_err(ew, "duplicate npc id '%s'" % str(e["id"]))
 				npc_ids[e["id"]] = true
@@ -294,11 +303,11 @@ func _validate_steps(steps: Variant, where: String) -> void:
 			_err(sw, "each step must be an object")
 			continue
 		var kinds := 0
-		for key in ["text", "choice", "if_flag", "cmd"]:
+		for key in ["text", "choice", "if_flag", "if_cert", "cmd"]:
 			if step.has(key):
 				kinds += 1
 		if kinds != 1:
-			_err(sw, "needs exactly one of text, choice, if_flag or cmd")
+			_err(sw, "needs exactly one of text, choice, if_flag, if_cert or cmd")
 			continue
 		if step.has("text"):
 			_string(step, "text", sw)
@@ -306,8 +315,11 @@ func _validate_steps(steps: Variant, where: String) -> void:
 			_string(step, "choice", sw)
 			_validate_steps(step.get("yes", []), sw + " › yes")
 			_validate_steps(step.get("no", []), sw + " › no")
-		elif step.has("if_flag"):
-			_string(step, "if_flag", sw)
+		elif step.has("if_flag") or step.has("if_cert"):
+			if step.has("if_flag"):
+				_string(step, "if_flag", sw)
+			elif not certifications.has(step["if_cert"]):
+				_err(sw, "unknown certification '%s'" % str(step["if_cert"]))
 			_validate_steps(step.get("then", []), sw + " › then")
 			_validate_steps(step.get("else", []), sw + " › else")
 		else:
@@ -336,9 +348,18 @@ func _validate_command(step: Dictionary, where: String) -> void:
 				_err(where, "unknown species '%s'" % str(step["species"]))
 			_int(step, "level", where, 1, 100)
 		"start_battle":
-			_validate_team(step["foe"], where + " › foe")
+			if step.has("trainer"):
+				if not trainers.has(step["trainer"]):
+					_err(where, "unknown trainer '%s'" % str(step["trainer"]))
+			elif step.has("foe"):
+				_validate_team(step["foe"], where + " › foe")
+			else:
+				_err(where, "'start_battle' needs 'trainer' or 'foe'")
 			if step.has("ai"):
 				_one_of(step, "ai", where, ["random", "basic", "smart"])
+		"give_cert":
+			if not certifications.has(step["cert"]):
+				_err(where, "unknown certification '%s'" % str(step["cert"]))
 		"open_shop":
 			var stock: Variant = step["stock"]
 			if typeof(stock) != TYPE_ARRAY or stock.is_empty():
@@ -368,6 +389,51 @@ func _validate_team(team: Variant, where: String) -> void:
 	for entry: Variant in team:
 		if typeof(entry) != TYPE_ARRAY or entry.size() != 2 or not species.has(entry[0]) or not _is_int(entry[1]) or entry[1] < 1 or entry[1] > 100:
 			_err(where, "bad entry %s (want [species_id, level 1-100])" % JSON.stringify(entry))
+
+
+# --- certifications and trainers ---------------------------------------------
+
+func _validate_certifications(raw: Variant) -> void:
+	certifications = _index(raw, "certifications")
+	for id: String in certifications:
+		var c: Dictionary = certifications[id]
+		var where := "certifications › " + id
+		_string(c, "name", where)
+		_string(c, "department", where)
+		_one_of(c, "type", where, types.keys())
+		_int(c, "order", where, 1, 99)
+
+
+## raw = {file name: {trainer id: {...}}}. Ids are unique across files.
+func _validate_trainers(raw: Variant) -> void:
+	trainers = {}
+	if typeof(raw) != TYPE_DICTIONARY:
+		return
+	for file: String in raw:
+		var content: Variant = raw[file]
+		if typeof(content) != TYPE_DICTIONARY:
+			_err("trainers › " + file, "must be an object of trainer id -> trainer")
+			continue
+		for id: String in content:
+			var where := "trainers › %s › %s" % [file, id]
+			if trainers.has(id):
+				_err(where, "duplicate trainer id")
+				continue
+			var t: Variant = content[id]
+			if typeof(t) != TYPE_DICTIONARY:
+				_err(where, "must be an object")
+				continue
+			trainers[id] = t
+			_string(t, "name", where)
+			_validate_team(t.get("team"), where + " › team")
+			_one_of(t, "ai", where, ["random", "basic", "smart"])
+			_int(t, "prize", where, 0, 999999)
+			if t.has("sight"):
+				_int(t, "sight", where, 0, 10)
+			for key in ["intro", "defeat", "after"]:
+				_string(t, key, where)
+			if t.has("cert") and not certifications.has(t["cert"]):
+				_err(where, "unknown certification '%s'" % str(t["cert"]))
 
 
 # --- wild encounters ---------------------------------------------------------

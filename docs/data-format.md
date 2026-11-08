@@ -131,3 +131,33 @@ picked by weight; level is random in min..max. A Firewall Rule blocks results be
 |---|---|
 | open_shop | `{"cmd": "open_shop", "stock": ["coffee", "thumb_drive"]}` (items need a price) |
 | open_rack | `{"cmd": "open_rack"}` (Server Rack storage) |
+
+## trainers/<file>.json
+Object of `trainer id → trainer`. Ids are unique across files.
+```json
+"intern_ian": { "name": "Intern Ian", "team": [["dustbunny", 4], ["wormby", 4]], "ai": "basic",
+  "prize": 160, "sight": 3, "cert": "desktop_support",
+  "intro": "Battle me!", "defeat": "I should have opened a ticket first...", "after": "I'm still on probation." }
+```
+`sight` = how many tiles ahead they spot you (0 / missing = only when you talk to them). `cert` is optional
+(Department bosses). Put a trainer on a map with an npc event: `{"type": "npc", "id": "intern_ian", "x": 11,
+"y": 18, "facing": "left", "trainer": "intern_ian"}` (add "dialogue" too for custom talk). Beating one sets
+the flag `trainer_<id>`.
+
+## certifications.json
+8 entries: id, name, department, type (badge color), order (slot on the trainer card).
+
+### More dialogue
+| step | example |
+|---|---|
+| start_battle (trainer) | `{"cmd": "start_battle", "trainer": "kevin_town"}` |
+| give_cert | `{"cmd": "give_cert", "cert": "networking"}` |
+| cert check | `{"if_cert": "networking", "then": [steps], "else": [steps]}` |
+
+NPC events can also have `"hide_if_flag": "flag"` to disappear once that flag is set.
+
+## Save files (user://save_a.json, save_b.json)
+`{"version", "save_count", "saved_at", "checksum" (sha256 of the data), "data": GameState.to_dict()}`.
+Saves alternate between the two files; loading picks the newest one whose checksum matches.
+When the save format changes, bump `SaveManager.SAVE_VERSION` and add a step to `migrate()`.
+Options live separately in user://settings.cfg.

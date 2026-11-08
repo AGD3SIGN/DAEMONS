@@ -4,6 +4,35 @@ Newest entries at the top. Each entry: what's done, decisions, what's next.
 
 ---
 
+## 2026-11-07 — Phase 6: Trainers, progression, saving ✅
+
+**Done**
+- **Trainers** (`data/trainers/*.json`): team, AI tier, prize, sight range, intro/defeat/after lines, optional cert. NPCs with `"trainer"` spot you in a straight line (blocked by anything solid), show "!", walk up, say their intro and battle. Talking to an unbeaten trainer also starts it. Beaten = flag `trainer_<id>`; they then say their "after" line. Route 1 now has Intern Ian and Sysadmin Sam; Kevin uses trainer data.
+- **Rewards:** winning shows the defeat line, pays the prize ("You got 160 CR for winning!") and awards the trainer's cert if it has one.
+- **Certifications** (`data/certifications.json`, 8, original names): `give_cert` and `if_cert` dialogue, cert-gated progress through dialogue + `hide_if_flag` NPCs. Trainer card shows them as colored badges.
+- **Black-out:** losing any battle → lose half your credits, team healed, wake at the last Help Desk you healed at (`heal_party` records it; defaults to Onboarding Town's Help Desk).
+- **SaveManager:** JSON with version + sha256 checksum + save_count; two slots that alternate; loads the newest valid slot (damaged, hand-edited or newer-version files are skipped); `migrate()` hook. Saves location, stack, racks, bag, flags, certs, CMDB, credits, play time, trainer ID, black-out point, repel.
+- **Pause menu:** CMDB, STACK, BAG, CARD, SAVE, OPTIONS, DEBUG (debug builds), CLOSE. Trainer card (name, ID, credits, CMDB, play time, cert badges). Save asks to confirm.
+- **Options** (Settings autoload, user://settings.cfg): text speed (slow/mid/fast/instant, used by every text box), music volume, SFX volume, battle animations on/off.
+- **Title menu:** CONTINUE (with time + certs), NEW GAME (placeholder start: Chipmunk Lv5 in your house until the Phase 7 intro), DEBUG MENU.
+- Play time only counts during gameplay.
+- README added.
+- Tests: `tests/test_progression.gd` (20). 181/181 passing.
+
+**Done-when:** beat a trainer, save, quit, relaunch, continue exactly where you were. ✔ (test: battle → save → reset → load → overworld at the same tile, facing, credits and trainer flag)
+
+**Fixes during the phase**
+- JSON turns ints into floats on reload, so a checksum over the original data never matched. Checksums are now computed over the round-tripped data.
+- Damaged save files are parsed quietly (a half-written file after a crash is expected, not an error).
+
+**Notes**
+- No cert-gated area exists yet; the first gate comes with Phase 7/10 content.
+- Design doc's "Network+" example is a CompTIA trademark; certs use original names.
+
+**Next:** Phase 7 — vertical slice: intro + starter choice, Route 1, Wi-Fi Dead Zone, Patch Town, Desktop Support Department.
+
+---
+
 ## 2026-11-07 — Phase 5: Collecting systems ✅
 
 **Done**

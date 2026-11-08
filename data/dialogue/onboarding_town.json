@@ -36,37 +36,37 @@
   ],
   "kevin_town": [
     {
-      "speaker": "Kevin",
-      "text": "Oh, it's you! Did you see my email? The one with 47 attachments?"
-    },
-    {
-      "speaker": "Kevin",
-      "choice": "Want to test our Daemons? Quick battle?",
-      "yes": [
+      "if_flag": "trainer_kevin_town",
+      "then": [
         {
           "speaker": "Kevin",
-          "text": "Replying all to this challenge!"
-        },
-        {
-          "cmd": "start_battle",
-          "trainer_name": "Kevin",
-          "ai": "basic",
-          "foe": [
-            [
-              "spamlet",
-              6
-            ],
-            [
-              "cablesnake",
-              7
-            ]
-          ]
+          "text": "Next time I'm bringing a bigger attachment."
         }
       ],
-      "no": [
+      "else": [
         {
           "speaker": "Kevin",
-          "text": "Fine. I'll schedule a meeting about it."
+          "text": "Oh, it's you! Did you see my email? The one with 47 attachments?"
+        },
+        {
+          "speaker": "Kevin",
+          "choice": "Want to test our Daemons? Quick battle?",
+          "yes": [
+            {
+              "speaker": "Kevin",
+              "text": "Replying all to this challenge!"
+            },
+            {
+              "cmd": "start_battle",
+              "trainer": "kevin_town"
+            }
+          ],
+          "no": [
+            {
+              "speaker": "Kevin",
+              "text": "Fine. I'll schedule a meeting about it."
+            }
+          ]
         }
       ]
     }

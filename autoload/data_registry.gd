@@ -11,10 +11,12 @@ const FILES := {
 	"items": "items.json",
 	"config_profiles": "config_profiles.json",
 	"tiles": "tiles.json",
+	"certifications": "certifications.json",
 }
 const MAPS_DIR := "res://data/maps/"
 const DIALOGUE_DIR := "res://data/dialogue/"
 const ENCOUNTERS_DIR := "res://data/encounters/"
+const TRAINERS_DIR := "res://data/trainers/"
 
 var types: Dictionary = {}       # id -> {id, name, color}
 var type_chart: Dictionary = {}  # attacker id -> {defender id -> multiplier}; missing = 1
@@ -25,6 +27,8 @@ var config_profiles: Dictionary = {}  # id -> {id, name, up, down}; up/down null
 var tiles: Dictionary = {}            # tile name -> {name, atlas, collision, behavior}
 var dialogues: Dictionary = {}        # dialogue id -> list of steps (from every data/dialogue/*.json)
 var encounters: Dictionary = {}       # map id -> wild encounter table (data/encounters/<map>.json)
+var trainers: Dictionary = {}         # trainer id -> trainer (every data/trainers/*.json)
+var certifications: Dictionary = {}   # cert id -> {id, name, department, type, order}
 
 var _validator: DataValidator
 var _maps: Dictionary = {}            # map id -> validated map data (loaded on first use)
@@ -71,17 +75,23 @@ func read_raw(out_errors: PackedStringArray = PackedStringArray()) -> Dictionary
 			continue
 		dialogue_files[file] = json.data
 	raw["dialogue"] = dialogue_files
-	var encounter_tables := {}
-	for file in DirAccess.get_files_at(ENCOUNTERS_DIR):
+	raw["encounters"] = _read_dir(ENCOUNTERS_DIR, out_errors)
+	raw["trainers"] = _read_dir(TRAINERS_DIR, out_errors)
+	return raw
+
+
+## {file base name: parsed JSON} for every .json in a folder.
+func _read_dir(dir: String, out_errors: PackedStringArray) -> Dictionary:
+	var out := {}
+	for file in DirAccess.get_files_at(dir):
 		if not file.ends_with(".json"):
 			continue
 		var json := JSON.new()
-		if json.parse(FileAccess.get_file_as_string(ENCOUNTERS_DIR + file)) != OK:
-			out_errors.append("%s%s line %d: %s" % [ENCOUNTERS_DIR, file, json.get_error_line(), json.get_error_message()])
+		if json.parse(FileAccess.get_file_as_string(dir + file)) != OK:
+			out_errors.append("%s%s line %d: %s" % [dir, file, json.get_error_line(), json.get_error_message()])
 			continue
-		encounter_tables[file.get_basename()] = json.data
-	raw["encounters"] = encounter_tables
-	return raw
+		out[file.get_basename()] = json.data
+	return out
 
 
 ## Validates already-parsed data and swaps it in. Used by load_all() and by tests.
@@ -99,6 +109,8 @@ func load_from(raw: Dictionary, report: bool = true) -> bool:
 	tiles = validator.tiles
 	dialogues = validator.dialogues
 	encounters = validator.encounters
+	trainers = validator.trainers
+	certifications = validator.certifications
 	if report:
 		_report()
 	return errors.is_empty()

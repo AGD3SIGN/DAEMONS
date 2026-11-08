@@ -8,7 +8,9 @@ extends RefCounted
 ##   {"cmd": "give_item", "item": "coffee", "count": 2}
 ##   {"cmd": "give_daemon", "species": "dustbunny", "level": 5}
 ##   {"cmd": "heal_party"}
-##   {"cmd": "start_battle", "foe": [["spamlet", 9]], "trainer_name": "Kevin", "ai": "smart"}  (ends the dialogue)
+##   {"cmd": "start_battle", "trainer": "kevin_town"}   or  "foe": [["spamlet", 9]] (ends the dialogue)
+##   {"cmd": "give_cert", "cert": "desktop_support"}
+##   {"if_cert": "networking", "then": [steps], "else": [steps]}
 ##   {"cmd": "move_npc", "npc": "kid", "path": ["left", "right"]}   npc "self" = whoever is talking
 ##   {"cmd": "open_shop", "stock": ["coffee", "thumb_drive"]}   Supply Closet buy/sell
 ##   {"cmd": "open_rack"}                                         Server Rack storage
@@ -43,6 +45,9 @@ func _run_step(step: Dictionary) -> void:
 	elif step.has("if_flag"):
 		var flag_set: bool = GameState.flags.get(step["if_flag"], false)
 		await run(step.get("then" if flag_set else "else", []))
+	elif step.has("if_cert"):
+		var has_cert: bool = step["if_cert"] in GameState.certifications
+		await run(step.get("then" if has_cert else "else", []))
 	else:
 		await _command(step)
 
@@ -67,13 +72,23 @@ func _command(step: Dictionary) -> void:
 			if where == "rack":
 				await world.show_message("Your stack is full, so %s went to the Server Rack." % d.display_name())
 		"heal_party":
-			for d: DaemonInstance in GameState.active_stack:
-				d.heal_full()
+			GameState.heal_stack()
+			# Black-outs bring you back to the last place you healed.
+			GameState.last_help_desk = GameState.location.duplicate()
 		"start_battle":
 			stopped = true
-			var config := {"foe": step["foe"], "wild": false, "trainer_name": step.get("trainer_name", ""),
-				"ai": step.get("ai", "basic")}
+			var config: Dictionary
+			if step.has("trainer"):
+				config = BattleScene.trainer_config(step["trainer"])
+			else:
+				config = {"foe": step["foe"], "wild": false, "trainer_name": step.get("trainer_name", ""),
+					"ai": step.get("ai", "basic")}
 			world.start_battle(config)
+		"give_cert":
+			if not step["cert"] in GameState.certifications:
+				GameState.certifications.append(step["cert"])
+				AudioManager.play_sfx("confirm")
+				await world.show_message("You earned the %s!" % DataRegistry.certifications[step["cert"]]["name"])
 		"open_shop":
 			await world.field_menus.shop(step["stock"])
 		"open_rack":

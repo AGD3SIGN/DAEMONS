@@ -3,7 +3,9 @@ extends MapEvent
 ## A person on the map. Solid (you can't walk through them). Press A facing them to talk: they
 ## turn to face you and run their dialogue. Optional wandering within 2 tiles of where they start.
 ## move_path() walks them along a list of directions (used by the move_npc dialogue command).
-## Phase 6 adds trainer data (line of sight, battle).
+## Trainers ("trainer": id from data/trainers) spot you along the way they face (up to "sight"
+## tiles), walk over and battle. Once beaten they say their "after" line. "hide_if_flag" removes
+## the NPC when that flag is set (e.g. a gatekeeper who steps aside for good).
 
 const WALK_TIME := 0.28
 const WANDER_RADIUS := 2
@@ -13,6 +15,8 @@ const FACINGS := {"up": Vector2i.UP, "down": Vector2i.DOWN, "left": Vector2i.LEF
 @export var dialogue_id: String = ""
 @export var facing: Vector2i = Vector2i.DOWN
 @export var wander: bool = false
+@export var trainer_id: String = ""
+@export var hide_if_flag: String = ""
 @export var shirt: Color = Color("4878c8")
 @export var hair: Color = Color("402818")
 
@@ -26,7 +30,9 @@ var _wander_timer := 0.0
 func configure(data: Dictionary) -> void:
 	super.configure(data)
 	npc_id = data["id"]
-	dialogue_id = data["dialogue"]
+	dialogue_id = data.get("dialogue", "")
+	trainer_id = data.get("trainer", "")
+	hide_if_flag = data.get("hide_if_flag", "")
 	facing = FACINGS.get(data.get("facing", "down"), Vector2i.DOWN)
 	wander = data.get("wander", false)
 	var look: Dictionary = data.get("look", {})
@@ -55,7 +61,37 @@ func can_interact() -> bool:
 
 func interact() -> void:
 	face(world.player.cell - cell)
-	await world.run_dialogue(dialogue_id, self)
+	if is_undefeated_trainer():
+		await world.engage_trainer(self, false)
+	elif not trainer_id.is_empty() and dialogue_id.is_empty():
+		await world.show_message("%s: %s" % [trainer_data()["name"], trainer_data()["after"]])
+	else:
+		await world.run_dialogue(dialogue_id, self)
+
+
+func trainer_data() -> Dictionary:
+	return DataRegistry.trainers.get(trainer_id, {})
+
+
+func is_undefeated_trainer() -> bool:
+	return not trainer_id.is_empty() and not GameState.flags.get(BattleScene.trainer_flag(trainer_id), false)
+
+
+func sight() -> int:
+	return int(trainer_data().get("sight", 0))
+
+
+## The "!" when a trainer spots you.
+func show_alert(duration: float) -> void:
+	var bubble := Label.new()
+	bubble.text = "!"
+	bubble.theme = UiTheme.get_theme()
+	bubble.add_theme_color_override("font_color", Color("e04040"))
+	bubble.position = Vector2(4, -12)
+	add_child(bubble)
+	AudioManager.play_sfx("confirm")
+	await get_tree().create_timer(duration).timeout
+	bubble.queue_free()
 
 
 func face(direction: Vector2i) -> void:
@@ -95,7 +131,7 @@ func step(dir: Vector2i) -> bool:
 
 
 func _process(delta: float) -> void:
-	if not wander or moving or world == null or not world.is_idle():
+	if not wander or is_undefeated_trainer() or moving or world == null or not world.is_idle():
 		return
 	_wander_timer -= delta
 	if _wander_timer > 0.0:

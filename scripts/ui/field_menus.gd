@@ -1,7 +1,7 @@
 class_name FieldMenus
 extends Control
 ## Menus used outside battle, all as awaitable flows:
-##   open_pause()        CMDB / STACK / BAG (+ DEBUG in debug builds)
+##   open_pause()        CMDB / STACK / BAG / CARD / SAVE / OPTIONS (+ DEBUG in debug builds)
 ##   stack_screen()      summary, swap order, use an item on a Daemon
 ##   bag_screen()        4 pockets (left/right), use / toss
 ##   cmdb_screen()       every Daemon, seen/caught, entries
@@ -19,6 +19,7 @@ var side: MenuList      # top-right: pause, rack, shop
 var sub: MenuList       # bottom-right: small submenus over a list (SUMMARY/SWAP, USE/TOSS)
 var summary: SummaryPanel
 var cmdb_panel: CmdbPanel
+var card: TrainerCardPanel
 
 var _qty_panel: Panel
 var _qty_label: Label
@@ -38,7 +39,7 @@ func _ready() -> void:
 	list.setup(Vector4(0, 0, 1, 1), Vector4(6, 6, -6, -6), 11, 2)
 	add_child(list)
 	side = MenuList.new()
-	side.setup(Vector4(1, 0, 1, 0), Vector4(-112, 6, -6, 6 + 17 + 5 * MenuList.ROW_H + 6), 5)
+	side.setup(Vector4(1, 0, 1, 0), Vector4(-112, 6, -6, 6 + 17 + 8 * MenuList.ROW_H + 6), 8)
 	add_child(side)
 	sub = MenuList.new()
 	sub.setup(Vector4(1, 1, 1, 1), Vector4(-112, -6 - (17 + 4 * MenuList.ROW_H + 6), -6, -6), 4)
@@ -47,6 +48,8 @@ func _ready() -> void:
 	add_child(summary)
 	cmdb_panel = CmdbPanel.new()
 	add_child(cmdb_panel)
+	card = TrainerCardPanel.new()
+	add_child(card)
 	_qty_panel = Panel.new()
 	_qty_panel.anchor_left = 1
 	_qty_panel.anchor_right = 1
@@ -67,7 +70,7 @@ func _ready() -> void:
 # --- pause -------------------------------------------------------------------
 
 func open_pause() -> void:
-	var options := PackedStringArray(["CMDB", "STACK", "BAG"])
+	var options := PackedStringArray(["CMDB", "STACK", "BAG", "CARD", "SAVE", "OPTIONS"])
 	if OS.is_debug_build():
 		options.append("DEBUG")
 	options.append("CLOSE")
@@ -85,10 +88,64 @@ func open_pause() -> void:
 				await stack_screen()
 			"BAG":
 				await bag_screen()
+			"CARD":
+				await card.open()
+			"SAVE":
+				await save_flow()
+			"OPTIONS":
+				await options_screen()
 			"DEBUG":
 				SceneRouter.goto(DEBUG_MENU)
 				return
 	side.close()
+
+
+# --- save and options --------------------------------------------------------
+
+func save_flow() -> void:
+	if not await world.ask("Save your progress?"):
+		return
+	var error := SaveManager.save_game()
+	AudioManager.play_sfx("confirm")
+	await _say(error if not error.is_empty() else "Saved. Play time %s." % TrainerCardPanel.format_time(GameState.play_time_sec))
+
+
+func options_screen() -> void:
+	var cursor := 0
+	while true:
+		var on_off := "ON" if Settings.battle_animations else "OFF"
+		var rows := PackedStringArray([
+			"TEXT SPEED    < %s >" % Settings.text_speed.to_upper(),
+			"MUSIC VOLUME  < %d%% >" % roundi(Settings.music_volume * 100),
+			"SFX VOLUME    < %d%% >" % roundi(Settings.sfx_volume * 100),
+			"BATTLE ANIMS  < %s >" % on_off,
+			"DONE",
+		])
+		list.allow_lr = true
+		list.describe = func(i: int) -> String: return ["How fast text types out.", "Background music (coming with the soundtrack).",
+			"Sound effects.", "Turn off to skip battle animations.", "Save and close."][i]
+		var r := await list.choose("OPTIONS   (left/right to change)", rows, [], cursor)
+		list.allow_lr = false
+		list.describe = Callable()
+		cursor = r["index"]
+		if r["action"] == "cancel" or (r["action"] == "pick" and cursor == 4):
+			break
+		var step := -1 if r["action"] == "left" else 1
+		match cursor:
+			0:
+				var order := Settings.TEXT_SPEED_ORDER
+				Settings.text_speed = order[wrapi(order.find(Settings.text_speed) + step, 0, order.size())]
+			1:
+				Settings.music_volume = clampf(snappedf(Settings.music_volume + 0.1 * step, 0.1), 0.0, 1.0)
+			2:
+				Settings.sfx_volume = clampf(snappedf(Settings.sfx_volume + 0.1 * step, 0.1), 0.0, 1.0)
+				Settings.apply()
+				AudioManager.play_sfx("select")
+			3:
+				Settings.battle_animations = not Settings.battle_animations
+	Settings.apply()
+	Settings.save_settings()
+	list.close()
 
 
 # --- Active Stack ------------------------------------------------------------

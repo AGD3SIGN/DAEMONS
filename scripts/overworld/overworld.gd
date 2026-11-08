@@ -41,6 +41,7 @@ var _busy := false   # dialogue or warp in progress
 
 func _ready() -> void:
 	encounter_rng.randomize()
+	GameState.clock_running = true
 	_build_ui()
 	var params := SceneRouter.params
 	if params.has("map"):
@@ -90,6 +91,8 @@ func load_map(map_id: String, spawn_name: String = "default") -> bool:
 
 func _spawn_events() -> void:
 	for data: Dictionary in map.map_data.get("events", []):
+		if data.has("hide_if_flag") and GameState.flags.get(data["hide_if_flag"], false):
+			continue
 		var event := _new_event(data["type"])
 		event.world = self
 		event.configure(data)
@@ -142,6 +145,10 @@ func _on_stepped(cell: Vector2i, _behavior: String) -> void:
 			player.input_enabled = false
 			await event.run()
 			return
+	for event in events:
+		if event is NpcEvent and trainer_sees_player(event):
+			await engage_trainer(event, true)
+			return
 	if GameState.repel_steps > 0:
 		GameState.repel_steps -= 1
 		if GameState.repel_steps == 0:
@@ -164,6 +171,41 @@ func _check_encounter(cell: Vector2i) -> void:
 	var hit := Encounters.roll(map.map_id, info["name"], encounter_rng, GameState.lead_level(), GameState.repel_steps > 0, rate)
 	if not hit.is_empty():
 		start_wild_battle(hit["species"], hit["level"])
+
+
+## True if an unbeaten trainer is looking straight at the player within its sight range,
+## with nothing solid in between.
+func trainer_sees_player(npc: NpcEvent) -> bool:
+	if not npc.is_undefeated_trainer() or npc.sight() <= 0 or npc.moving:
+		return false
+	for distance in range(1, npc.sight() + 1):
+		var cell := npc.cell + npc.facing * distance
+		if cell == player.cell:
+			return true
+		if not map.is_walkable(cell):
+			return false
+	return false
+
+
+## "!" → walk up (if they spotted you) → intro line → battle.
+func engage_trainer(npc: NpcEvent, walk_up: bool) -> void:
+	_busy = true
+	player.input_enabled = false
+	await npc.show_alert(0.6 * time_scale)
+	if walk_up:
+		var gap := absi(player.cell.x - npc.cell.x) + absi(player.cell.y - npc.cell.y) - 1
+		for i in gap:
+			if not await npc.step(npc.facing):
+				break
+	player.face(-npc.facing)
+	var t := npc.trainer_data()
+	await say(String(t["intro"]), String(t["name"]))
+	text_box.visible = false
+	_speaker_tab.visible = false
+	start_battle(BattleScene.trainer_config(npc.trainer_id))
+	if not allow_scene_change:
+		_busy = false
+		player.input_enabled = true
 
 
 func start_wild_battle(species_id: String, level: int) -> void:

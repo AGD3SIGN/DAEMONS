@@ -82,6 +82,30 @@
       "item": "thumb_drive",
       "count": 2,
       "flag": "hidden_route_1_keys"
+    },
+    {
+      "type": "npc",
+      "id": "intern_ian",
+      "x": 11,
+      "y": 18,
+      "facing": "left",
+      "trainer": "intern_ian",
+      "look": {
+        "shirt": "#e0a030",
+        "hair": "#402010"
+      }
+    },
+    {
+      "type": "npc",
+      "id": "sysadmin_sam",
+      "x": 8,
+      "y": 7,
+      "facing": "right",
+      "trainer": "sysadmin_sam",
+      "look": {
+        "shirt": "#505868",
+        "hair": "#a0a0a0"
+      }
     }
   ]
 }
