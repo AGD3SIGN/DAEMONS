@@ -11,6 +11,10 @@ var state: BattleState
 var upgrades: Array[Dictionary] = []
 
 var _active: Array[int] = [-1, -1]
+var _species: Array[String] = ["", ""]
+var _held: Array[bool] = [false, false]  # a pose is showing; the idle loop leaves it alone
+var _breath := 0.0
+var _breath_frame := 0
 var _shown: Array[Dictionary] = [{}, {}]  # side -> {stack index -> {level, exp, status}}
 
 
@@ -53,8 +57,10 @@ func _play_event(e: Dictionary) -> void:
 			_panel(side).show_daemon(d.display_name(), int(info["level"]), int(e["uptime"]), int(e["max_uptime"]),
 				info["status"], exp_fraction(_active[side]) if side == BattleState.PLAYER else 0.0)
 			_panel(side).visible = false
+			_species[side] = d.species_id
 			_sprite(side).texture = DaemonSprites.back(d.species_id) if side == BattleState.PLAYER else DaemonSprites.front(d.species_id)
 			await _anim_enter(side)
+			_rest(side)
 			_panel(side).visible = true
 			await _say(text)
 		"switch_out":
@@ -63,15 +69,23 @@ func _play_event(e: Dictionary) -> void:
 			_panel(side).visible = false
 		"move_used":
 			await _say(text, false)
+			var category := String(DataRegistry.get_move(String(e.get("move", ""))).get("category", "physical"))
+			_hold_pose(side, "attack" if category == "physical" else "special")
 			await _anim_lunge(side)
+			await view.get_tree().create_timer(0.2 * _ts()).timeout
+			_release_pose(side)
 		"damage":
+			_hold_pose(side, "hurt")
 			_hit_flash(side)
 			await _panel(side).animate_uptime(int(e["uptime"]), int(e["max_uptime"]))
+			_release_pose(side)
 			await _say(text)
 		"status_damage":
 			await _say(text, false)
+			_hold_pose(side, "hurt")
 			_hit_flash(side)
 			await _panel(side).animate_uptime(int(e["uptime"]), int(e["max_uptime"]))
+			_release_pose(side)
 		"heal", "revived":
 			if int(e.get("target_index", -1)) == _active[side]:
 				await _panel(side).animate_uptime(int(e["uptime"]), int(e["max_uptime"]))
@@ -83,18 +97,22 @@ func _play_event(e: Dictionary) -> void:
 			if e["status"] != "looping":
 				_shown[side][_active[side]]["status"] = e["status"]
 				_panel(side).set_status(e["status"])
+				_rest(side)
 			await _say(text)
 		"status_cured":
 			var index := int(e.get("target_index", _active[side]))
 			_shown[side][index]["status"] = ""
 			if index == _active[side]:
 				_panel(side).set_status("")
+				_rest(side)
 			await _say(text)
 		"stat_changed":
 			await _anim_tint(side, int(e["delta"]) > 0)
 			await _say(text)
 		"fainted":
+			_hold_pose(side, "faint")
 			await _anim_faint(side)
+			_held[side] = false
 			_panel(side).visible = false
 			await _say(text)
 		"exp_gained":
@@ -146,6 +164,62 @@ func _play_level_up(e: Dictionary, text: String) -> void:
 	view.stat_popup.visible = true
 	await view.text_box.wait_for_advance()
 	view.stat_popup.visible = false
+
+
+# --- poses (only for Daemons with a sprite sheet) -----------------------------
+
+## Front pose names; the player's Daemon is seen from behind, so it uses the back version.
+const BACK_POSES := {"idle": "back", "idle_b": "back_b", "attack": "back_attack", "special": "back_attack",
+	"hurt": "back_hurt", "faint": "back_hurt"}
+## Foe poses for lasting statuses.
+const STATUS_POSES := {"standby": "asleep", "overheated": "overheated", "throttled": "throttled"}
+
+
+## Shows a pose; returns false if this Daemon has no sheet (then the sprite is left alone).
+func _set_pose(side: int, pose_name: String) -> bool:
+	if _species[side].is_empty():
+		return false
+	if side == BattleState.PLAYER:
+		pose_name = BACK_POSES.get(pose_name, "back")
+	var tex := DaemonSprites.pose(_species[side], pose_name)
+	if tex == null:
+		return false
+	_sprite(side).texture = tex
+	return true
+
+
+func _hold_pose(side: int, pose_name: String) -> void:
+	_held[side] = _set_pose(side, pose_name)
+
+
+func _release_pose(side: int) -> void:
+	_held[side] = false
+	_rest(side)
+
+
+## The resting pose: idle, or a status pose (foe side only; the back view has none).
+func _rest(side: int) -> void:
+	if _held[side] or _active[side] < 0:
+		return
+	var status := String(_shown[side][_active[side]].get("status", ""))
+	if side == BattleState.FOE and STATUS_POSES.has(status):
+		_set_pose(side, STATUS_POSES[status])
+	else:
+		_set_pose(side, "idle_b" if _breath_frame == 1 else "idle")
+
+
+## Two-frame breathing loop, called every frame by the battle scene.
+func tick(delta: float) -> void:
+	if _ts() <= 0.0:
+		return
+	_breath += delta / _ts()
+	if _breath < 0.5:
+		return
+	_breath = 0.0
+	_breath_frame = 1 - _breath_frame
+	for side in 2:
+		if _sprite(side).visible:
+			_rest(side)
 
 
 # --- helpers -----------------------------------------------------------------

@@ -1,13 +1,51 @@
 class_name DaemonSprites
 extends RefCounted
-## Battle sprites (64x64). Uses real art from assets/sprites/daemons/<id>_front.png / <id>_back.png
-## when it exists; otherwise generates a placeholder blob colored by the Daemon's types, shaped by
-## its id, and sized by its base stat total (later stages are bigger). Results are cached.
+## Battle sprites (64x64). Looks for art in assets/sprites/daemons/, best first:
+##   <id>_sheet.png  256x256, 4x4 poses (see POSES; made by tools/art_import/import_sheet.gd)
+##   <id>_front.png / <id>_back.png  single stills
+## otherwise generates a placeholder blob colored by the Daemon's types, shaped by its id, and sized
+## by its base stat total (later stages are bigger). Results are cached.
 
 const SIZE := 64
 const ART_DIR := "res://assets/sprites/daemons/"
 
+## Sheet frame index for each pose, row by row (same order as the art prompts).
+const POSES := {
+	"idle": 0, "idle_b": 1, "attack": 2, "special": 3,
+	"hurt": 4, "faint": 5, "happy": 6, "asleep": 7,
+	"back": 8, "back_b": 9, "back_attack": 10, "back_hurt": 11,
+	"upgrade": 12, "overheated": 13, "throttled": 14, "icon": 15,
+}
+
 static var _cache: Dictionary = {}
+
+
+static func has_sheet(species_id: String) -> bool:
+	return _sheet(species_id) != null
+
+
+## One pose from the Daemon's sheet, or null if it has no sheet yet.
+static func pose(species_id: String, pose_name: String) -> Texture2D:
+	var key := "%s#%s" % [species_id, pose_name]
+	if _cache.has(key):
+		return _cache[key]
+	var sheet := _sheet(species_id)
+	if sheet == null or not POSES.has(pose_name):
+		return null
+	var i: int = POSES[pose_name]
+	var atlas := AtlasTexture.new()
+	atlas.atlas = sheet
+	atlas.region = Rect2((i % 4) * SIZE, (i / 4) * SIZE, SIZE, SIZE)
+	_cache[key] = atlas
+	return atlas
+
+
+static func _sheet(species_id: String) -> Texture2D:
+	var key := species_id + "#sheet"
+	if not _cache.has(key):
+		var path := ART_DIR + species_id + "_sheet.png"
+		_cache[key] = load(path) if ResourceLoader.exists(path) else null
+	return _cache[key]
 
 
 static func front(species_id: String) -> Texture2D:
@@ -44,11 +82,9 @@ static func _load(species_id: String, is_back: bool) -> Texture2D:
 	if _cache.has(key):
 		return _cache[key]
 	var path := ART_DIR + key + ".png"
-	var tex: Texture2D
-	if ResourceLoader.exists(path):
-		tex = load(path)
-	else:
-		tex = ImageTexture.create_from_image(_generate(species_id, is_back))
+	var tex: Texture2D = pose(species_id, "back" if is_back else "idle")
+	if tex == null:
+		tex = load(path) if ResourceLoader.exists(path) else ImageTexture.create_from_image(_generate(species_id, is_back))
 	_cache[key] = tex
 	return tex
 

@@ -4,6 +4,19 @@ Newest entries at the top. Each entry: what's done, decisions, what's next.
 
 ---
 
+## 2026-11-08 — Art pipeline: first real Daemon sprites
+
+**Done**
+- `tools/art_import/import_sheet.gd` (run headless): slices an AI sprite sheet into 4x4 poses, removes the
+  background (magenta anywhere; a plain color only from the edges so white bellies survive), shrinks each to 64x64
+  → `assets/sprites/daemons/<id>_sheet.png`. Sources live in `art_src/` (gdignored, excluded from exports).
+- `DaemonSprites`: sheets first (`pose(id, name)`, `POSES`), then `_front/_back.png`, then the placeholder.
+- `BattlePlayer`: plays the poses: breathing idle loop, physical/special attack, hurt, faint, foe status poses
+  (asleep/overheated/throttled); the player's Daemon uses the back-view poses.
+- Imported Pengwan and Emperoute. Tests: 208/208 (importer, pose lookup, a battle that shows the poses).
+
+---
+
 ## 2026-11-08 — Phase 8: iOS Simulator + touch fixes
 
 **Done**

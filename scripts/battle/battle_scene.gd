@@ -85,6 +85,11 @@ static func trainer_flag(trainer_id: String) -> String:
 	return "trainer_" + trainer_id
 
 
+
+func _process(delta: float) -> void:
+	if _player != null:
+		_player.tick(delta)
+
 func setup(cfg: Dictionary) -> void:
 	config = cfg
 	auto = cfg.get("auto", false)
