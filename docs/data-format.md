@@ -38,6 +38,13 @@ Move effects:
 | `heal` | `fraction` of max Uptime |
 | `multi_hit` | `min`, `max` hits |
 
+**fx** (optional, every move has one): the move's battle effect, a list of steps played between "X ran Y!"
+and the hit (`scripts/battle/ui/battle_fx.gd`). Each step: `kind` (burst, stream, rings, beam, bolt, rise, fall,
+orbit, glitch, flash, dim, cover, shield, wall, xmark, slices), optional `color` ("type" = the move's type color,
+or "#rrggbb"), `on` ("user"/"target"), `glyph` for particles (square, dot, plus, arrow_up, arrow_down, z, key,
+envelope, cell, code, wave, hook, drop), size/count/radius knobs, and `"parallel": true` to start the next step at
+once. Example (Packet Flood): `[{"kind": "stream", "count": 18, "size": 3}, {"kind": "burst", "count": 10}]`.
+
 **Force Quit** (`force_quit`) is the 0-PP fallback: when every move a Daemon knows is out of PP, choosing
 FIGHT uses it automatically (fight slot `BattleSim.FALLBACK_SLOT`). Typeless, power 50, never misses, 1/4 recoil.
 It's never put in a learnset. Change it here; the id is `BattleSim.FALLBACK_MOVE`.

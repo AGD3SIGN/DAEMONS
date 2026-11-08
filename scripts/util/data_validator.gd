@@ -539,6 +539,31 @@ func _validate_profiles(raw: Variant) -> void:
 
 # --- moves -------------------------------------------------------------------
 
+## Optional "fx": the move's battle effect, a list of steps (see scripts/battle/ui/battle_fx.gd).
+func _validate_fx(m: Dictionary, where: String) -> void:
+	if not m.has("fx"):
+		return
+	var fx: Variant = m["fx"]
+	if typeof(fx) != TYPE_ARRAY:
+		_err(where, "'fx' must be a list of steps")
+		return
+	for i in fx.size():
+		var sw := "%s › fx[%d]" % [where, i]
+		var step: Variant = fx[i]
+		if typeof(step) != TYPE_DICTIONARY:
+			_err(sw, "each fx step must be an object like {\"kind\": \"burst\"}")
+			continue
+		_one_of(step, "kind", sw, BattleFx.KINDS)
+		if step.has("glyph") and not String(step["glyph"]) in BattleFx.GLYPHS:
+			_err(sw, "unknown glyph '%s' (allowed: %s)" % [str(step["glyph"]), ", ".join(BattleFx.GLYPHS)])
+		if step.has("on") and not String(step["on"]) in ["user", "target"]:
+			_err(sw, "'on' must be \"user\" or \"target\"")
+		if step.has("color"):
+			var c := String(step["color"])
+			if c != "type" and not Color.html_is_valid(c):
+				_err(sw, "'color' must be \"type\" or a hex color like \"#ff8800\", not '%s'" % c)
+
+
 func _validate_move(m: Dictionary, where: String) -> void:
 	_string(m, "name", where)
 	_string(m, "description", where)
@@ -553,6 +578,7 @@ func _validate_move(m: Dictionary, where: String) -> void:
 	_int(m, "accuracy", where, 0, 100)  # 0 = never misses
 	_int(m, "max_pp", where, 1, 64)
 	_int(m, "priority", where, -7, 7)
+	_validate_fx(m, where)
 	var params := _effect(m, where, MOVE_EFFECTS)
 	if params.is_empty():
 		return

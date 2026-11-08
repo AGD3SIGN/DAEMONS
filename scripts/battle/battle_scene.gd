@@ -42,6 +42,7 @@ var foe_slot: Control
 var player_slot: Control
 var foe_sprite: TextureRect
 var player_sprite: TextureRect
+var fx: BattleFx
 var foe_panel: BattleInfoPanel
 var player_panel: BattleInfoPanel
 var text_box: TextBox
@@ -433,6 +434,8 @@ func _build() -> void:
 	_platform(player_slot, Rect2(-22, 48, 108, 18))
 	foe_sprite = _sprite_in(foe_slot)
 	player_sprite = _sprite_in(player_slot)
+	fx = BattleFx.new()  # move effects draw over the Daemons but under the info panels
+	add_child(fx)
 
 	foe_panel = BattleInfoPanel.new()
 	foe_panel.setup(false)

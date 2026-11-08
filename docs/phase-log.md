@@ -4,6 +4,19 @@ Newest entries at the top. Each entry: what's done, decisions, what's next.
 
 ---
 
+## 2026-11-08 — Move effects
+
+**Done**
+- Every move now has its own battle effect, defined in `data/moves.json` as `"fx"` (data-driven, like everything else).
+- `scripts/battle/ui/battle_fx.gd`: 16 pixel-art effect pieces (burst, stream of packets/envelopes/code/cells, rings,
+  beam, lightning bolt, rising/falling glyphs, orbit, glitch, screen flash/dim, blue-screen cover, shield, brick
+  wall, X stamp, slices) colored by move type by default; each step draws in its own layer so parallel steps work.
+- Plays after the attacker's lunge and before the hit; skipped when battle animations are off (time_scale 0).
+- Data checker rejects unknown kinds, glyphs, colors and `on` values.
+- Tests: 222/222 (every move has a distinct effect, every piece is used, every effect plays and cleans up).
+
+---
+
 ## 2026-11-08 — Art revamp: 19 new Daemon sheets
 
 **Done**

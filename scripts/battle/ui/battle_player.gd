@@ -72,7 +72,7 @@ func _play_event(e: Dictionary) -> void:
 			var category := String(DataRegistry.get_move(String(e.get("move", ""))).get("category", "physical"))
 			_hold_pose(side, "attack" if category == "physical" else "special")
 			await _anim_lunge(side)
-			await view.get_tree().create_timer(0.2 * _ts()).timeout
+			await _play_move_fx(side, String(e.get("move", "")))
 			_release_pose(side)
 		"damage":
 			_hold_pose(side, "hurt")
@@ -164,6 +164,28 @@ func _play_level_up(e: Dictionary, text: String) -> void:
 	view.stat_popup.visible = true
 	await view.text_box.wait_for_advance()
 	view.stat_popup.visible = false
+
+
+# --- move effects ----------------------------------------------------------------
+
+## The move's own effect (data/moves.json "fx"), drawn from the user to the target.
+func _play_move_fx(side: int, move_id: String) -> void:
+	var move := DataRegistry.get_move(move_id)
+	var steps: Array = move.get("fx", [])
+	if steps.is_empty() or _ts() <= 0.0:
+		await view.get_tree().create_timer(0.2 * _ts()).timeout
+		return
+	var type_data: Dictionary = DataRegistry.types.get(String(move.get("type", "")), {})
+	var type_color := Color(String(type_data.get("color", "#ffffff")))
+	view.fx.time_scale = _ts()
+	var user := _sprite_center(side)
+	var target := _sprite_center(BattleState.opponent(side))
+	await view.fx.play(steps, user, target, type_color)
+
+
+func _sprite_center(side: int) -> Vector2:
+	var s := _sprite(side)
+	return s.get_global_rect().get_center() - view.fx.get_global_rect().position
 
 
 # --- poses (only for Daemons with a sprite sheet) -----------------------------
