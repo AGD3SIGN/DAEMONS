@@ -743,11 +743,12 @@ def main():
              "2. Fix it with the follow-up lines at the bottom of each file until you approve it.",
              "3. Next stage: in the same chat, or a new chat with the approved sheet(s) attached, paste the "
              "next stage's whole prompt. Always paste the whole prompt; ChatGPT forgets earlier rules.",
-             "4. Put it in the game: save the approved image as `art_src/daemons/<id>_gpt_v1.png` (or .webp), then run",
-             "   `godot --headless -s tools/art_import/import_sheet.gd -- art_src/daemons/<id>_gpt_v1.png <id>`.",
-             "   That writes `assets/sprites/daemons/<id>_sheet.png` (4x4 frames of 64x64, background removed) and the",
-             "   battle screen, CMDB, Summary and starter picker use it automatically. Tidy it in Aseprite if needed,",
-             "   and log it in the vault's Daemon-Log.",
+             "4. Put it in the game: save the approved image in its line's folder, named `<id>_gpt...`, e.g.",
+             "   `art_src/daemons/02-Pingo/pengwan_gpt_v2.png`, then run",
+             "   `godot --headless -s tools/art_import/import_sheet.gd -- --all`.",
+             "   That writes `assets/sprites/daemons/<id>_sheet.png` for every image (4x4 frames of 64x64, background",
+             "   removed: magenta, plain, or already transparent) and the battle screen, CMDB, Summary and starter",
+             "   picker use it automatically. Tidy it in Aseprite if needed, and log it in the vault's Daemon-Log.",
              "", "Sheet layout: 1024x1024, invisible 4x4 grid of 256x256 cells, each sprite 64x64 art pixels "
              "at 4x. Rows: front poses · front reactions · back view · specials (evolution glow or final-form "
              "pose, overheated, throttled, menu icon).", "", "## Files", ""]

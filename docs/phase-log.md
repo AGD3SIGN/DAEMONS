@@ -4,6 +4,16 @@ Newest entries at the top. Each entry: what's done, decisions, what's next.
 
 ---
 
+## 2026-11-08 — Art: Chipmunk and Pingo lines
+
+**Done**
+- Source art now lives in one folder per line: `art_src/daemons/01-Chipmunk/` … `08-Singles/` (`<id>_gpt_v<stage>.png`).
+- `import_sheet.gd -- --all` imports every sheet found there (newest file wins if a Daemon has two).
+- The importer handles already-transparent sheets and drops the see-through halos background removers leave.
+- In the game: Chipmunk, Munkboard, Mainmunk, Pingo, Pengwan, Emperoute. Tests: 214/214.
+
+---
+
 ## 2026-11-08 — Bug review
 
 **Done**

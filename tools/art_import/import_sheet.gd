@@ -3,26 +3,64 @@ extends SceneTree
 ## game's battle sheet: assets/sprites/daemons/<id>_sheet.png, 256x256 = 4x4 frames of 64x64.
 ##
 ##   godot --headless -s tools/art_import/import_sheet.gd -- <source image> <species_id>
+##   godot --headless -s tools/art_import/import_sheet.gd -- --all
 ##
-## Per cell: removes the background (magenta anywhere; any other flat color only where it touches the
-## cell edge, so a white belly survives), then shrinks to 64x64 by taking the most common color in
+## --all imports every art_src/daemons/**/<species_id>_gpt*.png|webp (e.g. 02-Pingo/pengwan_gpt_v2.png);
+## the species id is the part of the file name before "_gpt".
+##
+## Per cell: removes the background (already-transparent pixels; magenta anywhere; any other flat color
+## only where it touches the cell edge, so a white belly survives), then shrinks to 64x64 by taking the most common color in
 ## each block. It's a rough import: open the result in Aseprite to tidy stray pixels.
 ## Frame order (row by row): idle A, idle B, physical, special / hurt, faint, happy, asleep /
 ## back idle A, back idle B, back attack, back hurt / evolve-or-signature, overheated, throttled, icon.
 
 const OUT_DIR := "res://assets/sprites/daemons/"
+const SRC_DIR := "res://art_src/daemons/"
 const FRAME := 64
 const GRID := 4
 
 
 func _init() -> void:
 	var args := OS.get_cmdline_user_args()
+	if args.size() == 1 and args[0] == "--all":
+		var failed := 0
+		for pair: Array in find_sources(ProjectSettings.globalize_path(SRC_DIR)):
+			if not import_sheet(pair[0], pair[1]).is_empty():
+				failed += 1
+		quit(1 if failed > 0 else 0)
+		return
 	if args.size() < 2:
 		printerr("usage: godot --headless -s tools/art_import/import_sheet.gd -- <image> <species_id>")
 		quit(1)
 		return
 	var err := import_sheet(args[0], args[1])
 	quit(0 if err.is_empty() else 1)
+
+
+## [[path, species_id], ...] for every *_gpt* image under dir (any depth), sorted by species id.
+static func find_sources(dir: String) -> Array:
+	var found := {}
+	_scan(dir, found)
+	var out := []
+	for species_id: String in found.keys():
+		out.append([found[species_id], species_id])
+	out.sort_custom(func(a: Array, b: Array) -> bool: return a[1] < b[1])
+	return out
+
+
+static func _scan(dir: String, found: Dictionary) -> void:
+	for sub in DirAccess.get_directories_at(dir):
+		_scan(dir.path_join(sub), found)
+	for file in DirAccess.get_files_at(dir):
+		var ext := file.get_extension().to_lower()
+		var at := file.find("_gpt")
+		if at <= 0 or not ext in ["png", "webp", "jpg", "jpeg"]:
+			continue
+		var species_id := file.substr(0, at).to_lower()
+		var path := dir.path_join(file)
+		# Two images for one Daemon: keep the newest file.
+		if not found.has(species_id) or FileAccess.get_modified_time(path) > FileAccess.get_modified_time(found[species_id]):
+			found[species_id] = path
 
 
 static func import_sheet(source: String, species_id: String) -> String:
@@ -34,18 +72,20 @@ static func import_sheet(source: String, species_id: String) -> String:
 	var out := Image.create(FRAME * GRID, FRAME * GRID, false, Image.FORMAT_RGBA8)
 	var cell := Vector2(src.get_width(), src.get_height()) / GRID
 	var bg := src.get_pixel(2, 2)
-	var magenta := _is_magenta(bg)
+	var transparent := bg.a < 0.5
+	var magenta := not transparent and _is_magenta(bg)
 	for row in GRID:
 		for col in GRID:
 			var rect := Rect2i(Vector2i(Vector2(col, row) * cell), Vector2i(cell))
-			var frame := _process_cell(src.get_region(rect), bg, magenta)
+			var frame := _process_cell(src.get_region(rect), bg, magenta, transparent)
 			out.blit_rect(frame, Rect2i(0, 0, FRAME, FRAME), Vector2i(col * FRAME, row * FRAME))
 	var path := OUT_DIR + species_id + "_sheet.png"
 	var err := out.save_png(ProjectSettings.globalize_path(path))
 	if err != OK:
 		printerr("Couldn't save ", path)
 		return "save failed"
-	print("Saved ", path, " (background: ", "magenta" if magenta else bg.to_html(false), ")")
+	var kind := "transparent" if transparent else ("magenta" if magenta else bg.to_html(false))
+	print("Saved ", path, " from ", source.get_file(), " (background: ", kind, ")")
 	return ""
 
 
@@ -53,12 +93,19 @@ static func _is_magenta(c: Color) -> bool:
 	return minf(c.r, c.b) - c.g > 0.35
 
 
-static func _process_cell(img: Image, bg: Color, magenta: bool) -> Image:
+static func _process_cell(img: Image, bg: Color, magenta: bool, transparent: bool = false) -> Image:
 	var w := img.get_width()
 	var h := img.get_height()
 	var clear := PackedByteArray()
 	clear.resize(w * h)
-	if magenta:
+	# Already cut out: clear see-through pixels, including the faint halos background removers leave.
+	for y in h:
+		for x in w:
+			if img.get_pixel(x, y).a < 0.6:
+				clear[y * w + x] = 1
+	if transparent:
+		pass
+	elif magenta:
 		for y in h:
 			for x in w:
 				if _is_magenta(img.get_pixel(x, y)):

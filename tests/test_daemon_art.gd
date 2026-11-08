@@ -11,8 +11,8 @@ func test_sheet_poses_come_from_the_right_cells() -> void:
 	assert_eq((DaemonSprites.pose("emperoute", "back") as AtlasTexture).region, Rect2(0, 128, 64, 64))
 	assert_eq((DaemonSprites.front("pengwan") as AtlasTexture).region, Rect2(0, 0, 64, 64), "front = idle")
 	assert_eq((DaemonSprites.back("pengwan") as AtlasTexture).region, Rect2(0, 128, 64, 64), "back = back idle")
-	assert_null(DaemonSprites.pose("chipmunk", "idle"), "no sheet yet")
-	assert_false(DaemonSprites.front("chipmunk") is AtlasTexture, "placeholder still works")
+	assert_null(DaemonSprites.pose("dustbunny", "idle"), "no sheet yet")
+	assert_false(DaemonSprites.front("dustbunny") is AtlasTexture, "placeholder still works")
 
 
 func test_importer_keys_out_magenta_and_keeps_a_white_belly() -> void:
@@ -56,3 +56,32 @@ func test_battle_with_sheet_art_plays_poses() -> void:
 	assert_true(seen.has(Vector2(0, 0)), "foe idle shown")
 	assert_true(seen.has(Vector2(0, 128)), "player back shown")
 	assert_gt(seen.size(), 2, "more poses than just the two idles: %s" % [seen.keys()])
+
+
+func test_importer_handles_cut_out_sheets_and_halos() -> void:
+	# Already-transparent background with a faint see-through halo around each body.
+	var src := Image.create(400, 400, false, Image.FORMAT_RGBA8)
+	src.fill(Color(0, 0, 0, 0))
+	for cell in 16:
+		var o := Vector2i((cell % 4) * 100, (cell / 4) * 100)
+		src.fill_rect(Rect2i(o + Vector2i(10, 10), Vector2i(80, 80)), Color(0.2, 0.9, 1.0, 0.35))  # halo
+		src.fill_rect(Rect2i(o + Vector2i(25, 25), Vector2i(50, 60)), Color("1b2a44"))  # dark outline...
+		src.fill_rect(Rect2i(o + Vector2i(30, 30), Vector2i(40, 50)), Color("3c8ee0"))  # ...around a blue body
+	var path := ProjectSettings.globalize_path("user://cutout_sheet.png")
+	src.save_png(path)
+	assert_eq(ImportSheet.import_sheet(path, "zz_test"), "")
+	var out := Image.load_from_file(ProjectSettings.globalize_path("res://assets/sprites/daemons/zz_test_sheet.png"))
+	assert_eq(out.get_pixel(5, 5).a, 0.0, "halo dropped")
+	assert_eq(out.get_pixel(32, 35), Color("3c8ee0"), "body kept")
+	assert_eq(out.get_pixel(17, 30), Color("1b2a44"), "dark outline kept (not mistaken for a black background)")
+	DirAccess.remove_absolute(ProjectSettings.globalize_path("res://assets/sprites/daemons/zz_test_sheet.png"))
+	DirAccess.remove_absolute(path)
+
+
+func test_import_all_finds_sheets_in_character_folders() -> void:
+	var found := ImportSheet.find_sources(ProjectSettings.globalize_path("res://art_src/daemons/"))
+	var ids := found.map(func(pair: Array) -> String: return pair[1])
+	for species_id in ["chipmunk", "munkboard", "mainmunk", "pingo", "pengwan", "emperoute"]:
+		assert_has(ids, species_id)
+		assert_true(DataRegistry.species.has(species_id), species_id + " is a real Daemon")
+		assert_true(DaemonSprites.has_sheet(species_id), species_id + " is in the game")
