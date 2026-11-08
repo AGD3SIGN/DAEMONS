@@ -104,6 +104,7 @@ func open_pause() -> void:
 
 const NAME_PRESETS: PackedStringArray = ["ALEX", "SAM", "RILEY", "JORDAN", "CASEY"]
 const NAME_MAX := 10
+const NAME_PANEL_W := 200.0
 
 ## Pick a preset or type one. Returns the chosen name (never empty).
 func choose_name() -> String:
@@ -126,26 +127,56 @@ func choose_name() -> String:
 
 func _type_name() -> String:
 	var panel := Panel.new()
+	panel.name = "NameEntry"
 	panel.anchor_left = 0.5
 	panel.anchor_right = 0.5
-	panel.offset_left = -90
-	panel.offset_right = 90
-	panel.offset_top = 40
-	panel.offset_bottom = 84
+	panel.offset_left = -NAME_PANEL_W / 2.0
+	panel.offset_right = NAME_PANEL_W / 2.0
+	panel.offset_top = 36
+	panel.offset_bottom = 88
 	add_child(panel)
 	var label := Label.new()
-	label.text = "Type a name, then Enter:"
+	label.name = "Prompt"
+	label.text = "YOUR NAME?"
 	label.position = Vector2(8, 5)
 	panel.add_child(label)
 	var edit := LineEdit.new()
+	edit.name = "Edit"
 	edit.max_length = NAME_MAX
-	edit.position = Vector2(8, 18)
-	edit.size = Vector2(164, 18)
+	edit.placeholder_text = "max %d letters" % NAME_MAX
+	edit.position = Vector2(8, 17)
+	edit.size = Vector2(NAME_PANEL_W - 16, 18)
 	panel.add_child(edit)
+	var hint := Label.new()
+	hint.name = "Hint"
+	hint.text = name_entry_hint()
+	hint.position = Vector2(8, 38)
+	hint.add_theme_color_override("font_color", Color("505068"))
+	panel.add_child(hint)
 	edit.grab_focus()
+	var cancel := func() -> void:
+		edit.text_submitted.emit("")
+	edit.gui_input.connect(func(e: InputEvent) -> void:
+		if e is InputEventKey and e.pressed and e.keycode == KEY_ESCAPE:
+			edit.accept_event()
+			cancel.call())
 	var typed: String = await edit.text_submitted
 	panel.queue_free()
-	return typed.strip_edges()
+	return clean_name(typed)
+
+
+## Letters, digits and spaces only, trimmed, at most NAME_MAX characters.
+static func clean_name(typed: String) -> String:
+	var out := ""
+	for ch in typed.strip_edges():
+		var c := ch.unicode_at(0)
+		if ch == " " or (c >= 48 and c <= 57) or (c >= 65 and c <= 90) or (c >= 97 and c <= 122):
+			out += ch
+	return out.strip_edges().left(NAME_MAX)
+
+
+static func name_entry_hint() -> String:
+	return "Done: confirm   (blank = back)" if InputPrompts.scheme == "touch" else "Enter: OK   Esc: back"
 
 
 ## Starter choice from the e-waste bin. Shows each one's sprite, type and CMDB line.

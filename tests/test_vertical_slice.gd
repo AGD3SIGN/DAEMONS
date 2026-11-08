@@ -160,3 +160,25 @@ func test_dana_is_beatable_around_level_13() -> void:
 		assert_gte(at_14, 18, "%s path at Lv14 should usually win (30%%+)" % starter)
 		assert_gte(at_12, 6, "%s path at Lv12 should be possible (10%%+)" % starter)
 	gut.p("Dana balance (no items, basic-AI player):\n" + "\n".join(report))
+
+
+func test_typed_name_box_fits_and_can_back_out() -> void:
+	_open("player_house", "new_game")
+	world.auto_choice = null
+	var menus: FieldMenus = world.field_menus
+	var result := []
+	var run := func() -> void: result.append(await menus._type_name())
+	run.call()
+	await wait_process_frames(2)
+	var panel: Panel = menus.get_node("NameEntry")
+	for part in ["Prompt", "Edit", "Hint"]:
+		var c: Control = panel.get_node(part)
+		var right: float = c.position.x + maxf(c.size.x, c.get_combined_minimum_size().x)
+		assert_lte(right, panel.size.x - 4.0, part + " fits inside the box")
+	assert_lte(panel.size.x, get_viewport().get_visible_rect().size.x, "box fits the screen")
+	var edit: LineEdit = panel.get_node("Edit")
+	edit.text_submitted.emit("  Z@ra_9!  ")
+	await wait_process_frames(2)
+	assert_eq(result, ["Zra9"], "symbols stripped, trimmed")
+	assert_eq(FieldMenus.clean_name("ABCDEFGHIJKLMN"), "ABCDEFGHIJ", "10 letters max")
+	assert_eq(FieldMenus.clean_name("   "), "", "blank goes back to the presets")
