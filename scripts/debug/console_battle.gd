@@ -11,9 +11,9 @@ extends Node
 ##   ... -- --auto             let the smart AI play your side too
 
 const MAX_TURNS := 200
-const WILD_POOL := [["dustbunny", 4, 7], ["wormby", 4, 7], ["cablesnake", 5, 8], ["floppit", 5, 8], ["spamlet", 4, 7]]
-const PLAYER_TEAM := [["chipmunk", 12], ["pingo", 10], ["bitling", 10]]
-const KEVIN_TEAM := [["spamlet", 9], ["cablesnake", 10], ["wormby", 11]]
+const WILD_POOL := [["dustbunny", 4, 7], ["wormby", 4, 7], ["cablesnake", 5, 8], ["floppit", 5, 8], ["spigeon", 4, 7]]
+const PLAYER_TEAM := [["chipmunk", 12], ["pingo", 10], ["glowbit", 10]]
+const KEVIN_TEAM := [["spigeon", 9], ["cablesnake", 10], ["wormby", 11]]
 const PLAYER_ITEMS := {"coffee": 3, "energy_drink": 1, "hard_reboot": 1, "thumb_drive": 5, "encrypted_key": 2}
 
 

@@ -18,7 +18,7 @@ func test_browse_level_and_upgrade() -> void:
 	for i in 11:
 		_lab.change_level(1)  # level 16
 	_lab.upgrade()
-	assert_eq(_lab.daemon.species_id, "motherboar")
+	assert_eq(_lab.daemon.species_id, "munkboard")
 	_lab.overclock()
 	assert_eq(_lab.daemon.level, 17)
 	assert_true(_lab.save_ok)

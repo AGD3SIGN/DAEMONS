@@ -115,7 +115,7 @@ Every file is an object of `dialogue id → list of steps`. Ids must be unique a
 | give_item | `{"cmd": "give_item", "item": "coffee", "count": 3}` |
 | give_daemon | `{"cmd": "give_daemon", "species": "dustbunny", "level": 5}` |
 | heal_party | `{"cmd": "heal_party"}` |
-| start_battle | `{"cmd": "start_battle", "trainer_name": "Kevin", "ai": "basic", "foe": [["spamlet", 6]]}` (ends the dialogue; you come back to the same spot) |
+| start_battle | `{"cmd": "start_battle", "trainer_name": "Kevin", "ai": "basic", "foe": [["spigeon", 6]]}` (ends the dialogue; you come back to the same spot) |
 | move_npc | `{"cmd": "move_npc", "npc": "self", "path": ["up", "down"]}` |
 
 ## encounters/<map id>.json
@@ -171,6 +171,6 @@ Options live separately in user://settings.cfg.
 | dialogue command | example |
 |---|---|
 | name_player | `{"cmd": "name_player"}` (presets or type a name) |
-| choose_starter | `{"cmd": "choose_starter", "options": ["chipmunk", "pingo", "bitling"], "level": 5}` sets got_starter + starter_<id> |
+| choose_starter | `{"cmd": "choose_starter", "options": ["chipmunk", "pingo", "glowbit"], "level": 5}` sets got_starter + starter_<id> |
 | move_player | `{"cmd": "move_player", "path": ["down"]}` |
 | set_flag false | `{"cmd": "set_flag", "flag": "port_2", "value": false}` |

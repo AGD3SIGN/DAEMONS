@@ -65,8 +65,8 @@ func test_catch_a_wild_dustbunny() -> void:
 
 
 func test_trainer_battle_with_forced_switches() -> void:
-	var team: Array[DaemonInstance] = [_daemon("chipmunk", 14), _daemon("pingo", 13), _daemon("bitling", 13)]
-	var scene := await _run_battle({"foe": [["spamlet", 9], ["cablesnake", 10], ["wormby", 11]],
+	var team: Array[DaemonInstance] = [_daemon("chipmunk", 14), _daemon("pingo", 13), _daemon("glowbit", 13)]
+	var scene := await _run_battle({"foe": [["spigeon", 9], ["cablesnake", 10], ["wormby", 11]],
 		"wild": false, "trainer_name": "Kevin", "ai": "smart", "player_stack": team, "items": {}})
 	assert_true(scene.result.get("outcome", "") in ["player_won", "player_lost"])
 
@@ -81,9 +81,9 @@ func test_level_up_then_upgrade_on_screen() -> void:
 	var scene := await _run_battle({"foe_stack": foe_stack, "player_stack": team, "items": {}})
 	assert_eq(scene.result["outcome"], "player_won")
 	assert_eq(chipmunk.level, 16)
-	assert_eq(chipmunk.species_id, "motherboar", "upgraded after the battle")
+	assert_eq(chipmunk.species_id, "munkboard", "upgraded after the battle")
 	assert_eq(scene.player_panel.max_uptime, 0 + scene.player_panel.max_uptime, "panel survived")
-	assert_true(GameState.cmdb_caught.has("motherboar"))
+	assert_true(GameState.cmdb_caught.has("munkboard"))
 
 
 # --- menus and text box ------------------------------------------------------

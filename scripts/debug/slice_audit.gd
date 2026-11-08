@@ -230,7 +230,7 @@ func _rect_touches(reachable: Dictionary, origin: Vector2i, w: int, h: int) -> b
 # --- flags, certs, trainers, dialogue ----------------------------------------
 
 func _collect_dialogue_facts() -> void:
-	for flag in ["got_starter", "starter_chipmunk", "starter_pingo", "starter_bitling"]:
+	for flag in ["got_starter", "starter_chipmunk", "starter_pingo", "starter_glowbit"]:
 		_flags_set[flag] = "choose_starter"
 	for map_id in DataRegistry.map_ids():
 		for e: Dictionary in DataRegistry.get_map(map_id).get("events", []):

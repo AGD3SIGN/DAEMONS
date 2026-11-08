@@ -139,7 +139,7 @@ func test_losing_the_rival_battle_is_not_a_black_out() -> void:
 # --- battle results ----------------------------------------------------------
 
 func test_winning_pays_the_prize_and_marks_the_trainer() -> void:
-	var team: Array[DaemonInstance] = [_daemon("motherboar", 30)]
+	var team: Array[DaemonInstance] = [_daemon("munkboard", 30)]
 	GameState.credits = 100
 	var config := BattleScene.trainer_config("intern_ian")
 	config["player_stack"] = team
@@ -151,7 +151,7 @@ func test_winning_pays_the_prize_and_marks_the_trainer() -> void:
 
 
 func test_bosses_can_award_a_certification() -> void:
-	var team: Array[DaemonInstance] = [_daemon("motherboar", 30)]
+	var team: Array[DaemonInstance] = [_daemon("munkboard", 30)]
 	var config := BattleScene.trainer_config("intern_ian")
 	config["cert"] = "desktop_support"
 	config["player_stack"] = team
@@ -295,11 +295,32 @@ func test_older_versions_go_through_migrate() -> void:
 	assert_eq(GameState.credits, 70)
 
 
+func test_v1_saves_get_the_renamed_species() -> void:
+	var old := {
+		"party": [{"species_id": "bitling", "nickname": "", "level": 9}],
+		"cmdb_caught": ["bitling", "spamlet"],
+		"cmdb_found_at": {"spamlet": "route_1"},
+		"flags": {"starter_bitling": true, "trainer_kevin_rival_1_bitling": true, "got_starter": true},
+	}
+	var data: Dictionary = SaveManager.migrate(old, 1)
+	assert_eq(data["party"][0]["species_id"], "glowbit")
+	assert_eq(data["cmdb_caught"], ["glowbit", "spigeon"])
+	assert_eq(data["cmdb_found_at"], {"spigeon": "route_1"})
+	assert_true(data["flags"].has("starter_glowbit"))
+	assert_true(data["flags"].has("trainer_kevin_rival_1_glowbit"))
+	assert_true(data["flags"].has("got_starter"), "unrelated flags untouched")
+	assert_eq(SaveManager.migrate({"party": [{"species_id": "bitling"}]}, 2)["party"][0]["species_id"], "bitling",
+		"current saves aren't touched")
+	for old_id: String in SaveManager.V2_SPECIES_RENAMES:
+		assert_false(DataRegistry.get_species(old_id).size() > 0, old_id + " is gone from the data")
+		assert_true(DataRegistry.get_species(SaveManager.V2_SPECIES_RENAMES[old_id]).size() > 0)
+
+
 # --- the done-when -----------------------------------------------------------
 
 func test_beat_a_trainer_save_quit_relaunch_continue() -> void:
 	GameState.trainer_id = 11111
-	GameState.add_daemon(_daemon("motherboar", 30))
+	GameState.add_daemon(_daemon("munkboard", 30))
 	GameState.location = {"map": "route_1", "x": 10, "y": 18, "facing": "right"}
 	var config := BattleScene.trainer_config("intern_ian")
 	config["items"] = {}

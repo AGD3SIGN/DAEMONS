@@ -8,14 +8,14 @@ extends RefCounted
 ##   {"cmd": "give_item", "item": "coffee", "count": 2}
 ##   {"cmd": "give_daemon", "species": "dustbunny", "level": 5}
 ##   {"cmd": "heal_party"}
-##   {"cmd": "start_battle", "trainer": "kevin_town"}   or  "foe": [["spamlet", 9]] (ends the dialogue)
+##   {"cmd": "start_battle", "trainer": "kevin_town"}   or  "foe": [["spigeon", 9]] (ends the dialogue)
 ##   {"cmd": "give_cert", "cert": "desktop_support"}
 ##   {"if_cert": "networking", "then": [steps], "else": [steps]}
 ##   {"cmd": "move_npc", "npc": "kid", "path": ["left", "right"]}   npc "self" = whoever is talking
 ##   {"cmd": "open_shop", "stock": ["coffee", "thumb_drive"]}   Supply Closet buy/sell
 ##   {"cmd": "open_rack"}                                         Server Rack storage
 ##   {"cmd": "name_player"}                                       pick or type the player's name
-##   {"cmd": "choose_starter", "options": ["chipmunk", "pingo", "bitling"], "level": 5}
+##   {"cmd": "choose_starter", "options": ["chipmunk", "pingo", "glowbit"], "level": 5}
 ##        sets flags got_starter and starter_<species>
 ##   {"cmd": "move_player", "path": ["down"]}                     walk the player in a cutscene
 ## Text can use {player} for the player's name.

@@ -5,13 +5,13 @@ extends Control
 const TITLE_SCENE := "res://scenes/ui/title_screen.tscn"
 const LAB_SCENE := "res://scenes/debug/daemon_lab.tscn"
 const SELF_SCENE := "res://scenes/debug/debug_menu.tscn"
-const STARTER_TEAM := [["chipmunk", 12], ["pingo", 10], ["bitling", 10]]
+const STARTER_TEAM := [["chipmunk", 12], ["pingo", 10], ["glowbit", 10]]
 const BAG := {"coffee": 5, "energy_drink": 2, "pizza_friday": 1, "hard_reboot": 2,
 	"thumb_drive": 10, "encrypted_key": 5, "root_key": 1, "firewall_rule": 3, "overclock_chip": 2,
 	"legacy_driver": 1}
 const WILD_POOL := [["dustbunny", 4, 7], ["wormby", 4, 7], ["cablesnake", 5, 8], ["floppit", 5, 8],
-	["spamlet", 4, 7], ["fanbat", 6, 9]]
-const KEVIN := [["spamlet", 9], ["cablesnake", 10], ["wormby", 11]]
+	["spigeon", 4, 7], ["fanbat", 6, 9]]
+const KEVIN := [["spigeon", 9], ["cablesnake", 10], ["wormby", 11]]
 
 var _status: Label
 

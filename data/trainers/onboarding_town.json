@@ -14,11 +14,11 @@
     "defeat": "I'm escalating this to my manager. Wait, it's the same manager.",
     "after": "Next time I'm CC'ing my lawyer."
   },
-  "kevin_rival_1_bitling": {
+  "kevin_rival_1_glowbit": {
     "name": "Kevin",
     "team": [
       [
-        "bitling",
+        "glowbit",
         5
       ]
     ],

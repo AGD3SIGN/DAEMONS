@@ -59,7 +59,7 @@ func test_encounter_tables_and_rolls() -> void:
 			assert_between(int(hit["level"]), 3, 5)
 	assert_eq(species_seen.size(), 6, "every slot shows up")
 	assert_between(int(species_seen["dustbunny"]), 550, 850, "about 35%")
-	assert_lt(int(species_seen["floppit"]), int(species_seen["spamlet"]), "rare slot is rarer")
+	assert_lt(int(species_seen["floppit"]), int(species_seen["spigeon"]), "rare slot is rarer")
 	assert_true(Encounters.roll("route_1", "cable_tangle", rng, 1, false, 0.0).is_empty(), "rate 0")
 	assert_true(Encounters.roll("route_1", "grass", rng, 1, false, 1.0).is_empty(), "plain grass")
 	assert_true(Encounters.roll("player_house", "floor", rng, 1, false, 1.0).is_empty(), "no table")
@@ -138,8 +138,8 @@ func test_legacy_driver_upgrades_floppit() -> void:
 	GameState.bag = {"legacy_driver": 1}
 	var result := ItemUse.use_on("legacy_driver", floppit)
 	assert_true(result["ok"])
-	assert_eq(floppit.species_id, "diskette")
-	assert_true(GameState.cmdb_caught.has("diskette"))
+	assert_eq(floppit.species_id, "ziphare")
+	assert_true(GameState.cmdb_caught.has("ziphare"))
 	assert_false(GameState.bag.has("legacy_driver"))
 
 

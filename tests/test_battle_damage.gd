@@ -120,14 +120,14 @@ func test_type_immunity_means_no_damage() -> void:
 
 func test_multi_hit() -> void:
 	var bunny := _daemon("dustbunny", 20)
-	var tank := _daemon("mainframe", 50)
+	var tank := _daemon("mainmunk", 50)
 	var events := BattleSim.run_turn(_battle([bunny], [tank]), _fight(bunny, "double_click"), _fight(tank, "defrag"))
 	assert_eq(_of(events, "hit_count")[0]["count"], 2)
 	assert_eq(_of(events, "damage").size(), 2)
 	var counts := {}
 	for seed_value in range(1, 41):
 		bunny = _daemon("dustbunny", 20)
-		tank = _daemon("mainframe", 50)
+		tank = _daemon("mainmunk", 50)
 		events = BattleSim.run_turn(_battle([bunny], [tank], true, seed_value), _fight(bunny, "keyboard_smash"), _fight(tank, "defrag"))
 		if _of(events, "move_missed").is_empty():
 			var count: int = _of(events, "hit_count")[0]["count"]
@@ -197,18 +197,18 @@ func test_status_immunities() -> void:
 
 
 func test_status_move_sticks_once() -> void:
-	var routeroo := _daemon("routeroo", 20)
+	var pengwan := _daemon("pengwan", 20)
 	var chipmunk := _daemon("chipmunk", 20)
-	var state := _battle([routeroo], [chipmunk])
+	var state := _battle([pengwan], [chipmunk])
 	var applied := false
 	for i in 10:
-		var events := BattleSim.run_turn(state, _fight(routeroo, "latency_spike"), _fight(chipmunk, "chassis_guard"))
+		var events := BattleSim.run_turn(state, _fight(pengwan, "latency_spike"), _fight(chipmunk, "chassis_guard"))
 		if not _of(events, "status_applied").is_empty():
 			applied = true
 			break
 	assert_true(applied, "90% accuracy should land within 10 tries")
 	assert_eq(chipmunk.status, "throttled")
-	var again := BattleSim.run_turn(state, _fight(routeroo, "latency_spike"), _fight(chipmunk, "chassis_guard"))
+	var again := BattleSim.run_turn(state, _fight(pengwan, "latency_spike"), _fight(chipmunk, "chassis_guard"))
 	assert_true(not _of(again, "status_failed").is_empty() or not _of(again, "move_missed").is_empty())
 
 
@@ -286,32 +286,32 @@ func test_looping_ends_and_sometimes_self_hits() -> void:
 # --- drain, recoil, heal -----------------------------------------------------
 
 func test_drain_heals_half_the_damage() -> void:
-	var bitling := _daemon("bitling", 20)
+	var glowbit := _daemon("glowbit", 20)
 	var bunny := _daemon("dustbunny", 20)
-	bitling.current_uptime = 1
-	var events := BattleSim.run_turn(_battle([bitling], [bunny]), _fight(bitling, "code_injection"), _fight(bunny, "screen_glare"))
+	glowbit.current_uptime = 1
+	var events := BattleSim.run_turn(_battle([glowbit], [bunny]), _fight(glowbit, "code_injection"), _fight(bunny, "screen_glare"))
 	var dealt: int = _of(events, "damage")[0]["amount"]
 	assert_eq(_of(events, "drain")[0]["amount"], maxi(1, dealt / 2))
 
 
 func test_recoil_hurts_the_user() -> void:
-	var mainframe := _daemon("mainframe", 50)
-	var boar := _daemon("motherboar", 50)
-	var events := BattleSim.run_turn(_battle([mainframe], [boar]), _fight(mainframe, "hard_reset"), _fight(boar, "overclock"))
+	var mainmunk := _daemon("mainmunk", 50)
+	var boar := _daemon("munkboard", 50)
+	var events := BattleSim.run_turn(_battle([mainmunk], [boar]), _fight(mainmunk, "hard_reset"), _fight(boar, "overclock"))
 	var dealt: int = _of(events, "damage")[0]["amount"]
 	var recoil: Dictionary = _of(events, "recoil")[0]
 	assert_eq(recoil["amount"], maxi(1, floori(dealt * 0.33)))
-	assert_eq(mainframe.current_uptime, mainframe.max_uptime() - int(recoil["amount"]))
+	assert_eq(mainmunk.current_uptime, mainmunk.max_uptime() - int(recoil["amount"]))
 
 
 func test_heal_move() -> void:
-	var bitling := _daemon("bitling", 20)  # max 51, heals up to 25
+	var glowbit := _daemon("glowbit", 20)  # max 51, heals up to 25
 	var bunny := _daemon("dustbunny", 20)
-	bitling.current_uptime -= 20
-	var state := _battle([bitling], [bunny])
-	var events := BattleSim.run_turn(state, _fight(bitling, "patch_up"), _fight(bunny, "screen_glare"))
+	glowbit.current_uptime -= 20
+	var state := _battle([glowbit], [bunny])
+	var events := BattleSim.run_turn(state, _fight(glowbit, "patch_up"), _fight(bunny, "screen_glare"))
 	assert_eq(_of(events, "heal")[0]["amount"], 20)
-	events = BattleSim.run_turn(state, _fight(bitling, "patch_up"), _fight(bunny, "screen_glare"))
+	events = BattleSim.run_turn(state, _fight(glowbit, "patch_up"), _fight(bunny, "screen_glare"))
 	assert_eq(_of(events, "move_failed")[0]["reason"], "full_uptime")
 
 
@@ -350,14 +350,14 @@ func test_trainer_battle_forced_switch_and_bonus_exp() -> void:
 func test_exp_is_split_between_participants() -> void:
 	for pingo_crashed in [false, true]:
 		var pingo := _daemon("pingo", 20)
-		var bitling := _daemon("bitling", 20)
+		var glowbit := _daemon("glowbit", 20)
 		var bunny := _daemon("dustbunny", 5)
-		var state := _battle([pingo, bitling], [bunny])
+		var state := _battle([pingo, glowbit], [bunny])
 		BattleSim.run_turn(state, BattleAction.switch_to(1), _fight(bunny, "bump"))
 		bunny.current_uptime = 1
 		if pingo_crashed:
 			pingo.current_uptime = 0
-		var events := BattleSim.run_turn(state, _fight(bitling, "code_injection"), _fight(bunny, "bump"))
+		var events := BattleSim.run_turn(state, _fight(glowbit, "code_injection"), _fight(bunny, "bump"))
 		assert_eq(state.outcome, "player_won")
 		var gains := _of(events, "exp_gained").map(func(e: Dictionary) -> int: return e["amount"])
 		assert_eq(gains, [35] if pingo_crashed else [17, 17])
@@ -373,7 +373,7 @@ func test_level_up_mid_battle_then_upgrade_after() -> void:
 	assert_eq(chipmunk.level, 16)
 	assert_gt(types.find("battle_end"), types.find("level_up"))
 	var upgrade: Dictionary = _of(events, "upgrade_ready")[0]
-	assert_eq(upgrade["to"], "motherboar")
+	assert_eq(upgrade["to"], "munkboard")
 	assert_gt(types.find("upgrade_ready"), types.find("battle_end"), "upgrades happen after the battle")
 	assert_eq(chipmunk.species_id, "chipmunk", "the sim only flags it; the caller evolves")
 
@@ -381,9 +381,9 @@ func test_level_up_mid_battle_then_upgrade_after() -> void:
 func test_player_loses_when_everyone_crashes() -> void:
 	var pingo := _daemon("pingo", 20)
 	pingo.current_uptime = 1
-	var mainframe := _daemon("mainframe", 50)
-	var state := _battle([pingo], [mainframe])
-	var events := BattleSim.run_turn(state, _fight(pingo, "ping"), _fight(mainframe, "hard_reset"))
+	var mainmunk := _daemon("mainmunk", 50)
+	var state := _battle([pingo], [mainmunk])
+	var events := BattleSim.run_turn(state, _fight(pingo, "ping"), _fight(mainmunk, "hard_reset"))
 	assert_eq(state.outcome, "player_lost")
 	assert_eq(_of(events, "move_used").size(), 1, "Pingo never got to act")
 	assert_eq(_of(events, "fainted")[0]["side"], 0)

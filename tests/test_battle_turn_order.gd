@@ -229,7 +229,7 @@ func test_cant_run_from_trainers() -> void:
 func test_same_seed_same_battle() -> void:
 	var logs := []
 	for attempt in 2:
-		var state := _battle([_daemon("pingo", 20), _daemon("bitling", 20)], [_daemon("pingo", 20), _daemon("wormby", 20)], true, {}, 1234)
+		var state := _battle([_daemon("pingo", 20), _daemon("glowbit", 20)], [_daemon("pingo", 20), _daemon("wormby", 20)], true, {}, 1234)
 		var events := BattleSim.start(state)
 		events.append_array(BattleSim.run_turn(state, BattleAction.fight(0), BattleAction.fight(1)))
 		events.append_array(BattleSim.run_turn(state, BattleAction.switch_to(1), BattleAction.fight(0)))

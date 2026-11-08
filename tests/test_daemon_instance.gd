@@ -171,24 +171,24 @@ func test_experience_log_caps() -> void:
 
 func test_level_evolution() -> void:
 	assert_eq(_make("chipmunk", 15).check_evolution("level"), "")
-	assert_eq(_make("chipmunk", 16).check_evolution("level"), "motherboar")
-	assert_eq(_make("mainframe", 100).check_evolution("level"), "")
+	assert_eq(_make("chipmunk", 16).check_evolution("level"), "munkboard")
+	assert_eq(_make("mainmunk", 100).check_evolution("level"), "")
 
 
 func test_item_and_sync_evolution() -> void:
 	var floppit := _make("floppit", 10)
 	assert_eq(floppit.check_evolution("item", "coffee"), "")
-	assert_eq(floppit.check_evolution("item", "legacy_driver"), "diskette")
+	assert_eq(floppit.check_evolution("item", "legacy_driver"), "ziphare")
 	assert_eq(floppit.check_evolution("level"), "", "item upgrades ignore level")
-	assert_eq(_make("diskette", 30).check_evolution("sync"), "zipdrive")
+	assert_eq(_make("ziphare", 30).check_evolution("sync"), "discohare")
 
 
 func test_evolve_keeps_damage_taken() -> void:
 	var d := _make("chipmunk", 16)
 	d.current_uptime -= 10
-	d.evolve("motherboar")
-	assert_eq(d.species_id, "motherboar")
-	assert_eq(d.display_name(), "Motherboar")
+	d.evolve("munkboard")
+	assert_eq(d.species_id, "munkboard")
+	assert_eq(d.display_name(), "Munkboard")
 	assert_eq(d.current_uptime, d.max_uptime() - 10)
 
 

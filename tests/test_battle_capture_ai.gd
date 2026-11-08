@@ -148,21 +148,21 @@ func test_basic_ai_avoids_immune_targets() -> void:
 
 func test_smart_ai_statuses_a_healthy_target_first() -> void:
 	var chipmunk := _daemon("chipmunk", 20)
-	var state := _battle([chipmunk], [_daemon("routeroo", 20)])
+	var state := _battle([chipmunk], [_daemon("pengwan", 20)])
 	assert_eq(_move_id(state, 1, BattleAI.choose_action(state, 1, "smart")), "latency_spike")
 	chipmunk.status = "throttled"
 	assert_true(_move_id(state, 1, BattleAI.choose_action(state, 1, "smart")) in ["ping", "fast_ethernet"])
 
 
 func test_smart_ai_heals_when_low() -> void:
-	var bitling := _daemon("bitling", 20)
-	bitling.current_uptime = 5
-	var state := _battle([_daemon("dustbunny", 20)], [bitling])
+	var glowbit := _daemon("glowbit", 20)
+	glowbit.current_uptime = 5
+	var state := _battle([_daemon("dustbunny", 20)], [glowbit])
 	assert_eq(_move_id(state, 1, BattleAI.choose_action(state, 1, "smart")), "patch_up")
 
 
 func test_smart_ai_switches_out_of_a_bad_matchup() -> void:
-	var state := _battle([_daemon("pingo", 20)], [_daemon("chipmunk", 20), _daemon("bitling", 20)])
+	var state := _battle([_daemon("pingo", 20)], [_daemon("chipmunk", 20), _daemon("glowbit", 20)])
 	var action := BattleAI.choose_action(state, 1, "smart")
 	assert_eq(action.kind, BattleAction.Kind.SWITCH)
 	assert_eq(action.index, 1, "Software resists Network")
@@ -174,7 +174,7 @@ func test_smart_ai_switches_out_of_a_bad_matchup() -> void:
 func test_smart_replacement_picks_the_best_matchup() -> void:
 	var crashed := _daemon("dustbunny", 20)
 	crashed.current_uptime = 0
-	var state := _battle([_daemon("pingo", 20)], [crashed, _daemon("chipmunk", 20), _daemon("bitling", 20)])
+	var state := _battle([_daemon("pingo", 20)], [crashed, _daemon("chipmunk", 20), _daemon("glowbit", 20)])
 	state.sides[1].active_index = 0  # the crashed one was in battle
 	assert_eq(BattleAI.choose_replacement(state, 1, "smart"), 2)
 	assert_eq(BattleAI.choose_replacement(state, 1, "basic"), 1)

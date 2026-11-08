@@ -4,7 +4,7 @@
 - None
 
 ## Notes
-- flag 'starter_bitling' is set but never checked (fine for bookkeeping)
+- flag 'starter_glowbit' is set but never checked (fine for bookkeeping)
 - flag 'trainer_tech_theo' is set but never checked (fine for bookkeeping)
 - flag 'trainer_tech_tina' is set but never checked (fine for bookkeeping)
 - flag 'trainer_dana' is set but never checked (fine for bookkeeping)
@@ -14,11 +14,11 @@
 - flag 'trainer_signal_hunter_hal' is set but never checked (fine for bookkeeping)
 - flag 'trainer_phisher_pete' is set but never checked (fine for bookkeeping)
 - flag 'trainer_kevin_rival_1_pingo' is set but never checked (fine for bookkeeping)
-- flag 'trainer_kevin_rival_1_bitling' is set but never checked (fine for bookkeeping)
+- flag 'trainer_kevin_rival_1_glowbit' is set but never checked (fine for bookkeeping)
 - flag 'trainer_kevin_rival_1_chipmunk' is set but never checked (fine for bookkeeping)
 - maps reachable: 9 of 9; arrival points: 17
 - trainer kevin_rival_1_pingo: levels [5]
-- trainer kevin_rival_1_bitling: levels [5]
+- trainer kevin_rival_1_glowbit: levels [5]
 - trainer kevin_rival_1_chipmunk: levels [5]
 - trainer tech_theo: levels [10, 10]
 - trainer tech_tina: levels [11]

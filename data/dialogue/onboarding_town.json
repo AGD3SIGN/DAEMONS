@@ -283,7 +283,7 @@
       "options": [
         "chipmunk",
         "pingo",
-        "bitling"
+        "glowbit"
       ],
       "level": 5
     },
@@ -316,11 +316,11 @@
           "then": [
             {
               "speaker": "Kevin",
-              "text": "I'll take Bitling! Software reroutes Network. Checkmate."
+              "text": "I'll take Glowbit! Software reroutes Network. Checkmate."
             },
             {
               "cmd": "start_battle",
-              "trainer": "kevin_rival_1_bitling"
+              "trainer": "kevin_rival_1_glowbit"
             }
           ],
           "else": [

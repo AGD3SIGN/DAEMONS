@@ -88,14 +88,16 @@ Draft type chart (attacker → defender; 2 = super effective, ½ = resisted, 0 =
 | **Looping** | volatile; 33% chance to hit itself | Confusion |
 
 ### Sample Daemons (original designs, starting roster ideas)
+**Rule:** an evolution line keeps the SAME animal. The animal grows up (baby → adult → elder) while its tech upgrades (home → business → enterprise gear).
+
 | Line | Type | Concept |
 |---|---|---|
-| **Chipmunk → Motherboar → Mainframe** | Hardware (starter) | chipmunk with heatsink cheeks → armored boar with PCB plating → towering mainframe beast |
-| **Pingo → Routeroo → Meshkraken** | Network (starter) | penguin that echoes "ping" → kangaroo that hops packets → kraken whose tentacles are cables |
-| **Bitling → Scriptor → Compilox** | Software (starter) | tiny glowing cursor sprite → robed scribe made of code → ox-like compiler that builds anything |
+| **Chipmunk → Munkboard → Mainmunk** | Hardware (starter) | baby chipmunk + CPU heatsink (heatsink cheeks, fan tail) → adult chipmunk + motherboard (copper-trace stripes, RAM-stick cheek pouches) → huge elder chipmunk + mainframe (server-cabinet chest, cable mane, twin-fan tail) |
+| **Pingo → Pengwan → Emperoute** | Network (starter) | penguin chick + home router (2 antennas, belly LEDs) → adult penguin + office switch (antenna crown, port-panel belly) → emperor penguin + internet backbone (satellite-dish crest, fiber-optic cape) |
+| **Glowbit → Scriptfly → Compilume** | Software (starter) | baby firefly whose tail blinks like a cursor (`>_` face) → adult firefly with code-window wings that writes script in the air → giant firefly whose abdomen is a build-progress bar |
 | **Wormby → Wormhole** | Malware | worm that tunnels through cables → space-warping worm |
-| **Spamlet → Spamwich** | Malware | living junk-mail envelope → sandwich stacked with spam letters |
-| **Floppit → Diskette → Zipdrive** | Legacy | floppy-disk bunny (ears = shutter) → evolves via a Legacy item |
+| **Spigeon → Botgeon** | Malware | scruffy pigeon with envelope wings, stuffed with junk mail → huge pigeon commanding a botnet (dish feathers, "!!!" crest) |
+| **Floppit → Ziphare → Discohare** | Legacy | bunny with 3.5" floppy ears → grown hare + zip disk (via a Legacy item) → elder hare + rainbow CD ears (via sync) |
 | **Fanbat** | Hardware/Power | bat with case-fan wings; swarms server rooms |
 | **Dustbunny** | Peripheral | early-route common; scrappy and cute |
 | **Captchat** | Security | cat that only lets "humans" pass; confusion moves |

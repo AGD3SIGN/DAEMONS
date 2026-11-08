@@ -5,7 +5,13 @@ extends Node
 ##
 ## File shape: {"version": 1, "save_count": 7, "saved_at": unix, "checksum": sha256, "data": {...}}
 
-const SAVE_VERSION := 1
+const SAVE_VERSION := 2
+## v2 (2026-11-08): evolution lines redesigned so each keeps the same animal; old species ids renamed.
+const V2_SPECIES_RENAMES := {
+	"motherboar": "munkboard", "mainframe": "mainmunk", "routeroo": "pengwan", "meshkraken": "emperoute",
+	"bitling": "glowbit", "scriptor": "scriptfly", "compilox": "compilume", "spamlet": "spigeon",
+	"spamwich": "botgeon", "diskette": "ziphare", "zipdrive": "discohare",
+}
 const SLOT_PATHS: PackedStringArray = ["user://save_a.json", "user://save_b.json"]
 
 ## Tests point this somewhere else so they never touch real saves.
@@ -103,10 +109,38 @@ func read_slot(path: String) -> Dictionary:
 ## Upgrades older save data to the current shape. Add a step here whenever SAVE_VERSION goes up.
 func migrate(data: Dictionary, from_version: int) -> Dictionary:
 	var out := data
-	# if from_version < 2: out = _v1_to_v2(out)
-	if from_version < 1:
-		pass
+	if from_version < 2:
+		out = _rename_species(out)
 	return out
+
+
+## v1 -> v2: renames old species ids wherever they appear: a value ("species_id": "bitling"), a key
+## (cmdb_found_at), or the end of a flag ("starter_bitling", "trainer_kevin_rival_1_bitling").
+static func _rename_species(value: Variant) -> Variant:
+	match typeof(value):
+		TYPE_STRING:
+			return _renamed_id(value)
+		TYPE_ARRAY:
+			var arr: Array = []
+			for v: Variant in value:
+				arr.append(_rename_species(v))
+			return arr
+		TYPE_DICTIONARY:
+			var dict: Dictionary = {}
+			for k: Variant in value:
+				var key: Variant = _renamed_id(k) if typeof(k) == TYPE_STRING else k
+				dict[key] = _rename_species(value[k])
+			return dict
+	return value
+
+
+static func _renamed_id(s: String) -> String:
+	if V2_SPECIES_RENAMES.has(s):
+		return V2_SPECIES_RENAMES[s]
+	for old: String in V2_SPECIES_RENAMES:
+		if s.ends_with("_" + old):
+			return s.trim_suffix(old) + V2_SPECIES_RENAMES[old]
+	return s
 
 
 ## Writes to whichever slot doesn't hold the newest save (or slot A on a fresh start).

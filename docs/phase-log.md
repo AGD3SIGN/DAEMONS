@@ -4,6 +4,21 @@ Newest entries at the top. Each entry: what's done, decisions, what's next.
 
 ---
 
+## 2026-11-08 — Roster: same-animal evolution lines + sprite prompts
+
+**Done**
+- Every evolution line now keeps the same animal (it grows up while its tech upgrades). Renamed:
+  Motherboar/Mainframe → **Munkboard/Mainmunk** (chipmunk), Routeroo/Meshkraken → **Pengwan/Emperoute** (penguin),
+  Bitling/Scriptor/Compilox → **Glowbit/Scriptfly/Compilume** (firefly), Spamlet/Spamwich → **Spigeon/Botgeon** (pigeon),
+  Diskette/Zipdrive → **Ziphare/Discohare** (rabbit). New CMDB categories and entries. Stats, levels, types, moves unchanged.
+- Updated encounters, trainers (`kevin_rival_1_glowbit`), dialogue, debug tools, tests, design doc.
+- **Save version 2:** `SaveManager.migrate` renames old ids in values, keys and flag suffixes, so existing saves keep their Daemons.
+- `tools/art_prompts/build_prompts.py` → `docs/art-prompts/`: one full ChatGPT prompt per stage for all 22 Daemons
+  (1024x1024, 4x4 grid of 64x64 sprites at 4x: front, reactions, back, evolution/specials, menu icon).
+- Tests: 202/202.
+
+---
+
 ## 2026-11-08 — Phase 8: Platform support (code done; builds need toolchain + devices)
 
 **Done**

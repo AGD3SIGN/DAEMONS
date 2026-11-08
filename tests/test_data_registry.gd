@@ -60,7 +60,7 @@ func test_lookups() -> void:
 
 
 func test_starters_share_base_stat_total() -> void:
-	for line in [["chipmunk", "motherboar", "mainframe"], ["pingo", "routeroo", "meshkraken"], ["bitling", "scriptor", "compilox"]]:
+	for line in [["chipmunk", "munkboard", "mainmunk"], ["pingo", "pengwan", "emperoute"], ["glowbit", "scriptfly", "compilume"]]:
 		var totals := []
 		for id: String in line:
 			var total := 0

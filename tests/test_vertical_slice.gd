@@ -71,7 +71,7 @@ func test_patch_panel_puzzle() -> void:
 
 
 func test_dana_awards_the_desktop_support_cert() -> void:
-	var team: Array[DaemonInstance] = [_daemon("meshkraken", 40)]
+	var team: Array[DaemonInstance] = [_daemon("emperoute", 40)]
 	var config := BattleScene.trainer_config("dana")
 	assert_eq(config["music"], "battle_boss")
 	config.merge({"player_stack": team, "items": {}, "auto": true, "time_scale": 0.0, "seed": 2}, true)
@@ -153,7 +153,7 @@ func _dana_wins(starter: String, level: int) -> int:
 
 func test_dana_is_beatable_around_level_13() -> void:
 	var report := PackedStringArray()
-	for starter in ["chipmunk", "pingo", "bitling"]:
+	for starter in ["chipmunk", "pingo", "glowbit"]:
 		var at_14 := _dana_wins(starter, 14)
 		var at_12 := _dana_wins(starter, 12)
 		report.append("%-8s Lv14 team: %2d/60   Lv12 team: %2d/60" % [starter, at_14, at_12])
