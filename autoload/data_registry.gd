@@ -14,6 +14,7 @@ const FILES := {
 }
 const MAPS_DIR := "res://data/maps/"
 const DIALOGUE_DIR := "res://data/dialogue/"
+const ENCOUNTERS_DIR := "res://data/encounters/"
 
 var types: Dictionary = {}       # id -> {id, name, color}
 var type_chart: Dictionary = {}  # attacker id -> {defender id -> multiplier}; missing = 1
@@ -23,6 +24,7 @@ var items: Dictionary = {}
 var config_profiles: Dictionary = {}  # id -> {id, name, up, down}; up/down null = neutral
 var tiles: Dictionary = {}            # tile name -> {name, atlas, collision, behavior}
 var dialogues: Dictionary = {}        # dialogue id -> list of steps (from every data/dialogue/*.json)
+var encounters: Dictionary = {}       # map id -> wild encounter table (data/encounters/<map>.json)
 
 var _validator: DataValidator
 var _maps: Dictionary = {}            # map id -> validated map data (loaded on first use)
@@ -69,6 +71,16 @@ func read_raw(out_errors: PackedStringArray = PackedStringArray()) -> Dictionary
 			continue
 		dialogue_files[file] = json.data
 	raw["dialogue"] = dialogue_files
+	var encounter_tables := {}
+	for file in DirAccess.get_files_at(ENCOUNTERS_DIR):
+		if not file.ends_with(".json"):
+			continue
+		var json := JSON.new()
+		if json.parse(FileAccess.get_file_as_string(ENCOUNTERS_DIR + file)) != OK:
+			out_errors.append("%s%s line %d: %s" % [ENCOUNTERS_DIR, file, json.get_error_line(), json.get_error_message()])
+			continue
+		encounter_tables[file.get_basename()] = json.data
+	raw["encounters"] = encounter_tables
 	return raw
 
 
@@ -86,6 +98,7 @@ func load_from(raw: Dictionary, report: bool = true) -> bool:
 	config_profiles = validator.config_profiles
 	tiles = validator.tiles
 	dialogues = validator.dialogues
+	encounters = validator.encounters
 	if report:
 		_report()
 	return errors.is_empty()

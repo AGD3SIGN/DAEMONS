@@ -10,6 +10,8 @@ extends RefCounted
 ##   {"cmd": "heal_party"}
 ##   {"cmd": "start_battle", "foe": [["spamlet", 9]], "trainer_name": "Kevin", "ai": "smart"}  (ends the dialogue)
 ##   {"cmd": "move_npc", "npc": "kid", "path": ["left", "right"]}   npc "self" = whoever is talking
+##   {"cmd": "open_shop", "stock": ["coffee", "thumb_drive"]}   Supply Closet buy/sell
+##   {"cmd": "open_rack"}                                         Server Rack storage
 ## Text can use {player} for the player's name.
 
 ## Until the intro asks for a name (Phase 7).
@@ -72,6 +74,10 @@ func _command(step: Dictionary) -> void:
 			var config := {"foe": step["foe"], "wild": false, "trainer_name": step.get("trainer_name", ""),
 				"ai": step.get("ai", "basic")}
 			world.start_battle(config)
+		"open_shop":
+			await world.field_menus.shop(step["stock"])
+		"open_rack":
+			await world.field_menus.rack_screen()
 		"move_npc":
 			var who: NpcEvent = npc if step["npc"] == "self" else world.find_npc(step["npc"])
 			if who != null:

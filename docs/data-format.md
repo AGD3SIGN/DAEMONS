@@ -117,3 +117,17 @@ Every file is an object of `dialogue id → list of steps`. Ids must be unique a
 | heal_party | `{"cmd": "heal_party"}` |
 | start_battle | `{"cmd": "start_battle", "trainer_name": "Kevin", "ai": "basic", "foe": [["spamlet", 6]]}` (ends the dialogue; you come back to the same spot) |
 | move_npc | `{"cmd": "move_npc", "npc": "self", "path": ["up", "down"]}` |
+
+## encounters/<map id>.json
+```json
+{ "rate": 0.12,
+  "zones": { "cable_tangle": [ { "species": "dustbunny", "min": 2, "max": 4, "weight": 35 } ] } }
+```
+`rate` is the chance per step on a hot_zone (or water) tile. Zones are keyed by tile name. Slots are
+picked by weight; level is random in min..max. A Firewall Rule blocks results below the lead's level.
+
+### More dialogue commands
+| command | example |
+|---|---|
+| open_shop | `{"cmd": "open_shop", "stock": ["coffee", "thumb_drive"]}` (items need a price) |
+| open_rack | `{"cmd": "open_rack"}` (Server Rack storage) |

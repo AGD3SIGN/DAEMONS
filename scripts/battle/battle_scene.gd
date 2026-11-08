@@ -242,10 +242,13 @@ func _after_battle() -> void:
 		GameState.cmdb_caught[caught.species_id] = true
 		if config.get("add_captured", true):
 			var where := GameState.add_daemon(caught)
-			if where == "stack":
-				await text_box.show_text("%s was added to your Active Stack." % caught.display_name())
-			else:
-				await text_box.show_text("Your stack is full. %s was sent to the Server Rack." % caught.display_name())
+			match where:
+				"stack":
+					await text_box.show_text("%s was added to your Active Stack." % caught.display_name())
+				"rack":
+					await text_box.show_text("Your stack is full. %s was sent to the Server Rack." % caught.display_name())
+				_:
+					await text_box.show_text("Every rack is full! %s had to be released." % caught.display_name())
 	result = {"outcome": state.outcome, "turns": state.turn, "captured": state.captured}
 	await get_tree().create_timer(0.2 * time_scale).timeout
 

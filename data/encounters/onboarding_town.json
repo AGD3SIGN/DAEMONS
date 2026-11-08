@@ -1,0 +1,9 @@
+{
+  "rate": 0.1,
+  "zones": {
+    "cable_tangle": [
+      { "species": "dustbunny", "min": 2, "max": 3, "weight": 60 },
+      { "species": "wormby",    "min": 2, "max": 3, "weight": 40 }
+    ]
+  }
+}

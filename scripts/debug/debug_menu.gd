@@ -7,7 +7,8 @@ const LAB_SCENE := "res://scenes/debug/daemon_lab.tscn"
 const SELF_SCENE := "res://scenes/debug/debug_menu.tscn"
 const STARTER_TEAM := [["chipmunk", 12], ["pingo", 10], ["bitling", 10]]
 const BAG := {"coffee": 5, "energy_drink": 2, "pizza_friday": 1, "hard_reboot": 2,
-	"thumb_drive": 10, "encrypted_key": 5, "root_key": 1}
+	"thumb_drive": 10, "encrypted_key": 5, "root_key": 1, "firewall_rule": 3, "overclock_chip": 2,
+	"legacy_driver": 1}
 const WILD_POOL := [["dustbunny", 4, 7], ["wormby", 4, 7], ["cablesnake", 5, 8], ["floppit", 5, 8],
 	["spamlet", 4, 7], ["fanbat", 6, 9]]
 const KEVIN := [["spamlet", 9], ["cablesnake", 10], ["wormby", 11]]
@@ -110,6 +111,7 @@ func _make_team() -> void:
 func _restock() -> void:
 	for item_id: String in BAG:
 		GameState.bag[item_id] = BAG[item_id]
+	GameState.credits = maxi(GameState.credits, 3000)
 
 
 func _refresh_status(note: String = "") -> void:
@@ -123,5 +125,5 @@ func _refresh_status(note: String = "") -> void:
 		var r: Dictionary = SceneRouter.params["battle_result"]
 		lines.append("Last battle: %s in %d turns" % [r.get("outcome", "?"), int(r.get("turns", 0))])
 	lines.append("Team: " + ", ".join(team))
-	lines.append("CMDB: %d seen, %d caught   Rack: %d" % [GameState.cmdb_seen.size(), GameState.cmdb_caught.size(), GameState.server_rack.size()])
+	lines.append("CMDB: %d seen, %d caught  Rack: %d  %d CR" % [GameState.cmdb_seen.size(), GameState.cmdb_caught.size(), GameState.rack_total(), GameState.credits])
 	_status.text = "\n".join(lines)

@@ -4,6 +4,33 @@ Newest entries at the top. Each entry: what's done, decisions, what's next.
 
 ---
 
+## 2026-11-07 — Phase 5: Collecting systems ✅
+
+**Done**
+- **Wild encounters:** `data/encounters/<map>.json` (rate per step + weighted slots per tile type). Onboarding Town and Route 1 cable tangles have tables. Stepping on a hot zone rolls (`Encounters.roll`), flashes the screen, and starts a wild battle; you return to the same spot. First wild meeting records where it was found for the CMDB.
+- **Firewall Rule** (repel): blocks encounters below your lead's level for 100 steps, with an "expired" message.
+- **Pause menu** (Space/Tab/Start): CMDB, STACK, BAG, DEBUG (debug builds), CLOSE.
+- **Active Stack:** list with level/Uptime/status; SUMMARY (3 pages: info + CMDB text, stats with profile +/-, moves with type/category/power/accuracy; up/down switches Daemon; Build Quality hidden), SWAP to reorder, ITEM to use something on it.
+- **Bag:** 4 pockets (Items, Quarantine Keys, Scripts, Key Items) switched with left/right, item descriptions, USE / TOSS (with quantity). `ItemUse` handles Coffee/Energy Drink/Pizza Friday/Hard Reboot/Overclock Chip (level + upgrade check)/Legacy Driver (item upgrade)/Firewall Rule.
+- **CMDB:** every Daemon numbered, seen/quarantined counts, entry page (sprite, category, types, where found, entry text once quarantined).
+- **Server Rack:** 12 racks × 30 at the Help Desk's rack terminal: WITHDRAW, DEPOSIT, MOVE between racks (left/right flips racks). Won't let you deposit your last Daemon that can fight. Catches overflow into the rack when the stack is full.
+- **Supply Closet:** clerk at the Help Desk counter. BUY (stock list, quantity, total, confirm) and SELL (half price). Credits shown. Debug menu gives 3000 CR.
+- New UI pieces: `MenuList` (scrolling list, keyboard/gamepad/mouse, pages with left/right), `SummaryPanel`, `CmdbPanel`, `FieldMenus` (all field flows), quantity chooser.
+- GameState: racks, credits, repel_steps, cmdb_found_at, add_daemon overflow, deposit/withdraw/move, swap_stack, lead_level, heal_stack.
+- Tests: `tests/test_collecting.gd` (14), including menu flows driven by real input events and the full loop. 161/161 passing.
+
+**Done-when:** walk into a cable tangle → catch it → store it in the Server Rack → heal at the Help Desk → see it in the CMDB. ✔ (tested end to end except the walk, which is tested separately)
+
+**Found in screenshots and fixed:** the stack submenu covered the HP/status column (submenus moved bottom-right); the Moves page details overflowed and showed "40.0" (one compact line per move, whole numbers).
+
+**Notes**
+- A move learned from an Overclock Chip in the field with 4 slots full is skipped with a message (no replace prompt outside battle yet).
+- Losing a wild battle doesn't black out yet (Phase 6).
+
+**Next:** Phase 6 — trainer line-of-sight battles, Department bosses + certifications, black-out, saving, full pause menu, options.
+
+---
+
 ## 2026-11-07 — Phase 4b: Map events + dialogue ✅
 
 **Done**

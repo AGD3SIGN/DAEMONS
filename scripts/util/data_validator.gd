@@ -22,6 +22,8 @@ const DIALOGUE_COMMANDS := {
 	"heal_party": [],
 	"start_battle": ["foe"],
 	"move_npc": ["npc", "path"],
+	"open_shop": ["stock"],
+	"open_rack": [],
 }
 const EVENT_TYPES := {
 	"warp": ["to_map", "to_spawn"],
@@ -66,6 +68,7 @@ var items: Dictionary = {}
 var config_profiles: Dictionary = {}
 var tiles: Dictionary = {}   # tile name -> {name, atlas, collision, behavior}
 var dialogues: Dictionary = {}  # dialogue id -> list of steps
+var encounters: Dictionary = {}  # map id -> {rate, zones: {tile name: [slots]}}
 
 
 ## raw = {"types": ..., "moves": ..., "species": ..., "items": ..., "config_profiles": ...}
@@ -85,6 +88,7 @@ func validate(raw: Dictionary) -> PackedStringArray:
 	for id: String in species:
 		_validate_species(species[id], "species › " + id)
 	_validate_dialogue_files(raw.get("dialogue", {}))
+	_validate_encounters(raw.get("encounters", {}))
 	return errors
 
 
@@ -335,6 +339,16 @@ func _validate_command(step: Dictionary, where: String) -> void:
 			_validate_team(step["foe"], where + " › foe")
 			if step.has("ai"):
 				_one_of(step, "ai", where, ["random", "basic", "smart"])
+		"open_shop":
+			var stock: Variant = step["stock"]
+			if typeof(stock) != TYPE_ARRAY or stock.is_empty():
+				_err(where, "'stock' must be a list of item ids")
+			else:
+				for item_id: Variant in stock:
+					if not items.has(item_id):
+						_err(where, "unknown item '%s' in stock" % str(item_id))
+					elif int(items[item_id].get("price", 0)) <= 0:
+						_err(where, "'%s' has no price, so it can't be sold in a shop" % str(item_id))
 		"move_npc":
 			_string(step, "npc", where)
 			var path: Variant = step["path"]
@@ -354,6 +368,51 @@ func _validate_team(team: Variant, where: String) -> void:
 	for entry: Variant in team:
 		if typeof(entry) != TYPE_ARRAY or entry.size() != 2 or not species.has(entry[0]) or not _is_int(entry[1]) or entry[1] < 1 or entry[1] > 100:
 			_err(where, "bad entry %s (want [species_id, level 1-100])" % JSON.stringify(entry))
+
+
+# --- wild encounters ---------------------------------------------------------
+
+## raw = {map id: {"rate": 0..1, "zones": {tile name: [{species, min, max, weight}]}}}
+func _validate_encounters(raw: Variant) -> void:
+	encounters = {}
+	if typeof(raw) != TYPE_DICTIONARY:
+		return
+	for map_id: String in raw:
+		var table: Variant = raw[map_id]
+		var where := "encounters › " + map_id
+		if typeof(table) != TYPE_DICTIONARY:
+			_err(where, "must be an object with 'rate' and 'zones'")
+			continue
+		encounters[map_id] = table
+		if not FileAccess.file_exists("res://data/maps/%s.json" % map_id):
+			_err(where, "no map called '%s'" % map_id)
+		if not _is_number(table.get("rate")) or float(table["rate"]) <= 0.0 or float(table["rate"]) > 1.0:
+			_err(where, "'rate' must be a chance per step above 0 and at most 1")
+		var zones: Variant = table.get("zones")
+		if typeof(zones) != TYPE_DICTIONARY or zones.is_empty():
+			_err(where, "'zones' must map tile names to encounter lists")
+			continue
+		for tile_name: String in zones:
+			var zw := where + " › " + tile_name
+			if not tiles.has(tile_name):
+				_err(zw, "unknown tile '%s'" % tile_name)
+			elif not tiles[tile_name]["behavior"] in ["hot_zone", "water"]:
+				_err(zw, "tile '%s' isn't a hot_zone or water tile" % tile_name)
+			var slots: Variant = zones[tile_name]
+			if typeof(slots) != TYPE_ARRAY or slots.is_empty():
+				_err(zw, "must be a non-empty list")
+				continue
+			for i in slots.size():
+				var slot: Variant = slots[i]
+				var sw := "%s[%d]" % [zw, i]
+				if typeof(slot) != TYPE_DICTIONARY:
+					_err(sw, "must be an object")
+					continue
+				if not species.has(slot.get("species")):
+					_err(sw, "unknown species '%s'" % str(slot.get("species")))
+				if _int(slot, "min", sw, 1, 100) and _int(slot, "max", sw, 1, 100) and slot["min"] > slot["max"]:
+					_err(sw, "'min' can't be above 'max'")
+				_int(slot, "weight", sw, 1, 1000)
 
 
 # --- config profiles ---------------------------------------------------------

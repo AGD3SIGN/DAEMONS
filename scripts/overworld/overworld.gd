@@ -2,7 +2,8 @@ class_name Overworld
 extends Node2D
 ## The overworld scene: loads a map and its events, places the player, and handles what happens
 ## around them: warps (with a fade), trigger zones, talking to NPCs and signs (A while facing),
-## hidden items, and dialogue (text box + yes/no) — including starting trainer battles.
+## hidden items, dialogue (text box + yes/no), wild encounters in hot zones, and the pause menu
+## (Space/Tab/Start) with CMDB, Active Stack and Bag.
 ##
 ## Open it with SceneRouter.goto(Overworld.SCENE, {"map": "onboarding_town", "spawn": "default"}).
 ## With no "map" param it returns to GameState.location (e.g. after a battle), else Onboarding Town.
@@ -12,7 +13,6 @@ signal map_loaded(map_id: String)
 
 const SCENE := "res://scenes/overworld/overworld.tscn"
 const DEFAULT_MAP := "onboarding_town"
-const DEBUG_MENU := "res://scenes/debug/debug_menu.tscn"
 const FADE_TIME := 0.2
 
 var map: MapView
@@ -23,11 +23,14 @@ var events: Array[MapEvent] = []
 var time_scale: float = 1.0
 var auto_advance_text := false
 var auto_choice: Variant = null      # true / false answers every yes/no question automatically
+var encounter_rate_override: float = -1.0  # >= 0 replaces the map's encounter rate (tests)
+var encounter_rng := RandomNumberGenerator.new()
 var allow_scene_change := true       # false: start_battle only emits battle_requested
 var dialogue_log: Array[String] = []  # every line shown, in order
 
 var text_box: TextBox
 var menu: BattleMenu
+var field_menus: FieldMenus
 var _speaker_tab: Panel
 var _speaker_label: Label
 var _fade: ColorRect
@@ -37,6 +40,7 @@ var _busy := false   # dialogue or warp in progress
 
 
 func _ready() -> void:
+	encounter_rng.randomize()
 	_build_ui()
 	var params := SceneRouter.params
 	if params.has("map"):
@@ -138,7 +142,52 @@ func _on_stepped(cell: Vector2i, _behavior: String) -> void:
 			player.input_enabled = false
 			await event.run()
 			return
-	# Phase 5: wild encounters on hot_zone tiles.
+	if GameState.repel_steps > 0:
+		GameState.repel_steps -= 1
+		if GameState.repel_steps == 0:
+			_busy = true
+			player.input_enabled = false
+			await show_message("The Firewall Rule expired.")
+			_busy = false
+			player.input_enabled = true
+	_check_encounter(cell)
+
+
+func _check_encounter(cell: Vector2i) -> void:
+	var info := map.tile_info(cell)
+	if not info["behavior"] in ["hot_zone", "water"] or not GameState.has_usable_daemon():
+		return
+	var table: Dictionary = DataRegistry.encounters.get(map.map_id, {})
+	if table.is_empty():
+		return
+	var rate := encounter_rate_override if encounter_rate_override >= 0.0 else float(table["rate"])
+	var hit := Encounters.roll(map.map_id, info["name"], encounter_rng, GameState.lead_level(), GameState.repel_steps > 0, rate)
+	if not hit.is_empty():
+		start_wild_battle(hit["species"], hit["level"])
+
+
+func start_wild_battle(species_id: String, level: int) -> void:
+	_busy = true
+	player.input_enabled = false
+	if not GameState.cmdb_found_at.has(species_id):
+		GameState.cmdb_found_at[species_id] = String(map.map_data.get("name", map.map_id))
+	await _encounter_flash()
+	start_battle({"foe": [[species_id, level]], "wild": true})
+	if not allow_scene_change:
+		_busy = false
+		player.input_enabled = true
+
+
+## White flashes, then black, like stumbling into something in tall grass.
+func _encounter_flash() -> void:
+	var tween := create_tween()
+	for i in 3:
+		tween.tween_property(_fade, "color", Color(1, 1, 1, 0.8), 0.08 * time_scale)
+		tween.tween_property(_fade, "color", Color(1, 1, 1, 0.0), 0.08 * time_scale)
+	tween.tween_property(_fade, "color", Color(0, 0, 0, 1), 0.25 * time_scale)
+	await tween.finished
+	if not allow_scene_change:
+		_fade.color = Color(0, 0, 0, 0)
 
 
 func warp_to(map_id: String, spawn_name: String = "default") -> void:
@@ -244,10 +293,18 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_accept") and is_idle():
 		get_viewport().set_input_as_handled()
 		interact()
-	elif OS.is_debug_build() and event.is_action_pressed("menu") and is_idle():
-		# Temporary until the pause menu (Phase 6): debug builds go back to the debug menu.
+	elif event.is_action_pressed("menu") and is_idle():
 		get_viewport().set_input_as_handled()
-		SceneRouter.goto(DEBUG_MENU)
+		open_pause()
+
+
+func open_pause() -> void:
+	_busy = true
+	player.input_enabled = false
+	AudioManager.play_sfx("select")
+	await field_menus.open_pause()
+	_busy = false
+	player.input_enabled = true
 
 
 # --- UI ----------------------------------------------------------------------
@@ -269,6 +326,10 @@ func _build_ui() -> void:
 	_banner_label = Label.new()
 	_banner_label.position = Vector2(8, 5)
 	_banner.add_child(_banner_label)
+
+	field_menus = FieldMenus.new()
+	field_menus.world = self
+	root.add_child(field_menus)
 
 	text_box = TextBox.new()
 	text_box.anchor_left = 0

@@ -45,7 +45,7 @@ Architecture/System-Notes.md. Append; don't overwrite.
 ## Conventions
 - snake_case files, PascalCase class_name, typed GDScript everywhere.
 - One feature per branch/commit. Run tests before saying a phase is done.
-- Commit locally; the user pushes to GitHub themselves.
+- After each phase (or sub-step): commit with a message describing what was done, then push to origin.
 - Never add Pokémon names, assets, sounds, or code from pokeemerald / Pokémon Essentials / Showdown.
   Mechanics can be inspired by them; code and content must be original.
 - Capture is menu-based inside battle only. No real-time throwing of capture items in the overworld.
@@ -53,7 +53,7 @@ Architecture/System-Notes.md. Append; don't overwrite.
 ## Folder layout
 res://
   autoload/        DataRegistry, GameState, SaveManager, AudioManager, SceneRouter
-  data/            species.json, moves.json, types.json, items.json, encounters/, trainers/, dialogue/
+  data/            species, moves, types, items, config_profiles, tiles (.json), maps/, encounters/, dialogue/, trainers/
   scenes/          overworld/, battle/, ui/, menus/
   scripts/         battle/sim/, battle/ui/, overworld/, ui/, util/
   assets/          sprites/daemons/, sprites/characters/, tiles/, ui/, fonts/, audio/

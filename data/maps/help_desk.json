@@ -67,7 +67,19 @@
       "type": "sign",
       "x": 10,
       "y": 2,
-      "dialogue": "server_rack_soon"
+      "dialogue": "server_rack"
+    },
+    {
+      "type": "npc",
+      "id": "supply_clerk",
+      "x": 8,
+      "y": 2,
+      "facing": "down",
+      "dialogue": "supply_closet",
+      "look": {
+        "shirt": "#a04040",
+        "hair": "#e0e0e0"
+      }
     }
   ]
 }

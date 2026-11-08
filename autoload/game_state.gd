@@ -1,33 +1,28 @@
 extends Node
 ## Single source of truth for the player's run: Active Stack, Server Rack, bag, flags,
-## credits, certifications and CMDB. SaveManager serializes this. Filled in from Phase 5 on.
+## credits, certifications and CMDB. SaveManager serializes this (Phase 6).
+
+const MAX_STACK := 6
+const RACKS := 12
+const RACK_SLOTS := 30
 
 var player_name: String = ""
 var credits: int = 0
 var play_time_sec: float = 0.0
-var active_stack: Array = []        # up to 6 DaemonInstances (Phase 1b)
-var server_rack: Array = []         # 12 racks x 30 slots (Phase 5)
+var active_stack: Array = []        # up to 6 DaemonInstances
+var racks: Array = []               # 12 racks, each a list of up to 30 DaemonInstances (no gaps)
 var bag: Dictionary = {}            # item_id -> count
 var flags: Dictionary = {}          # story flag -> bool
 var certifications: PackedStringArray = []
 var cmdb_seen: Dictionary = {}      # species_id -> true
 var cmdb_caught: Dictionary = {}    # species_id -> true
-var location: Dictionary = {}       # {"map": id, "x": cell x, "y": cell y}
+var cmdb_found_at: Dictionary = {}  # species_id -> map name where it was first met in the wild
+var location: Dictionary = {}       # {"map": id, "x": cell x, "y": cell y, "facing": "down"}
+var repel_steps: int = 0            # Firewall Rule steps left
 
 
-const MAX_STACK := 6
-
-
-## Adds a Daemon to the Active Stack, or the Server Rack if the stack is full.
-## Returns "stack" or "rack".
-func add_daemon(d: DaemonInstance) -> String:
-	cmdb_seen[d.species_id] = true
-	cmdb_caught[d.species_id] = true
-	if active_stack.size() < MAX_STACK:
-		active_stack.append(d)
-		return "stack"
-	server_rack.append(d)
-	return "rack"
+func _init() -> void:
+	reset()
 
 
 ## Clears everything for a new game.
@@ -36,10 +31,116 @@ func reset() -> void:
 	credits = 0
 	play_time_sec = 0.0
 	active_stack.clear()
-	server_rack.clear()
+	racks = []
+	for i in RACKS:
+		racks.append([])
 	bag.clear()
 	flags.clear()
 	certifications.clear()
 	cmdb_seen.clear()
 	cmdb_caught.clear()
+	cmdb_found_at.clear()
 	location.clear()
+	repel_steps = 0
+
+
+# --- Active Stack ------------------------------------------------------------
+
+## Adds a Daemon to the Active Stack, or the Server Rack if the stack is full.
+## Returns "stack", "rack" or "full" (everything is full).
+func add_daemon(d: DaemonInstance) -> String:
+	cmdb_seen[d.species_id] = true
+	cmdb_caught[d.species_id] = true
+	if active_stack.size() < MAX_STACK:
+		active_stack.append(d)
+		return "stack"
+	return "rack" if rack_add(d) >= 0 else "full"
+
+
+func has_usable_daemon() -> bool:
+	for d: DaemonInstance in active_stack:
+		if not d.is_fainted():
+			return true
+	return false
+
+
+## Level of the first Daemon that can fight (Firewall Rules compare against it).
+func lead_level() -> int:
+	for d: DaemonInstance in active_stack:
+		if not d.is_fainted():
+			return d.level
+	return 0
+
+
+func swap_stack(a: int, b: int) -> void:
+	if a == b or a < 0 or b < 0 or a >= active_stack.size() or b >= active_stack.size():
+		return
+	var temp: DaemonInstance = active_stack[a]
+	active_stack[a] = active_stack[b]
+	active_stack[b] = temp
+
+
+func heal_stack() -> void:
+	for d: DaemonInstance in active_stack:
+		d.heal_full()
+
+
+# --- Server Rack -------------------------------------------------------------
+
+## Puts a Daemon in the first rack with room (or `rack_index` if given). Returns the rack, or -1.
+func rack_add(d: DaemonInstance, rack_index: int = -1) -> int:
+	var order: Array = range(RACKS) if rack_index < 0 else [rack_index]
+	for i: int in order:
+		if racks[i].size() < RACK_SLOTS:
+			racks[i].append(d)
+			return i
+	return -1
+
+
+func rack_total() -> int:
+	var total := 0
+	for rack: Array in racks:
+		total += rack.size()
+	return total
+
+
+## Stack -> rack. Refuses to leave you without a Daemon that can fight. Returns "" or a reason.
+func deposit(stack_index: int, rack_index: int) -> String:
+	if stack_index < 0 or stack_index >= active_stack.size():
+		return "There's no Daemon there."
+	if racks[rack_index].size() >= RACK_SLOTS:
+		return "That rack is full."
+	var d: DaemonInstance = active_stack[stack_index]
+	var others_can_fight := false
+	for i in active_stack.size():
+		if i != stack_index and not active_stack[i].is_fainted():
+			others_can_fight = true
+	if not others_can_fight:
+		return "You need at least one Daemon that can fight."
+	active_stack.remove_at(stack_index)
+	racks[rack_index].append(d)
+	return ""
+
+
+## Rack -> stack. Returns "" or a reason.
+func withdraw(rack_index: int, slot: int) -> String:
+	if active_stack.size() >= MAX_STACK:
+		return "Your Active Stack is full."
+	if slot < 0 or slot >= racks[rack_index].size():
+		return "There's no Daemon there."
+	active_stack.append(racks[rack_index][slot])
+	racks[rack_index].remove_at(slot)
+	return ""
+
+
+## Rack -> another rack. Returns "" or a reason.
+func move_between_racks(from_rack: int, slot: int, to_rack: int) -> String:
+	if from_rack == to_rack:
+		return "It's already in that rack."
+	if racks[to_rack].size() >= RACK_SLOTS:
+		return "That rack is full."
+	if slot < 0 or slot >= racks[from_rack].size():
+		return "There's no Daemon there."
+	racks[to_rack].append(racks[from_rack][slot])
+	racks[from_rack].remove_at(slot)
+	return ""
