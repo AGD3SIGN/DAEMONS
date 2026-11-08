@@ -163,9 +163,8 @@ func _input(event: InputEvent) -> void:
 	if event is InputEventJoypadButton and shown:
 		set_shown(false)  # someone picked up a controller
 		return
-	if event is InputEventScreenTouch and event.pressed and not shown \
-			and DisplayServer.is_touchscreen_available() and Input.get_connected_joypads().is_empty():
-		set_shown(true)
+	if event is InputEventScreenTouch and event.pressed and not shown:
+		set_shown(true)  # a real touch proves a touchscreen, even with a pad paired (the iOS Simulator reports one)
 	if not is_active():
 		return
 	if event is InputEventScreenTouch:

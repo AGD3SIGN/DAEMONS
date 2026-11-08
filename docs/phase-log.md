@@ -4,6 +4,20 @@ Newest entries at the top. Each entry: what's done, decisions, what's next.
 
 ---
 
+## 2026-11-08 — Phase 8: iOS Simulator + touch fixes
+
+**Done**
+- Built Godot 4.7.2's iOS simulator library for Apple Silicon from source (the stock one is Intel-only).
+  `tools/export_ios.sh` merges it into the export; `tools/run_ios_simulator.sh` builds and launches on the Simulator.
+- Played in the iPhone 17 Simulator: title, menu, Onboarding Town, walking with the touch d-pad.
+- Fixed 3 touch bugs it exposed: tap-to-start did nothing (title background ate taps); tapping dialogue and
+  CMDB/Summary/Trainer Card panels did nothing (Panels eat taps); touch controls hidden whenever a controller
+  is paired (the Simulator reports one). Tests: 204/204.
+
+**Open:** a harmless `mouse_get_position` error on iOS startup.
+
+---
+
 ## 2026-11-08 — Phase 8: iOS build with a free Apple account
 
 **Done**

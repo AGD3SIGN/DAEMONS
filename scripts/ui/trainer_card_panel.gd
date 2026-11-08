@@ -11,6 +11,7 @@ var _badges: Control
 
 
 func _ready() -> void:
+	mouse_filter = Control.MOUSE_FILTER_IGNORE  # let taps reach _unhandled_input (tap anywhere to continue)
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	offset_left = 6
 	offset_top = 6

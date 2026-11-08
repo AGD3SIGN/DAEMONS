@@ -19,6 +19,7 @@ var _blink := 0.0
 
 
 func _ready() -> void:
+	mouse_filter = Control.MOUSE_FILTER_IGNORE  # let taps reach _unhandled_input (tap anywhere to continue)
 	_label = Label.new()
 	_label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_label.offset_left = 8

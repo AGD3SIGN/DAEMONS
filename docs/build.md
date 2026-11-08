@@ -74,11 +74,26 @@ Works with a **free** Apple ID (Personal Team). No paid program needed to play o
 Free Personal Team limits: the app stops opening after **7 days** (plug in and Run again to renew), max 3
 of your own apps on the device, no TestFlight or App Store. The paid program ($99/yr) removes those.
 
-- **No iOS Simulator on Apple Silicon (with the stock Godot templates):** Godot's official simulator
-  library is Intel-only. An arm64 simulator build fails to link (`_main` not found), and an Intel-only
-  build compiles but the iOS 26 Simulator refuses to install it ("needs to be updated", no matching arch).
-  Fix if needed: build Godot's iOS simulator template for arm64 from source (scons, about 30-60 min).
-  Otherwise test on a real iPhone.
+### iOS Simulator (Apple Silicon)
+
+Godot's stock simulator library is Intel-only, and the iOS 26 Simulator only runs arm64 apps. Fix: build
+Godot's simulator library for arm64 from the same source as your Godot (one-time, about 5 minutes on an M-series Mac):
+```bash
+brew install scons
+git clone --depth 1 --branch 4.7.2-stable https://github.com/godotengine/godot.git /Volumes/BlueHD/godot-build/godot-4.7.2
+cd /Volumes/BlueHD/godot-build/godot-4.7.2
+scons platform=ios target=template_debug arch=arm64 simulator=yes -j11
+mkdir -p ~/Library/Application\ Support/Godot/custom_templates/4.7.2.stable
+cp bin/libgodot.ios.template_debug.arm64.simulator.a ~/Library/Application\ Support/Godot/custom_templates/4.7.2.stable/
+```
+(This Mac already has it, built 2026-11-08.) After that, `./tools/export_ios.sh` merges it in automatically, and
+```bash
+./tools/run_ios_simulator.sh            # or: ./tools/run_ios_simulator.sh "iPhone 17"
+```
+builds for the Simulator and launches the game. The Simulator uses the OpenGL Compatibility renderer, which
+is what Daemons uses anyway. Rebuild the library when you upgrade Godot (change the version in both paths).
+Game logs: the game's ERROR lines show in Console.app / `log stream` under subsystem `com.agd3sign.daemons`.
+
 - Orientation is landscape (either way). Touch controls appear automatically. Notch/home-indicator safe areas are respected.
 
 ## 4. Android

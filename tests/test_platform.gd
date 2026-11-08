@@ -201,6 +201,26 @@ func test_battles_hide_the_touch_overlay() -> void:
 	assert_true(TouchControls.is_active(), "back after the battle")
 
 
+func test_touching_the_screen_shows_controls_even_with_a_pad_paired() -> void:
+	# The iOS Simulator (and a phone with a controller paired) reports a joypad; a touch still wins.
+	TouchControls._on_joy_connection_changed(0, true)
+	assert_false(TouchControls.shown)
+	_touch(0, Vector2(160, 20), true)
+	assert_true(TouchControls.shown, "a touch brings the overlay back")
+	_touch(0, Vector2(160, 20), false)
+
+
+func test_full_screen_panels_let_taps_through() -> void:
+	# Panels swallow taps by default, so "tap to start / continue" never fired on phones.
+	var title: Control = load("res://scenes/ui/title_screen.tscn").instantiate()
+	add_child_autofree(title)
+	assert_eq(title.mouse_filter, Control.MOUSE_FILTER_IGNORE, "title root")
+	assert_eq(title.get_node("Background").mouse_filter, Control.MOUSE_FILTER_IGNORE, "title background")
+	for panel: Control in [TextBox.new(), CmdbPanel.new(), SummaryPanel.new(), TrainerCardPanel.new()]:
+		add_child_autofree(panel)
+		assert_eq(panel.mouse_filter, Control.MOUSE_FILTER_IGNORE, panel.get_class() + " " + str(panel.get_script().resource_path))
+
+
 func test_desktop_ignores_menu_bar_safe_area() -> void:
 	TouchControls.safe_margins_override = null
 	if not OS.has_feature("mobile"):

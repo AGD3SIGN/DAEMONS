@@ -14,5 +14,17 @@ cp export_presets.cfg export_presets.cfg.bak
 trap 'mv export_presets.cfg.bak export_presets.cfg' EXIT
 sed -i '' "s/^application\/app_store_team_id=\"\"/application\/app_store_team_id=\"$TEAM\"/" export_presets.cfg
 mkdir -p build/ios
+touch build/.gdignore  # keep Godot from scanning exported files as project resources
 godot --headless --export-debug "iOS" build/ios/Daemons.ipa
-echo "Done: open build/ios/Daemons.xcodeproj in Xcode."
+
+# Godot's stock simulator library is Intel-only, which the Apple Silicon iOS Simulator can't run. If an
+# arm64 simulator library has been built from source (docs/build.md), merge it into the export.
+SIM_LIB="${GODOT_IOS_SIM_LIB:-$HOME/Library/Application Support/Godot/custom_templates/4.7.2.stable/libgodot.ios.template_debug.arm64.simulator.a}"
+SLICE="build/ios/Daemons.xcframework/ios-arm64_x86_64-simulator/libgodot.a"
+if [[ -f "$SIM_LIB" && -f "$SLICE" ]]; then
+  if ! lipo -archs "$SLICE" | grep -qw arm64; then
+    lipo -create "$SLICE" "$SIM_LIB" -output "$SLICE.fat" && mv "$SLICE.fat" "$SLICE"
+  fi
+  echo "Simulator: arm64 library merged ($(lipo -archs "$SLICE"))."
+fi
+echo "Done: open build/ios/Daemons.xcodeproj in Xcode (iPhone), or run tools/run_ios_simulator.sh."
