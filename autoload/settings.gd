@@ -13,6 +13,7 @@ var text_speed: String = "mid"
 var music_volume: float = 0.8
 var sfx_volume: float = 1.0
 var battle_animations: bool = true
+var autosave_on_suspend: bool = true  # mobile: save when the app goes to the background
 
 
 func _ready() -> void:
@@ -36,6 +37,7 @@ func save_settings() -> void:
 	cfg.set_value("options", "music_volume", music_volume)
 	cfg.set_value("options", "sfx_volume", sfx_volume)
 	cfg.set_value("options", "battle_animations", battle_animations)
+	cfg.set_value("options", "autosave_on_suspend", autosave_on_suspend)
 	cfg.save(path)
 
 
@@ -49,3 +51,4 @@ func load_settings() -> void:
 	music_volume = clampf(float(cfg.get_value("options", "music_volume", music_volume)), 0.0, 1.0)
 	sfx_volume = clampf(float(cfg.get_value("options", "sfx_volume", sfx_volume)), 0.0, 1.0)
 	battle_animations = bool(cfg.get_value("options", "battle_animations", battle_animations))
+	autosave_on_suspend = bool(cfg.get_value("options", "autosave_on_suspend", autosave_on_suspend))

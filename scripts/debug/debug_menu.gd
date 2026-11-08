@@ -49,6 +49,7 @@ func _ready() -> void:
 		["Trainer battle: Kevin", _kevin],
 		["Watch: AI plays you vs Kevin", _kevin_auto],
 		["Heal team + restock bag", _heal],
+		["Touch controls (try with mouse)", _toggle_touch],
 		["Daemon Lab", func() -> void: SceneRouter.goto(LAB_SCENE)],
 		["Title screen", func() -> void: SceneRouter.goto(TITLE_SCENE)],
 	]:
@@ -99,6 +100,14 @@ func _heal() -> void:
 		d.heal_full()
 	_restock()
 	_refresh_status("Team healed, bag restocked.")
+
+
+## Desktop testing: show the on-screen controls and let the mouse act as a finger.
+func _toggle_touch() -> void:
+	var on := not TouchControls.shown
+	Input.emulate_touch_from_mouse = on
+	TouchControls.set_shown(on)
+	_refresh_status("Touch controls %s." % ("ON: drag in the lower-left, tap the round buttons" if on else "OFF"))
 
 
 func _make_team() -> void:

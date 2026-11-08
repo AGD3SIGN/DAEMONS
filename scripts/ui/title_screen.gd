@@ -17,11 +17,18 @@ var _choosing := false
 
 func _ready() -> void:
 	GameState.clock_running = false
+	_update_prompt(InputPrompts.scheme)
+	InputPrompts.scheme_changed.connect(_update_prompt)
 	_menu = MenuList.new()
 	_menu.theme = UiTheme.get_theme()
 	_menu.setup(Vector4(0.5, 1, 0.5, 1), Vector4(-70, -70, 70, -8), 4)
 	_menu.cancellable = true
 	add_child(_menu)
+
+
+## "- press Z -", "- press A -", "- tap the check button -" to match what you're holding.
+func _update_prompt(_scheme: String) -> void:
+	_prompt.text = "- %s -" % ("tap to start" if InputPrompts.scheme == "touch" else InputPrompts.press("ui_accept"))
 
 
 func _process(delta: float) -> void:
@@ -33,7 +40,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	if _choosing:
 		return
 	if event.is_action_pressed("ui_accept") or event.is_action_pressed("menu") \
-			or (event is InputEventMouseButton and event.pressed):
+			or (event is InputEventMouseButton and event.pressed) or (event is InputEventScreenTouch and event.pressed):
 		get_viewport().set_input_as_handled()
 		start_pressed.emit()
 		show_menu()

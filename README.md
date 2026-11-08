@@ -51,7 +51,8 @@ godot --headless --path . res://scenes/debug/console_battle.tscn
 - [x] Phase 5 — Wild encounters, Active Stack, Bag, CMDB, Server Rack, shop
 - [x] Phase 6 — Trainers, Certifications, black-out, saving, options
 - [x] Phase 7 — Vertical slice (intro, Route 1, Wi-Fi Dead Zone, Patch Town, Desktop Support Dept.)
-- [ ] Phase 8+ — Platform builds, Steam page, content, polish, launch
+- [~] Phase 8 — Platform builds: touch controls, prompts, lifecycle, export presets done ([docs/build.md](docs/build.md)); device builds pending
+- [ ] Phase 9+ — Steam page, content, polish, launch
 
 ## Legal
 All names, creatures, art, text and code are original. No Pokémon assets, names or code are used.

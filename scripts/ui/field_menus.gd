@@ -203,16 +203,18 @@ func options_screen() -> void:
 			"MUSIC VOLUME  < %d%% >" % roundi(Settings.music_volume * 100),
 			"SFX VOLUME    < %d%% >" % roundi(Settings.sfx_volume * 100),
 			"BATTLE ANIMS  < %s >" % on_off,
+			"AUTOSAVE      < %s >" % ("ON" if Settings.autosave_on_suspend else "OFF"),
 			"DONE",
 		])
 		list.allow_lr = true
 		list.describe = func(i: int) -> String: return ["How fast text types out.", "Background music (coming with the soundtrack).",
-			"Sound effects.", "Turn off to skip battle animations.", "Save and close."][i]
+			"Sound effects.", "Turn off to skip battle animations.",
+			"Phones/tablets: save when the app goes to the background.", "Save and close."][i]
 		var r := await list.choose("OPTIONS   (left/right to change)", rows, [], cursor)
 		list.allow_lr = false
 		list.describe = Callable()
 		cursor = r["index"]
-		if r["action"] == "cancel" or (r["action"] == "pick" and cursor == 4):
+		if r["action"] == "cancel" or (r["action"] == "pick" and cursor == 5):
 			break
 		var step := -1 if r["action"] == "left" else 1
 		match cursor:
@@ -227,6 +229,8 @@ func options_screen() -> void:
 				AudioManager.play_sfx("select")
 			3:
 				Settings.battle_animations = not Settings.battle_animations
+			4:
+				Settings.autosave_on_suspend = not Settings.autosave_on_suspend
 	Settings.apply()
 	Settings.save_settings()
 	list.close()

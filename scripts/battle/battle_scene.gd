@@ -60,6 +60,8 @@ var _started := false
 
 func _ready() -> void:
 	theme = UiTheme.get_theme()
+	TouchControls.suppress("battle")  # everything in battle is tappable; buttons would cover the HP panel
+	tree_exiting.connect(func() -> void: TouchControls.release("battle"))
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_build()
 	if state == null and SceneRouter.params.has("battle"):

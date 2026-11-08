@@ -12,6 +12,7 @@ config_version=5
 
 config/name="Daemons"
 config/description="GBA-style IT-themed monster tamer."
+config/version="0.1.0"
 run/main_scene="res://scenes/ui/title_screen.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 
@@ -24,6 +25,9 @@ AudioManager="*res://autoload/audio_manager.gd"
 SceneRouter="*res://autoload/scene_router.gd"
 ScreenFitter="*res://autoload/screen_fitter.gd"
 Settings="*res://autoload/settings.gd"
+InputPrompts="*res://autoload/input_prompts.gd"
+TouchControls="*res://autoload/touch_controls.gd"
+AppLifecycle="*res://autoload/app_lifecycle.gd"
 
 [display]
 
@@ -34,6 +38,7 @@ window/size/window_height_override=720
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 window/stretch/scale_mode="integer"
+window/handheld/orientation=4
 
 [editor_plugins]
 

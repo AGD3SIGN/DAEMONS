@@ -4,6 +4,25 @@ Newest entries at the top. Each entry: what's done, decisions, what's next.
 
 ---
 
+## 2026-11-08 — Phase 8: Platform support (code done; builds need toolchain + devices)
+
+**Done**
+- **TouchControls** autoload: floating d-pad (lower-left; push past the ring to run), A = check icon, B = back-arrow icon, MENU = three lines. ≥44pt targets converted from points to the game's logical pixels per device, inside notch/home-indicator safe areas (mobile only). Vector-drawn so it's crisp at any density. Sends the same named actions as keyboard/gamepad (with menu repeat). Fake mouse clicks from touches on the controls are swallowed so they don't press menus underneath. Shown on touchscreens, hidden when a gamepad connects or a pad button is pressed, and hidden during battles (everything there is tappable; it covered the HP panel).
+- **InputPrompts** autoload: tracks keyboard / Xbox / PlayStation / Nintendo / touch from the last input; labels buttons to match (Z, A, Cross, Nintendo B, "tap"). Title prompt follows it.
+- **AppLifecycle** autoload: on mobile background → pause the tree and autosave if idle in the overworld (never mid-battle/dialogue); Options → AUTOSAVE toggle.
+- **export_presets.cfg**: macOS (universal), Windows (x86_64, data embedded), iOS, Android (arm64). All include `*.json`, exclude tests/tools/docs/GUT. App id com.agd3sign.daemons, version 0.1.0. Phones are sensor-landscape.
+- **docs/build.md**: setup + per-platform export, signing and notarization, device install, Play testing rule, done-when checklist.
+- Debug menu: "Touch controls (try with mouse)".
+- Tests: `tests/test_platform.gd` (11). 201/201 passing.
+
+**Fixes during the phase:** desktop safe area (menu bar/Dock) pushed the d-pad off-screen → safe areas only on mobile; touch buttons covered battle HP → hidden in battle.
+
+**Toolchain on this Mac:** Xcode 27 ✓, Apple Development cert ✓ (no Developer ID yet), Godot export templates ✗, JDK/Android SDK ✗.
+
+**Still to do for done-when:** run the slice on Mac, Windows PC, iPhone (Xcode) and Android phone.
+
+---
+
 ## 2026-11-07 — Phase 7: Vertical slice ✅ (code + content; art/audio still placeholder)
 
 **The slice:** New Game → wake up, name yourself → Mom → Help Desk → manager's e-waste bin starter choice → Kevin bursts in and takes the starter that beats yours → rival battle #1 (losing doesn't black out) → Route 1 (3 trainers) → Wi-Fi Dead Zone (dark, 2 trainers incl. a Ransom "Phisher") → Patch Town (Help Desk, shop, gate) → Desktop Support Department (patch-panel laser-door puzzle, 2 techs, Department Head Dana) → Desktop Support Cert → the gate opens → end-of-demo message.
