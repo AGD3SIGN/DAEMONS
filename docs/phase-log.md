@@ -4,6 +4,18 @@ Newest entries at the top. Each entry: what's done, decisions, what's next.
 
 ---
 
+## 2026-11-08 — Art polish pass (Aseprite)
+
+**Done**
+- Aseprite 1.3.18.6 built from source; diivi Aseprite MCP installed outside the repo (local Claude Code scope).
+- `tools/art_import/polish_sheet.py`: per sheet, weighted k-means (sqrt of pixel count) picks 15 colors from the
+  sheet's own pixels so small accents survive; Aseprite (via the MCP's tools) snaps every pixel and exports.
+  First try with Aseprite's own reduction dropped Pingo's cyan effects and white glow; this fixed it.
+- All 22 sheets polished: ~8,000-25,000 colors -> 15 each, flat GBA-style shading. Brandon approved the Pingo sample.
+- Tests: 216/216 (new: every sheet has at most 16 colors).
+
+---
+
 ## 2026-11-08 — Art: the whole roster
 
 **Done**

@@ -89,3 +89,16 @@ func test_import_all_finds_sheets_in_character_folders() -> void:
 		assert_has(ids, species_id)
 		assert_true(DataRegistry.species.has(species_id), species_id + " is a real Daemon")
 		assert_true(DaemonSprites.has_sheet(species_id), species_id + " is in the game")
+
+
+func test_sheets_are_polished_to_a_small_palette() -> void:
+	# Polish pass (tools/art_import/polish_sheet.py): GBA-style art uses a handful of colors per Daemon.
+	for species_id: String in DataRegistry.species:
+		var img := Image.load_from_file(ProjectSettings.globalize_path("res://assets/sprites/daemons/%s_sheet.png" % species_id))
+		var colors := {}
+		for y in img.get_height():
+			for x in img.get_width():
+				var c := img.get_pixel(x, y)
+				if c.a > 0.5:
+					colors[c.to_rgba32()] = true
+		assert_lte(colors.size(), 16, "%s uses %d colors; run the polish pass" % [species_id, colors.size()])
