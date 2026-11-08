@@ -102,3 +102,30 @@ func test_sheets_are_polished_to_a_small_palette() -> void:
 				if c.a > 0.5:
 					colors[c.to_rgba32()] = true
 		assert_lte(colors.size(), 16, "%s uses %d colors; run the polish pass" % [species_id, colors.size()])
+
+
+func test_importer_reads_the_wide_6x2_layout() -> void:
+	# 1536x1024 magenta canvas, two rows of 6 poses floating in the middle (like the revamped sheets).
+	var src := Image.create(1536, 1024, false, Image.FORMAT_RGBA8)
+	src.fill(Color("ff00ff"))
+	for i in 12:
+		var x := (i % 6) * 256 + 60
+		var bottom := 470 if i < 6 else 800
+		src.fill_rect(Rect2i(x, bottom - 200, 136, 200), Color("1b2a44"))
+		src.fill_rect(Rect2i(x + 8, bottom - 192, 120, 184), Color.from_hsv(i / 20.0, 0.8, 0.9))
+	var path := ProjectSettings.globalize_path("user://wide_sheet.png")
+	src.save_png(path)
+	assert_eq(ImportSheet.import_sheet(path, "zz_test"), "")
+	var out := Image.load_from_file(ProjectSettings.globalize_path("res://assets/sprites/daemons/zz_test_sheet.png"))
+	var center := func(i: int) -> Color: return out.get_pixel((i % 4) * 64 + 32, (i / 4) * 64 + 40)
+	for i in 12:
+		var want := Color.from_hsv(i / 20.0, 0.8, 0.9)
+		var got: Color = center.call(i)
+		assert_almost_eq(Vector3(got.r, got.g, got.b), Vector3(want.r, want.g, want.b), Vector3.ONE * 0.01,
+			"pose %d came from cell %d" % [i, i])
+	assert_eq(center.call(12), Color.WHITE, "evolve = white silhouette")
+	for i in [13, 14, 15]:
+		assert_eq(center.call(i), center.call(0), "missing pose %d filled from idle" % i)
+	assert_eq(out.get_pixel(2, 2).a, 0.0, "background removed")
+	DirAccess.remove_absolute(ProjectSettings.globalize_path("res://assets/sprites/daemons/zz_test_sheet.png"))
+	DirAccess.remove_absolute(path)

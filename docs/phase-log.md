@@ -4,6 +4,20 @@ Newest entries at the top. Each entry: what's done, decisions, what's next.
 
 ---
 
+## 2026-11-08 — Art revamp: 19 new Daemon sheets
+
+**Done**
+- Brandon revamped 19 Daemons in ChatGPT (all but the Chipmunk line): cleaner pixel art, 6x2 = 12 poses on a
+  1536x1024 canvas. Saved as `art_src/daemons/<line>/<id>_gpt_v<stage>_r2.webp` (newest file wins on import).
+- `import_sheet.gd` reads the 6x2 layout: finds the two pose rows from the gap between them, cuts each pose as a
+  square from its own column with one size per sheet, fills the 4 missing poses (white silhouette for evolve).
+- Background keying fixed: magenta is now matched against the sheet's own background color (strict), so hot pinks
+  and purples survive (Botgeon's and Spigeon's ruffs were being cut out); magenta-ish edge blends touching the
+  background are peeled off (removed a purple fringe and stray specks).
+- All 22 re-imported and polished to 15 colors. Tests: 217/217 (new: 6x2 layout).
+
+---
+
 ## 2026-11-08 — Art polish pass (Aseprite)
 
 **Done**

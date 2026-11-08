@@ -746,6 +746,7 @@ def main():
              "4. Put it in the game: save the approved image in its line's folder, named `<id>_gpt...`, e.g.",
              "   `art_src/daemons/02-Pingo/pengwan_gpt_v2.png`, then run",
              "   `godot --headless -s tools/art_import/import_sheet.gd -- --all`.",
+             "   It reads 4x4 (16 poses) or 6x2 (12 poses, e.g. 1536x1024; the 4 missing ones are filled from idle) sheets.",
              "   That writes `assets/sprites/daemons/<id>_sheet.png` for every image (4x4 frames of 64x64, background",
              "   removed: magenta, plain, or already transparent) and the battle screen, CMDB, Summary and starter",
              "   picker use it automatically. Tidy it in Aseprite if needed, and log it in the vault's Daemon-Log.",

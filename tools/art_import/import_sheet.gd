@@ -13,6 +13,14 @@ extends SceneTree
 ## each block. It's a rough import: open the result in Aseprite to tidy stray pixels.
 ## Frame order (row by row): idle A, idle B, physical, special / hurt, faint, happy, asleep /
 ## back idle A, back idle B, back attack, back hurt / evolve-or-signature, overheated, throttled, icon.
+##
+## Two source layouts are understood:
+##   4x4 (square image): the 16 poses above, one per equal cell.
+##   6x2 (wide image, e.g. 1536x1024): the first 12 poses in two rows of 6 floating on the canvas.
+##     Rows are found from the empty gap between them; each pose is cut as a square aligned to its
+##     row's bottom (the feet), using only its own column, with one square size for the whole sheet so
+##     every pose keeps the same scale. The 4 missing poses are filled in: a white silhouette of the
+##     idle pose for "evolve", and the idle pose for overheated, throttled and icon.
 
 const OUT_DIR := "res://assets/sprites/daemons/"
 const SRC_DIR := "res://art_src/daemons/"
@@ -70,15 +78,30 @@ static func import_sheet(source: String, species_id: String) -> String:
 		return "unreadable"
 	src.convert(Image.FORMAT_RGBA8)
 	var out := Image.create(FRAME * GRID, FRAME * GRID, false, Image.FORMAT_RGBA8)
-	var cell := Vector2(src.get_width(), src.get_height()) / GRID
 	var bg := src.get_pixel(2, 2)
 	var transparent := bg.a < 0.5
 	var magenta := not transparent and _is_magenta(bg)
-	for row in GRID:
-		for col in GRID:
-			var rect := Rect2i(Vector2i(Vector2(col, row) * cell), Vector2i(cell))
-			var frame := _process_cell(src.get_region(rect), bg, magenta, transparent)
-			out.blit_rect(frame, Rect2i(0, 0, FRAME, FRAME), Vector2i(col * FRAME, row * FRAME))
+	var cells: Array[Image] = []
+	if float(src.get_width()) / src.get_height() > 1.3:
+		cells = _wide_cells(src, bg, magenta, transparent)
+		if cells.is_empty():
+			printerr("Couldn't find two rows of poses in ", source)
+			return "layout"
+	else:
+		var cell := Vector2(src.get_width(), src.get_height()) / GRID
+		for row in GRID:
+			for col in GRID:
+				cells.append(src.get_region(Rect2i(Vector2i(Vector2(col, row) * cell), Vector2i(cell))))
+	var frames: Array[Image] = []
+	for img in cells:
+		frames.append(_process_cell(img, bg, magenta, transparent))
+	if frames.size() == 12:
+		frames.append(_silhouette(frames[0]))  # evolve
+		frames.append(frames[0])               # overheated
+		frames.append(frames[0])               # throttled
+		frames.append(frames[0])               # icon
+	for i in frames.size():
+		out.blit_rect(frames[i], Rect2i(0, 0, FRAME, FRAME), Vector2i((i % GRID) * FRAME, (i / GRID) * FRAME))
 	var path := OUT_DIR + species_id + "_sheet.png"
 	var err := out.save_png(ProjectSettings.globalize_path(path))
 	if err != OK:
@@ -89,8 +112,84 @@ static func import_sheet(source: String, species_id: String) -> String:
 	return ""
 
 
+## 6x2 layout: 12 square cells (row by row), background outside each pose's own column.
+static func _wide_cells(src: Image, bg: Color, magenta: bool, transparent: bool) -> Array[Image]:
+	var w := src.get_width()
+	var h := src.get_height()
+	var is_bg := func(c: Color) -> bool:
+		return c.a < 0.6 or (magenta and _is_key(c, bg)) or (not magenta and not transparent and _close(c, bg, 0.12))
+	# Which pixel rows have any art in them.
+	var has := PackedByteArray()
+	has.resize(h)
+	for y in h:
+		for x in range(0, w, 2):
+			if not is_bg.call(src.get_pixel(x, y)):
+				has[y] = 1
+				break
+	var top := has.find(1)
+	var bottom := h - 1
+	while bottom > 0 and has[bottom] == 0:
+		bottom -= 1
+	if top < 0:
+		return []
+	# The two rows are split at the longest empty stretch between the top and bottom of the art.
+	var best_start := -1
+	var best_len := 0
+	var run_start := -1
+	for y in range(top, bottom + 1):
+		if has[y] == 0:
+			if run_start < 0:
+				run_start = y
+			if y - run_start + 1 > best_len:
+				best_len = y - run_start + 1
+				best_start = run_start
+		else:
+			run_start = -1
+	if best_start < 0:
+		return []
+	var rows := [Vector2i(top, best_start - 1), Vector2i(best_start + best_len, bottom)]
+	var col_w := w / 6
+	var size := col_w
+	for r: Vector2i in rows:
+		size = maxi(size, r.y - r.x + 1 + 8)
+	var cells: Array[Image] = []
+	for r: Vector2i in rows:
+		for col in 6:
+			var cell := Image.create(size, size, false, Image.FORMAT_RGBA8)
+			cell.fill(bg)
+			var left := col * col_w + col_w / 2 - size / 2   # cell's left edge in the source
+			var y0 := r.y + 4 - size + 1                      # cell's top edge (feet near the bottom)
+			var src_x0 := maxi(col * col_w, left)
+			var src_x1 := mini((col + 1) * col_w, left + size)
+			var src_y0 := maxi(0, y0)
+			var src_y1 := mini(h, y0 + size)
+			if src_x1 > src_x0 and src_y1 > src_y0:
+				var part := Rect2i(src_x0, src_y0, src_x1 - src_x0, src_y1 - src_y0)
+				cell.blit_rect(src, part, Vector2i(src_x0 - left, src_y0 - y0))
+			cells.append(cell)
+	return cells
+
+
+## White silhouette (dark outline kept) for the evolve pose.
+static func _silhouette(frame: Image) -> Image:
+	var out := frame.duplicate() as Image
+	for y in out.get_height():
+		for x in out.get_width():
+			var c := out.get_pixel(x, y)
+			if c.a > 0.0 and c.get_luminance() > 0.3:
+				out.set_pixel(x, y, Color.WHITE)
+	return out
+
+
+## Is this sheet's background magenta? (Loose test, only used on the background sample.)
 static func _is_magenta(c: Color) -> bool:
 	return minf(c.r, c.b) - c.g > 0.35
+
+
+## Background pixel on a magenta sheet: close to the sheet's own background color. Kept strict so
+## hot-pink and purple parts of the art (Botgeon's ruff, Wormhole's portal) aren't cut out.
+static func _is_key(c: Color, bg: Color) -> bool:
+	return _close(c, bg, 0.26)
 
 
 static func _process_cell(img: Image, bg: Color, magenta: bool, transparent: bool = false) -> Image:
@@ -108,8 +207,23 @@ static func _process_cell(img: Image, bg: Color, magenta: bool, transparent: boo
 	elif magenta:
 		for y in h:
 			for x in w:
-				if _is_magenta(img.get_pixel(x, y)):
+				if _is_key(img.get_pixel(x, y), bg):
 					clear[y * w + x] = 1
+		# Soft edges: magenta-ish pixels touching the background are blends of art and background (the
+		# purple fringe and stray specks). Peel them off twice. Pinks inside the art are walled off by the
+		# dark outline, so they stay.
+		for _pass in 2:
+			var peel: Array[int] = []
+			for y in h:
+				for x in w:
+					var i := y * w + x
+					if clear[i] == 1 or not _is_magenta(img.get_pixel(x, y)):
+						continue
+					if (x > 0 and clear[i - 1] == 1) or (x < w - 1 and clear[i + 1] == 1) \
+							or (y > 0 and clear[i - w] == 1) or (y < h - 1 and clear[i + w] == 1):
+						peel.append(i)
+			for i in peel:
+				clear[i] = 1
 	else:
 		# Flood from the cell's edges through pixels close to the background color.
 		var stack: Array[Vector2i] = []
