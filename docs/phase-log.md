@@ -4,6 +4,17 @@ Newest entries at the top. Each entry: what's done, decisions, what's next.
 
 ---
 
+## 2026-11-08 — Art: the whole roster
+
+**Done**
+- Source sheets for all 22 Daemons in `art_src/daemons/01-Chipmunk/` … `08-Singles/`; imported with `-- --all`.
+- Every Daemon now uses its sheet in battle, CMDB, Summary and the starter picker; no placeholders left.
+- Tests: 215/215 (new: every species has a sheet).
+
+**Next:** an enhancement pass (palette, outlines, stray pixels), likely with Aseprite.
+
+---
+
 ## 2026-11-08 — Art: Chipmunk and Pingo lines
 
 **Done**

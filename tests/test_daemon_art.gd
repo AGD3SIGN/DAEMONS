@@ -11,8 +11,12 @@ func test_sheet_poses_come_from_the_right_cells() -> void:
 	assert_eq((DaemonSprites.pose("emperoute", "back") as AtlasTexture).region, Rect2(0, 128, 64, 64))
 	assert_eq((DaemonSprites.front("pengwan") as AtlasTexture).region, Rect2(0, 0, 64, 64), "front = idle")
 	assert_eq((DaemonSprites.back("pengwan") as AtlasTexture).region, Rect2(0, 128, 64, 64), "back = back idle")
-	assert_null(DaemonSprites.pose("dustbunny", "idle"), "no sheet yet")
-	assert_false(DaemonSprites.front("dustbunny") is AtlasTexture, "placeholder still works")
+	assert_null(DaemonSprites.pose("pengwan", "no_such_pose"))
+
+
+func test_every_daemon_has_art() -> void:
+	for species_id: String in DataRegistry.species:
+		assert_true(DaemonSprites.has_sheet(species_id), species_id + " has a sprite sheet")
 
 
 func test_importer_keys_out_magenta_and_keeps_a_white_belly() -> void:
