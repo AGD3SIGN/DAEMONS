@@ -52,18 +52,6 @@
       }
     },
     {
-      "type": "npc",
-      "id": "intern",
-      "x": 3,
-      "y": 6,
-      "facing": "right",
-      "dialogue": "intern",
-      "look": {
-        "shirt": "#e0a030",
-        "hair": "#603018"
-      }
-    },
-    {
       "type": "sign",
       "x": 10,
       "y": 2,
@@ -80,6 +68,38 @@
         "shirt": "#a04040",
         "hair": "#e0e0e0"
       }
+    },
+    {
+      "type": "npc",
+      "id": "manager",
+      "x": 9,
+      "y": 6,
+      "facing": "left",
+      "dialogue": "manager",
+      "look": {
+        "shirt": "#303848",
+        "hair": "#808080"
+      }
+    },
+    {
+      "type": "npc",
+      "id": "intern",
+      "x": 3,
+      "y": 6,
+      "facing": "right",
+      "dialogue": "intern",
+      "look": {
+        "shirt": "#e0a030",
+        "hair": "#603018"
+      }
+    },
+    {
+      "type": "trigger",
+      "x": 6,
+      "y": 7,
+      "dialogue": "manager_starter",
+      "unless_flag": "got_starter"
     }
-  ]
+  ],
+  "music": "help_desk"
 }

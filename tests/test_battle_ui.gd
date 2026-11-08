@@ -161,3 +161,23 @@ func test_text_box_waits_for_input() -> void:
 	box._unhandled_input(accept)
 	await wait_process_frames(2)
 	assert_true(done[0], "advanced")
+
+
+func test_long_text_is_split_into_pages() -> void:
+	var holder := Control.new()
+	holder.theme = UiTheme.get_theme()
+	holder.size = Vector2(320, 180)
+	add_child_autofree(holder)
+	var box := TextBox.new()
+	box.position = Vector2(2, 132)
+	box.size = Vector2(316, 46)
+	holder.add_child(box)
+	await wait_process_frames(2)
+	var long_text: String = DataRegistry.trainers["dana"]["intro"]
+	var pages := box.paginate(long_text)
+	assert_gt(pages.size(), 1, "Dana's intro needs more than one box")
+	assert_eq(" ".join(pages), " ".join(long_text.split(" ", false)), "no words lost")
+	for page in pages:
+		box._label.text = page
+		assert_lte(box._label.get_line_count(), TextBox.MAX_LINES, "page fits: " + page)
+	assert_eq(box.paginate("Short line.").size(), 1)

@@ -64,7 +64,7 @@
     "growth_rate": "medium_slow", "catch_rate": 45, "base_exp": 64, "log_yield": { "compute": 1 },
     "learnset": [
       { "level": 1, "move": "bump" }, { "level": 1, "move": "screen_glare" }, { "level": 7, "move": "code_injection" },
-      { "level": 10, "move": "infinite_loop" }, { "level": 13, "move": "patch_up" }
+      { "level": 10, "move": "infinite_loop" }, { "level": 12, "move": "data_dump" }, { "level": 13, "move": "patch_up" }
     ],
     "evolutions": [ { "to": "scriptor", "trigger": "level", "level": 16 } ],
     "cmdb": { "category": "Sprite / Cursor", "entry": "A blinking cursor that wandered off a terminal. Follows whoever types the fastest." } },
@@ -151,8 +151,8 @@
     "base_stats": { "uptime": 45, "throughput": 60, "hardening": 45, "compute": 40, "encryption": 45, "bandwidth": 65 },
     "growth_rate": "slow", "catch_rate": 190, "base_exp": 58, "log_yield": { "bandwidth": 1 },
     "learnset": [
-      { "level": 1, "move": "bump" }, { "level": 5, "move": "fast_ethernet" }, { "level": 10, "move": "latency_spike" },
-      { "level": 16, "move": "ping" }
+      { "level": 1, "move": "bump" }, { "level": 5, "move": "fast_ethernet" }, { "level": 9, "move": "ping" },
+      { "level": 12, "move": "latency_spike" }
     ],
     "evolutions": [ { "to": "patchviper", "trigger": "level", "level": 24 } ],
     "cmdb": { "category": "Snake / Ethernet Run", "entry": "Lives in cable tangles and is often mistaken for one. Bites when unplugged." } },
@@ -160,8 +160,8 @@
     "base_stats": { "uptime": 70, "throughput": 90, "hardening": 70, "compute": 65, "encryption": 70, "bandwidth": 95 },
     "growth_rate": "slow", "catch_rate": 90, "base_exp": 155, "log_yield": { "throughput": 2 },
     "learnset": [
-      { "level": 1, "move": "bump" }, { "level": 1, "move": "fast_ethernet" }, { "level": 10, "move": "latency_spike" },
-      { "level": 16, "move": "ping" }, { "level": 24, "move": "packet_flood" }, { "level": 30, "move": "bandwidth_hog" }
+      { "level": 1, "move": "bump" }, { "level": 1, "move": "fast_ethernet" }, { "level": 9, "move": "ping" },
+      { "level": 12, "move": "latency_spike" }, { "level": 24, "move": "packet_flood" }, { "level": 30, "move": "bandwidth_hog" }
     ],
     "evolutions": [],
     "cmdb": { "category": "Viper / Patch Panel", "entry": "Coils around patch panels and decides which ports get to talk. Strikes at unlabeled cables." } },
@@ -192,5 +192,25 @@
       { "level": 17, "move": "double_click" }, { "level": 25, "move": "data_dump" }, { "level": 35, "move": "firewall_up" }
     ],
     "evolutions": [],
-    "cmdb": { "category": "Jackrabbit / Removable Storage", "entry": "Can make a sudden clicking sound that ruins everything nearby. Collectors pay a fortune for working ones." } }
+    "cmdb": { "category": "Jackrabbit / Removable Storage", "entry": "Can make a sudden clicking sound that ruins everything nearby. Collectors pay a fortune for working ones." } },
+
+  { "id": "ramster", "name": "Ramster", "types": ["hardware"],
+    "base_stats": { "uptime": 50, "throughput": 70, "hardening": 55, "compute": 40, "encryption": 45, "bandwidth": 75 },
+    "growth_rate": "medium_fast", "catch_rate": 120, "base_exp": 92, "log_yield": { "bandwidth": 1 },
+    "learnset": [
+      { "level": 1, "move": "bump" }, { "level": 5, "move": "heatsink_slam" }, { "level": 8, "move": "double_click" },
+      { "level": 12, "move": "overclock" }, { "level": 18, "move": "hard_reset" }
+    ],
+    "evolutions": [],
+    "cmdb": { "category": "Hamster / Memory Module", "entry": "Runs on its wheel to keep its memory refreshed. Unplug it and it forgets everything, including you." } },
+
+  { "id": "servurtle", "name": "Servurtle", "types": ["hardware"],
+    "base_stats": { "uptime": 72, "throughput": 60, "hardening": 92, "compute": 50, "encryption": 70, "bandwidth": 28 },
+    "growth_rate": "slow", "catch_rate": 60, "base_exp": 130, "log_yield": { "hardening": 2 },
+    "learnset": [
+      { "level": 1, "move": "bump" }, { "level": 1, "move": "chassis_guard" }, { "level": 8, "move": "heatsink_slam" },
+      { "level": 12, "move": "defrag" }, { "level": 15, "move": "thermal_runaway" }, { "level": 22, "move": "hard_reset" }
+    ],
+    "evolutions": [],
+    "cmdb": { "category": "Turtle / Rack Server", "entry": "Carries a 2U server on its shell. Has not been rebooted since it hatched, and nobody dares try." } }
 ]

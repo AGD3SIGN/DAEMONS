@@ -126,7 +126,8 @@
       "x": 22,
       "y": 9,
       "facing": "left",
-      "dialogue": "kevin_town",
+      "dialogue": "kevin_town_pre",
+      "hide_if_flag": "got_starter",
       "look": {
         "shirt": "#40a0e0",
         "hair": "#e0b040"
@@ -163,8 +164,8 @@
       "y": 4,
       "w": 2,
       "h": 1,
-      "dialogue": "route_1_warning",
-      "once_flag": "warned_route_1"
+      "dialogue": "town_exit_block",
+      "unless_flag": "got_starter"
     },
     {
       "type": "hidden_item",
@@ -173,5 +174,6 @@
       "item": "coffee",
       "flag": "hidden_coffee_town"
     }
-  ]
+  ],
+  "music": "town"
 }

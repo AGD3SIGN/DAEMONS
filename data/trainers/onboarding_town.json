@@ -1,11 +1,47 @@
 {
-  "kevin_town": {
+  "kevin_rival_1_pingo": {
     "name": "Kevin",
-    "team": [["spamlet", 6], ["cablesnake", 7]],
+    "team": [
+      [
+        "pingo",
+        5
+      ]
+    ],
     "ai": "basic",
-    "prize": 300,
-    "intro": "Replying all to this challenge!",
-    "defeat": "Ugh. I'm sending a follow-up email about this.",
-    "after": "Next time I'm bringing a bigger attachment."
+    "prize": 200,
+    "story": true,
+    "intro": "Reply-all!",
+    "defeat": "I'm escalating this to my manager. Wait, it's the same manager.",
+    "after": "Next time I'm CC'ing my lawyer."
+  },
+  "kevin_rival_1_bitling": {
+    "name": "Kevin",
+    "team": [
+      [
+        "bitling",
+        5
+      ]
+    ],
+    "ai": "basic",
+    "prize": 200,
+    "story": true,
+    "intro": "Reply-all!",
+    "defeat": "I'm escalating this to my manager. Wait, it's the same manager.",
+    "after": "Next time I'm CC'ing my lawyer."
+  },
+  "kevin_rival_1_chipmunk": {
+    "name": "Kevin",
+    "team": [
+      [
+        "chipmunk",
+        5
+      ]
+    ],
+    "ai": "basic",
+    "prize": 200,
+    "story": true,
+    "intro": "Reply-all!",
+    "defeat": "I'm escalating this to my manager. Wait, it's the same manager.",
+    "after": "Next time I'm CC'ing my lawyer."
   }
 }

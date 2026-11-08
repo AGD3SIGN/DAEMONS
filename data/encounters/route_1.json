@@ -2,11 +2,42 @@
   "rate": 0.12,
   "zones": {
     "cable_tangle": [
-      { "species": "dustbunny",  "min": 2, "max": 4, "weight": 35 },
-      { "species": "wormby",     "min": 2, "max": 4, "weight": 25 },
-      { "species": "cablesnake", "min": 3, "max": 5, "weight": 20 },
-      { "species": "spamlet",    "min": 2, "max": 4, "weight": 15 },
-      { "species": "floppit",    "min": 4, "max": 5, "weight": 5 }
+      {
+        "species": "dustbunny",
+        "min": 2,
+        "max": 4,
+        "weight": 35
+      },
+      {
+        "species": "wormby",
+        "min": 2,
+        "max": 4,
+        "weight": 25
+      },
+      {
+        "species": "cablesnake",
+        "min": 3,
+        "max": 5,
+        "weight": 20
+      },
+      {
+        "species": "spamlet",
+        "min": 2,
+        "max": 4,
+        "weight": 15
+      },
+      {
+        "species": "floppit",
+        "min": 4,
+        "max": 5,
+        "weight": 5
+      },
+      {
+        "species": "ramster",
+        "min": 3,
+        "max": 5,
+        "weight": 10
+      }
     ]
   }
 }

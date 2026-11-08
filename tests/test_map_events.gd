@@ -127,7 +127,7 @@ func test_npc_gives_item_once_and_faces_you() -> void:
 	assert_eq(world.find_npc("mom").facing, Vector2i.LEFT, "Mom turned to face you")
 	await world.interact()
 	assert_eq(GameState.bag.get("coffee", 0), 3, "only once")
-	assert_true(_logged("Stay hydrated"))
+	assert_true(_logged("Go on, the Help Desk is the blue roof"))
 
 
 func test_yes_no_choice() -> void:
@@ -142,17 +142,20 @@ func test_yes_no_choice() -> void:
 	assert_true(GameState.flags.get("got_intern_dustbunny", false))
 
 
-func test_trigger_runs_once() -> void:
+func test_town_exit_is_blocked_until_you_have_a_starter() -> void:
+	GameState.reset()  # no Daemon, no got_starter flag
 	_open("onboarding_town")
 	_place(Vector2i(14, 5), Vector2i.UP)
 	await world.player.try_step(Vector2i.UP)
 	await _wait_idle()
-	assert_true(_logged("Hold up!"))
+	assert_true(_logged("Don't go into the cable tangles without a Daemon!"))
+	assert_eq(world.player.cell, Vector2i(14, 5), "walked back down")
+	GameState.flags["got_starter"] = true
 	var lines := world.dialogue_log.size()
-	await world.player.try_step(Vector2i.DOWN)
 	await world.player.try_step(Vector2i.UP)
 	await _wait_idle()
-	assert_eq(world.dialogue_log.size(), lines, "doesn't run twice")
+	assert_eq(world.dialogue_log.size(), lines, "free to go once you have one")
+	assert_eq(world.player.cell, Vector2i(14, 4))
 
 
 func test_hidden_item() -> void:
@@ -173,16 +176,25 @@ func test_npcs_block_and_can_move() -> void:
 	assert_eq(world.find_npc("kid").cell, Vector2i(11, 18), "danced up and down, back home")
 
 
-func test_kevin_asks_for_a_battle() -> void:
-	_open("onboarding_town")
+func test_manager_gives_a_starter_and_kevin_counter_picks() -> void:
+	GameState.reset()
+	SceneRouter.params = {"map": "help_desk"}
+	world = load(Overworld.SCENE).instantiate()
+	world.allow_scene_change = false
+	world.auto_advance_text = true
+	world.auto_choice = true  # takes the first starter (Chipmunk)
 	watch_signals(world)
-	_place(Vector2i(21, 9), Vector2i.RIGHT)
-	await world.interact()
+	add_child_autofree(world)
+	world.set_time_scale(0.0)
+	await wait_until(func() -> bool: return GameState.flags.get("got_starter", false) and world.is_idle(), 10.0)
+	assert_eq(GameState.active_stack.size(), 1)
+	assert_eq(GameState.active_stack[0].species_id, "chipmunk")
+	assert_eq(GameState.active_stack[0].level, 5)
+	assert_true(GameState.flags.get("starter_chipmunk", false))
 	assert_signal_emitted(world, "battle_requested")
 	var config: Dictionary = get_signal_parameters(world, "battle_requested")[0]
-	assert_eq(config["trainer_name"], "Kevin")
-	var team: Array = config["foe"].map(func(entry: Array) -> String: return "%s:%d" % [entry[0], int(entry[1])])
-	assert_eq(team, ["spamlet:6", "cablesnake:7"])
+	assert_eq(config["trainer_id"], "kevin_rival_1_pingo", "Kevin picks the starter that beats yours")
+	assert_true(config["story"])
 	assert_eq(config["return_scene"], Overworld.SCENE)
 
 

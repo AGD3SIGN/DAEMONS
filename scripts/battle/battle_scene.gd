@@ -73,8 +73,10 @@ func _ready() -> void:
 ## Battle config for a trainer from data/trainers/*.json.
 static func trainer_config(trainer_id: String) -> Dictionary:
 	var t: Dictionary = DataRegistry.trainers[trainer_id]
+	var music := "battle_boss" if t.has("cert") else ("battle_rival" if t.get("story", false) else "battle_trainer")
 	return {"foe": t["team"], "wild": false, "trainer_name": t["name"], "ai": t["ai"], "trainer_id": trainer_id,
-		"prize": int(t["prize"]), "defeat_text": t["defeat"], "cert": t.get("cert", "")}
+		"prize": int(t["prize"]), "defeat_text": t["defeat"], "cert": t.get("cert", ""),
+		"story": t.get("story", false), "music": t.get("music", music)}
 
 
 static func trainer_flag(trainer_id: String) -> String:
@@ -131,6 +133,7 @@ func _start() -> void:
 	text_box.auto_advance = auto
 	foe_panel.time_scale = time_scale
 	player_panel.time_scale = time_scale
+	AudioManager.play_music(config.get("music", "battle_wild" if state.is_wild else "battle_trainer"))
 	_run()
 
 
@@ -254,9 +257,13 @@ func _after_battle() -> void:
 			await _play_upgrade(d, int(e["index"]), e["to"])
 	match state.outcome:
 		"player_won":
+			AudioManager.play_music("victory")
 			await _trainer_rewards()
 		"player_lost":
-			await _black_out()
+			if config.get("story", false):
+				await _story_loss()
+			else:
+				await _black_out()
 	if state.outcome == "caught" and state.captured != null:
 		var caught := state.captured
 		caught.original_trainer_id = GameState.trainer_id
@@ -294,6 +301,18 @@ func _trainer_rewards() -> void:
 		GameState.certifications.append(cert)
 		AudioManager.play_sfx("confirm")
 		await text_box.show_text("You earned the %s!" % DataRegistry.certifications[cert]["name"])
+
+
+## Story battles (rival fights) don't black out: the story goes on either way.
+func _story_loss() -> void:
+	var trainer_id: String = config.get("trainer_id", "")
+	if not trainer_id.is_empty():
+		GameState.flags[trainer_flag(trainer_id)] = true
+	GameState.heal_stack()
+	var defeat: String = config.get("defeat_text", "")
+	if not defeat.is_empty():
+		await text_box.show_text("%s: Ha! Read receipt: you LOST. ...But fine. %s" % [trainer_name, defeat])
+	await text_box.show_text("Your Daemons got patched up.")
 
 
 ## Lose half your credits, heal up, wake at the last Help Desk.

@@ -161,3 +161,16 @@ NPC events can also have `"hide_if_flag": "flag"` to disappear once that flag is
 Saves alternate between the two files; loading picks the newest one whose checksum matches.
 When the save format changes, bump `SaveManager.SAVE_VERSION` and add a step to `migrate()`.
 Options live separately in user://settings.cfg.
+
+## Phase 7 additions
+**Maps:** optional `"music": "town"` (track id, see AudioManager) and `"tint": "#7c88bc"` (darkens the map, e.g. the Wi-Fi Dead Zone).
+**Laser doors:** `{"type": "barrier", "x": 7, "y": 9, "open_flags": ["port_1", "port_3"], "closed_flags": ["port_2"]}` blocks its tile until every open flag is set and no closed flag is. Re-checked after every dialogue.
+**Arrival triggers:** a trigger zone on a spawn point runs when you arrive there (cutscenes).
+**Trainers:** `"story": true` (rival fights: losing doesn't black out, the story continues). Music is picked automatically: battle_boss (has a cert), battle_rival (story), battle_trainer.
+
+| dialogue command | example |
+|---|---|
+| name_player | `{"cmd": "name_player"}` (presets or type a name) |
+| choose_starter | `{"cmd": "choose_starter", "options": ["chipmunk", "pingo", "bitling"], "level": 5}` sets got_starter + starter_<id> |
+| move_player | `{"cmd": "move_player", "path": ["down"]}` |
+| set_flag false | `{"cmd": "set_flag", "flag": "port_2", "value": false}` |

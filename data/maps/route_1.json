@@ -11,8 +11,8 @@
     "L": "ledge"
   },
   "rows": [
-    "TTTTTTTTTTTTTTTTTTTT",
-    "TTTTTTTTTTTTTTTTTTTT",
+    "TTTTTTTTT,,TTTTTTTTT",
+    "TTTTTTTTT,,TTTTTTTTT",
     "TT.......,,.......TT",
     "TT...f...,,S......TT",
     "TT.......,,.......TT",
@@ -46,6 +46,11 @@
       "x": 9,
       "y": 21,
       "facing": "up"
+    },
+    "north": {
+      "x": 9,
+      "y": 2,
+      "facing": "down"
     }
   },
   "events": [
@@ -73,7 +78,7 @@
       "type": "sign",
       "x": 11,
       "y": 3,
-      "dialogue": "route_1_closed"
+      "dialogue": "route_1_north_sign"
     },
     {
       "type": "hidden_item",
@@ -106,6 +111,33 @@
         "shirt": "#505868",
         "hair": "#a0a0a0"
       }
+    },
+    {
+      "type": "warp",
+      "x": 9,
+      "y": 0,
+      "to_map": "wifi_dead_zone",
+      "to_spawn": "south"
+    },
+    {
+      "type": "warp",
+      "x": 10,
+      "y": 0,
+      "to_map": "wifi_dead_zone",
+      "to_spawn": "south"
+    },
+    {
+      "type": "npc",
+      "id": "jogger_jo",
+      "x": 11,
+      "y": 12,
+      "facing": "left",
+      "trainer": "jogger_jo",
+      "look": {
+        "shirt": "#40c0a0",
+        "hair": "#e0c060"
+      }
     }
-  ]
+  ],
+  "music": "route"
 }

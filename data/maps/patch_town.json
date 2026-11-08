@@ -1,0 +1,180 @@
+{
+  "id": "patch_town",
+  "name": "Patch Town",
+  "music": "town",
+  "legend": {
+    ".": "grass",
+    ",": "path",
+    "\"": "cable_tangle",
+    "~": "water",
+    "T": "tree",
+    "F": "fence",
+    "f": "flowers",
+    "R": "roof_red",
+    "B": "roof_blue",
+    "W": "wall",
+    "w": "window",
+    "D": "door",
+    "L": "ledge",
+    "S": "sign"
+  },
+  "rows": [
+    "TTTTTTTTTTTTTT,,TTTTTTTTTTTTTT",
+    "TTTTTTTTTTTTTT,,TTTTTTTTTTTTTT",
+    "TT............,F............TT",
+    "TT.f..........,,..RRRRRRRRR.TT",
+    "TT..BBBBBBB.f.,,..RRRRRRRRR.TT",
+    "TT..BBBBBBB...,,..RRRRRRRRR.TT",
+    "TT..BBBBBBB...,,..RRRRRRRRR.TT",
+    "TT..WwwDwwW...,,..WwwwDwwwW.TT",
+    "TT.....,.S....,,......,.S...TT",
+    "TT.....,......,,......,...f.TT",
+    "TT..,,,,,,,,,,,,,,,,,,,,,,..TT",
+    "TT..,,,,,,,,,,,,,,,,,,,,,,..TT",
+    "TT.f........S.,,............TT",
+    "TT.......f....,,.f..........TT",
+    "TT..RRRRR.....,,............TT",
+    "TT..RRRRR.....,,...~~~~~....TT",
+    "TT..WwwwW.....,,...~~~~~....TT",
+    "TT............,,...~~~~~....TT",
+    "TT........f...,,............TT",
+    "TT.........f..,,.........f..TT",
+    "TT............,,............TT",
+    "TTTTTTTTTTTTTT,,TTTTTTTTTTTTTT"
+  ],
+  "spawns": {
+    "default": {
+      "x": 14,
+      "y": 20,
+      "facing": "up"
+    },
+    "south": {
+      "x": 14,
+      "y": 20,
+      "facing": "up"
+    },
+    "from_help_desk": {
+      "x": 7,
+      "y": 8,
+      "facing": "down"
+    },
+    "from_department": {
+      "x": 22,
+      "y": 8,
+      "facing": "down"
+    }
+  },
+  "events": [
+    {
+      "type": "warp",
+      "x": 14,
+      "y": 21,
+      "to_map": "wifi_dead_zone",
+      "to_spawn": "north"
+    },
+    {
+      "type": "warp",
+      "x": 15,
+      "y": 21,
+      "to_map": "wifi_dead_zone",
+      "to_spawn": "north"
+    },
+    {
+      "type": "warp",
+      "x": 7,
+      "y": 7,
+      "to_map": "help_desk_patch",
+      "to_spawn": "default"
+    },
+    {
+      "type": "warp",
+      "x": 22,
+      "y": 7,
+      "to_map": "department_1",
+      "to_spawn": "default"
+    },
+    {
+      "type": "sign",
+      "x": 12,
+      "y": 12,
+      "dialogue": "patch_town_sign"
+    },
+    {
+      "type": "sign",
+      "x": 9,
+      "y": 8,
+      "dialogue": "help_desk_sign"
+    },
+    {
+      "type": "sign",
+      "x": 24,
+      "y": 8,
+      "dialogue": "department_sign"
+    },
+    {
+      "type": "npc",
+      "id": "gate_guard",
+      "x": 14,
+      "y": 2,
+      "facing": "down",
+      "dialogue": "patch_gate",
+      "hide_if_flag": "patch_gate_open",
+      "look": {
+        "shirt": "#404858",
+        "hair": "#202020"
+      }
+    },
+    {
+      "type": "npc",
+      "id": "kevin_patch",
+      "x": 17,
+      "y": 9,
+      "facing": "down",
+      "dialogue": "kevin_patch",
+      "look": {
+        "shirt": "#40a0e0",
+        "hair": "#e0b040"
+      }
+    },
+    {
+      "type": "npc",
+      "id": "villager",
+      "x": 10,
+      "y": 13,
+      "facing": "down",
+      "wander": true,
+      "dialogue": "patch_villager",
+      "look": {
+        "shirt": "#c08040",
+        "hair": "#e0e0e0"
+      }
+    },
+    {
+      "type": "npc",
+      "id": "angler",
+      "x": 21,
+      "y": 18,
+      "facing": "up",
+      "dialogue": "patch_angler",
+      "look": {
+        "shirt": "#4060a0",
+        "hair": "#603018"
+      }
+    },
+    {
+      "type": "trigger",
+      "x": 14,
+      "y": 1,
+      "w": 2,
+      "h": 1,
+      "dialogue": "demo_end"
+    },
+    {
+      "type": "hidden_item",
+      "x": 3,
+      "y": 3,
+      "item": "overclock_chip",
+      "flag": "hidden_patch_chip"
+    }
+  ]
+}

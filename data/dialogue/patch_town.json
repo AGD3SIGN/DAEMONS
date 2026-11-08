@@ -1,0 +1,229 @@
+{
+  "dead_zone_sign": [
+    {
+      "text": "WI-FI DEAD ZONE"
+    },
+    {
+      "text": "No signal beyond this point. Daemons get restless without it."
+    }
+  ],
+  "patch_town_sign": [
+    {
+      "text": "PATCH TOWN"
+    },
+    {
+      "text": "Population: 214. Pending updates: 1,847."
+    }
+  ],
+  "department_sign": [
+    {
+      "text": "DESKTOP SUPPORT DEPARTMENT"
+    },
+    {
+      "text": "Certification trials daily. Department Head: Dana."
+    }
+  ],
+  "patch_gate": [
+    {
+      "if_cert": "desktop_support",
+      "then": [
+        {
+          "speaker": "Guard",
+          "text": "Desktop Support Cert... verified. You're cleared for Route 2."
+        },
+        {
+          "cmd": "set_flag",
+          "flag": "patch_gate_open"
+        },
+        {
+          "cmd": "move_npc",
+          "npc": "self",
+          "path": [
+            "left"
+          ]
+        },
+        {
+          "speaker": "Guard",
+          "text": "Mind the construction."
+        }
+      ],
+      "else": [
+        {
+          "speaker": "Guard",
+          "text": "Route 2 is restricted. Desktop Support Cert holders only."
+        },
+        {
+          "speaker": "Guard",
+          "text": "The Department is the big building to the east. Good luck with Dana."
+        }
+      ]
+    }
+  ],
+  "demo_end": [
+    {
+      "text": "Route 2 is still under construction. A sign reads: \"Port City - coming soon.\""
+    },
+    {
+      "text": "That's the end of the DAEMONS demo. Thanks for playing!"
+    },
+    {
+      "cmd": "move_player",
+      "path": [
+        "down"
+      ]
+    }
+  ],
+  "kevin_patch": [
+    {
+      "if_cert": "desktop_support",
+      "then": [
+        {
+          "speaker": "Kevin",
+          "text": "You beat Dana?! I'm drafting an email to complain. To who? Everyone."
+        }
+      ],
+      "else": [
+        {
+          "speaker": "Kevin",
+          "text": "I tried the Department already. Dana's Servurtle took ZERO damage."
+        },
+        {
+          "speaker": "Kevin",
+          "text": "Hardware hates Network moves and Software moves both... wait, no. Read the type chart, {player}."
+        }
+      ]
+    }
+  ],
+  "patch_villager": [
+    {
+      "speaker": "Villager",
+      "text": "Patch Town gets an update every night at 3 AM. Nobody knows what changes."
+    }
+  ],
+  "patch_angler": [
+    {
+      "speaker": "Angler",
+      "text": "I've been fishing here for an hour. Turns out it's a cooling pond."
+    }
+  ],
+  "patch_patron": [
+    {
+      "speaker": "Patron",
+      "text": "Dana's Department uses lots of Hardware Daemons. Network moves hit them hard."
+    }
+  ],
+  "supply_closet_patch": [
+    {
+      "speaker": "Supply Closet",
+      "text": "Welcome! We're the bigger Supply Closet. It's a slightly bigger closet."
+    },
+    {
+      "cmd": "open_shop",
+      "stock": [
+        "coffee",
+        "energy_drink",
+        "hard_reboot",
+        "firewall_rule",
+        "thumb_drive",
+        "encrypted_key",
+        "hardware_token"
+      ]
+    }
+  ],
+  "department_welcome": [
+    {
+      "speaker": "Receptionist",
+      "text": "Welcome to Desktop Support! The trial room is behind that laser door."
+    },
+    {
+      "speaker": "Receptionist",
+      "text": "Plug the right cables into the patch panels to open it. The patch notes are on the shelf."
+    }
+  ],
+  "port_1": [
+    {
+      "if_flag": "port_1",
+      "then": [
+        {
+          "text": "PORT 1: You unplug the cable."
+        },
+        {
+          "cmd": "set_flag",
+          "flag": "port_1",
+          "value": false
+        }
+      ],
+      "else": [
+        {
+          "text": "PORT 1: You plug a cable in. The status light blinks green."
+        },
+        {
+          "cmd": "set_flag",
+          "flag": "port_1"
+        }
+      ]
+    }
+  ],
+  "port_2": [
+    {
+      "if_flag": "port_2",
+      "then": [
+        {
+          "text": "PORT 2: You unplug the cable. The alarm stops."
+        },
+        {
+          "cmd": "set_flag",
+          "flag": "port_2",
+          "value": false
+        }
+      ],
+      "else": [
+        {
+          "text": "PORT 2: You plug a cable in. The status light blinks RED. Something is beeping."
+        },
+        {
+          "cmd": "set_flag",
+          "flag": "port_2"
+        }
+      ]
+    }
+  ],
+  "port_3": [
+    {
+      "if_flag": "port_3",
+      "then": [
+        {
+          "text": "PORT 3: You unplug the cable."
+        },
+        {
+          "cmd": "set_flag",
+          "flag": "port_3",
+          "value": false
+        }
+      ],
+      "else": [
+        {
+          "text": "PORT 3: You plug a cable in. The status light blinks green."
+        },
+        {
+          "cmd": "set_flag",
+          "flag": "port_3"
+        }
+      ]
+    }
+  ],
+  "patch_notes": [
+    {
+      "text": "PATCH NOTES v1.3: Only odd-numbered ports are live."
+    },
+    {
+      "text": "Port 2 is a honeypot. Do NOT plug anything into Port 2."
+    }
+  ],
+  "dana": [
+    {
+      "speaker": "Dana",
+      "text": "Hardware that refuses to die. That's Desktop Support. Keep at it, {player}."
+    }
+  ]
+}

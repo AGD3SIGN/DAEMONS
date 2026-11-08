@@ -1,0 +1,55 @@
+{
+  "tech_theo": {
+    "name": "Tech Theo",
+    "team": [
+      [
+        "fanbat",
+        10
+      ],
+      [
+        "dustbunny",
+        10
+      ]
+    ],
+    "ai": "basic",
+    "prize": 400,
+    "sight": 5,
+    "intro": "Ticket #4417: challenger detected. Resolving now!",
+    "defeat": "Ticket closed: won't fix.",
+    "after": "Dana's Servurtle hasn't been rebooted in years. Neither has Dana."
+  },
+  "tech_tina": {
+    "name": "Tech Tina",
+    "team": [
+      [
+        "ramster",
+        11
+      ]
+    ],
+    "ai": "basic",
+    "prize": 420,
+    "sight": 5,
+    "intro": "You solved the patch panel? Took me three weeks.",
+    "defeat": "I need to update my resume.",
+    "after": "Odd ports only. I still mess that up."
+  },
+  "dana": {
+    "name": "Department Head Dana",
+    "team": [
+      [
+        "ramster",
+        12
+      ],
+      [
+        "servurtle",
+        13
+      ]
+    ],
+    "ai": "basic",
+    "prize": 1400,
+    "cert": "desktop_support",
+    "intro": "So you're the new hire everyone's talking about. Desktop Support isn't about fancy code. It's about hardware that refuses to die. Show me yours!",
+    "defeat": "Hah! You fixed it without opening a ticket. You've earned this.",
+    "after": "Port City's Networking department is next, once the road opens. Bring a cable tester."
+  }
+}

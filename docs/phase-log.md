@@ -4,6 +4,40 @@ Newest entries at the top. Each entry: what's done, decisions, what's next.
 
 ---
 
+## 2026-11-07 — Phase 7: Vertical slice ✅ (code + content; art/audio still placeholder)
+
+**The slice:** New Game → wake up, name yourself → Mom → Help Desk → manager's e-waste bin starter choice → Kevin bursts in and takes the starter that beats yours → rival battle #1 (losing doesn't black out) → Route 1 (3 trainers) → Wi-Fi Dead Zone (dark, 2 trainers incl. a Ransom "Phisher") → Patch Town (Help Desk, shop, gate) → Desktop Support Department (patch-panel laser-door puzzle, 2 techs, Department Head Dana) → Desktop Support Cert → the gate opens → end-of-demo message.
+
+**Engine**
+- Arrival triggers (cutscene when you spawn onto a trigger), laser-door `barrier` events re-checked after dialogue, `move_player` scripted walking, map `music` + darkness `tint` (CanvasModulate).
+- Dialogue commands: `name_player` (presets or typed), `choose_starter` (sprite preview + CMDB line + confirm), `move_player`; `set_flag` with `value: false` toggles.
+- Story trainers (`"story": true`): no black-out on a loss; flag set either way.
+- Music hooks everywhere (AudioManager.play_music / play_jingle, files in assets/audio/music|jingles/<id>.ogg drop in by name): town, route, dead_zone, help_desk, department, battle_wild/trainer/rival/boss, victory, heal jingle. Silent until a soundtrack exists.
+- **Text paging:** long lines split into pages that fit 3 lines (was clipping; Bug #7).
+- New Game no longer hands out a placeholder starter; 3000 CR start.
+
+**Content**
+- 2 new Daemons: **Ramster** (Hardware, hamster + RAM stick) and **Servurtle** (Hardware, turtle + rack server). Slice roster: 11 (3 starters + Dustbunny, Wormby, Cablesnake, Spamlet, Floppit, Fanbat, Ramster, Servurtle).
+- Maps: Wi-Fi Dead Zone, Patch Town, Patch Town Help Desk, Desktop Support Dept.; Route 1 opened north; story edits to your house, Help Desk, Onboarding Town.
+- Trainers (8 + Kevin): Intern Ian, Sysadmin Sam, Jogger Jo (Route 1); Signal Hunter Hal, Phisher Pete (Dead Zone); Tech Theo, Tech Tina, Department Head Dana (Dept.).
+- Encounters: Dead Zone table (Cablesnake, Fanbat, Ramster, Spamlet, Floppit Lv5-8); Ramster added to Route 1.
+
+**Playtest by script — `SliceAudit` (docs/slice-audit.md):** walks every map from New Game with the real movement rules. Result: **0 problems** — 9/9 maps reachable, 17 arrival points all lead back home, every warp/NPC/sign/hidden item reachable, every checked flag is set somewhere, the cert is awarded where it's checked, the laser door is solvable. A test proves it catches a walled-off exit. Bug #2 (0 PP) judged low risk in the slice (lowest move set = 55 PP).
+
+**Balance (Dana, 60 simulated fights each, no items, player plays its best attack):**
+| Starter | Lv14 team | Lv12 team |
+|---|---|---|
+| Chipmunk | 60/60 | 22/60 |
+| Pingo | 60/60 | 59/60 |
+| Bitling | 56/60 | 8/60 |
+Tuning to get there: Cablesnake learns Ping at 9 (was 16) so it can cover Hardware; Bitling learns Data Dump at 12 (neutral coverage); Dana uses the basic AI and a 2-Daemon team (Ramster 12, Servurtle 13) — her original Fanbat + smart AI boosting was a wall for Bitling (5/60).
+
+**Tests:** test_vertical_slice.gd (6), test_slice_audit.gd (2), paging test; story tests replaced the old town-Kevin tests. 190/190 passing.
+
+**Not done in this phase (needs you / outside Claude Code):** real art (Aseprite: slice Daemons, characters, tilesets), music + SFX, and a human playthrough by someone new ("done when").
+
+---
+
 ## 2026-11-07 — Phase 6: Trainers, progression, saving ✅
 
 **Done**

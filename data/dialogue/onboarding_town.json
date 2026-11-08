@@ -20,57 +20,6 @@
       "text": "Please describe your issue in detail. Tickets that say \"it's broken\" will be closed."
     }
   ],
-  "route_1_warning": [
-    {
-      "speaker": "Kevin",
-      "text": "Hey! Hold up!"
-    },
-    {
-      "speaker": "Kevin",
-      "text": "Wild Daemons live in those cable tangles up north. Don't go in without a Daemon of your own!"
-    },
-    {
-      "speaker": "Kevin",
-      "text": "I've CC'd the whole town on this, by the way."
-    }
-  ],
-  "kevin_town": [
-    {
-      "if_flag": "trainer_kevin_town",
-      "then": [
-        {
-          "speaker": "Kevin",
-          "text": "Next time I'm bringing a bigger attachment."
-        }
-      ],
-      "else": [
-        {
-          "speaker": "Kevin",
-          "text": "Oh, it's you! Did you see my email? The one with 47 attachments?"
-        },
-        {
-          "speaker": "Kevin",
-          "choice": "Want to test our Daemons? Quick battle?",
-          "yes": [
-            {
-              "speaker": "Kevin",
-              "text": "Replying all to this challenge!"
-            },
-            {
-              "cmd": "start_battle",
-              "trainer": "kevin_town"
-            }
-          ],
-          "no": [
-            {
-              "speaker": "Kevin",
-              "text": "Fine. I'll schedule a meeting about it."
-            }
-          ]
-        }
-      ]
-    }
-  ],
   "townsperson": [
     {
       "speaker": "Townsperson",
@@ -106,8 +55,19 @@
       "if_flag": "got_mom_coffee",
       "then": [
         {
-          "speaker": "Mom",
-          "text": "Stay hydrated! Coffee counts. Probably."
+          "if_flag": "got_starter",
+          "then": [
+            {
+              "speaker": "Mom",
+              "text": "A Daemon of your own! Does it need a charger? A blanket? A firewall?"
+            }
+          ],
+          "else": [
+            {
+              "speaker": "Mom",
+              "text": "Go on, the Help Desk is the blue roof. Don't be late on day one!"
+            }
+          ]
         }
       ],
       "else": [
@@ -230,11 +190,6 @@
       "text": "Onboarding Town is just south."
     }
   ],
-  "route_1_closed": [
-    {
-      "text": "SCHEDULED MAINTENANCE: The road to Patch Town is closed until further notice."
-    }
-  ],
   "server_rack": [
     {
       "text": "You logged in to the Server Rack."
@@ -261,6 +216,178 @@
         "thumb_drive",
         "encrypted_key"
       ]
+    }
+  ],
+  "intro_wake": [
+    {
+      "text": "BZZZT. BZZZT. Your alarm goes off. 7:59 AM."
+    },
+    {
+      "text": "Today is your first day on the Help Desk at Root Valley IT."
+    },
+    {
+      "text": "Your badge photo looks terrible. Your name is printed below it..."
+    },
+    {
+      "cmd": "name_player"
+    },
+    {
+      "text": "...{player}. That's you. Time to go!"
+    },
+    {
+      "speaker": "Mom",
+      "text": "{player}! Your manager is waiting at the Help Desk. It's the building with the blue roof, south of the big road."
+    }
+  ],
+  "kevin_town_pre": [
+    {
+      "speaker": "Kevin",
+      "text": "Oh hey, new hire! The manager's handing out Daemons at the Help Desk today."
+    },
+    {
+      "speaker": "Kevin",
+      "text": "I'm getting the best one. I already sent a calendar invite about it."
+    }
+  ],
+  "town_exit_block": [
+    {
+      "speaker": "Kevin",
+      "text": "Hey! Don't go into the cable tangles without a Daemon!"
+    },
+    {
+      "speaker": "Kevin",
+      "text": "Wild ones bite. The manager's handing them out at the Help Desk. Blue roof!"
+    },
+    {
+      "cmd": "move_player",
+      "path": [
+        "down"
+      ]
+    }
+  ],
+  "manager_starter": [
+    {
+      "speaker": "Manager",
+      "text": "There you are, {player}! Welcome to the Help Desk."
+    },
+    {
+      "speaker": "Manager",
+      "text": "Every new hire gets a Daemon to help with tickets. We keep them in the e-waste bin. Don't ask."
+    },
+    {
+      "speaker": "Manager",
+      "text": "Pick one. They all still have their warranty stickers."
+    },
+    {
+      "cmd": "choose_starter",
+      "options": [
+        "chipmunk",
+        "pingo",
+        "bitling"
+      ],
+      "level": 5
+    },
+    {
+      "speaker": "Manager",
+      "text": "Good choice. Treat it well and it'll outlast every laptop in this building."
+    },
+    {
+      "text": "The front door bursts open!"
+    },
+    {
+      "speaker": "Kevin",
+      "text": "WAIT! I'm a new hire too! I replied-all to the onboarding email!"
+    },
+    {
+      "if_flag": "starter_chipmunk",
+      "then": [
+        {
+          "speaker": "Kevin",
+          "text": "I'll take Pingo! Network beats Hardware. It's in the manual. I read the manual."
+        },
+        {
+          "cmd": "start_battle",
+          "trainer": "kevin_rival_1_pingo"
+        }
+      ],
+      "else": [
+        {
+          "if_flag": "starter_pingo",
+          "then": [
+            {
+              "speaker": "Kevin",
+              "text": "I'll take Bitling! Software reroutes Network. Checkmate."
+            },
+            {
+              "cmd": "start_battle",
+              "trainer": "kevin_rival_1_bitling"
+            }
+          ],
+          "else": [
+            {
+              "speaker": "Kevin",
+              "text": "I'll take Chipmunk! You can't patch bad RAM. Ha!"
+            },
+            {
+              "cmd": "start_battle",
+              "trainer": "kevin_rival_1_chipmunk"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "manager": [
+    {
+      "if_cert": "desktop_support",
+      "then": [
+        {
+          "speaker": "Manager",
+          "text": "A Desktop Support Cert already? You'll have my job by Friday. Please don't."
+        }
+      ],
+      "else": [
+        {
+          "speaker": "Manager",
+          "text": "Your first assignment: head north through Route 1 and the Wi-Fi Dead Zone to Patch Town."
+        },
+        {
+          "speaker": "Manager",
+          "text": "The Desktop Support department there runs certification trials. Earn your first cert."
+        },
+        {
+          "if_flag": "got_manager_keys",
+          "then": [
+            {
+              "speaker": "Manager",
+              "text": "Use Thumb Drives on weakened wild Daemons. Quarantine them, don't fight them all."
+            }
+          ],
+          "else": [
+            {
+              "speaker": "Manager",
+              "text": "Take these. Company property, so try not to lose them."
+            },
+            {
+              "cmd": "give_item",
+              "item": "thumb_drive",
+              "count": 5
+            },
+            {
+              "cmd": "set_flag",
+              "flag": "got_manager_keys"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "route_1_north_sign": [
+    {
+      "text": "NORTH: Wi-Fi Dead Zone, then Patch Town."
+    },
+    {
+      "text": "Bring a map. Your phone won't help."
     }
   ]
 }

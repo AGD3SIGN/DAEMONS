@@ -119,13 +119,21 @@ func test_talking_to_an_unbeaten_trainer_starts_the_battle() -> void:
 	assert_eq(world.find_npc("intern_ian").cell, Vector2i(11, 18), "didn't need to walk")
 
 
-func test_kevin_uses_his_trainer_data() -> void:
-	GameState.add_daemon(_daemon("chipmunk", 10))
-	_open("onboarding_town")
-	watch_signals(world)
-	world.player.setup(world.map, Vector2i(21, 9), Vector2i.RIGHT)
-	await world.interact()
-	assert_eq(get_signal_parameters(world, "battle_requested")[0]["trainer_id"], "kevin_town")
+func test_losing_the_rival_battle_is_not_a_black_out() -> void:
+	var weak := _daemon("dustbunny", 2)
+	weak.current_uptime = 1
+	var team: Array[DaemonInstance] = [weak]
+	GameState.active_stack.assign(team)
+	GameState.credits = 3000
+	GameState.location = {"map": "help_desk", "x": 6, "y": 7, "facing": "up"}
+	var config := BattleScene.trainer_config("kevin_rival_1_pingo")
+	config["items"] = {}
+	var scene := await _battle(config)
+	assert_eq(scene.result["outcome"], "player_lost")
+	assert_eq(GameState.credits, 3000, "no credits lost")
+	assert_eq(GameState.location["map"], "help_desk", "you stay where you were")
+	assert_eq(weak.current_uptime, weak.max_uptime(), "patched up")
+	assert_true(GameState.flags.get("trainer_kevin_rival_1_pingo", false), "the story moves on")
 
 
 # --- battle results ----------------------------------------------------------
@@ -313,12 +321,12 @@ func test_beat_a_trainer_save_quit_relaunch_continue() -> void:
 
 # --- misc --------------------------------------------------------------------
 
-func test_new_game_gives_a_placeholder_start() -> void:
+func test_new_game_starts_with_nothing() -> void:
 	var title_script: GDScript = load("res://scripts/ui/title_screen.gd")
 	title_script.new_game()
-	assert_eq(GameState.active_stack.size(), 1)
+	assert_eq(GameState.active_stack.size(), 0, "the starter comes from the manager")
 	assert_between(GameState.trainer_id, 10000, 99999)
-	assert_eq(GameState.credits, 500)
+	assert_eq(GameState.credits, 3000)
 
 
 func test_options_persist() -> void:

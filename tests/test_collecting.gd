@@ -57,7 +57,7 @@ func test_encounter_tables_and_rolls() -> void:
 		species_seen[hit["species"]] = int(species_seen.get(hit["species"], 0)) + 1
 		if hit["species"] == "cablesnake":
 			assert_between(int(hit["level"]), 3, 5)
-	assert_eq(species_seen.size(), 5, "every slot shows up")
+	assert_eq(species_seen.size(), 6, "every slot shows up")
 	assert_between(int(species_seen["dustbunny"]), 550, 850, "about 35%")
 	assert_lt(int(species_seen["floppit"]), int(species_seen["spamlet"]), "rare slot is rarer")
 	assert_true(Encounters.roll("route_1", "cable_tangle", rng, 1, false, 0.0).is_empty(), "rate 0")
@@ -194,6 +194,7 @@ func test_stack_order_and_lead() -> void:
 func test_deposit_through_the_server_rack_menu() -> void:
 	GameState.add_daemon(_daemon("chipmunk", 12))
 	GameState.add_daemon(_daemon("dustbunny", 4))
+	GameState.flags["got_starter"] = true  # skip the manager's arrival cutscene
 	_open("help_desk")
 	var done := [false]
 	var flow := func() -> void:
@@ -216,6 +217,7 @@ func test_deposit_through_the_server_rack_menu() -> void:
 
 func test_buy_through_the_supply_closet() -> void:
 	GameState.credits = 500
+	GameState.flags["got_starter"] = true
 	_open("help_desk")
 	var done := [false]
 	var flow := func() -> void:

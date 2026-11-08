@@ -1,10 +1,15 @@
 extends Node
-## Plays music (with crossfades) and one-shot SFX, and owns volume settings.
-## Music hooks arrive in Phase 7; volume options in Phase 6.
+## Plays music, jingles and one-shot SFX, and owns volume settings.
+## Music: play_music("town") loads res://assets/audio/music/town.ogg (or .wav/.mp3) and loops it.
+## Until the soundtrack exists the hooks are silent, but `current_music` still tracks what
+## should be playing (tests check it). Track ids used so far: town, route, dead_zone, help_desk,
+## department, battle_wild, battle_trainer, battle_rival, battle_boss, victory. Jingles: heal.
 ## Until real SFX exist, a few placeholder blips are synthesized in code (square waves).
 ## Real files at res://assets/audio/sfx/<id>.wav or .ogg replace them automatically.
 
 const SFX_DIR := "res://assets/audio/sfx/"
+const MUSIC_DIR := "res://assets/audio/music/"
+const JINGLE_DIR := "res://assets/audio/jingles/"
 const MIX_RATE := 22050
 ## id -> [start Hz, end Hz, seconds, volume 0..1]
 const PLACEHOLDER_SFX := {
@@ -16,11 +21,60 @@ const PLACEHOLDER_SFX := {
 var music_volume: float = 1.0
 var sfx_volume: float = 1.0
 
+var current_music: String = ""
+var last_jingle: String = ""
+
 var _sfx_cache: Dictionary = {}
+var _music_player: AudioStreamPlayer
 
 
-func play_music(_track_id: String) -> void:
-	pass
+func play_music(track_id: String) -> void:
+	if track_id == current_music:
+		return
+	current_music = track_id
+	if _music_player == null:
+		_music_player = AudioStreamPlayer.new()
+		add_child(_music_player)
+	_music_player.stop()
+	var stream := _find_stream(MUSIC_DIR, track_id)
+	if stream == null:
+		return
+	if stream is AudioStreamOggVorbis or stream is AudioStreamMP3:
+		stream.loop = true
+	_music_player.stream = stream
+	_music_player.volume_db = linear_to_db(maxf(music_volume, 0.0001))
+	_music_player.play()
+
+
+func stop_music() -> void:
+	current_music = ""
+	if _music_player != null:
+		_music_player.stop()
+
+
+## Short fanfare (e.g. "heal" at the Help Desk). Placeholder blips until real files exist.
+func play_jingle(jingle_id: String) -> void:
+	last_jingle = jingle_id
+	var stream := _find_stream(JINGLE_DIR, jingle_id)
+	if stream == null:
+		for sfx in ["select", "confirm", "confirm"]:
+			play_sfx(sfx)
+		return
+	var player := AudioStreamPlayer.new()
+	player.stream = stream
+	player.volume_db = linear_to_db(maxf(music_volume, 0.0001))
+	add_child(player)
+	player.finished.connect(player.queue_free)
+	player.play()
+
+
+func _find_stream(dir: String, id: String) -> AudioStream:
+	if id.is_empty():
+		return null
+	for ext in [".ogg", ".wav", ".mp3"]:
+		if ResourceLoader.exists(dir + id + ext):
+			return load(dir + id + ext)
+	return null
 
 
 func play_sfx(sfx_id: String) -> void:

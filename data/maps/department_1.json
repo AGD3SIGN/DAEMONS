@@ -1,0 +1,133 @@
+{
+  "id": "department_1",
+  "name": "Desktop Support Dept.",
+  "music": "department",
+  "legend": {
+    "_": "floor",
+    "I": "interior_wall",
+    "M": "exit_mat",
+    "k": "bookshelf",
+    "c": "server_rack",
+    "b": "bed",
+    "t": "table",
+    "p": "plant",
+    "r": "rug",
+    "C": "counter"
+  },
+  "rows": [
+    "IIIIIIIIIIIIIII",
+    "IIIIIIIIIIIIIII",
+    "I_____c_c_____I",
+    "I_____________I",
+    "I_p_________p_I",
+    "I_____________I",
+    "I_____________I",
+    "I_____________I",
+    "I_____________I",
+    "IIIIIII_IIIIIII",
+    "I_____________I",
+    "I_c___c___c___I",
+    "I_____________I",
+    "I____rrrrr__k_I",
+    "I_____________I",
+    "I_____________I",
+    "I_____________I",
+    "IIIIIIIMIIIIIII"
+  ],
+  "spawns": {
+    "default": {
+      "x": 7,
+      "y": 16,
+      "facing": "up"
+    }
+  },
+  "events": [
+    {
+      "type": "warp",
+      "x": 7,
+      "y": 17,
+      "to_map": "patch_town",
+      "to_spawn": "from_department"
+    },
+    {
+      "type": "trigger",
+      "x": 7,
+      "y": 16,
+      "dialogue": "department_welcome",
+      "once_flag": "department_welcomed"
+    },
+    {
+      "type": "sign",
+      "x": 2,
+      "y": 11,
+      "dialogue": "port_1"
+    },
+    {
+      "type": "sign",
+      "x": 6,
+      "y": 11,
+      "dialogue": "port_2"
+    },
+    {
+      "type": "sign",
+      "x": 10,
+      "y": 11,
+      "dialogue": "port_3"
+    },
+    {
+      "type": "sign",
+      "x": 12,
+      "y": 13,
+      "dialogue": "patch_notes"
+    },
+    {
+      "type": "barrier",
+      "x": 7,
+      "y": 9,
+      "open_flags": [
+        "port_1",
+        "port_3"
+      ],
+      "closed_flags": [
+        "port_2"
+      ]
+    },
+    {
+      "type": "npc",
+      "id": "tech_theo",
+      "x": 2,
+      "y": 6,
+      "facing": "right",
+      "trainer": "tech_theo",
+      "look": {
+        "shirt": "#3858c0",
+        "hair": "#202020"
+      }
+    },
+    {
+      "type": "npc",
+      "id": "tech_tina",
+      "x": 12,
+      "y": 7,
+      "facing": "left",
+      "trainer": "tech_tina",
+      "look": {
+        "shirt": "#3858c0",
+        "hair": "#e0a040"
+      }
+    },
+    {
+      "type": "npc",
+      "id": "dana",
+      "x": 7,
+      "y": 3,
+      "facing": "down",
+      "trainer": "dana",
+      "dialogue": "dana",
+      "look": {
+        "shirt": "#802030",
+        "hair": "#c0c0c0"
+      }
+    }
+  ]
+}

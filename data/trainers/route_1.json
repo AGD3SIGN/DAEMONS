@@ -1,7 +1,16 @@
 {
   "intern_ian": {
     "name": "Intern Ian",
-    "team": [["dustbunny", 4], ["wormby", 4]],
+    "team": [
+      [
+        "dustbunny",
+        4
+      ],
+      [
+        "wormby",
+        5
+      ]
+    ],
     "ai": "basic",
     "prize": 160,
     "sight": 3,
@@ -11,12 +20,36 @@
   },
   "sysadmin_sam": {
     "name": "Sysadmin Sam",
-    "team": [["cablesnake", 6]],
+    "team": [
+      [
+        "cablesnake",
+        6
+      ],
+      [
+        "dustbunny",
+        5
+      ]
+    ],
     "ai": "basic",
     "prize": 240,
     "sight": 4,
     "intro": "Nobody walks through my cable run without a change request!",
     "defeat": "Fine. Change approved.",
     "after": "Label your cables. I'm begging you."
+  },
+  "jogger_jo": {
+    "name": "Jogger Jo",
+    "team": [
+      [
+        "ramster",
+        6
+      ]
+    ],
+    "ai": "basic",
+    "prize": 180,
+    "sight": 2,
+    "intro": "I run every morning. My Ramster runs every millisecond!",
+    "defeat": "Out of breath. And out of RAM.",
+    "after": "Stretch before you battle. Trust me."
   }
 }

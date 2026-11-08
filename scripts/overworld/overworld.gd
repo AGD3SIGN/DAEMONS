@@ -37,6 +37,8 @@ var _fade: ColorRect
 var _banner: Panel
 var _banner_label: Label
 var _busy := false   # dialogue or warp in progress
+var _scripted_move := false  # move_player in a cutscene: steps don't warp/trigger/encounter
+var _tint: CanvasModulate
 
 
 func _ready() -> void:
@@ -52,6 +54,7 @@ func _ready() -> void:
 		player.setup(map, Vector2i(int(loc["x"]), int(loc["y"])), MapView.FACING_VECTORS.get(loc.get("facing", "down"), Vector2i.DOWN))
 	else:
 		load_map(DEFAULT_MAP)
+	_check_arrival.call_deferred()
 
 
 func set_time_scale(value: float) -> void:
@@ -83,10 +86,40 @@ func load_map(map_id: String, spawn_name: String = "default") -> bool:
 	var sp := map.spawn(spawn_name)
 	player.setup(map, sp["cell"], sp["facing"])
 	_spawn_events()
+	refresh_barriers()
 	_remember_location()
+	_apply_map_mood()
 	_show_banner(String(map.map_data.get("name", map_id)))
 	map_loaded.emit(map_id)
 	return true
+
+
+## Map music and the optional darkness tint (e.g. the Wi-Fi Dead Zone).
+func _apply_map_mood() -> void:
+	AudioManager.play_music(String(map.map_data.get("music", "")))
+	if _tint == null:
+		_tint = CanvasModulate.new()
+		add_child(_tint)
+	_tint.color = Color(String(map.map_data.get("tint", "#ffffff")))
+
+
+## Re-checks every laser door (after dialogue changes flags).
+func refresh_barriers() -> void:
+	for event in events:
+		if event is BarrierEvent:
+			event.refresh()
+
+
+## Trigger zones under the player when they arrive (cutscenes on entering a map).
+func _check_arrival() -> void:
+	if not is_inside_tree() or _busy:
+		return
+	for event in events:
+		if event is TriggerEvent and event.contains(player.cell) and event.is_active():
+			_busy = true
+			player.input_enabled = false
+			await event.run()
+			return
 
 
 func _spawn_events() -> void:
@@ -110,6 +143,8 @@ static func _new_event(type: String) -> MapEvent:
 			return NpcEvent.new()
 		"trigger":
 			return TriggerEvent.new()
+		"barrier":
+			return BarrierEvent.new()
 	return HiddenItemEvent.new()
 
 
@@ -126,7 +161,7 @@ func is_idle() -> bool:
 
 func _event_at(cell: Vector2i) -> MapEvent:
 	for event in events:
-		if event.cell == cell and not event is WarpEvent and not event is TriggerEvent:
+		if event.cell == cell and not event is WarpEvent and not event is TriggerEvent and not event is BarrierEvent:
 			return event
 	return null
 
@@ -135,6 +170,8 @@ func _event_at(cell: Vector2i) -> MapEvent:
 
 func _on_stepped(cell: Vector2i, _behavior: String) -> void:
 	_remember_location()
+	if _scripted_move:
+		return
 	for event in events:
 		if event is WarpEvent and event.cell == cell:
 			warp_to(event.to_map, event.to_spawn)
@@ -240,6 +277,7 @@ func warp_to(map_id: String, spawn_name: String = "default") -> void:
 	await _fade_to(0.0)
 	_busy = false
 	player.input_enabled = true
+	_check_arrival()
 
 
 func _fade_to(alpha: float) -> void:
@@ -281,6 +319,7 @@ func run_dialogue(dialogue_id: String, npc: NpcEvent = null) -> void:
 	player.input_enabled = false
 	text_box.visible = true
 	await DialogueRunner.new(self, npc).run(DataRegistry.get_dialogue(dialogue_id))
+	refresh_barriers()
 	text_box.visible = false
 	_speaker_tab.visible = false
 	_busy = false
@@ -313,6 +352,17 @@ func ask(question: String, speaker: String = "") -> bool:
 		await get_tree().process_frame
 		return bool(auto_choice)
 	return await menu.confirm()
+
+
+## Walks the player along a path during a cutscene (no warps, triggers or encounters).
+func move_player(path: Array) -> void:
+	_scripted_move = true
+	for dir_name: Variant in path:
+		var dir: Vector2i = MapView.FACING_VECTORS.get(dir_name, Vector2i.ZERO)
+		if dir != Vector2i.ZERO:
+			await player.try_step(dir)
+	_scripted_move = false
+	_remember_location()
 
 
 func start_battle(config: Dictionary) -> void:

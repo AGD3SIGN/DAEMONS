@@ -6,6 +6,7 @@ extends Panel
 signal advanced
 
 const AUTO_PAUSE := 0.6   # seconds a line stays up when it doesn't wait for input
+const MAX_LINES := 3      # longer text is split into pages at word boundaries
 
 var time_scale: float = 1.0   # 0 = instant (tests)
 var auto_advance: bool = false  # never wait for input (AI-vs-AI / tests)
@@ -62,10 +63,36 @@ func is_waiting() -> bool:
 
 
 ## Types the text out, then waits for input (wait = true) or pauses briefly (wait = false).
+## Text longer than the box is split into pages; every page but the last waits for input.
 func show_text(text: String, wait: bool = true) -> void:
 	if text.is_empty():
 		return
 	set_reserved_right(0)
+	var pages := paginate(text)
+	for i in pages.size():
+		await _show_page(pages[i], wait or i < pages.size() - 1)
+
+
+## Splits text into pages that fit MAX_LINES at the box's current width.
+func paginate(text: String) -> PackedStringArray:
+	if _label.size.x < 40.0:
+		return PackedStringArray([text])  # not laid out yet; show it as one page
+	var pages := PackedStringArray()
+	var page := ""
+	for word in text.split(" ", false):
+		var candidate := word if page.is_empty() else page + " " + word
+		_label.text = candidate
+		if _label.get_line_count() > MAX_LINES and not page.is_empty():
+			pages.append(page)
+			page = word
+		else:
+			page = candidate
+	if not page.is_empty():
+		pages.append(page)
+	return pages
+
+
+func _show_page(text: String, wait: bool) -> void:
 	_label.text = text
 	_label.visible_characters = 0
 	_typing = true

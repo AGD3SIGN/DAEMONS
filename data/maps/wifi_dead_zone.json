@@ -1,0 +1,142 @@
+{
+  "id": "wifi_dead_zone",
+  "name": "Wi-Fi Dead Zone",
+  "music": "dead_zone",
+  "tint": "#7c88bc",
+  "legend": {
+    ".": "grass",
+    ",": "path",
+    "\"": "cable_tangle",
+    "~": "water",
+    "T": "tree",
+    "F": "fence",
+    "f": "flowers",
+    "R": "roof_red",
+    "B": "roof_blue",
+    "W": "wall",
+    "w": "window",
+    "D": "door",
+    "L": "ledge",
+    "S": "sign"
+  },
+  "rows": [
+    "TTTTTTTTTTT,,TTTTTTTTTTT",
+    "TTTTTTTTTTT,,TTTTTTTTTTT",
+    "TTTTTTTTTTT,,TTTTTTTTTTT",
+    "TTTTTTTTTTT,,,,,,,,,TTTT",
+    "TTTTTTTTTTT,,,,,,,,,TTTT",
+    "TTTTTTTTTTTTT.....,,TTTT",
+    "TTTTTTTTTTTTT.\"\"\".,,TTTT",
+    "TTTTTTTTTTTTT.\"\"\".,,TTTT",
+    "TTTTTTTTTTTTT.\"\"\".,,TTTT",
+    "TTTTTTTTTTTTT.\"\"\".,,TTTT",
+    "TTTTTTTTTTTTTf....,,TTTT",
+    "TTTT,,,,,,,,,,,,,,,,TTTT",
+    "TTTT,,,,,,,,,,,,,,,,TTTT",
+    "TTTT,,....fTTTTTTTTTTTTT",
+    "TTTT,,.\"\"\".TTTTTTTTTTTTT",
+    "TTTT,,.\"\"\".TTTTTTTTTTTTT",
+    "TTTT,,.\"\"\".TTTTTTTTTTTTT",
+    "TTTT,,.\"\"\".TTTTTTTTTTTTT",
+    "TTTT,,f....TTTTTTTTTTTTT",
+    "TTTT,,,,,,,,,.......fTTT",
+    "TTTT,,,,,,,,,..\"\"\"\"\".TTT",
+    "TTTTTTTTTTT,,..\"\"\"\"\".TTT",
+    "TTTTTTTTTTT,,..\"\"\"\"\".TTT",
+    "TTTTTTTTTTS,,........TTT",
+    "TTTTTTTTTTT,,TTTTTTTTTTT",
+    "TTTTTTTTTTT,,TTTTTTTTTTT"
+  ],
+  "spawns": {
+    "default": {
+      "x": 11,
+      "y": 24,
+      "facing": "up"
+    },
+    "south": {
+      "x": 11,
+      "y": 24,
+      "facing": "up"
+    },
+    "north": {
+      "x": 11,
+      "y": 1,
+      "facing": "down"
+    }
+  },
+  "events": [
+    {
+      "type": "warp",
+      "x": 11,
+      "y": 25,
+      "to_map": "route_1",
+      "to_spawn": "north"
+    },
+    {
+      "type": "warp",
+      "x": 12,
+      "y": 25,
+      "to_map": "route_1",
+      "to_spawn": "north"
+    },
+    {
+      "type": "warp",
+      "x": 11,
+      "y": 0,
+      "to_map": "patch_town",
+      "to_spawn": "south"
+    },
+    {
+      "type": "warp",
+      "x": 12,
+      "y": 0,
+      "to_map": "patch_town",
+      "to_spawn": "south"
+    },
+    {
+      "type": "sign",
+      "x": 10,
+      "y": 23,
+      "dialogue": "dead_zone_sign"
+    },
+    {
+      "type": "npc",
+      "id": "signal_hunter_hal",
+      "x": 6,
+      "y": 16,
+      "facing": "left",
+      "trainer": "signal_hunter_hal",
+      "look": {
+        "shirt": "#608040",
+        "hair": "#704020"
+      }
+    },
+    {
+      "type": "npc",
+      "id": "phisher_pete",
+      "x": 17,
+      "y": 7,
+      "facing": "right",
+      "trainer": "phisher_pete",
+      "look": {
+        "shirt": "#303038",
+        "hair": "#101010"
+      }
+    },
+    {
+      "type": "hidden_item",
+      "x": 9,
+      "y": 18,
+      "item": "hard_reboot",
+      "flag": "hidden_dead_zone_reboot"
+    },
+    {
+      "type": "hidden_item",
+      "x": 20,
+      "y": 23,
+      "item": "encrypted_key",
+      "count": 2,
+      "flag": "hidden_dead_zone_keys"
+    }
+  ]
+}

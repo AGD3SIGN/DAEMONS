@@ -26,4 +26,4 @@ func test_browse_level_and_upgrade() -> void:
 
 func test_species_wraps_around() -> void:
 	_lab.change_species(-1)
-	assert_eq(_lab.daemon.species_id, "zipdrive")
+	assert_eq(_lab.daemon.species_id, "servurtle")

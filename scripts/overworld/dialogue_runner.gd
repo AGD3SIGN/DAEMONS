@@ -14,6 +14,10 @@ extends RefCounted
 ##   {"cmd": "move_npc", "npc": "kid", "path": ["left", "right"]}   npc "self" = whoever is talking
 ##   {"cmd": "open_shop", "stock": ["coffee", "thumb_drive"]}   Supply Closet buy/sell
 ##   {"cmd": "open_rack"}                                         Server Rack storage
+##   {"cmd": "name_player"}                                       pick or type the player's name
+##   {"cmd": "choose_starter", "options": ["chipmunk", "pingo", "bitling"], "level": 5}
+##        sets flags got_starter and starter_<species>
+##   {"cmd": "move_player", "path": ["down"]}                     walk the player in a cutscene
 ## Text can use {player} for the player's name.
 
 ## Until the intro asks for a name (Phase 7).
@@ -73,6 +77,7 @@ func _command(step: Dictionary) -> void:
 				await world.show_message("Your stack is full, so %s went to the Server Rack." % d.display_name())
 		"heal_party":
 			GameState.heal_stack()
+			AudioManager.play_jingle("heal")
 			# Black-outs bring you back to the last place you healed.
 			GameState.last_help_desk = GameState.location.duplicate()
 		"start_battle":
@@ -93,6 +98,20 @@ func _command(step: Dictionary) -> void:
 			await world.field_menus.shop(step["stock"])
 		"open_rack":
 			await world.field_menus.rack_screen()
+		"name_player":
+			GameState.player_name = await world.field_menus.choose_name()
+		"choose_starter":
+			var species_id := await world.field_menus.choose_starter(step["options"])
+			var rng := RandomNumberGenerator.new()
+			rng.randomize()
+			var starter := DaemonInstance.create(species_id, int(step.get("level", 5)), rng, GameState.trainer_id)
+			GameState.add_daemon(starter)
+			GameState.flags["got_starter"] = true
+			GameState.flags["starter_" + species_id] = true
+			AudioManager.play_jingle("heal")
+			await world.show_message("You received %s!" % starter.display_name())
+		"move_player":
+			await world.move_player(step["path"])
 		"move_npc":
 			var who: NpcEvent = npc if step["npc"] == "self" else world.find_npc(step["npc"])
 			if who != null:

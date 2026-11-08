@@ -25,6 +25,9 @@ const DIALOGUE_COMMANDS := {
 	"move_npc": ["npc", "path"],
 	"open_shop": ["stock"],
 	"open_rack": [],
+	"name_player": [],
+	"choose_starter": ["options"],
+	"move_player": ["path"],
 }
 const EVENT_TYPES := {
 	"warp": ["to_map", "to_spawn"],
@@ -32,6 +35,7 @@ const EVENT_TYPES := {
 	"npc": ["id", "facing"],  # plus "dialogue" and/or "trainer"
 	"trigger": ["dialogue"],
 	"hidden_item": ["item", "flag"],
+	"barrier": ["open_flags"],
 }
 
 ## effect id -> required param names
@@ -181,6 +185,8 @@ func validate_map(m: Variant, map_id: String) -> PackedStringArray:
 	if m.get("id") != map_id:
 		_err(where, "'id' must match the file name")
 	_string(m, "name", where)
+	if m.has("tint") and (typeof(m["tint"]) != TYPE_STRING or not Color.html_is_valid(m["tint"])):
+		_err(where, "'tint' must be a hex color")
 	var legend: Variant = m.get("legend")
 	if typeof(legend) != TYPE_DICTIONARY or legend.is_empty():
 		_err(where, "'legend' must map characters to tile names")
@@ -265,6 +271,9 @@ func _validate_events(events: Variant, where: String, rows: Array, legend: Dicti
 					_int(e, "w", ew, 1, width)
 				if e.has("h"):
 					_int(e, "h", ew, 1, rows.size())
+			"barrier":
+				if typeof(e["open_flags"]) != TYPE_ARRAY:
+					_err(ew, "'open_flags' must be a list of flags")
 			"hidden_item":
 				if not items.has(e["item"]):
 					_err(ew, "unknown item '%s'" % str(e["item"]))
@@ -370,6 +379,24 @@ func _validate_command(step: Dictionary, where: String) -> void:
 						_err(where, "unknown item '%s' in stock" % str(item_id))
 					elif int(items[item_id].get("price", 0)) <= 0:
 						_err(where, "'%s' has no price, so it can't be sold in a shop" % str(item_id))
+		"choose_starter":
+			var options: Variant = step["options"]
+			if typeof(options) != TYPE_ARRAY or options.is_empty():
+				_err(where, "'options' must be a list of species")
+			else:
+				for species_id: Variant in options:
+					if not species.has(species_id):
+						_err(where, "unknown species '%s'" % str(species_id))
+			if step.has("level"):
+				_int(step, "level", where, 1, 100)
+		"move_player":
+			var player_path: Variant = step["path"]
+			if typeof(player_path) != TYPE_ARRAY or player_path.is_empty():
+				_err(where, "'path' must be a list of directions")
+			else:
+				for dir: Variant in player_path:
+					if not dir in FACINGS:
+						_err(where, "unknown direction '%s' in path" % str(dir))
 		"move_npc":
 			_string(step, "npc", where)
 			var path: Variant = step["path"]
@@ -432,6 +459,8 @@ func _validate_trainers(raw: Variant) -> void:
 				_int(t, "sight", where, 0, 10)
 			for key in ["intro", "defeat", "after"]:
 				_string(t, key, where)
+			if t.has("story") and typeof(t["story"]) != TYPE_BOOL:
+				_err(where, "'story' must be true or false")
 			if t.has("cert") and not certifications.has(t["cert"]):
 				_err(where, "unknown certification '%s'" % str(t["cert"]))
 

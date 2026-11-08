@@ -60,17 +60,14 @@ func show_menu() -> void:
 				SceneRouter.goto(Overworld.SCENE)
 		"NEW GAME":
 			new_game()
-			SceneRouter.goto(Overworld.SCENE, {"map": NEW_GAME_MAP})
+			SceneRouter.goto(Overworld.SCENE, {"map": NEW_GAME_MAP, "spawn": "new_game"})
 		"DEBUG MENU":
 			SceneRouter.goto(DEBUG_MENU_SCENE)
 
 
-## Fresh run. Phase 7 replaces the placeholder starter with the intro and starter choice.
+## Fresh run: no Daemons yet. You wake up at home (intro trigger), name yourself, and get a
+## starter from the manager at the Help Desk.
 static func new_game() -> void:
 	GameState.reset()
 	GameState.trainer_id = randi_range(10000, 99999)
-	GameState.credits = 500
-	GameState.bag = {"coffee": 3, "thumb_drive": 5}
-	var rng := RandomNumberGenerator.new()
-	rng.randomize()
-	GameState.add_daemon(DaemonInstance.create("chipmunk", 5, rng, GameState.trainer_id))  # placeholder starter
+	GameState.credits = 3000

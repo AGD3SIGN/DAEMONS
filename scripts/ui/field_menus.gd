@@ -100,6 +100,90 @@ func open_pause() -> void:
 	side.close()
 
 
+# --- story pickers -----------------------------------------------------------
+
+const NAME_PRESETS: PackedStringArray = ["ALEX", "SAM", "RILEY", "JORDAN", "CASEY"]
+const NAME_MAX := 10
+
+## Pick a preset or type one. Returns the chosen name (never empty).
+func choose_name() -> String:
+	if world != null and world.auto_choice != null:
+		return NAME_PRESETS[0].capitalize()
+	var options := NAME_PRESETS.duplicate()
+	options.append("TYPE NAME")
+	while true:
+		var r := await side.choose("YOUR NAME?", options)
+		side.close()
+		if r["action"] != "pick":
+			continue  # a name is required
+		if r["index"] < NAME_PRESETS.size():
+			return NAME_PRESETS[r["index"]].capitalize()
+		var typed := await _type_name()
+		if not typed.is_empty():
+			return typed
+	return NAME_PRESETS[0].capitalize()
+
+
+func _type_name() -> String:
+	var panel := Panel.new()
+	panel.anchor_left = 0.5
+	panel.anchor_right = 0.5
+	panel.offset_left = -90
+	panel.offset_right = 90
+	panel.offset_top = 40
+	panel.offset_bottom = 84
+	add_child(panel)
+	var label := Label.new()
+	label.text = "Type a name, then Enter:"
+	label.position = Vector2(8, 5)
+	panel.add_child(label)
+	var edit := LineEdit.new()
+	edit.max_length = NAME_MAX
+	edit.position = Vector2(8, 18)
+	edit.size = Vector2(164, 18)
+	panel.add_child(edit)
+	edit.grab_focus()
+	var typed: String = await edit.text_submitted
+	panel.queue_free()
+	return typed.strip_edges()
+
+
+## Starter choice from the e-waste bin. Shows each one's sprite, type and CMDB line.
+func choose_starter(options: Array) -> String:
+	if world != null and world.auto_choice != null:
+		return options[0]
+	var preview := TextureRect.new()
+	preview.anchor_left = 1
+	preview.anchor_right = 1
+	preview.offset_left = -84
+	preview.offset_top = 30
+	preview.size = Vector2(64, 64)
+	add_child(preview)
+	var rows := PackedStringArray()
+	for species_id: String in options:
+		var data := DataRegistry.get_species(species_id)
+		rows.append("%-10s %s" % [data["name"], String(DataRegistry.types[data["types"][0]]["name"]).to_upper()])
+	list.describe = func(i: int) -> String:
+		preview.texture = DaemonSprites.front(options[i])
+		var data := DataRegistry.get_species(options[i])
+		return "%s. %s" % [data["cmdb"]["category"], data["cmdb"]["entry"]]
+	var chosen := ""
+	while chosen.is_empty():
+		var r := await list.choose("THE E-WASTE BIN", rows)
+		if r["action"] != "pick":
+			continue
+		var name: String = DataRegistry.get_species(options[r["index"]])["name"]
+		list.visible = false
+		preview.visible = false
+		if await world.ask("Take %s?" % name):
+			chosen = options[r["index"]]
+		preview.visible = true
+	list.describe = Callable()
+	list.close()
+	preview.queue_free()
+	return chosen
+
+
 # --- save and options --------------------------------------------------------
 
 func save_flow() -> void:

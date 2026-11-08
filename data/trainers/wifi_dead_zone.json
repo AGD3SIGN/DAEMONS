@@ -1,0 +1,40 @@
+{
+  "signal_hunter_hal": {
+    "name": "Signal Hunter Hal",
+    "team": [
+      [
+        "cablesnake",
+        7
+      ],
+      [
+        "fanbat",
+        7
+      ]
+    ],
+    "ai": "basic",
+    "prize": 260,
+    "sight": 4,
+    "intro": "One bar! I had ONE BAR right here! You scared it off!",
+    "defeat": "Zero bars. Zero Daemons. Zero hope.",
+    "after": "If you find signal, don't tell anyone. It's mine."
+  },
+  "phisher_pete": {
+    "name": "Phisher Pete",
+    "team": [
+      [
+        "spamlet",
+        8
+      ],
+      [
+        "wormby",
+        8
+      ]
+    ],
+    "ai": "basic",
+    "prize": 320,
+    "sight": 3,
+    "intro": "Hey friend! Just click this totally normal link and verify your password. ...No? Then battle!",
+    "defeat": "Ransom will hear about this. Check your spam folder.",
+    "after": "I'm not with Ransom. Who's Ransom? Never heard of them."
+  }
+}

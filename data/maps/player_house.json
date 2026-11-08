@@ -28,6 +28,11 @@
       "x": 4,
       "y": 6,
       "facing": "up"
+    },
+    "new_game": {
+      "x": 8,
+      "y": 4,
+      "facing": "down"
     }
   },
   "events": [
@@ -55,6 +60,14 @@
       "x": 7,
       "y": 2,
       "dialogue": "home_pc"
+    },
+    {
+      "type": "trigger",
+      "x": 8,
+      "y": 4,
+      "dialogue": "intro_wake",
+      "once_flag": "intro_done"
     }
-  ]
+  ],
+  "music": "town"
 }

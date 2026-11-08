@@ -5,6 +5,7 @@ help desk in **Root Valley**: catch Daemons in Quarantine Keys, earn Certificati
 **Ransom** syndicate. Built with Godot 4.7 (GDScript).
 
 > Working title. Placeholder art is generated in code until real art lands.
+> The playable demo runs from New Game to the first Certification (about 30-45 minutes).
 
 ## Run it
 ```bash
@@ -49,7 +50,7 @@ godot --headless --path . res://scenes/debug/console_battle.tscn
 - [x] Phase 4 — Overworld, maps, NPCs, dialogue
 - [x] Phase 5 — Wild encounters, Active Stack, Bag, CMDB, Server Rack, shop
 - [x] Phase 6 — Trainers, Certifications, black-out, saving, options
-- [ ] Phase 7 — Vertical slice (intro, Route 1, Patch Town, first Department)
+- [x] Phase 7 — Vertical slice (intro, Route 1, Wi-Fi Dead Zone, Patch Town, Desktop Support Dept.)
 - [ ] Phase 8+ — Platform builds, Steam page, content, polish, launch
 
 ## Legal
