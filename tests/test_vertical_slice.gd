@@ -171,11 +171,17 @@ func test_typed_name_box_fits_and_can_back_out() -> void:
 	run.call()
 	await wait_process_frames(2)
 	var panel: Panel = menus.get_node("NameEntry")
+	var box := Rect2(Vector2.ZERO, panel.size).grow(-2.0)
+	var rects := []
 	for part in ["Prompt", "Edit", "Hint"]:
 		var c: Control = panel.get_node(part)
-		var right: float = c.position.x + maxf(c.size.x, c.get_combined_minimum_size().x)
-		assert_lte(right, panel.size.x - 4.0, part + " fits inside the box")
-	assert_lte(panel.size.x, get_viewport().get_visible_rect().size.x, "box fits the screen")
+		# What's actually drawn: never smaller than the control's (theme) minimum size.
+		var r := Rect2(c.position, c.size.max(c.get_combined_minimum_size()))
+		assert_true(box.encloses(r), "%s %s fits inside the box %s" % [part, r, box])
+		rects.append(r)
+	assert_false(rects[0].intersects(rects[1]), "prompt and text field don't overlap")
+	assert_false(rects[1].intersects(rects[2]), "text field and hint don't overlap")
+	assert_true(get_viewport().get_visible_rect().encloses(panel.get_global_rect()), "box fits the screen")
 	var edit: LineEdit = panel.get_node("Edit")
 	edit.text_submitted.emit("  Z@ra_9!  ")
 	await wait_process_frames(2)

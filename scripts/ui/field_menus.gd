@@ -133,26 +133,29 @@ func _type_name() -> String:
 	panel.offset_left = -NAME_PANEL_W / 2.0
 	panel.offset_right = NAME_PANEL_W / 2.0
 	panel.offset_top = 36
-	panel.offset_bottom = 88
 	add_child(panel)
 	var label := Label.new()
 	label.name = "Prompt"
 	label.text = "YOUR NAME?"
-	label.position = Vector2(8, 5)
+	label.position = Vector2(8, 6)
 	panel.add_child(label)
 	var edit := LineEdit.new()
 	edit.name = "Edit"
 	edit.max_length = NAME_MAX
 	edit.placeholder_text = "max %d letters" % NAME_MAX
-	edit.position = Vector2(8, 17)
-	edit.size = Vector2(NAME_PANEL_W - 16, 18)
 	panel.add_child(edit)
 	var hint := Label.new()
 	hint.name = "Hint"
 	hint.text = name_entry_hint()
-	hint.position = Vector2(8, 38)
 	hint.add_theme_color_override("font_color", Color("505068"))
 	panel.add_child(hint)
+	# Stack by real (theme) heights so nothing overlaps whatever the font and padding are.
+	var y := label.position.y + label.get_combined_minimum_size().y + 3.0
+	edit.position = Vector2(8, y)
+	edit.size = Vector2(NAME_PANEL_W - 16, edit.get_combined_minimum_size().y)
+	y += edit.size.y + 4.0
+	hint.position = Vector2(8, y)
+	panel.offset_bottom = panel.offset_top + y + hint.get_combined_minimum_size().y + 7.0
 	edit.grab_focus()
 	var cancel := func() -> void:
 		edit.text_submitted.emit("")
