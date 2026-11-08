@@ -4,6 +4,17 @@ Newest entries at the top. Each entry: what's done, decisions, what's next.
 
 ---
 
+## 2026-11-08 — Phase 8: iOS build with a free Apple account
+
+**Done**
+- `tools/export_ios.sh` exports the Xcode project to `build/ios/`, filling the Team ID from the git-ignored `.ios_team_id` only during the export.
+- iOS preset now exports the project only (`export_project_only=true`); Xcode signs automatically with the free Personal Team.
+- Checked: the project compiles for iPhone (unsigned `xcodebuild`, BUILD SUCCEEDED). The iOS Simulator can't link on Apple Silicon because Godot's simulator library is Intel-only.
+
+**Next:** run it on the iPhone from Xcode.
+
+---
+
 ## 2026-11-08 — Roster: same-animal evolution lines + sprite prompts
 
 **Done**

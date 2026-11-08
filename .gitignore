@@ -17,3 +17,6 @@ mono_crash.*.json
 .DS_Store
 *.tmp
 .vscode/
+
+# Local Apple Team ID for iOS exports (tools/export_ios.sh)
+.ios_team_id

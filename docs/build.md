@@ -11,7 +11,7 @@ Export presets live in `export_presets.cfg` (macOS, Windows, iOS, Android). Ever
 | macOS (universal, ad-hoc signed) | ✅ `build/macos/Daemons.zip` (60 MB) | ✅ launches and loads all data |
 | Windows x86_64 | ✅ `build/windows/Daemons.exe` (110 MB) | needs a Windows PC |
 | Android arm64 (debug) | ✅ `build/android/Daemons.apk` (29 MB), targetSdk 36 | needs a phone (USB debugging) |
-| iOS | needs your Team ID in the preset | needs an iPhone + Xcode |
+| iOS (free Personal Team) | ✅ Xcode project in `build/ios/` via `tools/export_ios.sh`; compiles for iPhone | needs your iPhone (Run from Xcode) |
 
 ## 0. One-time setup (all platforms)
 
@@ -32,7 +32,7 @@ Command-line export (any preset, after setup):
 godot --headless --export-release "macOS" build/macos/Daemons.zip
 godot --headless --export-release "Windows" build/windows/Daemons.exe
 godot --headless --export-debug   "Android" build/android/Daemons.apk
-godot --headless --export-debug   "iOS"     build/ios/Daemons.ipa
+./tools/export_ios.sh   # iOS: fills in your Team ID from .ios_team_id, writes build/ios/Daemons.xcodeproj
 ```
 
 ## 1. macOS (universal: Apple Silicon + Intel)
@@ -58,12 +58,24 @@ godot --headless --export-debug   "iOS"     build/ios/Daemons.ipa
 
 ## 3. iOS (iPhone / iPad)
 
-Needs Xcode (installed: Xcode 27) and an Apple account.
-1. Find your **Team ID**: developer.apple.com → Membership (paid), or Xcode → Settings → Accounts (a free Personal Team works for your own phone; apps expire after 7 days).
-2. Put it in the iOS preset: `application/app_store_team_id`.
-3. Export → Godot writes an Xcode project next to the .ipa path (`build/ios/`).
-4. Open `build/ios/Daemons.xcodeproj` in Xcode, plug in your iPhone, pick it as the run target, press Run.
-   First time: on the phone, Settings → General → VPN & Device Management → trust your developer certificate. Also turn on Developer Mode (Settings → Privacy & Security).
+Works with a **free** Apple ID (Personal Team). No paid program needed to play on your own iPhone.
+
+1. Xcode → Settings → Accounts: sign in with your Apple ID.
+2. Your Team ID is in your development certificate (the code after `OU=`):
+   `security find-certificate -c "Apple Development" -p | openssl x509 -noout -subject`
+3. Save it in `.ios_team_id` at the project root. It's git-ignored because it's a personal account detail;
+   the preset in `export_presets.cfg` keeps an empty Team ID. (Or set `IOS_TEAM_ID` in the environment.)
+4. `./tools/export_ios.sh` writes the Xcode project to `build/ios/` (the preset exports the project only;
+   Xcode does the signing).
+5. Open `build/ios/Daemons.xcodeproj`, plug in your iPhone, pick it as the run target, press Run.
+   First time on the phone: Settings → Privacy & Security → Developer Mode on (restart), and
+   Settings → General → VPN & Device Management → trust your developer certificate.
+
+Free Personal Team limits: the app stops opening after **7 days** (plug in and Run again to renew), max 3
+of your own apps on the device, no TestFlight or App Store. The paid program ($99/yr) removes those.
+
+- **No iOS Simulator on Apple Silicon:** Godot's official simulator library is Intel-only, so a simulator
+  build fails to link (`_main` not found for arm64). Test on a real iPhone instead.
 - Orientation is landscape (either way). Touch controls appear automatically. Notch/home-indicator safe areas are respected.
 
 ## 4. Android
@@ -99,7 +111,7 @@ Try the touch controls on a Mac: Debug Menu → "Touch controls (try with mouse)
 
 - [ ] Mac: export, run the slice start to finish
 - [ ] Windows PC: run the .exe
-- [ ] iPhone: run from Xcode, play with touch controls
+- [ ] iPhone: run from Xcode, play with touch controls (project exports and compiles)
 - [ ] Android phone: install the APK, play with touch controls
 - [ ] (Distribution) Developer ID + notarized Mac build
 
