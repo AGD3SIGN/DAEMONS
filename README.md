@@ -4,8 +4,9 @@ A GBA-style, top-down, turn-based monster collector where tech comes alive. You'
 help desk in **Root Valley**: catch Daemons in Quarantine Keys, earn Certifications, and stop the
 **Ransom** syndicate. Built with Godot 4.7 (GDScript).
 
-> Working title. Placeholder art is generated in code until real art lands.
-> The playable demo runs from New Game to the first Certification (about 30-45 minutes).
+> Working title. All 22 Daemons have pixel-art battle sprites (AI-drafted, imported and polished with Aseprite);
+> overworld characters are still placeholders. The playable demo runs from New Game to the first Certification
+> (about 30-45 minutes). Builds for macOS, Windows, Android and iOS: [docs/build.md](docs/build.md).
 
 ## Run it
 ```bash
@@ -24,6 +25,8 @@ In debug builds the title menu also has a **Debug Menu** (test battles, the Daem
 | Run (hold) | Shift | X | — |
 | Menu | Space / Tab | Start | — |
 
+On phones and tablets an on-screen d-pad and buttons appear (drag in the lower left to move, push far to run).
+
 ## Tests
 ```bash
 godot --headless -s addons/gut/gut_cmdln.gd -gdir=res://tests -gexit
@@ -39,8 +42,21 @@ godot --headless --path . res://scenes/debug/console_battle.tscn
 | `data/` | All game content as JSON: Daemons, moves, types, items, maps, dialogue, encounters, trainers. Format: [docs/data-format.md](docs/data-format.md) |
 | `scripts/battle/sim/` | The battle rules, pure and seeded (no UI) |
 | `scripts/battle/`, `scripts/overworld/`, `scripts/ui/` | Battle screen, overworld, menus |
-| `autoload/` | DataRegistry, GameState, SaveManager, Settings, AudioManager, SceneRouter, ScreenFitter |
-| `docs/` | [Design doc](docs/design.md), [phase log](docs/phase-log.md) |
+| `autoload/` | DataRegistry, GameState, SaveManager, AudioManager, SceneRouter, ScreenFitter, Settings, InputPrompts, TouchControls, AppLifecycle |
+| `assets/sprites/daemons/` | One battle sheet per Daemon: `<id>_sheet.png`, 4x4 poses of 64x64 |
+| `art_src/daemons/` | Source art (ChatGPT sheets), one folder per evolution line. Not shipped in builds |
+| `tools/` | Art importer and polish script, art-prompt generator, iOS export and Simulator scripts |
+| `docs/` | [Design doc](docs/design.md), [phase log](docs/phase-log.md), [data formats](docs/data-format.md), [builds](docs/build.md), [art prompts](docs/art-prompts/README.md) |
+
+## Art
+Daemon sprites go from a ChatGPT prompt to the game in four steps (details in [docs/art-prompts/README.md](docs/art-prompts/README.md)):
+1. Generate a sheet with the prompt for that Daemon's stage (`docs/art-prompts/`, built by `tools/art_prompts/build_prompts.py`).
+2. Save it as `art_src/daemons/<NN-Line>/<id>_gpt_v<stage>.png` (or `.webp`). 4x4 (16 poses) and 6x2 (12 poses) layouts both work.
+3. Import every sheet: `godot --headless -s tools/art_import/import_sheet.gd -- --all` (background removed, poses cut to 64x64).
+4. Polish to ~15 colors with Aseprite through the Aseprite MCP: `tools/art_import/polish_sheet.py` (setup in the vault's Assets > Tools).
+
+A test fails if a Daemon has no sheet or a sheet has more than 16 colors. Each move's battle effect is data too:
+`"fx"` in `data/moves.json` (see [docs/data-format.md](docs/data-format.md)).
 
 ## Progress
 - [x] Phase 0 — Project setup
@@ -51,7 +67,9 @@ godot --headless --path . res://scenes/debug/console_battle.tscn
 - [x] Phase 5 — Wild encounters, Active Stack, Bag, CMDB, Server Rack, shop
 - [x] Phase 6 — Trainers, Certifications, black-out, saving, options
 - [x] Phase 7 — Vertical slice (intro, Route 1, Wi-Fi Dead Zone, Patch Town, Desktop Support Dept.)
-- [~] Phase 8 — Platform builds: touch controls, prompts, lifecycle, export presets done ([docs/build.md](docs/build.md)); device builds pending
+- [~] Phase 8 — Platform builds: touch controls, prompts, lifecycle, export presets, Mac/Windows/Android/iOS builds and the iOS Simulator done ([docs/build.md](docs/build.md)); testing on real devices pending
+- [x] Art: all 22 Daemons drawn, imported and polished; every move has its own battle effect
+- [ ] Overworld character art
 - [ ] Phase 9+ — Steam page, content, polish, launch
 
 ## Legal
