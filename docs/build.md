@@ -74,8 +74,11 @@ Works with a **free** Apple ID (Personal Team). No paid program needed to play o
 Free Personal Team limits: the app stops opening after **7 days** (plug in and Run again to renew), max 3
 of your own apps on the device, no TestFlight or App Store. The paid program ($99/yr) removes those.
 
-- **No iOS Simulator on Apple Silicon:** Godot's official simulator library is Intel-only, so a simulator
-  build fails to link (`_main` not found for arm64). Test on a real iPhone instead.
+- **No iOS Simulator on Apple Silicon (with the stock Godot templates):** Godot's official simulator
+  library is Intel-only. An arm64 simulator build fails to link (`_main` not found), and an Intel-only
+  build compiles but the iOS 26 Simulator refuses to install it ("needs to be updated", no matching arch).
+  Fix if needed: build Godot's iOS simulator template for arm64 from source (scons, about 30-60 min).
+  Otherwise test on a real iPhone.
 - Orientation is landscape (either way). Touch controls appear automatically. Notch/home-indicator safe areas are respected.
 
 ## 4. Android
