@@ -4,6 +4,15 @@ Export presets live in `export_presets.cfg` (macOS, Windows, iOS, Android). Ever
 `*.json` game data and leaves out `tests/`, `tools/`, `docs/` and the GUT addon. Builds go to `build/`
 (git-ignored). App id everywhere: `com.agd3sign.daemons` (change it in the presets if you want another).
 
+## Status on this Mac (2026-11-08)
+
+| Platform | Build | Ran it? |
+|---|---|---|
+| macOS (universal, ad-hoc signed) | ✅ `build/macos/Daemons.zip` (60 MB) | ✅ launches and loads all data |
+| Windows x86_64 | ✅ `build/windows/Daemons.exe` (110 MB) | needs a Windows PC |
+| Android arm64 (debug) | ✅ `build/android/Daemons.apk` (29 MB), targetSdk 36 | needs a phone (USB debugging) |
+| iOS | needs your Team ID in the preset | needs an iPhone + Xcode |
+
 ## 0. One-time setup (all platforms)
 
 1. **Godot 4.7.2** (`brew install --cask godot`).
@@ -59,14 +68,18 @@ Needs Xcode (installed: Xcode 27) and an Apple account.
 
 ## 4. Android
 
-Needs a JDK and the Android SDK (not installed on this Mac yet):
+Needs a JDK and the Android SDK. **This Mac is already set up** (2026-11-08): OpenJDK 17 (Homebrew, no admin password needed),
+Android command-line tools, platform-tools, build-tools 35, Android 35 platform, Godot Editor Settings pointed at both, and a debug keystore.
+To set up another Mac:
 ```bash
-brew install --cask temurin@17
+brew install openjdk@17
 brew install --cask android-commandlinetools
-sdkmanager "platform-tools" "build-tools;35.0.0" "platforms;android-35" "cmdline-tools;latest"
+export JAVA_HOME=/opt/homebrew/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home
+yes | sdkmanager --licenses   # accepts Google's Android SDK License Agreement
+sdkmanager "platform-tools" "build-tools;35.0.0" "platforms;android-35"
 ```
-1. Godot editor → Editor Settings → Export → Android: set **Java SDK Path** (`/usr/libexec/java_home -v 17`) and **Android SDK Path** (usually `/opt/homebrew/share/android-commandlinetools`).
-2. A debug keystore is created automatically for debug exports.
+1. Godot editor → Editor Settings → Export → Android: **Java SDK Path** = the JAVA_HOME above, **Android SDK Path** = `/opt/homebrew/share/android-commandlinetools`.
+2. Debug keystore: `~/Library/Application Support/Godot/keystores/debug.keystore` (standard debug values: alias androiddebugkey, password android).
 3. On the phone: Settings → About → tap Build number 7 times → Developer options → USB debugging on.
 4. Export Debug, then install: `adb install -r build/android/Daemons.apk` (or use the one-click deploy button in the editor toolbar).
 - **Google Play:** release builds need your own upload keystore (keep it safe forever) and an `.aab` (turn on Gradle build). New personal Play accounts need **12 testers opted in for 14 straight days** before going live; start that early.
@@ -89,3 +102,7 @@ Try the touch controls on a Mac: Debug Menu → "Touch controls (try with mouse)
 - [ ] iPhone: run from Xcode, play with touch controls
 - [ ] Android phone: install the APK, play with touch controls
 - [ ] (Distribution) Developer ID + notarized Mac build
+
+## Project settings that exports need
+- `rendering/textures/vram_compression/import_etc2_astc = true`: required for Apple Silicon/universal Mac and mobile exports (doesn't change the pixel art).
+- `application/config/icon = res://assets/ui/icon.png`: placeholder (Pingo). Replace with real art at 512x512 or larger.

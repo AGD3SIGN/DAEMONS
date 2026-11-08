@@ -17,9 +17,19 @@ Newest entries at the top. Each entry: what's done, decisions, what's next.
 
 **Fixes during the phase:** desktop safe area (menu bar/Dock) pushed the d-pad off-screen → safe areas only on mobile; touch buttons covered battle HP → hidden in battle.
 
-**Toolchain on this Mac:** Xcode 27 ✓, Apple Development cert ✓ (no Developer ID yet), Godot export templates ✗, JDK/Android SDK ✗.
+**Toolchain installed (with your OK):** Godot 4.7.2 export templates; OpenJDK 17 + Android command-line tools, platform-tools, build-tools 35, Android 35 (Google's SDK license accepted); Godot Editor Settings pointed at both; debug keystore created.
 
-**Still to do for done-when:** run the slice on Mac, Windows PC, iPhone (Xcode) and Android phone.
+**Builds (all exported cleanly):**
+| Platform | Result |
+|---|---|
+| macOS universal | `build/macos/Daemons.zip` 60 MB, x86_64 + arm64, ad-hoc signed. **Launched it: all data loaded.** |
+| Windows x86_64 | `build/windows/Daemons.exe` 110 MB (PE32+ GUI). Not run (needs a Windows PC). |
+| Android arm64 debug | `build/android/Daemons.apk` 29 MB, com.agd3sign.daemons 0.1.0, targetSdk 36. Not installed (no phone connected). |
+| iOS | Not exported: needs your Apple Team ID in the preset. |
+
+Export needed two project settings: ETC2/ASTC import on (Apple Silicon/mobile) and an app icon (placeholder Pingo, `assets/ui/icon.png`).
+
+**Still to do for done-when (needs devices/accounts):** play the slice on the Mac build, a Windows PC, an iPhone (add Team ID → Xcode) and an Android phone (USB debugging → `adb install`). Developer ID + notarization for distribution.
 
 ---
 
