@@ -19,6 +19,8 @@ const FACINGS := {"up": Vector2i.UP, "down": Vector2i.DOWN, "left": Vector2i.LEF
 @export var hide_if_flag: String = ""
 @export var shirt: Color = Color("4878c8")
 @export var hair: Color = Color("402818")
+## Character art id (assets/sprites/characters/<id>.png); empty = placeholder from shirt and hair.
+@export var sprite_id: String = ""
 
 var home := Vector2i.ZERO
 var moving := false
@@ -38,16 +40,15 @@ func configure(data: Dictionary) -> void:
 	var look: Dictionary = data.get("look", {})
 	shirt = Color(look.get("shirt", "#4878c8"))
 	hair = Color(look.get("hair", "#402818"))
+	sprite_id = look.get("sprite", "")
 	home = cell
 
 
 func _ready() -> void:
-	z_index = 1
+	z_index = CharacterSprites.depth(cell.y)
 	_sprite = Sprite2D.new()
-	_sprite.texture = CharacterSprites.sheet("npc_" + shirt.to_html(false) + hair.to_html(false), shirt, hair)
-	_sprite.centered = false
-	_sprite.hframes = 3
-	_sprite.vframes = 4
+	var sheet_id := sprite_id if not sprite_id.is_empty() else "npc_" + shirt.to_html(false) + hair.to_html(false)
+	CharacterSprites.place(_sprite, CharacterSprites.sheet(sheet_id, shirt, hair))
 	add_child(_sprite)
 	_set_frame(0)
 	_reset_wander_timer()
@@ -121,6 +122,7 @@ func step(dir: Vector2i) -> bool:
 	world.map.occupied.erase(cell)
 	world.map.occupied[target] = self
 	cell = target
+	z_index = CharacterSprites.depth(cell.y)
 	_set_frame(1)
 	var tween := create_tween()
 	tween.tween_property(self, "position", Vector2(target * OverworldTiles.TILE_SIZE), WALK_TIME * world.time_scale)

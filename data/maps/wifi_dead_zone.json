@@ -109,7 +109,7 @@
       "look": {
         "shirt": "#608040",
         "hair": "#704020"
-      }
+      , "sprite": "signal_hunter_hal"}
     },
     {
       "type": "npc",
@@ -121,7 +121,7 @@
       "look": {
         "shirt": "#303038",
         "hair": "#101010"
-      }
+      , "sprite": "phisher_pete"}
     },
     {
       "type": "hidden_item",

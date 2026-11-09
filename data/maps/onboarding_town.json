@@ -131,7 +131,7 @@
       "look": {
         "shirt": "#40a0e0",
         "hair": "#e0b040"
-      }
+      , "sprite": "kevin"}
     },
     {
       "type": "npc",
@@ -144,7 +144,7 @@
       "look": {
         "shirt": "#70a040",
         "hair": "#303030"
-      }
+      , "sprite": "barista"}
     },
     {
       "type": "npc",
@@ -156,7 +156,7 @@
       "look": {
         "shirt": "#e05050",
         "hair": "#c08040"
-      }
+      , "sprite": "kid"}
     },
     {
       "type": "trigger",

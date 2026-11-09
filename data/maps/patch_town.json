@@ -134,7 +134,7 @@
       "look": {
         "shirt": "#40a0e0",
         "hair": "#e0b040"
-      }
+      , "sprite": "kevin"}
     },
     {
       "type": "npc",
@@ -147,7 +147,7 @@
       "look": {
         "shirt": "#c08040",
         "hair": "#e0e0e0"
-      }
+      , "sprite": "elder"}
     },
     {
       "type": "npc",

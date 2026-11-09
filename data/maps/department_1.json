@@ -102,7 +102,7 @@
       "look": {
         "shirt": "#3858c0",
         "hair": "#202020"
-      }
+      , "sprite": "tech_theo"}
     },
     {
       "type": "npc",
@@ -114,7 +114,7 @@
       "look": {
         "shirt": "#3858c0",
         "hair": "#e0a040"
-      }
+      , "sprite": "tech_tina"}
     },
     {
       "type": "npc",
@@ -127,7 +127,7 @@
       "look": {
         "shirt": "#802030",
         "hair": "#c0c0c0"
-      }
+      , "sprite": "dana"}
     }
   ]
 }

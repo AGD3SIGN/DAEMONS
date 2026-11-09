@@ -53,7 +53,7 @@
       "look": {
         "shirt": "#c060a0",
         "hair": "#a05020"
-      }
+      , "sprite": "mom"}
     },
     {
       "type": "sign",

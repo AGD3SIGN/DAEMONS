@@ -49,7 +49,7 @@
       "look": {
         "shirt": "#3858c0",
         "hair": "#f0d070"
-      }
+      , "sprite": "help_desk_tech"}
     },
     {
       "type": "sign",
@@ -67,7 +67,7 @@
       "look": {
         "shirt": "#a04040",
         "hair": "#e0e0e0"
-      }
+      , "sprite": "supply_clerk"}
     },
     {
       "type": "npc",
@@ -79,7 +79,7 @@
       "look": {
         "shirt": "#303848",
         "hair": "#808080"
-      }
+      , "sprite": "manager"}
     },
     {
       "type": "npc",
@@ -91,7 +91,7 @@
       "look": {
         "shirt": "#e0a030",
         "hair": "#603018"
-      }
+      , "sprite": "intern"}
     },
     {
       "type": "trigger",

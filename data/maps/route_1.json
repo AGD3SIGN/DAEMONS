@@ -98,7 +98,7 @@
       "look": {
         "shirt": "#e0a030",
         "hair": "#402010"
-      }
+      , "sprite": "intern"}
     },
     {
       "type": "npc",
@@ -110,7 +110,7 @@
       "look": {
         "shirt": "#505868",
         "hair": "#a0a0a0"
-      }
+      , "sprite": "sysadmin_sam"}
     },
     {
       "type": "warp",
@@ -136,7 +136,7 @@
       "look": {
         "shirt": "#40c0a0",
         "hair": "#e0c060"
-      }
+      , "sprite": "jogger_jo"}
     }
   ],
   "music": "route"

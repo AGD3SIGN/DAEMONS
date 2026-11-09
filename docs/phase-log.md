@@ -4,6 +4,23 @@ Newest entries at the top. Each entry: what's done, decisions, what's next.
 
 ---
 
+## 2026-11-08 — Overworld character art
+
+**Done**
+- Brandon's 18 ChatGPT character sheets (3 frames x 4 directions) in `art_src/characters/`.
+- `tools/art_import/import_character.gd`: finds the pose grid from the gaps in the art (the poses aren't on an
+  even grid; equal thirds cut through them), keys the background (shared `clear_mask` with the Daemon importer),
+  one scale for all 12 frames, each anchored by its feet -> `assets/sprites/characters/<id>.png` at 16x24.
+  Polished to 12 colors.
+- Overworld characters now 16x24 (CLAUDE.md allows it): `CharacterSprites.place()` lifts the frame so the feet
+  stay on the 16x16 tile; draw order by row (`depth()`) so lower characters stand in front.
+- NPC `look.sprite` picks the art; 21 of 24 NPCs mapped (Kevin's mom, gate guard and angler still placeholders).
+  The data checker rejects a sprite id with no file.
+- Tests: 226/226 (importer on an off-grid sheet, NPCs use their art and stand on the tile, draw order,
+  every character sheet is 48x96 with <=12 colors).
+
+---
+
 ## 2026-11-08 — Move effects
 
 **Done**

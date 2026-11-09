@@ -266,6 +266,11 @@ func _validate_events(events: Variant, where: String, rows: Array, legend: Dicti
 				npc_ids[e["id"]] = true
 				if tile.get("collision", true):
 					_err(ew, "NPC stands on a solid tile")
+				var look: Variant = e.get("look", {})
+				if typeof(look) == TYPE_DICTIONARY and look.has("sprite"):
+					var sprite_path := "res://assets/sprites/characters/%s.png" % str(look["sprite"])
+					if not FileAccess.file_exists(sprite_path):
+						_err(ew, "no character art '%s' (expected %s)" % [str(look["sprite"]), sprite_path])
 			"trigger":
 				if e.has("w"):
 					_int(e, "w", ew, 1, width)

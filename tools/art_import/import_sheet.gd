@@ -192,7 +192,8 @@ static func _is_key(c: Color, bg: Color) -> bool:
 	return _close(c, bg, 0.26)
 
 
-static func _process_cell(img: Image, bg: Color, magenta: bool, transparent: bool = false) -> Image:
+## Background mask for one cell: 1 = background (cleared), 0 = art. Shared with import_character.gd.
+static func clear_mask(img: Image, bg: Color, magenta: bool, transparent: bool) -> PackedByteArray:
 	var w := img.get_width()
 	var h := img.get_height()
 	var clear := PackedByteArray()
@@ -244,6 +245,13 @@ static func _process_cell(img: Image, bg: Color, magenta: bool, transparent: boo
 			stack.append(p + Vector2i.LEFT)
 			stack.append(p + Vector2i.DOWN)
 			stack.append(p + Vector2i.UP)
+	return clear
+
+
+static func _process_cell(img: Image, bg: Color, magenta: bool, transparent: bool = false) -> Image:
+	var w := img.get_width()
+	var h := img.get_height()
+	var clear := clear_mask(img, bg, magenta, transparent)
 	var out := Image.create(FRAME, FRAME, false, Image.FORMAT_RGBA8)
 	var step := Vector2(w, h) / FRAME
 	for oy in FRAME:

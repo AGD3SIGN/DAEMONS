@@ -60,4 +60,4 @@ res://
   tests/
   docs/            design.md, phase-log.md, data-format.md, build.md, art-prompts/
   art_src/         source art (ChatGPT sheets) per evolution line; gdignored, excluded from exports
-  tools/           art_import/ (import_sheet.gd, polish_sheet.py), art_prompts/, export_ios.sh, run_ios_simulator.sh
+  tools/           art_import/ (import_sheet.gd, import_character.gd, polish_sheet.py), art_prompts/, export_ios.sh, run_ios_simulator.sh

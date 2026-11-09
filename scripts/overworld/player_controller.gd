@@ -42,10 +42,7 @@ func _ready() -> void:
 	_shadow.visible = false
 	add_child(_shadow)
 	_sprite = Sprite2D.new()
-	_sprite.texture = CharacterSprites.sheet("player", Color("d04848"), Color("583820"))
-	_sprite.centered = false
-	_sprite.hframes = 3
-	_sprite.vframes = 4
+	CharacterSprites.place(_sprite, CharacterSprites.sheet("player", Color("d04848"), Color("583820")))
 	add_child(_sprite)
 	camera = Camera2D.new()
 	camera.position = Vector2(TILE / 2.0, TILE / 2.0)  # center on the tile (offset would ignore the map limits)
@@ -57,6 +54,7 @@ func _ready() -> void:
 func setup(p_map: MapView, start_cell: Vector2i, start_facing: Vector2i) -> void:
 	map = p_map
 	cell = start_cell
+	z_index = CharacterSprites.depth(cell.y)
 	facing = start_facing
 	position = Vector2(cell * TILE)
 	moving = false
@@ -138,6 +136,7 @@ func _hop_arc(t: float) -> void:
 
 func _arrive(target: Vector2i) -> void:
 	cell = target
+	z_index = CharacterSprites.depth(cell.y)
 	position = Vector2(cell * TILE)
 	moving = false
 	_was_walking = true

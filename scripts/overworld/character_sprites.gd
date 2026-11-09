@@ -1,7 +1,9 @@
 class_name CharacterSprites
 extends RefCounted
-## Placeholder overworld character sheets: 3 frames (idle, step A, step B) x 4 rows
-## (down, up, left, right), 16x16 each. Real art: assets/sprites/characters/<id>.png, same layout.
+## Overworld character sheets: 3 frames (idle, step A, step B) x 4 rows (down, up, left, right).
+## Real art: assets/sprites/characters/<id>.png, 16x24 frames (made by tools/art_import/import_character.gd);
+## without art, a 16x16 placeholder is drawn from shirt and hair colors. Frames stand on the bottom of the
+## 16x16 tile, so taller art reaches up into the tile above (see place()).
 
 const SIZE := 16
 const ROWS := {Vector2i.DOWN: 0, Vector2i.UP: 1, Vector2i.LEFT: 2, Vector2i.RIGHT: 3}
@@ -21,6 +23,24 @@ static func sheet(id: String, shirt: Color, hair: Color) -> Texture2D:
 		tex = ImageTexture.create_from_image(_draw_sheet(shirt, hair))
 	_cache[id] = tex
 	return tex
+
+
+## Sets up a Sprite2D for a sheet: 3x4 frames, lifted so the feet stand on the tile whatever the frame height.
+static func place(sprite: Sprite2D, tex: Texture2D) -> void:
+	sprite.texture = tex
+	sprite.centered = false
+	sprite.hframes = 3
+	sprite.vframes = 4
+	sprite.offset = Vector2(0, SIZE - frame_height(tex))
+
+
+static func frame_height(tex: Texture2D) -> int:
+	return tex.get_height() / 4
+
+
+## Draw order for characters: lower on screen = in front (tall sprites overlap the row above).
+static func depth(row: int) -> int:
+	return 1 + row
 
 
 static func frame_index(facing: Vector2i, frame: int) -> int:

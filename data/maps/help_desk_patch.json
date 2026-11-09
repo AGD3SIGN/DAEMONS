@@ -49,7 +49,7 @@
       "look": {
         "shirt": "#3858c0",
         "hair": "#902020"
-      }
+      , "sprite": "help_desk_tech"}
     },
     {
       "type": "npc",
@@ -61,7 +61,7 @@
       "look": {
         "shirt": "#a04040",
         "hair": "#303030"
-      }
+      , "sprite": "supply_clerk"}
     },
     {
       "type": "sign",
@@ -79,7 +79,7 @@
       "look": {
         "shirt": "#80a040",
         "hair": "#c0a060"
-      }
+      , "sprite": "courier"}
     }
   ],
   "music": "help_desk"
