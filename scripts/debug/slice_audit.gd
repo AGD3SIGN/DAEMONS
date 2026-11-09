@@ -165,14 +165,15 @@ func _walkable(info: Dictionary) -> bool:
 	return not info.is_empty() and not info["collision"] and not info["behavior"] in ["water", "counter", "ledge_down"]
 
 
-## NPCs that never move out of the way. Gate NPCs with hide_if_flag count as passable when their
+## NPCs that never move out of the way. Hidden NPCs (cutscene actors) aren't there. Gate NPCs with
+## hide_if_flag count as passable when their
 ## flag can be set; laser doors count as passable when their flags can be satisfied.
 func _static_blockers(m: Dictionary) -> Dictionary:
 	var out := {}
 	for e: Dictionary in m.get("events", []):
 		var cell := Vector2i(int(e["x"]), int(e["y"]))
 		if e["type"] == "npc":
-			var hideable: bool = e.has("hide_if_flag") and _flags_set.has(e["hide_if_flag"])
+			var hideable: bool = e.get("hidden", false) or (e.has("hide_if_flag") and _flags_set.has(e["hide_if_flag"]))
 			if not hideable and not e.get("wander", false):
 				out[cell] = true
 		elif e["type"] == "barrier":

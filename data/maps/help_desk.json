@@ -81,6 +81,7 @@
         "hair": "#808080"
       , "sprite": "manager"}
     },
+    { "type": "npc", "id": "kevin_burst", "x": 6, "y": 8, "facing": "up", "hidden": true, "dialogue": "kevin_helpdesk", "look": {"shirt": "#40a0e0", "hair": "#e0b040", "sprite": "kevin"} },
     {
       "type": "npc",
       "id": "intern",

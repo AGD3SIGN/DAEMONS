@@ -1,6 +1,7 @@
 {
   "intern_ian": {
     "name": "Intern Ian",
+    "sprite": "intern",
     "team": [
       [
         "dustbunny",
@@ -20,6 +21,7 @@
   },
   "sysadmin_sam": {
     "name": "Sysadmin Sam",
+    "sprite": "sysadmin_sam",
     "team": [
       [
         "cablesnake",
@@ -39,6 +41,7 @@
   },
   "jogger_jo": {
     "name": "Jogger Jo",
+    "sprite": "jogger_jo",
     "team": [
       [
         "ramster",

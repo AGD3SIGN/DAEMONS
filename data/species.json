@@ -1,5 +1,5 @@
 [
-  { "id": "chipmunk", "name": "Chipmunk", "types": ["hardware"],
+  { "id": "chipmunk", "name": "Chipmunk", "types": ["hardware"], "art": { "flip_back": true },
     "base_stats": { "uptime": 44, "throughput": 58, "hardening": 48, "compute": 60, "encryption": 48, "bandwidth": 52 },
     "growth_rate": "medium_slow", "catch_rate": 45, "base_exp": 62, "log_yield": { "compute": 1 },
     "learnset": [
@@ -8,7 +8,7 @@
     ],
     "evolutions": [ { "to": "munkboard", "trigger": "level", "level": 16 } ],
     "cmdb": { "category": "Rodent / Thermal Unit", "entry": "Stores waste heat in its heatsink cheeks. Keeps a lap warm all winter. Do not pet after heavy use." } },
-  { "id": "munkboard", "name": "Munkboard", "types": ["hardware"],
+  { "id": "munkboard", "name": "Munkboard", "types": ["hardware"], "art": { "flip_back": true },
     "base_stats": { "uptime": 60, "throughput": 75, "hardening": 66, "compute": 78, "encryption": 60, "bandwidth": 66 },
     "growth_rate": "medium_slow", "catch_rate": 45, "base_exp": 142, "log_yield": { "compute": 1, "throughput": 1 },
     "learnset": [
@@ -18,7 +18,7 @@
     ],
     "evolutions": [ { "to": "mainmunk", "trigger": "level", "level": 34 } ],
     "cmdb": { "category": "Chipmunk / Logic Board", "entry": "Copper traces run down its back like stripes. Stuffs spare RAM in its cheeks for later." } },
-  { "id": "mainmunk", "name": "Mainmunk", "types": ["hardware"],
+  { "id": "mainmunk", "name": "Mainmunk", "types": ["hardware"], "art": { "flip_back": true },
     "base_stats": { "uptime": 80, "throughput": 98, "hardening": 90, "compute": 100, "encryption": 78, "bandwidth": 84 },
     "growth_rate": "medium_slow", "catch_rate": 45, "base_exp": 236, "log_yield": { "compute": 3 },
     "learnset": [
@@ -98,7 +98,7 @@
     ],
     "evolutions": [ { "to": "wormhole", "trigger": "level", "level": 22 } ],
     "cmdb": { "category": "Worm / Self-Replicator", "entry": "Tunnels through cable jackets. Where there is one, there are soon a hundred." } },
-  { "id": "wormhole", "name": "Wormhole", "types": ["malware"],
+  { "id": "wormhole", "name": "Wormhole", "types": ["malware"], "art": { "flip_back": true },
     "base_stats": { "uptime": 70, "throughput": 90, "hardening": 65, "compute": 70, "encryption": 65, "bandwidth": 110 },
     "growth_rate": "erratic", "catch_rate": 90, "base_exp": 158, "log_yield": { "bandwidth": 2 },
     "learnset": [

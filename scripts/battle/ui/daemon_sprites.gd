@@ -20,6 +20,13 @@ const POSES := {
 static var _cache: Dictionary = {}
 
 
+## True if this Daemon's back view was drawn facing left and must be mirrored so it faces the foe
+## (species "art": {"flip_back": true}). The player's Daemon stands bottom-left facing up-right.
+static func flip_back(species_id: String) -> bool:
+	var art: Variant = DataRegistry.get_species(species_id).get("art", {})
+	return typeof(art) == TYPE_DICTIONARY and bool(art.get("flip_back", false))
+
+
 static func has_sheet(species_id: String) -> bool:
 	return _sheet(species_id) != null
 

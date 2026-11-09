@@ -43,6 +43,9 @@ var player_slot: Control
 var foe_sprite: TextureRect
 var player_sprite: TextureRect
 var fx: BattleFx
+## Trainers shown at the start of the battle (overworld art at 3x); they slide away as the Daemons come out.
+var player_trainer: TextureRect
+var foe_trainer: TextureRect
 var foe_panel: BattleInfoPanel
 var player_panel: BattleInfoPanel
 var text_box: TextBox
@@ -79,7 +82,7 @@ static func trainer_config(trainer_id: String) -> Dictionary:
 	var music := "battle_boss" if t.has("cert") else ("battle_rival" if t.get("story", false) else "battle_trainer")
 	return {"foe": t["team"], "wild": false, "trainer_name": t["name"], "ai": t["ai"], "trainer_id": trainer_id,
 		"prize": int(t["prize"]), "defeat_text": t["defeat"], "cert": t.get("cert", ""),
-		"story": t.get("story", false), "music": t.get("music", music)}
+		"story": t.get("story", false), "music": t.get("music", music), "trainer_sprite": t.get("sprite", "")}
 
 
 static func trainer_flag(trainer_id: String) -> String:
@@ -417,6 +420,33 @@ static func _sentence(reason: String) -> String:
 
 # --- layout ------------------------------------------------------------------
 
+## A trainer figure in a Daemon slot: 48x72 (a 16x24 overworld frame at 3x), feet on the platform.
+func _trainer_in(slot: Control, at: Vector2) -> TextureRect:
+	var t := TextureRect.new()
+	t.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	t.stretch_mode = TextureRect.STRETCH_SCALE
+	t.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	t.position = at
+	t.size = Vector2(48, 72)
+	t.visible = false
+	t.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	t.set_meta("rest", at)
+	slot.add_child(t)
+	return t
+
+
+## One standing frame from a character sheet: the back ("up" row) for the player, the front for a trainer.
+static func trainer_frame(sprite_id: String, from_behind: bool) -> Texture2D:
+	if sprite_id.is_empty() or not ResourceLoader.exists(CharacterSprites.ART_DIR + sprite_id + ".png"):
+		return null
+	var sheet := CharacterSprites.sheet(sprite_id, Color.WHITE, Color.WHITE)
+	var h := CharacterSprites.frame_height(sheet)
+	var atlas := AtlasTexture.new()
+	atlas.atlas = sheet
+	atlas.region = Rect2(0, (1 if from_behind else 0) * h, CharacterSprites.SIZE, h)
+	return atlas
+
+
 func _build() -> void:
 	var sky := ColorRect.new()
 	sky.color = SKY
@@ -434,6 +464,8 @@ func _build() -> void:
 	_platform(player_slot, Rect2(-22, 48, 108, 18))
 	foe_sprite = _sprite_in(foe_slot)
 	player_sprite = _sprite_in(player_slot)
+	player_trainer = _trainer_in(player_slot, Vector2(8, -16))
+	foe_trainer = _trainer_in(foe_slot, Vector2(8, -16))
 	fx = BattleFx.new()  # move effects draw over the Daemons but under the info panels
 	add_child(fx)
 

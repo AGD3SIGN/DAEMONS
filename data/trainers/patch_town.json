@@ -1,6 +1,7 @@
 {
   "tech_theo": {
     "name": "Tech Theo",
+    "sprite": "tech_theo",
     "team": [
       [
         "fanbat",
@@ -20,6 +21,7 @@
   },
   "tech_tina": {
     "name": "Tech Tina",
+    "sprite": "tech_tina",
     "team": [
       [
         "ramster",
@@ -35,6 +37,7 @@
   },
   "dana": {
     "name": "Department Head Dana",
+    "sprite": "dana",
     "team": [
       [
         "ramster",

@@ -4,6 +4,23 @@ Newest entries at the top. Each entry: what's done, decisions, what's next.
 
 ---
 
+## 2026-11-08 — Battle intro, Kevin bursts in, Chipmunk faces the right way
+
+**Done**
+- Chipmunk, Munkboard, Mainmunk and Wormhole had back views drawn facing left (away from the foe). New species
+  field `"art": {"flip_back": true}` mirrors the player's sprite for them.
+- Trainer battle intro: you (from behind) and the opponent's character sprite slide onto the platforms, the
+  intro line plays, then each trainer slides out of frame right before their Daemon comes out. Wild battles show
+  only you. Trainers got `"sprite"` ids (Kevin, Theo, Tina, Dana, Intern, Sam, Jo, Hal, Pete).
+- Starter cutscene: you walk up to the Manager, and after you pick, Kevin bursts through the front door and runs
+  up to you. New NPC `"hidden": true` plus dialogue steps `show_npc`, `hide_npc`, and `move_npc` with
+  `"to": "player"` / `"run": true` (shortest free path, then both face each other).
+- The slice audit treats hidden NPCs as not there (Kevin waits on the exit mat).
+- Tests: 231/231 (new: flip, trainer intro, wild intro, Kevin burst-in, Kevin hidden on later visits). Mac export
+  smoke test passes; web build re-exported.
+
+---
+
 ## 2026-11-08 — Browser (Web) build
 
 **Done**

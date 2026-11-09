@@ -22,7 +22,9 @@ const DIALOGUE_COMMANDS := {
 	"heal_party": [],
 	"start_battle": [],  # needs "trainer" (id from data/trainers) or "foe"
 	"give_cert": ["cert"],
-	"move_npc": ["npc", "path"],
+	"move_npc": ["npc"],  # plus "path" (directions) or "to": "player"; optional "run"
+	"show_npc": ["npc"],
+	"hide_npc": ["npc"],
 	"open_shop": ["stock"],
 	"open_rack": [],
 	"name_player": [],
@@ -266,6 +268,8 @@ func _validate_events(events: Variant, where: String, rows: Array, legend: Dicti
 				npc_ids[e["id"]] = true
 				if tile.get("collision", true):
 					_err(ew, "NPC stands on a solid tile")
+				if e.has("hidden") and typeof(e["hidden"]) != TYPE_BOOL:
+					_err(ew, "'hidden' must be true or false")
 				var look: Variant = e.get("look", {})
 				if typeof(look) == TYPE_DICTIONARY and look.has("sprite"):
 					var sprite_path := "res://assets/sprites/characters/%s.png" % str(look["sprite"])
@@ -404,7 +408,11 @@ func _validate_command(step: Dictionary, where: String) -> void:
 						_err(where, "unknown direction '%s' in path" % str(dir))
 		"move_npc":
 			_string(step, "npc", where)
-			var path: Variant = step["path"]
+			if step.has("to"):
+				if step["to"] != "player":
+					_err(where, "'to' can only be \"player\"")
+				return
+			var path: Variant = step.get("path")
 			if typeof(path) != TYPE_ARRAY or path.is_empty():
 				_err(where, "'path' must be a list like [\"left\", \"left\"]")
 			else:
@@ -466,6 +474,8 @@ func _validate_trainers(raw: Variant) -> void:
 				_string(t, key, where)
 			if t.has("story") and typeof(t["story"]) != TYPE_BOOL:
 				_err(where, "'story' must be true or false")
+			if t.has("sprite") and not ResourceLoader.exists("res://assets/sprites/characters/%s.png" % str(t["sprite"])):
+				_err(where, "no character art '%s' for the battle intro" % str(t["sprite"]))
 			if t.has("cert") and not certifications.has(t["cert"]):
 				_err(where, "unknown certification '%s'" % str(t["cert"]))
 
@@ -675,6 +685,12 @@ func _validate_species(s: Dictionary, where: String) -> void:
 		if total > 3:
 			_err(where + " › log_yield", "total is %d, max is 3" % total)
 
+	if s.has("art"):
+		var art: Variant = s["art"]
+		if typeof(art) != TYPE_DICTIONARY:
+			_err(where, "'art' must be an object like {\"flip_back\": true}")
+		elif art.has("flip_back") and typeof(art["flip_back"]) != TYPE_BOOL:
+			_err(where + " › art", "'flip_back' must be true or false")
 	var learnset: Variant = s.get("learnset")
 	if typeof(learnset) != TYPE_ARRAY or learnset.is_empty():
 		_err(where, "'learnset' must be a non-empty list")

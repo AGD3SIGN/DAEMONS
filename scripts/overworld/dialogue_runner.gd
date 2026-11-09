@@ -115,7 +115,23 @@ func _command(step: Dictionary) -> void:
 		"move_npc":
 			var who: NpcEvent = npc if step["npc"] == "self" else world.find_npc(step["npc"])
 			if who != null:
-				await who.move_path(step["path"])
+				var run: bool = step.get("run", false)
+				if step.get("to", "") == "player":
+					await who.move_path(who.path_to_player(), run)
+					who.face(world.player.cell - who.cell)
+					world.player.face(who.cell - world.player.cell)
+				else:
+					await who.move_path(step["path"], run)
+		"show_npc":
+			var shown: NpcEvent = world.find_npc(step["npc"])
+			if shown != null:
+				shown.appear()
+				if step.has("facing"):
+					shown.face(NpcEvent.FACINGS.get(step["facing"], shown.facing))
+		"hide_npc":
+			var gone: NpcEvent = world.find_npc(step["npc"])
+			if gone != null:
+				gone.disappear()
 
 
 static func _fill(text: String) -> String:

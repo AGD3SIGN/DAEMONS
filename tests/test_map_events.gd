@@ -98,6 +98,7 @@ func test_help_desk_heals_across_the_counter() -> void:
 	var chipmunk: DaemonInstance = GameState.active_stack[0]
 	chipmunk.current_uptime = 1
 	chipmunk.status = "corrupted"
+	GameState.flags["got_starter"] = true  # skip the starter cutscene (Kevin would stand in the way)
 	_open("onboarding_town", "from_help_desk")
 	await world.player.try_step(Vector2i.UP)  # through the door
 	await wait_until(func() -> bool: return world.map.map_id == "help_desk" and world.is_idle(), 5.0)
@@ -196,6 +197,23 @@ func test_manager_gives_a_starter_and_kevin_counter_picks() -> void:
 	assert_eq(config["trainer_id"], "kevin_rival_1_pingo", "Kevin picks the starter that beats yours")
 	assert_true(config["story"])
 	assert_eq(config["return_scene"], Overworld.SCENE)
+	var kevin := world.find_npc("kevin_burst")
+	assert_eq(world.player.cell, Vector2i(8, 6), "you walked up to the Manager")
+	assert_true(kevin.visible and not kevin.off_map, "Kevin burst in through the door")
+	assert_ne(kevin.cell, kevin.home, "and ran in from the doorway")
+	assert_eq((kevin.cell - world.player.cell).length_squared(), 1, "and ran right up to the player")
+	assert_eq(kevin.facing, world.player.cell - kevin.cell, "facing them")
+	assert_eq(world.map.occupied.get(kevin.cell), kevin)
+
+
+func test_kevin_stays_hidden_by_the_door_on_later_visits() -> void:
+	GameState.flags["got_starter"] = true
+	_open("help_desk")
+	await wait_process_frames(2)
+	var kevin := world.find_npc("kevin_burst")
+	assert_false(kevin.visible)
+	assert_false(world.map.occupied.has(kevin.cell), "not solid while hidden")
+	assert_false(kevin.can_interact())
 
 
 func test_returns_to_saved_location() -> void:

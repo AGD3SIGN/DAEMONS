@@ -1,6 +1,7 @@
 {
   "signal_hunter_hal": {
     "name": "Signal Hunter Hal",
+    "sprite": "signal_hunter_hal",
     "team": [
       [
         "cablesnake",
@@ -20,6 +21,7 @@
   },
   "phisher_pete": {
     "name": "Phisher Pete",
+    "sprite": "phisher_pete",
     "team": [
       [
         "spigeon",

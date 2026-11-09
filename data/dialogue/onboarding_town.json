@@ -267,6 +267,10 @@
   ],
   "manager_starter": [
     {
+      "cmd": "move_player",
+      "path": ["up", "right", "right"]
+    },
+    {
       "speaker": "Manager",
       "text": "There you are, {player}! Welcome to the Help Desk."
     },
@@ -293,6 +297,17 @@
     },
     {
       "text": "The front door bursts open!"
+    },
+    {
+      "cmd": "show_npc",
+      "npc": "kevin_burst",
+      "facing": "up"
+    },
+    {
+      "cmd": "move_npc",
+      "npc": "kevin_burst",
+      "to": "player",
+      "run": true
     },
     {
       "speaker": "Kevin",
@@ -388,6 +403,12 @@
     },
     {
       "text": "Bring a map. Your phone won't help."
+    }
+  ],
+  "kevin_helpdesk": [
+    {
+      "speaker": "Kevin",
+      "text": "Hurry up! I've got a calendar invite for this battle."
     }
   ]
 }

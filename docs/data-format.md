@@ -61,6 +61,7 @@ It's never put in a learnset. Change it here; the id is `BattleSim.FALLBACK_MOVE
 | learnset | `[{ "level": 1, "move": "bump" }]` |
 | evolutions | `[{ "to": id, "trigger": "level", "level": 16 }]`, `"item"` + `"item": id` (item must have the `evolve` effect), or `"sync"`. `[]` for none |
 | cmdb | `{ "category": "Penguin / Echo Unit", "entry": "..." }` |
+| art (opt) | `{ "flip_back": true }` mirrors the back poses in battle (for sheets whose back view was drawn facing left; your Daemon must face up-right toward the foe) |
 
 ## items.json
 | Field | Values |
@@ -169,7 +170,12 @@ the flag `trainer_<id>`.
 | give_cert | `{"cmd": "give_cert", "cert": "networking"}` |
 | cert check | `{"if_cert": "networking", "then": [steps], "else": [steps]}` |
 
-NPC events can also have `"hide_if_flag": "flag"` to disappear once that flag is set.
+NPC events can also have `"hide_if_flag": "flag"` to disappear once that flag is set, or `"hidden": true` to
+start off the map (not drawn, not solid) until a `show_npc` cutscene step brings them in.
+
+Trainers can have `"sprite": "<character id>"` (assets/sprites/characters/<id>.png). In battle, that figure
+(front view) and you (from behind) slide onto the platforms first, then step out of frame as each side's first
+Daemon comes out. Wild battles show only you.
 
 ## Save files (user://save_a.json, save_b.json)
 `{"version", "save_count", "saved_at", "checksum" (sha256 of the data), "data": GameState.to_dict()}`.
@@ -190,3 +196,6 @@ Options live separately in user://settings.cfg.
 | choose_starter | `{"cmd": "choose_starter", "options": ["chipmunk", "pingo", "glowbit"], "level": 5}` sets got_starter + starter_<id> |
 | move_player | `{"cmd": "move_player", "path": ["down"]}` |
 | set_flag false | `{"cmd": "set_flag", "flag": "port_2", "value": false}` |
+| show_npc | `{"cmd": "show_npc", "npc": "kevin_burst", "facing": "up"}` (a `"hidden"` NPC appears on its tile) |
+| hide_npc | `{"cmd": "hide_npc", "npc": "kevin_burst"}` |
+| move_npc to player | `{"cmd": "move_npc", "npc": "kevin_burst", "to": "player", "run": true}` (walks the shortest free path to a tile next to you; both turn to face each other. `"run"` doubles the speed, also works with `"path"`) |

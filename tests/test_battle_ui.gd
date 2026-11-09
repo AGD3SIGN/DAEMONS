@@ -71,6 +71,44 @@ func test_trainer_battle_with_forced_switches() -> void:
 	assert_true(scene.result.get("outcome", "") in ["player_won", "player_lost"])
 
 
+func test_back_view_flip_faces_the_foe() -> void:
+	# The Chipmunk line's back pose was drawn facing left; species art.flip_back mirrors it.
+	assert_true(DaemonSprites.flip_back("chipmunk"))
+	assert_false(DaemonSprites.flip_back("pingo"))
+	var team: Array[DaemonInstance] = [_daemon("chipmunk", 12)]
+	var scene := await _run_battle({"foe": [["pingo", 5]], "player_stack": team, "items": {}})
+	assert_true(scene.player_sprite.flip_h, "player's Chipmunk mirrored")
+	assert_false(scene.foe_sprite.flip_h, "foe's front view never flipped")
+
+
+func test_trainers_show_then_step_out_before_daemons() -> void:
+	var team: Array[DaemonInstance] = [_daemon("chipmunk", 14)]
+	var scene: BattleScene = load(BattleScene.SCENE).instantiate()
+	scene.setup({"auto": true, "time_scale": 0.05, "seed": 11, "foe": [["pingo", 5]], "wild": false,
+		"trainer_name": "Kevin", "trainer_sprite": "kevin", "player_stack": team, "items": {}})
+	add_child_autofree(scene)
+	await wait_until(func() -> bool: return scene.foe_trainer.visible and scene.player_trainer.visible, 5.0)
+	assert_true(scene.player_trainer.visible, "you, from behind")
+	assert_true(scene.foe_trainer.visible, "and Kevin, both on screen at the start")
+	assert_false(scene.player_sprite.visible or scene.foe_sprite.visible, "before any Daemon is out")
+	assert_not_null(scene.foe_trainer.texture)
+	await wait_until(func() -> bool: return scene.foe_sprite.visible and scene.player_sprite.visible, 10.0)
+	assert_false(scene.player_trainer.visible, "trainers stepped out of frame")
+	assert_false(scene.foe_trainer.visible)
+	await wait_for_signal(scene.finished, TIMEOUT)
+
+
+func test_wild_battles_show_only_you() -> void:
+	var team: Array[DaemonInstance] = [_daemon("chipmunk", 14)]
+	var scene: BattleScene = load(BattleScene.SCENE).instantiate()
+	scene.setup({"auto": true, "time_scale": 0.05, "seed": 11, "foe": [["dustbunny", 3]],
+		"player_stack": team, "items": {}})
+	add_child_autofree(scene)
+	await wait_until(func() -> bool: return scene.player_trainer.visible, 5.0)
+	assert_false(scene.foe_trainer.visible, "no trainer in a wild battle")
+	await wait_for_signal(scene.finished, TIMEOUT)
+
+
 func test_level_up_then_upgrade_on_screen() -> void:
 	var chipmunk := _daemon("chipmunk", 15)
 	chipmunk.total_exp = GrowthRate.exp_for_level("medium_slow", 16) - 1

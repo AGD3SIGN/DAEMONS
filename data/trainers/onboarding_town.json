@@ -1,6 +1,7 @@
 {
   "kevin_rival_1_pingo": {
     "name": "Kevin",
+    "sprite": "kevin",
     "team": [
       [
         "pingo",
@@ -16,6 +17,7 @@
   },
   "kevin_rival_1_glowbit": {
     "name": "Kevin",
+    "sprite": "kevin",
     "team": [
       [
         "glowbit",
@@ -31,6 +33,7 @@
   },
   "kevin_rival_1_chipmunk": {
     "name": "Kevin",
+    "sprite": "kevin",
     "team": [
       [
         "chipmunk",

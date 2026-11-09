@@ -5,9 +5,12 @@ extends MapEvent
 ## move_path() walks them along a list of directions (used by the move_npc dialogue command).
 ## Trainers ("trainer": id from data/trainers) spot you along the way they face (up to "sight"
 ## tiles), walk over and battle. Once beaten they say their "after" line. "hide_if_flag" removes
-## the NPC when that flag is set (e.g. a gatekeeper who steps aside for good).
+## the NPC when that flag is set (e.g. a gatekeeper who steps aside for good). "hidden": true keeps
+## them off the map (not drawn, not solid) until a show_npc cutscene step brings them in (e.g. Kevin
+## bursting through the Help Desk door).
 
 const WALK_TIME := 0.28
+const RUN_TIME := 0.14
 const WANDER_RADIUS := 2
 const FACINGS := {"up": Vector2i.UP, "down": Vector2i.DOWN, "left": Vector2i.LEFT, "right": Vector2i.RIGHT}
 
@@ -17,6 +20,7 @@ const FACINGS := {"up": Vector2i.UP, "down": Vector2i.DOWN, "left": Vector2i.LEF
 @export var wander: bool = false
 @export var trainer_id: String = ""
 @export var hide_if_flag: String = ""
+@export var off_map: bool = false  # map data: "hidden": true
 @export var shirt: Color = Color("4878c8")
 @export var hair: Color = Color("402818")
 ## Character art id (assets/sprites/characters/<id>.png); empty = placeholder from shirt and hair.
@@ -35,6 +39,7 @@ func configure(data: Dictionary) -> void:
 	dialogue_id = data.get("dialogue", "")
 	trainer_id = data.get("trainer", "")
 	hide_if_flag = data.get("hide_if_flag", "")
+	off_map = data.get("hidden", false)
 	facing = FACINGS.get(data.get("facing", "down"), Vector2i.DOWN)
 	wander = data.get("wander", false)
 	var look: Dictionary = data.get("look", {})
@@ -52,12 +57,56 @@ func _ready() -> void:
 	add_child(_sprite)
 	_set_frame(0)
 	_reset_wander_timer()
-	if world != null:
+	visible = not off_map
+	if world != null and not off_map:
 		world.map.occupied[cell] = self
 
 
 func can_interact() -> bool:
-	return not moving
+	return not moving and not off_map
+
+
+## Brings a hidden NPC onto the map (drawn and solid). Used by the show_npc cutscene step.
+func appear() -> void:
+	off_map = false
+	visible = true
+	if world != null:
+		world.map.occupied[cell] = self
+
+
+## Takes the NPC off the map again (hide_npc).
+func disappear() -> void:
+	off_map = true
+	visible = false
+	if world != null and world.map.occupied.get(cell) == self:
+		world.map.occupied.erase(cell)
+
+
+## Directions to a free tile next to the player (shortest walk), or [] if there's no way.
+func path_to_player() -> Array:
+	var goal := world.player.cell
+	var dirs := {Vector2i.UP: "up", Vector2i.DOWN: "down", Vector2i.LEFT: "left", Vector2i.RIGHT: "right"}
+	var came_from := {cell: null}
+	var queue: Array[Vector2i] = [cell]
+	while not queue.is_empty():
+		var at: Vector2i = queue.pop_front()
+		if (at - goal).length_squared() == 1:
+			var path: Array = []
+			while came_from[at] != null:
+				var prev: Vector2i = came_from[at]
+				path.push_front(dirs[at - prev])
+				at = prev
+			return path
+		for d: Vector2i in dirs:
+			var next := at + d
+			if came_from.has(next) or next == goal:
+				continue
+			var blocker: Variant = world.map.occupied.get(next)
+			if not world.map.is_walkable(next) or (blocker != null and blocker != self):
+				continue
+			came_from[next] = at
+			queue.append(next)
+	return []
 
 
 func interact() -> void:
@@ -101,16 +150,16 @@ func face(direction: Vector2i) -> void:
 	_set_frame(0)
 
 
-## Walks along ["up", "left", ...]. Stops early if something blocks the way.
-func move_path(path: Array) -> void:
+## Walks along ["up", "left", ...] (or runs, twice as fast). Stops early if something blocks the way.
+func move_path(path: Array, run: bool = false) -> void:
 	for dir_name: Variant in path:
-		if not await step(FACINGS.get(dir_name, Vector2i.ZERO)):
+		if not await step(FACINGS.get(dir_name, Vector2i.ZERO), run):
 			face(FACINGS.get(dir_name, facing))
 			return
 
 
 ## One step. Returns false (and just turns) if the cell is blocked.
-func step(dir: Vector2i) -> bool:
+func step(dir: Vector2i, run: bool = false) -> bool:
 	if dir == Vector2i.ZERO:
 		return false
 	facing = dir
@@ -125,7 +174,7 @@ func step(dir: Vector2i) -> bool:
 	z_index = CharacterSprites.depth(cell.y)
 	_set_frame(1)
 	var tween := create_tween()
-	tween.tween_property(self, "position", Vector2(target * OverworldTiles.TILE_SIZE), WALK_TIME * world.time_scale)
+	tween.tween_property(self, "position", Vector2(target * OverworldTiles.TILE_SIZE), (RUN_TIME if run else WALK_TIME) * world.time_scale)
 	await tween.finished
 	_set_frame(0)
 	moving = false
@@ -133,7 +182,7 @@ func step(dir: Vector2i) -> bool:
 
 
 func _process(delta: float) -> void:
-	if not wander or is_undefeated_trainer() or moving or world == null or not world.is_idle():
+	if off_map or not wander or is_undefeated_trainer() or moving or world == null or not world.is_idle():
 		return
 	_wander_timer -= delta
 	if _wander_timer > 0.0:

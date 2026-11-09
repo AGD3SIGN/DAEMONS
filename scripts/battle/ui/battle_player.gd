@@ -13,6 +13,7 @@ var upgrades: Array[Dictionary] = []
 var _active: Array[int] = [-1, -1]
 var _species: Array[String] = ["", ""]
 var _held: Array[bool] = [false, false]  # a pose is showing; the idle loop leaves it alone
+var _trainer_up: Array[bool] = [false, false]  # a trainer figure is on screen for that side
 var _breath := 0.0
 var _breath_frame := 0
 var _shown: Array[Dictionary] = [{}, {}]  # side -> {stack index -> {level, exp, status}}
@@ -50,7 +51,12 @@ func _play_event(e: Dictionary) -> void:
 	match e["type"]:
 		"turn_start", "turn_end", "switch_needed":
 			pass
+		"battle_start":
+			await _anim_trainers_in()
+			await _say(text)
 		"switch_in":
+			if _trainer_up[side]:
+				await _anim_trainer_out(side)
 			_active[side] = int(e["index"])
 			var d := state.sides[side].stack[_active[side]]
 			var info: Dictionary = _shown[side][_active[side]]
@@ -59,6 +65,7 @@ func _play_event(e: Dictionary) -> void:
 			_panel(side).visible = false
 			_species[side] = d.species_id
 			_sprite(side).texture = DaemonSprites.back(d.species_id) if side == BattleState.PLAYER else DaemonSprites.front(d.species_id)
+			_sprite(side).flip_h = side == BattleState.PLAYER and DaemonSprites.flip_back(d.species_id)
 			await _anim_enter(side)
 			_rest(side)
 			_panel(side).visible = true
@@ -268,6 +275,42 @@ func _tween() -> Tween:
 
 
 # --- animations --------------------------------------------------------------
+
+func _trainer(side: int) -> TextureRect:
+	return view.player_trainer if side == BattleState.PLAYER else view.foe_trainer
+
+
+## Battle start: you (from behind) and, in trainer battles, the opponent slide onto their platforms.
+func _anim_trainers_in() -> void:
+	if _ts() <= 0.0 or view.player_trainer == null:
+		return
+	var frames := [BattleScene.trainer_frame(String(view.config.get("player_sprite", "player")), true),
+		null if state.is_wild else BattleScene.trainer_frame(String(view.config.get("trainer_sprite", "")), false)]
+	var t := _tween().set_parallel(true)
+	for side in 2:
+		if frames[side] == null:
+			continue
+		var fig := _trainer(side)
+		var rest: Vector2 = fig.get_meta("rest")
+		fig.texture = frames[side]
+		fig.position = rest + Vector2(-160.0 if side == BattleState.PLAYER else 160.0, 0)
+		fig.visible = true
+		t.tween_property(fig, "position", rest, 0.45 * _ts()).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		_trainer_up[side] = true
+	if _trainer_up.has(true):
+		await t.finished
+	else:
+		t.kill()
+
+
+## Just before a side's first Daemon comes out, its trainer steps off screen.
+func _anim_trainer_out(side: int) -> void:
+	var fig := _trainer(side)
+	_trainer_up[side] = false
+	var t := _tween()
+	t.tween_property(fig, "position:x", fig.position.x + (-160.0 if side == BattleState.PLAYER else 160.0), 0.3 * _ts())
+	await t.finished
+	fig.visible = false
 
 func _anim_enter(side: int) -> void:
 	var s := _sprite(side)
