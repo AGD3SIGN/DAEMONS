@@ -21,7 +21,7 @@ func _ready() -> void:
 	InputPrompts.scheme_changed.connect(_update_prompt)
 	_menu = MenuList.new()
 	_menu.theme = UiTheme.get_theme()
-	_menu.setup(Vector4(0.5, 1, 0.5, 1), Vector4(-70, -70, 70, -8), 4)
+	_menu.setup(Vector4(0.5, 1, 0.5, 1), Vector4(-90, -70, 90, -8), 4)  # wide enough for "TIME 999:59  CERTS 8"
 	_menu.cancellable = true
 	add_child(_menu)
 

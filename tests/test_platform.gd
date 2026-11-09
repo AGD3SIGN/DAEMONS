@@ -178,12 +178,14 @@ func test_export_presets_ship_the_data_and_not_the_tests() -> void:
 	var cfg := ConfigFile.new()
 	assert_eq(cfg.load("res://export_presets.cfg"), OK)
 	var platforms := []
-	for i in 4:
+	for i in 5:
 		var section := "preset.%d" % i
 		platforms.append(cfg.get_value(section, "platform"))
 		assert_string_contains(cfg.get_value(section, "include_filter"), "*.json", "data files are included")
 		assert_string_contains(cfg.get_value(section, "exclude_filter"), "tests/*")
-	assert_eq(platforms, ["macOS", "Windows Desktop", "iOS", "Android"])
+	assert_eq(platforms, ["macOS", "Windows Desktop", "iOS", "Android", "Web"])
+	assert_eq(cfg.get_value("preset.4.options", "variant/thread_support"), false,
+		"web build without threads: no special server headers needed (itch.io, GitHub Pages)")
 	assert_eq(cfg.get_value("preset.0.options", "binary_format/architecture"), "universal")
 	assert_eq(ProjectSettings.get_setting("display/window/handheld/orientation"), 4, "sensor landscape on phones")
 
@@ -228,3 +230,15 @@ func test_desktop_ignores_menu_bar_safe_area() -> void:
 	var zone: Rect2 = TouchControls.layout()["dpad_zone"]
 	assert_gt(zone.size.x, 0.0)
 	assert_gt(zone.size.y, 0.0)
+
+
+func test_title_menu_header_fits() -> void:
+	# The save preview header ("TIME 0:00  CERTS 0") ran past the right edge of the title menu.
+	var title: Control = load("res://scenes/ui/title_screen.tscn").instantiate()
+	add_child_autofree(title)
+	await wait_process_frames(2)
+	var menu: MenuList = title._menu
+	menu._title.text = "TIME %s  CERTS %d" % [TrainerCardPanel.format_time(999 * 3600 + 59 * 60), 8]
+	await wait_process_frames(1)
+	var right := menu._title.position.x + menu._title.get_combined_minimum_size().x
+	assert_lte(right, menu.size.x - 6.0, "longest header (%s) fits inside the %d px menu" % [menu._title.text, menu.size.x])

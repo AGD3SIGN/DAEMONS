@@ -13,6 +13,7 @@ help desk in **Root Valley**: catch Daemons in Quarantine Keys, earn Certificati
 brew install --cask godot        # Godot 4.7.x
 godot --path .                   # play
 godot --path . --editor          # open in the editor
+./tools/serve_web.sh             # browser version at http://localhost:8060
 ```
 In debug builds the title menu also has a **Debug Menu** (test battles, the Daemon Lab, overworld shortcuts).
 

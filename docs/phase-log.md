@@ -4,6 +4,20 @@ Newest entries at the top. Each entry: what's done, decisions, what's next.
 
 ---
 
+## 2026-11-08 — Browser (Web) build
+
+**Done**
+- `Web` export preset (no threads: works on itch.io / GitHub Pages without special headers). `tools/serve_web.sh`
+  exports and serves it locally. 39 MB on disk, ~10 MB compressed download.
+- Played in the browser: loads with a clean console, New Game, maps + character art, dialogue, menus, mouse
+  clicks, save -> reload -> CONTINUE (IndexedDB). Walking couldn't be checked in Claude's hidden browser pane
+  (2 fps there); it uses the same code as desktop.
+- Fixed while testing (affects every build): the title's save header ("TIME 0:00  CERTS 0") ran past the menu box;
+  menu is now 180 px, with a test that the longest header fits.
+- docs/build.md: web section with itch.io upload steps. Tests: 227/227.
+
+---
+
 ## 2026-11-08 — Fix: black screen after New Game in the Mac build
 
 - Cause: the new NPC sprite check used `FileAccess.file_exists` on `res://assets/...png`. Exports repack images,

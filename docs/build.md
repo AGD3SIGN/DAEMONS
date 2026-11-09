@@ -11,6 +11,7 @@ Export presets live in `export_presets.cfg` (macOS, Windows, iOS, Android). Ever
 | macOS (universal, ad-hoc signed) | ✅ `build/macos/Daemons.zip` (60 MB) | ✅ launches and loads all data |
 | Windows x86_64 | ✅ `build/windows/Daemons.exe` (110 MB) | needs a Windows PC |
 | Android arm64 (debug) | ✅ `build/android/Daemons.apk` (29 MB), targetSdk 36 | needs a phone (USB debugging) |
+| Web (browser) | ✅ `build/web/` via `tools/serve_web.sh`; plays in Chrome/Safari | itch.io-ready zip: `build/daemons-web.zip` |
 | iOS (free Personal Team) | ✅ Xcode project in `build/ios/` via `tools/export_ios.sh`; compiles for iPhone | needs your iPhone (Run from Xcode) |
 
 ## 0. One-time setup (all platforms)
@@ -122,6 +123,35 @@ sdkmanager "platform-tools" "build-tools;35.0.0" "platforms;android-35"
 3. On the phone: Settings → About → tap Build number 7 times → Developer options → USB debugging on.
 4. Export Debug, then install: `adb install -r build/android/Daemons.apk` (or use the one-click deploy button in the editor toolbar).
 - **Google Play:** release builds need your own upload keystore (keep it safe forever) and an `.aab` (turn on Gradle build). New personal Play accounts need **12 testers opted in for 14 straight days** before going live; start that early.
+
+## 4b. Web (play in a browser)
+
+The `Web` preset builds a browser version (WebAssembly + WebGL 2, the Compatibility renderer the game already uses).
+It's the **no-threads** variant, so it runs on any static host without special server headers (itch.io, GitHub
+Pages, any web server).
+
+```bash
+./tools/serve_web.sh      # export to build/web/ and serve at http://localhost:8060
+```
+Then open http://localhost:8060 in Chrome, Safari, Firefox or Edge. Click the game once so it gets keyboard focus.
+
+- **Size:** 39 MB on disk, about **10 MB to download** (hosts compress it). The game data itself is under 1 MB; the
+  rest is the engine. The browser caches it after the first visit.
+- **Saves** go in the browser's storage (IndexedDB): they survive reloads, but each browser/device has its own,
+  and clearing site data deletes them.
+- **Sound** starts after the first click or key press (browsers require it); the title screen covers that.
+- **Phones:** the touch controls work in mobile browsers.
+- Release builds have no Debug Menu.
+- Checked 2026-11-08: loads with no console errors, New Game, maps and character art, dialogue, menus, mouse
+  clicks, save → reload → CONTINUE.
+
+### Putting it on itch.io (your account)
+1. Zip the contents of `build/web/` (not the folder itself): `cd build/web && zip -r ../daemons-web.zip .`
+2. itch.io → Create new project → Kind of project: **HTML** → upload the zip → tick **"This file will be played
+   in the browser"**.
+3. Embed options: viewport **960 x 540** (16:9, 3x the game's 320x180), tick **Fullscreen button**. Leave
+   "SharedArrayBuffer support" off (not needed).
+4. Visibility: **Draft** or **Restricted** (password) while you collect feedback; Public when ready.
 
 ## 5. What's different on phones (already in the game)
 
