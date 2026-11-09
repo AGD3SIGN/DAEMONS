@@ -269,7 +269,7 @@ func _validate_events(events: Variant, where: String, rows: Array, legend: Dicti
 				var look: Variant = e.get("look", {})
 				if typeof(look) == TYPE_DICTIONARY and look.has("sprite"):
 					var sprite_path := "res://assets/sprites/characters/%s.png" % str(look["sprite"])
-					if not FileAccess.file_exists(sprite_path):
+					if not ResourceLoader.exists(sprite_path):  # not FileAccess: exports repack images, the .png isn't there
 						_err(ew, "no character art '%s' (expected %s)" % [str(look["sprite"]), sprite_path])
 			"trigger":
 				if e.has("w"):

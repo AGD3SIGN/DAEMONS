@@ -35,6 +35,15 @@ godot --headless --export-debug   "Android" build/android/Daemons.apk
 ./tools/export_ios.sh   # iOS: fills in your Team ID from .ios_team_id, writes build/ios/Daemons.xcodeproj
 ```
 
+**After any Mac export, run the smoke test:**
+```bash
+./tools/smoke_test_mac_build.sh
+```
+It runs the exported app with no window, checks all game data and every map (`-- --check-data`), and fails on
+any error. The GUT tests run from the project folder, so they can't catch export-only problems: on 2026-11-08 a
+check that looked for a character `.png` passed in the tests but broke 8 of 9 maps in the export (exports repack
+images), and New Game showed a black screen.
+
 ## 1. macOS (universal: Apple Silicon + Intel)
 
 - **For yourself:** export as above. Godot ad-hoc signs it; unzip and run. If macOS blocks it, right-click → Open.

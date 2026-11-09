@@ -4,6 +4,17 @@ Newest entries at the top. Each entry: what's done, decisions, what's next.
 
 ---
 
+## 2026-11-08 — Fix: black screen after New Game in the Mac build
+
+- Cause: the new NPC sprite check used `FileAccess.file_exists` on `res://assets/...png`. Exports repack images,
+  so the file isn't there; the check failed and 8 of 9 maps refused to load. Tests passed (they run from the
+  project). Fixed with `ResourceLoader.exists`.
+- New `-- --check-data` startup option (DataRegistry checks every map, then quits) and
+  `tools/smoke_test_mac_build.sh`, which runs it on the exported app. Proven: fails on the buggy build, passes
+  on the fix. Added to docs/build.md as a step after every Mac export.
+
+---
+
 ## 2026-11-08 — Overworld character art
 
 **Done**

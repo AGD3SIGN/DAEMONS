@@ -39,6 +39,16 @@ var errors: PackedStringArray = []
 
 func _ready() -> void:
 	load_all()
+	# `<game> --headless -- --check-data`: load and check every map too, then quit (non-zero on errors).
+	# Used by tools/smoke_test_mac_build.sh on the exported app, where file layout differs from the project.
+	if "--check-data" in OS.get_cmdline_user_args():
+		var bad := 0
+		var ids := map_ids()
+		for map_id in ids:
+			if get_map(map_id).is_empty():
+				bad += 1
+		print("DataRegistry: %d maps checked, %d broken" % [ids.size(), bad])
+		get_tree().quit(1 if bad > 0 or not errors.is_empty() else 0)
 
 
 ## Reads every data file, validates, and indexes it. Returns true if there were no errors.
