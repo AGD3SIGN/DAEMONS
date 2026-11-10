@@ -63,6 +63,9 @@ Daemon sprites go from a ChatGPT prompt to the game in four steps (details in [d
 Overworld characters work the same way: save `art_src/characters/<id>_gpt_v1.png` (3 columns: stand, step,
 step x 4 rows: down, up, left, right), run `godot --headless -s tools/art_import/import_character.gd -- --all`,
 polish with `polish_sheet.py --colors 12`, and set `"sprite": "<id>"` in the NPC's `look` in its map.
+The importer also writes `<id>_battle.png` (front + back standing poses at 48x72, sampled straight from the
+source so faces keep their detail) for the battle intro; polish those with `--colors 16`. Re-running `--all`
+overwrites polished sheets, so polish again (or `git checkout` the ones you didn't mean to change).
 
 A test fails if a Daemon has no sheet or a sheet has more than 16 colors. Each move's battle effect is data too:
 `"fx"` in `data/moves.json` (see [docs/data-format.md](docs/data-format.md)).

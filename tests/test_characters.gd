@@ -27,6 +27,7 @@ func test_importer_finds_poses_off_an_even_grid() -> void:
 		assert_gt(out.get_pixel((i % 3) * 16 + 8, (i / 3) * 24 + 23).a, 0.5, "frame %d: feet on the bottom row" % i)
 	assert_eq(out.get_pixel(0, 0).a, 0.0, "background removed")
 	DirAccess.remove_absolute(ProjectSettings.globalize_path("res://assets/sprites/characters/zz_test.png"))
+	DirAccess.remove_absolute(ProjectSettings.globalize_path("res://assets/sprites/characters/zz_test_battle.png"))
 	DirAccess.remove_absolute(path)
 
 
@@ -64,13 +65,29 @@ func test_every_character_sheet_is_16x24_and_small_palette() -> void:
 	for f in files:
 		if f.get_extension() != "png":
 			continue
-		count += 1
+		var battle := f.ends_with("_battle.png")
+		count += 0 if battle else 1
 		var img := Image.load_from_file(ProjectSettings.globalize_path("res://assets/sprites/characters/" + f))
-		assert_eq(img.get_size(), Vector2i(48, 96), f)
+		assert_eq(img.get_size(), Vector2i(96, 72) if battle else Vector2i(48, 96), f)
 		var colors := {}
 		for y in img.get_height():
 			for x in img.get_width():
 				if img.get_pixel(x, y).a > 0.5:
 					colors[img.get_pixel(x, y).to_rgba32()] = true
-		assert_lte(colors.size(), 12, "%s uses %d colors; run the polish pass with --colors 12" % [f, colors.size()])
+		var limit := 16 if battle else 12
+		assert_lte(colors.size(), limit, "%s uses %d colors; run the polish pass with --colors %d" % [f, colors.size(), limit])
 	assert_eq(count, 18)
+
+
+func test_every_character_has_battle_art_and_the_intro_uses_it() -> void:
+	# The battle intro used the 16x24 walking frame scaled up 3x, which lost the faces.
+	for file in DirAccess.get_files_at(CharacterSprites.ART_DIR):
+		if not file.ends_with(".png") or file.ends_with("_battle.png"):
+			continue
+		var battle := CharacterSprites.ART_DIR + file.get_basename() + "_battle.png"
+		assert_true(ResourceLoader.exists(battle), file + " has battle art (import_character.gd)")
+	for from_behind in [false, true]:
+		var frame: AtlasTexture = BattleScene.trainer_frame("kevin", from_behind)
+		assert_string_ends_with(frame.atlas.resource_path, "kevin_battle.png")
+		assert_eq(frame.region.size, BattleScene.TRAINER_SIZE, "drawn 1:1, no blocky scaling")
+	assert_eq(BattleScene.trainer_frame("kevin", true).region.position.x, BattleScene.TRAINER_SIZE.x, "back is the second frame")

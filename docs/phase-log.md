@@ -4,6 +4,17 @@ Newest entries at the top. Each entry: what's done, decisions, what's next.
 
 ---
 
+## 2026-11-09 — Battle intro uses battle-size character art
+
+- Brandon: the trainers in the battle intro looked nothing like the uploaded art. They were the 16x24 walking
+  frames scaled up 3x, which drops the faces and shading.
+- `import_character.gd` now also writes `<id>_battle.png` (front + back at 48x72) straight from the source sheet,
+  with a de-fringe step (the sources' outlines are blended into the magenta background and came out purple).
+  Polished to 16 colors. `BattleScene.trainer_frame` uses it (falls back to the walking frame).
+- Tests: 232/232 (every character has battle art, the intro draws it 1:1).
+
+---
+
 ## 2026-11-08 — Battle intro, Kevin bursts in, Chipmunk faces the right way
 
 **Done**

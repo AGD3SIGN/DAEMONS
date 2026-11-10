@@ -27,6 +27,8 @@ const SCENE := "res://scenes/battle/battle_scene.tscn"
 const SKY := Color("d4e4ec")
 const GROUND := Color("bcdcac")
 const PLATFORM := Color("98c088")
+## Trainer figures in the battle intro (and one frame of <id>_battle.png).
+const TRAINER_SIZE := Vector2(48, 72)
 const UPGRADE_BG := Color("181c30")
 
 var config: Dictionary = {}
@@ -427,7 +429,7 @@ func _trainer_in(slot: Control, at: Vector2) -> TextureRect:
 	t.stretch_mode = TextureRect.STRETCH_SCALE
 	t.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	t.position = at
-	t.size = Vector2(48, 72)
+	t.size = TRAINER_SIZE
 	t.visible = false
 	t.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	t.set_meta("rest", at)
@@ -435,13 +437,22 @@ func _trainer_in(slot: Control, at: Vector2) -> TextureRect:
 	return t
 
 
-## One standing frame from a character sheet: the back ("up" row) for the player, the front for a trainer.
+## The trainer figure for the battle intro: the back for the player, the front for a trainer. Uses the
+## battle-size art (<id>_battle.png, 48x72 front + back, made by import_character.gd from the source
+## sheet); falls back to the 16x24 overworld frame (blocky when scaled up) if there's none.
 static func trainer_frame(sprite_id: String, from_behind: bool) -> Texture2D:
-	if sprite_id.is_empty() or not ResourceLoader.exists(CharacterSprites.ART_DIR + sprite_id + ".png"):
+	if sprite_id.is_empty():
+		return null
+	var atlas := AtlasTexture.new()
+	var battle_path := CharacterSprites.ART_DIR + sprite_id + "_battle.png"
+	if ResourceLoader.exists(battle_path):
+		atlas.atlas = load(battle_path)
+		atlas.region = Rect2((TRAINER_SIZE.x if from_behind else 0), 0, TRAINER_SIZE.x, TRAINER_SIZE.y)
+		return atlas
+	if not ResourceLoader.exists(CharacterSprites.ART_DIR + sprite_id + ".png"):
 		return null
 	var sheet := CharacterSprites.sheet(sprite_id, Color.WHITE, Color.WHITE)
 	var h := CharacterSprites.frame_height(sheet)
-	var atlas := AtlasTexture.new()
 	atlas.atlas = sheet
 	atlas.region = Rect2(0, (1 if from_behind else 0) * h, CharacterSprites.SIZE, h)
 	return atlas
