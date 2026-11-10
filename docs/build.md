@@ -175,3 +175,9 @@ Try the touch controls on a Mac: Debug Menu → "Touch controls (try with mouse)
 ## Project settings that exports need
 - `rendering/textures/vram_compression/import_etc2_astc = true`: required for Apple Silicon/universal Mac and mobile exports (doesn't change the pixel art).
 - `application/config/icon = res://assets/ui/icon.png`: placeholder (Pingo). Replace with real art at 512x512 or larger.
+
+## GitHub Pages (automatic)
+`.github/workflows/web.yml` runs on every push to `main`: downloads Godot 4.7.2 + the web templates (cached),
+imports, runs the GUT suite, exports the `Web` preset and deploys `build/web` to https://agd3sign.github.io/DAEMONS/.
+If a test fails, nothing is deployed and the live page keeps the last good build. Run it by hand from the
+Actions tab ("Run workflow"). Progress: `gh run list --workflow web.yml`.

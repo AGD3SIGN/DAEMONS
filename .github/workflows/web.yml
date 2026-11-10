@@ -1,0 +1,83 @@
+# Builds the browser version and publishes it to GitHub Pages on every push to main.
+# The tests run first; if any fail, nothing is deployed and the live page keeps the last good build.
+# Live at https://agd3sign.github.io/DAEMONS/
+name: Web build (GitHub Pages)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+env:
+  GODOT_VERSION: 4.7.2
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cache Godot and web templates
+        id: godot-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/godot
+          key: godot-${{ env.GODOT_VERSION }}-web
+
+      - name: Download Godot and web templates
+        if: steps.godot-cache.outputs.cache-hit != 'true'
+        run: |
+          base=https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable
+          mkdir -p ~/godot/templates
+          curl -sSfL -o /tmp/godot.zip "$base/Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip"
+          unzip -q /tmp/godot.zip -d ~/godot
+          mv ~/godot/Godot_v${GODOT_VERSION}-stable_linux.x86_64 ~/godot/godot
+          curl -sSfL -o /tmp/templates.tpz "$base/Godot_v${GODOT_VERSION}-stable_export_templates.tpz"
+          unzip -q -j /tmp/templates.tpz templates/version.txt templates/web_nothreads_release.zip \
+            templates/web_nothreads_debug.zip -d ~/godot/templates
+
+      - name: Install
+        run: |
+          mkdir -p ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
+          cp ~/godot/templates/* ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable/
+          sudo ln -sf ~/godot/godot /usr/local/bin/godot
+          godot --version
+
+      - name: Import assets
+        run: godot --headless --import || godot --headless --import
+
+      - name: Run tests
+        run: |
+          godot --headless -s addons/gut/gut_cmdln.gd -gdir=res://tests -gexit 2>&1 | tee gut.log
+          grep -q "Failing Tests" gut.log && exit 1 || true
+          grep -q "Passing Tests" gut.log
+
+      - name: Export web build
+        run: |
+          mkdir -p build/web && touch build/.gdignore
+          godot --headless --export-release "Web" build/web/index.html
+          test -s build/web/index.pck
+          touch build/web/.nojekyll
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: build/web
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

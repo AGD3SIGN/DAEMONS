@@ -4,6 +4,9 @@ A GBA-style, top-down, turn-based monster collector where tech comes alive. You'
 help desk in **Root Valley**: catch Daemons in Quarantine Keys, earn Certifications, and stop the
 **Ransom** syndicate. Built with Godot 4.7 (GDScript).
 
+**▶ Play in your browser: https://agd3sign.github.io/DAEMONS/** (updates automatically on every push to `main`
+once the tests pass; see `.github/workflows/web.yml`).
+
 > Working title. All 22 Daemons have pixel-art battle sprites and 18 overworld characters have walking sprites
 > (AI-drafted, imported and polished with Aseprite); 3 minor NPCs still use placeholders. The playable demo runs from New Game to the first Certification
 > (about 30-45 minutes). Builds for macOS, Windows, Android and iOS: [docs/build.md](docs/build.md).
