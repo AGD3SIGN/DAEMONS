@@ -146,7 +146,7 @@ Then open http://localhost:8060 in Chrome, Safari, Firefox or Edge. Click the ga
   clicks, save → reload → CONTINUE.
 
 ### Putting it on itch.io (your account)
-1. Zip the contents of `build/web/` (not the folder itself): `cd build/web && zip -r ../daemons-web.zip .`
+1. Make sure `build/web/touch_deck.js` is there (`serve_web.sh` copies it; an editor export doesn't), then zip the contents of `build/web/` (not the folder itself): `cd build/web && zip -r ../daemons-web.zip .`
 2. itch.io → Create new project → Kind of project: **HTML** → upload the zip → tick **"This file will be played
    in the browser"**.
 3. Embed options: viewport **960 x 540** (16:9, 3x the game's 320x180), tick **Fullscreen button**. Leave
@@ -181,3 +181,10 @@ Try the touch controls on a Mac: Debug Menu → "Touch controls (try with mouse)
 imports, runs the GUT suite, exports the `Web` preset and deploys `build/web` to https://agd3sign.github.io/DAEMONS/.
 If a test fails, nothing is deployed and the live page keeps the last good build. Run it by hand from the
 Actions tab ("Run workflow"). Progress: `gh run list --workflow web.yml`.
+
+## Phones in the browser
+Upright on a touch device, `web/touch_deck.js` (loaded by the Web preset's head include) makes the game a 4:3
+screen at the top and draws a control deck below it: d-pad, A (OK), B (back), MENU, and RUN (tap to toggle).
+The deck talks to the game through `window.daemonsDeck` (TouchControls deck mode hides the in-game overlay).
+Sideways or on desktop the game fills the window and the in-game overlay is used. The preset uses canvas resize
+policy 0 so Godot follows the canvas size the page sets.

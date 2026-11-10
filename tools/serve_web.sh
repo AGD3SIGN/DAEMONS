@@ -9,6 +9,7 @@ if [[ "${1:-}" != "--no-export" ]]; then
   mkdir -p build/web
   touch build/.gdignore
   godot --headless --export-release "Web" build/web/index.html
+  cp web/touch_deck.js build/web/  # phone control deck (portrait), loaded by the export's head include
 fi
 echo "Open http://localhost:8060 in your browser. Ctrl+C to stop."
 python3 -m http.server 8060 --bind 127.0.0.1 --directory build/web

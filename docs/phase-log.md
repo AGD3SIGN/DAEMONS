@@ -4,6 +4,19 @@ Newest entries at the top. Each entry: what's done, decisions, what's next.
 
 ---
 
+## 2026-11-09 — Phone browser layout (portrait control deck)
+
+- Brandon's phone (portrait): the game filled the tall screen, the map was tiny in the middle and the touch
+  buttons covered the text box.
+- New `web/touch_deck.js`: on touch devices held upright the game is a 4:3 screen at the top and a handheld-style
+  deck sits below (d-pad you can roll your thumb across, A, B, MENU, RUN toggle, light haptics on Android).
+  Input reaches the game through JavaScriptBridge (`window.daemonsDeck`) as the usual actions; TouchControls
+  "deck mode" hides the overlay. Web preset: head include + canvas resize policy 0.
+- Checked at 375x812 in the browser: title, menu navigation and New Game all driven from the deck; landscape
+  falls back to the full-screen game + overlay. Tests: 234/234.
+
+---
+
 ## 2026-11-09 — Battle intro uses battle-size character art
 
 - Brandon: the trainers in the battle intro looked nothing like the uploaded art. They were the 16x24 walking

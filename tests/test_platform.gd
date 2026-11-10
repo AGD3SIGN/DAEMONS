@@ -242,3 +242,43 @@ func test_title_menu_header_fits() -> void:
 	await wait_process_frames(1)
 	var right := menu._title.position.x + menu._title.get_combined_minimum_size().x
 	assert_lte(right, menu.size.x - 6.0, "longest header (%s) fits inside the %d px menu" % [menu._title.text, menu.size.x])
+
+
+func test_web_build_loads_the_phone_control_deck() -> void:
+	# Upright phones: the page shrinks the game to a screen at the top and draws a deck below it.
+	var cfg := ConfigFile.new()
+	cfg.load("res://export_presets.cfg")
+	assert_string_contains(cfg.get_value("preset.4.options", "html/head_include"), "touch_deck.js")
+	assert_eq(cfg.get_value("preset.4.options", "html/canvas_resize_policy"), 0, "the page sizes the canvas")
+	assert_true(FileAccess.file_exists("res://web/touch_deck.js"))
+	for script in ["res://tools/serve_web.sh", "res://.github/workflows/web.yml"]:
+		assert_string_contains(FileAccess.get_file_as_string(script), "web/touch_deck.js", script + " ships it")
+
+
+func test_deck_mode_hides_the_overlay_and_drives_input() -> void:
+	TouchControls.set_deck(true)
+	assert_false(TouchControls._view.visible, "the deck replaces the overlay")
+	TouchControls._on_deck_message(["dir", 0, -1])
+	await wait_process_frames(1)
+	assert_true(Input.is_action_pressed("move_up"))
+	assert_true(Input.is_action_pressed("ui_up"))
+	TouchControls._on_deck_message(["dir", 1, 1])
+	await wait_process_frames(1)
+	assert_false(Input.is_action_pressed("move_up"), "diagonals count as no direction")
+	TouchControls._on_deck_message(["button", "ui_accept", true])
+	await wait_process_frames(1)
+	assert_true(Input.is_action_pressed("ui_accept"))
+	TouchControls._on_deck_message(["button", "ui_accept", false])
+	TouchControls._on_deck_message(["button", "quit", true])  # not a deck action: ignored
+	TouchControls._on_deck_message(["dir", 0, 0])
+	await wait_process_frames(1)
+	assert_false(Input.is_action_pressed("ui_accept"))
+	TouchControls.suppress("battle")
+	TouchControls._on_deck_message(["button", "ui_cancel", true])
+	await wait_process_frames(1)
+	assert_true(Input.is_action_pressed("ui_cancel"), "the deck still works in battle")
+	TouchControls._on_deck_message(["button", "ui_cancel", false])
+	TouchControls.release("battle")
+	TouchControls._on_deck_message(["shown", false])
+	assert_false(TouchControls.deck)
+	assert_true(TouchControls._view.visible, "overlay back in landscape")

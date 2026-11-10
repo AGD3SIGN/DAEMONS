@@ -9,6 +9,9 @@ extends CanvasLayer
 ## Everything is sent as the same named input actions the keyboard and gamepad use (move_*, ui_*,
 ## ui_accept, ui_cancel, menu, run), so no game code knows the difference. Taps outside the control
 ## zones still work as normal taps on menus.
+## Web, phone held upright: the page (web/touch_deck.js) shrinks the game to a screen at the top and
+## draws a control deck below it. Then this overlay hides (deck mode) and the deck's presses come in
+## through window.daemonsDeck as the same actions.
 
 signal shown_changed(shown: bool)
 
@@ -17,6 +20,8 @@ const BUTTON_PT := 58.0
 const DPAD_RING_PT := 62.0
 const REPEAT_DELAY := 0.35
 const REPEAT_RATE := 0.1
+## Buttons the web control deck may press.
+const DECK_ACTIONS: PackedStringArray = ["ui_accept", "ui_cancel", "menu", "run"]
 const DIR_ACTIONS := {
 	Vector2i.UP: ["move_up", "ui_up"], Vector2i.DOWN: ["move_down", "ui_down"],
 	Vector2i.LEFT: ["move_left", "ui_left"], Vector2i.RIGHT: ["move_right", "ui_right"],
@@ -38,6 +43,9 @@ var _dir := Vector2i.ZERO
 var _running := false
 var _repeat_timer := 0.0
 var _button_touches := {}  # touch index -> action
+## The web page's control deck is showing (portrait phone): no overlay, input comes from the deck.
+var deck := false
+var _deck_callback: JavaScriptObject
 
 
 func _ready() -> void:
@@ -51,11 +59,47 @@ func _ready() -> void:
 	Input.joy_connection_changed.connect(_on_joy_connection_changed)
 	get_viewport().size_changed.connect(_view.queue_redraw)
 	set_shown(DisplayServer.is_touchscreen_available() and Input.get_connected_joypads().is_empty())
+	if OS.has_feature("web"):
+		_deck_callback = JavaScriptBridge.create_callback(_on_deck_message)
+		var window: JavaScriptObject = JavaScriptBridge.get_interface("window")
+		window.daemonsDeck = _deck_callback
+		set_deck(bool(window.daemonsDeckShown))
+
+
+## Messages from web/touch_deck.js: ["shown", bool], ["button", action, pressed], ["dir", x, y].
+func _on_deck_message(args: Array) -> void:
+	if args.is_empty():
+		return
+	match String(args[0]):
+		"shown":
+			set_deck(bool(args[1]))
+		"button":
+			deck_button(String(args[1]), bool(args[2]))
+		"dir":
+			deck_direction(Vector2i(int(args[1]), int(args[2])))
+
+
+func set_deck(on: bool) -> void:
+	if on == deck:
+		return
+	_release_all()
+	deck = on
+	_view.visible = is_active() and not deck
+
+
+func deck_button(action: String, pressed: bool) -> void:
+	if action in DECK_ACTIONS:
+		_send(action, pressed)
+
+
+func deck_direction(dir: Vector2i) -> void:
+	var d := Vector2i(signi(dir.x), signi(dir.y))
+	_set_direction(d if d.x == 0 or d.y == 0 else Vector2i.ZERO, false)
 
 
 func set_shown(value: bool) -> void:
 	shown = value
-	_view.visible = is_active()
+	_view.visible = is_active() and not deck
 	if not value:
 		_release_all()
 	shown_changed.emit(value)
@@ -65,13 +109,14 @@ func set_shown(value: bool) -> void:
 ## Temporarily hide the overlay (e.g. during battle). Call release(reason) when done.
 func suppress(reason: String) -> void:
 	_suppressed[reason] = true
-	_release_all()
-	_view.visible = is_active()
+	if not deck:
+		_release_all()
+	_view.visible = is_active() and not deck
 
 
 func release(reason: String) -> void:
 	_suppressed.erase(reason)
-	_view.visible = is_active()
+	_view.visible = is_active() and not deck
 
 
 func is_active() -> bool:
@@ -165,7 +210,7 @@ func _input(event: InputEvent) -> void:
 		return
 	if event is InputEventScreenTouch and event.pressed and not shown:
 		set_shown(true)  # a real touch proves a touchscreen, even with a pad paired (the iOS Simulator reports one)
-	if not is_active():
+	if not is_active() or deck:
 		return
 	if event is InputEventScreenTouch:
 		if _handle_touch(event):
@@ -237,7 +282,7 @@ func _set_direction(dir: Vector2i, run: bool) -> void:
 
 ## Holding a direction repeats ui_* presses so menus scroll, like holding a key.
 func _process(delta: float) -> void:
-	if not is_active() or _dir == Vector2i.ZERO:
+	if not (is_active() or deck) or _dir == Vector2i.ZERO:
 		return
 	_repeat_timer -= delta
 	if _repeat_timer <= 0.0:
