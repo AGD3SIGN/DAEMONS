@@ -282,3 +282,27 @@ func test_deck_mode_hides_the_overlay_and_drives_input() -> void:
 	TouchControls._on_deck_message(["shown", false])
 	assert_false(TouchControls.deck)
 	assert_true(TouchControls._view.visible, "overlay back in landscape")
+
+
+func test_text_box_stops_short_of_the_touch_buttons() -> void:
+	# Phone held sideways: A and B sat on top of the right end of the dialogue box.
+	GameState.add_daemon(DaemonInstance.create("pingo", 8, RandomNumberGenerator.new(), 1))
+	SceneRouter.params = {"map": "onboarding_town"}
+	var world: Overworld = load(Overworld.SCENE).instantiate()
+	add_child_autofree(world)
+	await wait_process_frames(2)
+	var l := TouchControls.layout()
+	var box_right := world.text_box.get_global_rect().end.x
+	var b: Vector2 = l["b"]
+	assert_lt(box_right, b.x - l["r"], "box ends left of B")
+	assert_lt(box_right, (l["a"] as Vector2).x - l["r"], "and of A")
+	TouchControls.set_shown(false)
+	await wait_process_frames(1)
+	assert_almost_eq(world.text_box.get_global_rect().end.x, get_viewport().get_visible_rect().size.x - 2.0, 0.5,
+		"full width with a keyboard or gamepad")
+	TouchControls.set_deck(true)
+	TouchControls.set_shown(true)
+	await wait_process_frames(1)
+	assert_almost_eq(world.text_box.get_global_rect().end.x, get_viewport().get_visible_rect().size.x - 2.0, 0.5,
+		"full width under the phone deck (the buttons are below the game)")
+	TouchControls.set_deck(false)

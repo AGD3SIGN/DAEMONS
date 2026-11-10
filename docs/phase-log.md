@@ -14,6 +14,8 @@ Newest entries at the top. Each entry: what's done, decisions, what's next.
   "deck mode" hides the overlay. Web preset: head include + canvas resize policy 0.
 - Checked at 375x812 in the browser: title, menu navigation and New Game all driven from the deck; landscape
   falls back to the full-screen game + overlay. Tests: 234/234.
+- Landscape touch: the overworld text box now stops short of the A/B buttons (`TouchControls.reserved_right()`),
+  full width with keyboard/gamepad or under the portrait deck. Tests: 235/235.
 
 ---
 

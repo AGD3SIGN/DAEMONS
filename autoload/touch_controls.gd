@@ -85,6 +85,7 @@ func set_deck(on: bool) -> void:
 	_release_all()
 	deck = on
 	_view.visible = is_active() and not deck
+	shown_changed.emit(shown)  # the space the overlay covers changed
 
 
 func deck_button(action: String, pressed: bool) -> void:
@@ -165,6 +166,16 @@ func safe_margins() -> Vector4:
 	var screen := DisplayServer.screen_get_size()
 	return Vector4(safe.position.x / k, safe.position.y / k,
 		maxf(0.0, screen.x - safe.end.x) / k, maxf(0.0, screen.y - safe.end.y) / k)
+
+
+## Logical px at the right of the screen covered by the A/B buttons while the overlay shows (0 when it
+## doesn't), so bottom-anchored UI like the overworld text box can stop short of them.
+func reserved_right() -> float:
+	if not is_active() or deck:
+		return 0.0
+	var l := layout()
+	var b: Vector2 = l["b"]
+	return get_viewport().get_visible_rect().size.x - (b.x - l["r"]) + 2.0
 
 
 func button_radius() -> float:

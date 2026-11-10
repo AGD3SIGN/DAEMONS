@@ -401,6 +401,12 @@ func open_pause() -> void:
 
 # --- UI ----------------------------------------------------------------------
 
+## With the touch overlay showing (phone held sideways), the text box stops short of the A/B buttons.
+func _fit_text_box(_shown: bool = false) -> void:
+	if text_box != null:
+		text_box.offset_right = -2.0 - TouchControls.reserved_right()
+
+
 func _build_ui() -> void:
 	var layer := CanvasLayer.new()
 	layer.layer = 5
@@ -434,6 +440,9 @@ func _build_ui() -> void:
 	text_box.offset_bottom = -2
 	text_box.visible = false
 	root.add_child(text_box)
+	TouchControls.shown_changed.connect(_fit_text_box)
+	get_viewport().size_changed.connect(_fit_text_box)
+	_fit_text_box()
 
 	_speaker_tab = Panel.new()
 	_speaker_tab.anchor_top = 1
