@@ -16,6 +16,9 @@ Newest entries at the top. Each entry: what's done, decisions, what's next.
   falls back to the full-screen game + overlay. Tests: 234/234.
 - Landscape touch: the overworld text box now stops short of the A/B buttons (`TouchControls.reserved_right()`),
   full width with keyboard/gamepad or under the portrait deck. Tests: 235/235.
+- Landscape touch d-pad is now a fixed cross (arms 44pt+ wide, arrows, pressed arm lights up) instead of a
+  floating ring; directions come from its center so you can roll your thumb. The text box fits between it and
+  A/B. Checked with real touch events at phone-landscape size. Tests: 237/237.
 
 ---
 

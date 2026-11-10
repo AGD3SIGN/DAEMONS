@@ -401,10 +401,15 @@ func open_pause() -> void:
 
 # --- UI ----------------------------------------------------------------------
 
-## With the touch overlay showing (phone held sideways), the text box stops short of the A/B buttons.
+## With the touch overlay showing (phone held sideways), the text box fits between the d-pad and A/B.
 func _fit_text_box(_shown: bool = false) -> void:
 	if text_box != null:
+		text_box.offset_left = 2.0 + TouchControls.reserved_left()
 		text_box.offset_right = -2.0 - TouchControls.reserved_right()
+	if _speaker_tab != null:
+		var width := _speaker_tab.size.x
+		_speaker_tab.offset_left = 6.0 + TouchControls.reserved_left()
+		_speaker_tab.size.x = width
 
 
 func _build_ui() -> void:

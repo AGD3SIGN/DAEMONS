@@ -1,8 +1,8 @@
 extends CanvasLayer
 ## On-screen controls for touchscreens. Shown when the device has a touchscreen and no gamepad is
 ## connected; hidden as soon as a gamepad connects or a gamepad button is pressed.
-##   - Floating d-pad: put your left thumb down anywhere in the lower-left area and drag. Push past
-##     the ring to run.
+##   - D-pad (cross) in the bottom-left corner: press an arm, roll your thumb to change direction.
+##     Push past the end of an arm to run.
 ##   - A (confirm, check icon) and B (back, arrow icon) bottom-right; MENU (three lines) top-right.
 ##   - Buttons are at least 44pt (Apple's minimum touch target) and stay inside the safe area
 ##     (notches, rounded corners, home indicator).
@@ -17,7 +17,8 @@ signal shown_changed(shown: bool)
 
 const MIN_TARGET_PT := 44.0
 const BUTTON_PT := 58.0
-const DPAD_RING_PT := 62.0
+## Center to arm tip. Arms are 2/3 of that wide (44pt minimum touch target).
+const DPAD_HALF_PT := 66.0
 const REPEAT_DELAY := 0.35
 const REPEAT_RATE := 0.1
 ## Buttons the web control deck may press.
@@ -170,6 +171,13 @@ func safe_margins() -> Vector4:
 
 ## Logical px at the right of the screen covered by the A/B buttons while the overlay shows (0 when it
 ## doesn't), so bottom-anchored UI like the overworld text box can stop short of them.
+func reserved_left() -> float:
+	if not is_active() or deck:
+		return 0.0
+	var l := layout()
+	return (l["dpad_home"] as Vector2).x + float(l["ring"]) + 3.0
+
+
 func reserved_right() -> float:
 	if not is_active() or deck:
 		return 0.0
@@ -190,11 +198,14 @@ func layout() -> Dictionary:
 	var b := a + Vector2(-r * 2.3, r * 1.1)
 	var menu_r := maxf(r * 0.7, points_to_logical(MIN_TARGET_PT) / 2.0)
 	var menu := Vector2(size.x - m.z - menu_r - 4.0, m.y + menu_r + 4.0)
-	var ring := points_to_logical(DPAD_RING_PT) / 2.0 + 6.0
+	var ring := points_to_logical(DPAD_HALF_PT)  # half the d-pad's width (center to arm tip)
+	var home := Vector2(m.x + ring + 8.0, size.y - m.w - ring - 8.0)
 	return {
 		"a": a, "b": b, "menu": menu, "r": r, "menu_r": menu_r, "ring": ring,
-		"dpad_zone": Rect2(m.x, size.y * 0.3, maxf(0.0, size.x * 0.45 - m.x), maxf(0.0, size.y * 0.7 - m.w)),
-		"dpad_home": Vector2(m.x + ring + 10.0, size.y - m.w - ring - 10.0),
+		# A touch starting anywhere in this square (a bit bigger than the pad) works the d-pad.
+		"dpad_zone": Rect2(home - Vector2.ONE * ring * 1.5, Vector2.ONE * ring * 3.0).intersection(
+			Rect2(m.x, m.y, size.x - m.x - m.z, size.y - m.y - m.w)),  # inside the safe area
+		"dpad_home": home,
 	}
 
 
@@ -248,8 +259,9 @@ func _handle_touch(event: InputEventScreenTouch) -> bool:
 			return true
 		if _dpad_touch == -1 and layout()["dpad_zone"].has_point(event.position):
 			_dpad_touch = event.index
-			_dpad_origin = event.position
+			_dpad_origin = layout()["dpad_home"]  # the pad is fixed: directions are from its center
 			_dpad_pos = event.position
+			_update_direction()
 			_view.queue_redraw()
 			return true
 		return false
@@ -332,16 +344,8 @@ class Drawer extends Control:
 		var edge := Color(1, 1, 1, 0.55)
 		var pressed_fill := Color(1, 1, 1, 0.45)
 		var ink := Color(0.1, 0.12, 0.2, 0.75)
-		# D-pad: where your thumb is, or a faint hint at the home spot.
-		var center: Vector2 = state["origin"] if state["active"] else l["dpad_home"]
-		var ring: float = l["ring"]
-		draw_circle(center, ring, Color(1, 1, 1, 0.12 if state["active"] else 0.07))
-		draw_arc(center, ring, 0, TAU, 48, edge if state["active"] else Color(1, 1, 1, 0.25), 2.0)
-		var knob: Vector2 = center
-		if state["active"]:
-			var offset: Vector2 = state["pos"] - center
-			knob = center + offset.limit_length(ring * 1.2)
-		draw_circle(knob, ring * 0.42, pressed_fill if state["active"] else fill)
+		# D-pad: a cross with an arrow on each arm; the pressed arm lights up.
+		_dpad(l["dpad_home"], l["ring"], controls._dir, fill, pressed_fill, edge, ink)
 		# A: check mark.
 		var r: float = l["r"]
 		_button(l["a"], r, "ui_accept" in state["pressed"], fill, pressed_fill, edge)
@@ -360,6 +364,28 @@ class Drawer extends Control:
 		for i in 3:
 			var y := (i - 1) * mr * 0.32
 			draw_line(mc + Vector2(-mr * 0.42, y), mc + Vector2(mr * 0.42, y), ink, maxf(1.5, mr * 0.12))
+
+	func _dpad(c: Vector2, half: float, dir: Vector2i, fill: Color, pressed_fill: Color, edge: Color, ink: Color) -> void:
+		var w := half / 3.0  # half an arm's width
+		var cross := PackedVector2Array([
+			c + Vector2(-w, -half), c + Vector2(w, -half), c + Vector2(w, -w), c + Vector2(half, -w),
+			c + Vector2(half, w), c + Vector2(w, w), c + Vector2(w, half), c + Vector2(-w, half),
+			c + Vector2(-w, w), c + Vector2(-half, w), c + Vector2(-half, -w), c + Vector2(-w, -w)])
+		draw_colored_polygon(cross, Color(0.1, 0.12, 0.2, 0.35))  # dark body so it reads on any map
+		draw_colored_polygon(cross, fill)
+		for d: Vector2i in [Vector2i.UP, Vector2i.DOWN, Vector2i.LEFT, Vector2i.RIGHT]:
+			var v := Vector2(d)
+			var side := Vector2(-v.y, v.x)
+			if d == dir:  # this arm is held
+				draw_colored_polygon(PackedVector2Array([c + v * w + side * w, c + v * half + side * w,
+					c + v * half - side * w, c + v * w - side * w]), pressed_fill)
+			var tip := c + v * half * 0.82
+			var base := c + v * half * 0.5
+			draw_colored_polygon(PackedVector2Array([tip, base + side * w * 0.6, base - side * w * 0.6]), ink)
+		var outline := cross.duplicate()
+		outline.append(cross[0])
+		draw_polyline(outline, edge, 2.0)
+		draw_circle(c, w * 0.45, Color(1, 1, 1, 0.12))
 
 	func _button(center: Vector2, radius: float, pressed: bool, fill: Color, pressed_fill: Color, edge: Color) -> void:
 		draw_circle(center, radius, pressed_fill if pressed else fill)

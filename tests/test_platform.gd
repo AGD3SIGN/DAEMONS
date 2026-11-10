@@ -74,7 +74,28 @@ func test_a_and_b_buttons_press_confirm_and_back() -> void:
 	_touch(2, l["menu"], false)
 
 
-func test_floating_dpad_moves_and_runs() -> void:
+func test_dpad_is_a_fixed_cross() -> void:
+	# A real D-pad: directions come from the pad's center, wherever on it your thumb lands.
+	var l := TouchControls.layout()
+	var home: Vector2 = l["dpad_home"]
+	var ring: float = l["ring"]
+	_touch(0, home + Vector2(ring * 0.1, -ring * 0.7), true)  # straight onto the up arm
+	await wait_process_frames(1)
+	assert_true(Input.is_action_pressed("move_up"), "pressing the up arm moves up right away")
+	_drag(0, home + Vector2(-ring * 0.7, 0))
+	await wait_process_frames(1)
+	assert_true(Input.is_action_pressed("move_left"), "roll the thumb to the left arm")
+	assert_false(Input.is_action_pressed("move_up"))
+	_touch(0, home, false)
+	await wait_process_frames(1)
+	assert_false(Input.is_action_pressed("move_left"))
+	_touch(1, home + Vector2(ring * 3.0, -ring * 2.0), true)  # well off the pad
+	await wait_process_frames(1)
+	assert_false(Input.is_action_pressed("move_right"), "touches away from the pad don't move you")
+	_touch(1, home + Vector2(ring * 3.0, -ring * 2.0), false)
+
+
+func test_dpad_moves_and_runs() -> void:
 	var l := TouchControls.layout()
 	var start: Vector2 = l["dpad_zone"].get_center()
 	_touch(0, start, true)
@@ -296,6 +317,8 @@ func test_text_box_stops_short_of_the_touch_buttons() -> void:
 	var b: Vector2 = l["b"]
 	assert_lt(box_right, b.x - l["r"], "box ends left of B")
 	assert_lt(box_right, (l["a"] as Vector2).x - l["r"], "and of A")
+	var home: Vector2 = l["dpad_home"]
+	assert_gt(world.text_box.get_global_rect().position.x, home.x + l["ring"], "and starts right of the d-pad")
 	TouchControls.set_shown(false)
 	await wait_process_frames(1)
 	assert_almost_eq(world.text_box.get_global_rect().end.x, get_viewport().get_visible_rect().size.x - 2.0, 0.5,
@@ -306,3 +329,8 @@ func test_text_box_stops_short_of_the_touch_buttons() -> void:
 	assert_almost_eq(world.text_box.get_global_rect().end.x, get_viewport().get_visible_rect().size.x - 2.0, 0.5,
 		"full width under the phone deck (the buttons are below the game)")
 	TouchControls.set_deck(false)
+
+
+func test_dpad_arms_are_big_enough_to_hit() -> void:
+	var ring: float = TouchControls.layout()["ring"]
+	assert_gte(ring * 2.0 / 3.0, TouchControls.points_to_logical(44.0), "each arm is at least 44pt wide")
