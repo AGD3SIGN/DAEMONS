@@ -31,3 +31,4 @@ Sheet layout: 1024x1024, invisible 4x4 grid of 256x256 cells, each sprite 64x64 
 - [Cablesnake → Patchviper](06-cablesnake-line.md)
 - [Floppit → Ziphare → Discohare](07-hare-line.md)
 - [Single-stage Daemons](08-singles.md)
+- [Overworld NPCs (missing + new townsfolk)](09-npcs.md)
