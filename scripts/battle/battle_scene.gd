@@ -422,7 +422,7 @@ static func _sentence(reason: String) -> String:
 
 # --- layout ------------------------------------------------------------------
 
-## A trainer figure in a Daemon slot: 48x72 (a 16x24 overworld frame at 3x), feet on the platform.
+## A trainer figure in a Daemon slot: 48x72 (the front/back pose from <id>_battle.png), feet on the platform.
 func _trainer_in(slot: Control, at: Vector2) -> TextureRect:
 	var t := TextureRect.new()
 	t.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
@@ -439,7 +439,7 @@ func _trainer_in(slot: Control, at: Vector2) -> TextureRect:
 
 ## The trainer figure for the battle intro: the back for the player, the front for a trainer. Uses the
 ## battle-size art (<id>_battle.png, 48x72 front + back, made by import_character.gd from the source
-## sheet); falls back to the 16x24 overworld frame (blocky when scaled up) if there's none.
+## sheet); falls back to the overworld walking frame (blocky when scaled up) if there's none.
 static func trainer_frame(sprite_id: String, from_behind: bool) -> Texture2D:
 	if sprite_id.is_empty():
 		return null
@@ -454,7 +454,7 @@ static func trainer_frame(sprite_id: String, from_behind: bool) -> Texture2D:
 	var sheet := CharacterSprites.sheet(sprite_id, Color.WHITE, Color.WHITE)
 	var h := CharacterSprites.frame_height(sheet)
 	atlas.atlas = sheet
-	atlas.region = Rect2(0, (1 if from_behind else 0) * h, CharacterSprites.SIZE, h)
+	atlas.region = Rect2(0, (1 if from_behind else 0) * h, CharacterSprites.frame_width(sheet), h)
 	return atlas
 
 

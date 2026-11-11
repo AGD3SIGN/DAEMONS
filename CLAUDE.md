@@ -23,7 +23,7 @@ Architecture/System-Notes.md. Append; don't overwrite.
 
 ## Rendering rules
 - Base resolution 320x180 (16:9), stretch mode canvas_items, scale mode integer, texture filter Nearest.
-- Tiles 16x16. Overworld characters 16x16 (or 16x24). Battle sprites 64x64.
+- Tiles 16x16. Overworld characters 20x28 frames, centered on their 16x16 tile. Battle sprites 64x64.
 - On wider/taller screens, show more world instead of letterboxing where possible.
 
 ## Architecture rules (do not break these)

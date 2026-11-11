@@ -48,7 +48,7 @@ godot --headless --path . res://scenes/debug/console_battle.tscn
 | `scripts/battle/`, `scripts/overworld/`, `scripts/ui/` | Battle screen, overworld, menus |
 | `autoload/` | DataRegistry, GameState, SaveManager, AudioManager, SceneRouter, ScreenFitter, Settings, InputPrompts, TouchControls, AppLifecycle |
 | `assets/sprites/daemons/` | One battle sheet per Daemon: `<id>_sheet.png`, 4x4 poses of 64x64 |
-| `assets/sprites/characters/` | Overworld walking sheets: `<id>.png`, 3 frames x 4 directions of 16x24 |
+| `assets/sprites/characters/` | Overworld walking sheets: `<id>.png`, 3 frames x 4 directions of 20x28 |
 | `art_src/daemons/`, `art_src/characters/` | Source art (ChatGPT sheets). Not shipped in builds |
 | `tools/` | Art importer and polish script, art-prompt generator, iOS export and Simulator scripts |
 | `docs/` | [Design doc](docs/design.md), [phase log](docs/phase-log.md), [data formats](docs/data-format.md), [builds](docs/build.md), [art prompts](docs/art-prompts/README.md) |

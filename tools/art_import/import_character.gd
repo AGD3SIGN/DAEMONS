@@ -1,7 +1,7 @@
 extends SceneTree
 ## Turns an AI-generated overworld character sheet into the game's walking sheet:
 ## assets/sprites/characters/<id>.png, 3 frames (stand, step A, step B) x 4 rows (down, up, left, right)
-## of 16x24, standing on the bottom of each frame (the character fills one 16x16 tile and stands 8 px taller).
+## of 20x28, standing on the bottom of each frame (centered on its 16x16 tile, 2 px wider each side and 12 px taller).
 ##
 ##   godot --headless -s tools/art_import/import_character.gd -- <source image> <id>
 ##   godot --headless -s tools/art_import/import_character.gd -- --all
@@ -13,12 +13,12 @@ extends SceneTree
 ## All 12 frames share one scale (the tallest/widest pose fits), and each pose is anchored by its feet
 ## so walking doesn't jitter.
 ## Also writes <id>_battle.png: the front and back standing poses at 48x72 for the battle intro, sampled
-## straight from the source so faces keep their detail (the 16x24 frame scaled up loses it).
+## straight from the source so faces keep their detail (the walking frame scaled up loses it).
 
 const ImportSheet := preload("res://tools/art_import/import_sheet.gd")
 const OUT_DIR := "res://assets/sprites/characters/"
 const SRC_DIR := "res://art_src/characters/"
-const FRAME := Vector2i(16, 24)
+const FRAME := Vector2i(20, 28)
 ## Battle intro figure (<id>_battle.png): front + back, side by side.
 const BATTLE_FRAME := Vector2i(48, 72)
 const COLS := 3

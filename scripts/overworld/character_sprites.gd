@@ -1,7 +1,7 @@
 class_name CharacterSprites
 extends RefCounted
 ## Overworld character sheets: 3 frames (idle, step A, step B) x 4 rows (down, up, left, right).
-## Real art: assets/sprites/characters/<id>.png, 16x24 frames (made by tools/art_import/import_character.gd);
+## Real art: assets/sprites/characters/<id>.png, 20x28 frames (made by tools/art_import/import_character.gd);
 ## without art, a 16x16 placeholder is drawn from shirt and hair colors. Frames stand on the bottom of the
 ## 16x16 tile, so taller art reaches up into the tile above (see place()).
 
@@ -25,13 +25,18 @@ static func sheet(id: String, shirt: Color, hair: Color) -> Texture2D:
 	return tex
 
 
-## Sets up a Sprite2D for a sheet: 3x4 frames, lifted so the feet stand on the tile whatever the frame height.
+## Sets up a Sprite2D for a sheet: 3x4 frames, centered on the tile and lifted so the feet stand on it,
+## whatever the frame size.
 static func place(sprite: Sprite2D, tex: Texture2D) -> void:
 	sprite.texture = tex
 	sprite.centered = false
 	sprite.hframes = 3
 	sprite.vframes = 4
-	sprite.offset = Vector2(0, SIZE - frame_height(tex))
+	sprite.offset = Vector2((SIZE - frame_width(tex)) / 2, SIZE - frame_height(tex))
+
+
+static func frame_width(tex: Texture2D) -> int:
+	return tex.get_width() / 3
 
 
 static func frame_height(tex: Texture2D) -> int:

@@ -18,13 +18,13 @@ func test_importer_finds_poses_off_an_even_grid() -> void:
 	src.save_png(path)
 	assert_eq(ImportCharacter.import_character(path, "zz_test"), "")
 	var out := Image.load_from_file(ProjectSettings.globalize_path("res://assets/sprites/characters/zz_test.png"))
-	assert_eq(out.get_size(), Vector2i(48, 96))
+	assert_eq(out.get_size(), Vector2i(60, 112))
 	for i in 12:
-		var c := out.get_pixel((i % 3) * 16 + 8, (i / 3) * 24 + 14)
+		var c := out.get_pixel((i % 3) * 20 + 10, (i / 3) * 28 + 16)
 		var want := Color.from_hsv(i / 16.0, 0.7, 0.9)
 		assert_almost_eq(Vector3(c.r, c.g, c.b), Vector3(want.r, want.g, want.b), Vector3.ONE * 0.02,
 			"frame %d holds pose %d, whole" % [i, i])
-		assert_gt(out.get_pixel((i % 3) * 16 + 8, (i / 3) * 24 + 23).a, 0.5, "frame %d: feet on the bottom row" % i)
+		assert_gt(out.get_pixel((i % 3) * 20 + 10, (i / 3) * 28 + 27).a, 0.5, "frame %d: feet on the bottom row" % i)
 	assert_eq(out.get_pixel(0, 0).a, 0.0, "background removed")
 	DirAccess.remove_absolute(ProjectSettings.globalize_path("res://assets/sprites/characters/zz_test.png"))
 	DirAccess.remove_absolute(ProjectSettings.globalize_path("res://assets/sprites/characters/zz_test_battle.png"))
@@ -40,9 +40,9 @@ func test_npcs_with_art_use_it_and_stand_on_their_tile() -> void:
 	var kevin: NpcEvent = world.find_npc("kevin")
 	assert_eq(kevin.sprite_id, "kevin")
 	var sprite: Sprite2D = kevin._sprite
-	assert_eq(sprite.texture.get_size(), Vector2(48, 96), "Kevin's own art")
-	assert_eq(sprite.offset, Vector2(0, -8), "24-tall frame lifted 8 px so the feet stay on the 16 px tile")
-	assert_eq(world.player._sprite.offset, Vector2(0, -8), "the player too")
+	assert_eq(sprite.texture.get_size(), Vector2(60, 112), "Kevin's own art")
+	assert_eq(sprite.offset, Vector2(-2, -12), "20x28 frame centered on the 16 px tile, feet on it")
+	assert_eq(world.player._sprite.offset, Vector2(-2, -12), "the player too")
 	SceneRouter.params = {}
 
 
@@ -59,7 +59,7 @@ func test_lower_characters_draw_in_front() -> void:
 	SceneRouter.params = {}
 
 
-func test_every_character_sheet_is_16x24_and_small_palette() -> void:
+func test_every_character_sheet_is_20x28_and_small_palette() -> void:
 	var files := DirAccess.get_files_at("res://assets/sprites/characters/")
 	var count := 0
 	for f in files:
@@ -68,7 +68,7 @@ func test_every_character_sheet_is_16x24_and_small_palette() -> void:
 		var battle := f.ends_with("_battle.png")
 		count += 0 if battle else 1
 		var img := Image.load_from_file(ProjectSettings.globalize_path("res://assets/sprites/characters/" + f))
-		assert_eq(img.get_size(), Vector2i(96, 72) if battle else Vector2i(48, 96), f)
+		assert_eq(img.get_size(), Vector2i(96, 72) if battle else Vector2i(60, 112), f)
 		var colors := {}
 		for y in img.get_height():
 			for x in img.get_width():
@@ -80,7 +80,7 @@ func test_every_character_sheet_is_16x24_and_small_palette() -> void:
 
 
 func test_every_character_has_battle_art_and_the_intro_uses_it() -> void:
-	# The battle intro used the 16x24 walking frame scaled up 3x, which lost the faces.
+	# The battle intro used the small walking frame scaled up 3x, which lost the faces.
 	for file in DirAccess.get_files_at(CharacterSprites.ART_DIR):
 		if not file.ends_with(".png") or file.ends_with("_battle.png"):
 			continue

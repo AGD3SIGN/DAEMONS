@@ -117,7 +117,7 @@ legend. Spawns must be on a walkable tile. Maps load on first use and are valida
 Counters let you talk across them (A reaches one tile further).
 
 NPC `look`: `shirt` and `hair` colors draw a 16x16 placeholder; `"sprite": "<id>"` uses the character art in
-`assets/sprites/characters/<id>.png` instead (3 frames x 4 directions of 16x24, feet on the tile). The data
+`assets/sprites/characters/<id>.png` instead (3 frames x 4 directions of 20x28, centered on the tile with the feet on it). The data
 checker fails if that file doesn't exist.
 
 ## dialogue/*.json

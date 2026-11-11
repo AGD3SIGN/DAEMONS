@@ -129,7 +129,7 @@ func test_overworld_scene_loads_town() -> void:
 
 func test_character_sheet() -> void:
 	var art := CharacterSprites.sheet("player", Color.RED, Color.BROWN)
-	assert_eq(art.get_size(), Vector2(48, 96), "real art: 3x4 frames of 16x24")
+	assert_eq(art.get_size(), Vector2(60, 112), "real art: 3x4 frames of 20x28")
 	var placeholder := CharacterSprites.sheet("zz_nobody", Color.RED, Color.BROWN)
 	assert_eq(placeholder.get_size(), Vector2(48, 64), "no art: 16x16 placeholder")
 	assert_eq(CharacterSprites.frame_index(Vector2i.RIGHT, 2), 11)
