@@ -258,7 +258,7 @@ Accounts needed around here: Apple Developer ($99/yr, needed even for a notarize
 Repeatable prompt template:
 > Add the next content chunk: [area name]. Build the map(s), encounter table, trainers, NPC dialogue, items, and story beats described in docs/design.md under [area]. Add these Daemons to data/species.json: [list with types and evolution notes]. Keep difficulty curve: wild levels [x–y], trainers [x–y], boss ace level [z]. Validate data, run tests, and list anything that needs art.
 
-Suggested chunk order: Port City + Networking cert → The Basement → DevOps Heights + Software cert → Abandoned Data Center (Ransom mid-boss) → Power Plant + Facilities cert → Cloud Summit → SecOps Fortress → remaining Departments → HQ Tower (C-Suite + The Board) → post-game legendaries (Uptimus, Hallucinaut).
+Suggested chunk order: Port City + Networking cert → The Basement → DevOps Heights + Software cert → Abandoned Data Center (Ransom mid-boss) → Power Plant + Facilities cert → Cloud Summit → SecOps Fortress → remaining Departments → HQ Tower (C-Suite + The Board) → post-game legendaries (Uptimus, Hallucinaut, Pyrewall — exact spot decided later).
 
 Also in this phase: Scripts (TMs) placed around the world, move tutors, item-based upgrades (e.g. Floppit needs a "Legacy Driver"), a Sync feature (local trade between save files) if you want trade evolutions.
 
