@@ -20,18 +20,11 @@
     #daemons-deck .main { top: 12%; }
     #daemons-deck .pills { bottom: calc(10% + env(safe-area-inset-bottom)); justify-content: center; gap: 9vw; }
     #daemons-deck .dpad { position: relative; width: var(--pad); height: var(--pad); }
-    #daemons-deck .arm { position: absolute; background: #3a4060; border: 3px solid #0d0f1c;
-      box-shadow: inset 0 -4px 0 #2a2f48; }
-    #daemons-deck .arm.v { left: 33.3%; width: 33.4%; height: 100%; top: 0; border-radius: 8px; }
-    #daemons-deck .arm.h { top: 33.3%; height: 33.4%; width: 100%; left: 0; border-radius: 8px; }
-    #daemons-deck .hub { position: absolute; left: 33.3%; top: 33.3%; width: 33.4%; height: 33.4%;
-      background: #3a4060; }
-    #daemons-deck .tri { position: absolute; width: 0; height: 0; border: calc(var(--pad) * 0.06) solid transparent; }
-    #daemons-deck .tri.up { left: 50%; top: 8%; transform: translateX(-50%); border-bottom-color: #9aa3c8; border-top: 0; }
-    #daemons-deck .tri.down { left: 50%; bottom: 8%; transform: translateX(-50%); border-top-color: #9aa3c8; border-bottom: 0; }
-    #daemons-deck .tri.left { top: 50%; left: 8%; transform: translateY(-50%); border-right-color: #9aa3c8; border-left: 0; }
-    #daemons-deck .tri.right { top: 50%; right: 8%; transform: translateY(-50%); border-left-color: #9aa3c8; border-right: 0; }
-    #daemons-deck .tri.on { filter: brightness(1.8); }
+    #daemons-deck .dpad svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+    #daemons-deck .dpad .press { fill: #000; opacity: 0; }
+    #daemons-deck .dpad .press.on { opacity: 0.28; }
+    #daemons-deck .dpad .tri { fill: #9aa3c8; transition: transform 40ms; }
+    #daemons-deck .dpad .tri.on { fill: #e6e9f8; }
     #daemons-deck .ab { position: relative; width: calc(var(--btn) * 2.3); height: calc(var(--btn) * 2.1); }
     #daemons-deck .btn { position: absolute; width: var(--btn); height: var(--btn); border-radius: 50%;
       border: 3px solid #0d0f1c; color: #f4f2ea; display: flex; align-items: center; justify-content: center;
@@ -44,6 +37,10 @@
     #daemons-deck .on { transform: translateY(2px); filter: brightness(1.25); box-shadow: none; }
     #daemons-deck .pill.toggled { background: #3f8a52; color: #f4f2ea; }
   `;
+
+  // The D-pad outline in a 100x100 box: arms 32 wide, rounded ends.
+  const CROSS = "M38,2 H62 Q66,2 66,6 V34 H94 Q98,34 98,38 V62 Q98,66 94,66 H66 V94 Q66,98 62,98 H38 " +
+    "Q34,98 34,94 V66 H6 Q2,66 2,62 V38 Q2,34 6,34 H34 V6 Q34,2 38,2 Z";
 
   let canvas = null;
   let deck = null;
@@ -107,7 +104,10 @@
     let id = null;
     let dir = [0, 0];
     const tris = {};
+    const arms = {};
     el.querySelectorAll(".tri").forEach((t) => (tris[t.dataset.dir] = t));
+    el.querySelectorAll(".press").forEach((a) => (arms[a.dataset.dir] = a));
+    const clear = () => [...Object.values(tris), ...Object.values(arms)].forEach((n) => n.classList.remove("on"));
     function update(e) {
       const r = el.getBoundingClientRect();
       const dx = e.clientX - (r.left + r.width / 2);
@@ -118,9 +118,9 @@
       }
       if (next[0] !== dir[0] || next[1] !== dir[1]) {
         dir = next;
-        Object.values(tris).forEach((t) => t.classList.remove("on"));
+        clear();
         const name = dir[0] < 0 ? "left" : dir[0] > 0 ? "right" : dir[1] < 0 ? "up" : dir[1] > 0 ? "down" : "";
-        if (name) { tris[name].classList.add("on"); buzz(); }
+        if (name) { tris[name].classList.add("on"); arms[name].classList.add("on"); buzz(); }
         send("dir", dir[0], dir[1]);
       }
     }
@@ -136,7 +136,7 @@
       if (e.pointerId !== id) return;
       id = null;
       dir = [0, 0];
-      Object.values(tris).forEach((t) => t.classList.remove("on"));
+      clear();
       send("dir", 0, 0);
     };
     el.addEventListener("pointerup", release);
@@ -152,9 +152,22 @@
     deck.innerHTML = `
       <div class="row main">
         <div class="dpad">
-          <div class="arm v"></div><div class="arm h"></div><div class="hub"></div>
-          <div class="tri up" data-dir="up"></div><div class="tri down" data-dir="down"></div>
-          <div class="tri left" data-dir="left"></div><div class="tri right" data-dir="right"></div>
+          <svg viewBox="0 0 100 100" aria-hidden="true">
+            <!-- one solid cross: a dark base for depth, the top face, a center dimple -->
+            <path d="${CROSS}" transform="translate(0 4)" fill="#151829" stroke="#0d0f1c" stroke-width="4" stroke-linejoin="round"/>
+            <path d="${CROSS}" fill="#3a4060" stroke="#0d0f1c" stroke-width="4" stroke-linejoin="round"/>
+            <rect x="38" y="5" width="24" height="3" rx="1.5" fill="#4a5178"/><rect x="5" y="38" width="3" height="24" rx="1.5" fill="#4a5178"/>
+            <rect class="press" data-dir="up" x="34" y="2" width="32" height="32"/>
+            <rect class="press" data-dir="down" x="34" y="66" width="32" height="32"/>
+            <rect class="press" data-dir="left" x="2" y="34" width="32" height="32"/>
+            <rect class="press" data-dir="right" x="66" y="34" width="32" height="32"/>
+            <circle cx="50" cy="50" r="9" fill="#2c3150"/>
+            <circle cx="50" cy="51.5" r="7" fill="#353b5a"/>
+            <polygon class="tri" data-dir="up" points="50,12 58,23 42,23"/>
+            <polygon class="tri" data-dir="down" points="50,88 58,77 42,77"/>
+            <polygon class="tri" data-dir="left" points="12,50 23,42 23,58"/>
+            <polygon class="tri" data-dir="right" points="88,50 77,42 77,58"/>
+          </svg>
         </div>
         <div class="ab">
           <div class="btn a">A<small>OK</small></div>

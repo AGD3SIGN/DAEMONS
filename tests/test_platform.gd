@@ -274,6 +274,12 @@ func test_web_build_loads_the_phone_control_deck() -> void:
 	assert_true(FileAccess.file_exists("res://web/touch_deck.js"))
 	for script in ["res://tools/serve_web.sh", "res://.github/workflows/web.yml"]:
 		assert_string_contains(FileAccess.get_file_as_string(script), "web/touch_deck.js", script + " ships it")
+	# The deck's d-pad is one solid cross (a single outline), not two overlapping bars with a seam.
+	var deck := FileAccess.get_file_as_string("res://web/touch_deck.js")
+	assert_string_contains(deck, "const CROSS")
+	assert_eq(deck.count("class=\"tri\""), 4, "an arrow per direction")
+	assert_eq(deck.count("class=\"press\""), 4, "each arm shows when it's pressed")
+	assert_false(deck.contains("arm v") or deck.contains("arm h"), "no separate bars")
 
 
 func test_deck_mode_hides_the_overlay_and_drives_input() -> void:
