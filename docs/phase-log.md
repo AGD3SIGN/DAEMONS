@@ -4,6 +4,25 @@ Newest entries at the top. Each entry: what's done, decisions, what's next.
 
 ---
 
+## 2026-11-11 — New title screen (Start Screen Style Guide)
+
+- Brandon designed a new start screen (PDF style guide, 1280x720 HTML reference): CRT boot-screen look with a
+  synthwave grid floor, circuit traces with traveling pulses, floating bits, a glitching DAEMONS logo, and the
+  legendary **Pyrewall** (phoenix x firewall) bobbing in the middle with rings, embers, flame flicker, core pulse
+  and eye blink, a LEGENDARY card, PRESS START, and a NEW GAME · CONTINUE · OPTIONS row.
+- Built in Godot as `scripts/ui/title_screen.gd` + `scripts/ui/title/` (TitleStyle constants, TitleBackdrop,
+  TitleHero + shader, TitleLogo, background and CRT overlay shaders). The 1280x720 frame is scaled to fit and the
+  background/floor extend on wider or taller screens instead of letterboxing. Pyrewall is drawn from the mirrored
+  map in `data/title_screen.json` (one texture, per-pixel animation in a shader). The card is data-driven so
+  other legendaries can rotate in.
+- Menu: left/right (or up/down, stick), accept/Start, mouse hover + click, tap to select then tap again; CONTINUE
+  greyed out and skipped without a save; on touch the menu stacks vertically. Options gained CRT EFFECTS and LESS
+  MOTION (the browser's prefers-reduced-motion also counts).
+- Bundled VT323 (OFL) next to Press Start 2P. Version tag shows the web deploy's run number.
+- Tests: 250/250. Checked at 1280x720, 375x812 portrait (deck) and 812x375 landscape (touch overlay).
+
+---
+
 ## 2026-11-09 — Phone browser layout (portrait control deck)
 
 - Brandon's phone (portrait): the game filled the tall screen, the map was tiny in the middle and the touch

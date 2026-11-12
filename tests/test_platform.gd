@@ -161,9 +161,9 @@ func test_scheme_follows_the_last_input_and_updates_the_title() -> void:
 	var title: Control = load("res://scenes/ui/title_screen.tscn").instantiate()
 	add_child_autofree(title)
 	InputPrompts._input(touch)
-	assert_eq(title.get_node("%Prompt").text, "- tap to start -")
+	assert_true(title.vertical, "touch: the title menu stacks vertically")
 	InputPrompts._input(key)
-	assert_eq(title.get_node("%Prompt").text, "- press Z -")
+	assert_false(title.vertical, "keyboard: one row")
 
 
 # --- app lifecycle -----------------------------------------------------------
@@ -253,16 +253,15 @@ func test_desktop_ignores_menu_bar_safe_area() -> void:
 	assert_gt(zone.size.y, 0.0)
 
 
-func test_title_menu_header_fits() -> void:
-	# The save preview header ("TIME 0:00  CERTS 0") ran past the right edge of the title menu.
+func test_title_menu_fits_the_frame() -> void:
 	var title: Control = load("res://scenes/ui/title_screen.tscn").instantiate()
 	add_child_autofree(title)
 	await wait_process_frames(2)
-	var menu: MenuList = title._menu
-	menu._title.text = "TIME %s  CERTS %d" % [TrainerCardPanel.format_time(999 * 3600 + 59 * 60), 8]
-	await wait_process_frames(1)
-	var right := menu._title.position.x + menu._title.get_combined_minimum_size().x
-	assert_lte(right, menu.size.x - 6.0, "longest header (%s) fits inside the %d px menu" % [menu._title.text, menu.size.x])
+	for vertical in [false, true]:
+		title.vertical = vertical
+		for r: Rect2 in title.menu_rects():
+			assert_true(Rect2(0, 0, 1280, 720).encloses(r), "%s inside the 1280x720 frame (vertical %s)" % [r, vertical])
+			assert_gte(r.size.y, 44.0, "touch targets at least 44 px tall")
 
 
 func test_web_build_loads_the_phone_control_deck() -> void:

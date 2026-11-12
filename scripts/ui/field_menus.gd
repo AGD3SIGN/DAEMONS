@@ -238,17 +238,20 @@ func options_screen() -> void:
 			"SFX VOLUME    < %d%% >" % roundi(Settings.sfx_volume * 100),
 			"BATTLE ANIMS  < %s >" % on_off,
 			"AUTOSAVE      < %s >" % ("ON" if Settings.autosave_on_suspend else "OFF"),
+			"CRT EFFECTS   < %s >" % ("ON" if Settings.crt_effects else "OFF"),
+			"LESS MOTION   < %s >" % ("ON" if Settings.reduced_motion else "OFF"),
 			"DONE",
 		])
 		list.allow_lr = true
 		list.describe = func(i: int) -> String: return ["How fast text types out.", "Background music (coming with the soundtrack).",
 			"Sound effects.", "Turn off to skip battle animations.",
-			"Phones/tablets: save when the app goes to the background.", "Save and close."][i]
+			"Phones/tablets: save when the app goes to the background.",
+			"Title screen scanlines and scan bar.", "Stops the title screen's bigger animations.", "Save and close."][i]
 		var r := await list.choose("OPTIONS   (left/right to change)", rows, [], cursor)
 		list.allow_lr = false
 		list.describe = Callable()
 		cursor = r["index"]
-		if r["action"] == "cancel" or (r["action"] == "pick" and cursor == 5):
+		if r["action"] == "cancel" or (r["action"] == "pick" and cursor == 7):
 			break
 		var step := -1 if r["action"] == "left" else 1
 		match cursor:
@@ -265,6 +268,10 @@ func options_screen() -> void:
 				Settings.battle_animations = not Settings.battle_animations
 			4:
 				Settings.autosave_on_suspend = not Settings.autosave_on_suspend
+			5:
+				Settings.crt_effects = not Settings.crt_effects
+			6:
+				Settings.reduced_motion = not Settings.reduced_motion
 	Settings.apply()
 	Settings.save_settings()
 	list.close()

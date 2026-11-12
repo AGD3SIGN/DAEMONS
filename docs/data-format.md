@@ -177,6 +177,23 @@ Trainers can have `"sprite": "<character id>"` (assets/sprites/characters/<id>.p
 (front view) and you (from behind) slide onto the platforms first, then step out of frame as each side's first
 Daemon comes out. Wild battles show only you.
 
+## title_screen.json
+
+Copy and the featured legendary for the title screen (built to the 2026-11-11 Start Screen Style Guide; every
+layout/color/timing value lives in `scripts/ui/title/title_style.gd`).
+
+- `tagline`, `prompt`: text under the logo and the blinking prompt.
+- `boot_log`: terminal lines typed in the bottom-left; `{count}` becomes the number of species.
+- `featured`: legendaries that can take the hero spot (the first one is shown today). Each has `id`, `label`,
+  `name`, `fusion`, `number`, `flavor` (the card), `a11y` (screen-reader label) and `sprite`:
+  - `half`: the LEFT half of the pixel map, rows of up to 16 characters (`.` = transparent). Rows are padded
+    to 16 and mirrored, so the sprite is 32 wide with no seam. Drawn at 11x.
+  - `palette`: character -> `#hex`, or `"accent"` to follow the theme accent color.
+  - `anim`: character -> `flicker` (flame), `core` / `core_accent` (pulse), or `eye` (blink).
+
+`data/build_info.json` (`{"build": n}`) is the build number on the title's version tag; the web deploy writes
+its run number there before exporting.
+
 ## Save files (user://save_a.json, save_b.json)
 `{"version", "save_count", "saved_at", "checksum" (sha256 of the data), "data": GameState.to_dict()}`.
 Saves alternate between the two files; loading picks the newest one whose checksum matches.

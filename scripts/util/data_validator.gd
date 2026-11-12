@@ -78,6 +78,7 @@ var dialogues: Dictionary = {}  # dialogue id -> list of steps
 var encounters: Dictionary = {}  # map id -> {rate, zones: {tile name: [slots]}}
 var trainers: Dictionary = {}    # trainer id -> {name, team, ai, prize, sight, intro, defeat, after, cert}
 var certifications: Dictionary = {}  # cert id -> {id, name, department, type, order}
+var title_screen: Dictionary = {}  # tagline, prompt, boot_log, featured legendaries (data/title_screen.json)
 
 
 ## raw = {"types": ..., "moves": ..., "species": ..., "items": ..., "config_profiles": ...}
@@ -100,7 +101,64 @@ func validate(raw: Dictionary) -> PackedStringArray:
 	_validate_trainers(raw.get("trainers", {}))
 	_validate_dialogue_files(raw.get("dialogue", {}))
 	_validate_encounters(raw.get("encounters", {}))
+	_validate_title_screen(raw.get("title_screen"))
 	return errors
+
+
+# --- title screen ------------------------------------------------------------
+
+const TITLE_ANIMS := ["flicker", "core", "core_accent", "eye"]
+
+
+## The featured legendaries rotate on the title. Each sprite is the LEFT half (16 wide), mirrored in game.
+func _validate_title_screen(raw: Variant) -> void:
+	title_screen = {}
+	if typeof(raw) != TYPE_DICTIONARY:
+		_err("title_screen", "title_screen.json is missing or isn't an object")
+		return
+	title_screen = raw
+	_string(raw, "tagline", "title_screen")
+	_string(raw, "prompt", "title_screen")
+	var log: Variant = raw.get("boot_log")
+	if typeof(log) != TYPE_ARRAY or log.is_empty():
+		_err("title_screen", "'boot_log' must be a list of lines")
+	var featured: Variant = raw.get("featured")
+	if typeof(featured) != TYPE_ARRAY or featured.is_empty():
+		_err("title_screen", "'featured' must list at least one legendary")
+		return
+	for i in featured.size():
+		var f: Variant = featured[i]
+		var where := "title_screen › featured[%d]" % i
+		if typeof(f) != TYPE_DICTIONARY:
+			_err(where, "must be an object")
+			continue
+		for field in ["id", "label", "name", "fusion", "number", "flavor", "a11y"]:
+			_string(f, field, where)
+		var sprite: Variant = f.get("sprite")
+		if typeof(sprite) != TYPE_DICTIONARY:
+			_err(where, "'sprite' must be an object with half, palette and anim")
+			continue
+		var palette: Variant = sprite.get("palette", {})
+		var anim: Variant = sprite.get("anim", {})
+		var half: Variant = sprite.get("half")
+		if typeof(half) != TYPE_ARRAY or half.is_empty():
+			_err(where + " › sprite", "'half' must be a list of rows")
+			continue
+		for r in half.size():
+			var row: Variant = half[r]
+			if typeof(row) != TYPE_STRING or (row as String).length() > 16:
+				_err(where + " › sprite", "row %d must be text of at most 16 characters" % r)
+				continue
+			for ch in (row as String):
+				if ch != "." and not (palette as Dictionary).has(ch):
+					_err(where + " › sprite", "row %d uses '%s', which isn't in the palette" % [r, ch])
+		for ch: String in palette:
+			var c: String = str(palette[ch])
+			if c != "accent" and not Color.html_is_valid(c):
+				_err(where + " › sprite", "palette '%s' must be a #hex color or \"accent\"" % ch)
+		for ch: String in anim:
+			if not TITLE_ANIMS.has(anim[ch]):
+				_err(where + " › sprite", "anim '%s' must be one of %s" % [ch, TITLE_ANIMS])
 
 
 # --- types -------------------------------------------------------------------

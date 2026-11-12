@@ -63,6 +63,8 @@ jobs:
 
       - name: Export web build
         run: |
+          # The title screen's version tag shows this ("v0.1.0 · BUILD 0042").
+          echo "{\"build\": ${{ github.run_number }}}" > data/build_info.json
           mkdir -p build/web && touch build/.gdignore
           godot --headless --export-release "Web" build/web/index.html
           test -s build/web/index.pck

@@ -1,0 +1,54 @@
+{
+  "tagline": "CATCH · FUSE · COMPILE",
+  "prompt": "PRESS START",
+  "boot_log": ["> mounting /dev/daemons … OK", "> {count} entities indexed"],
+  "featured": [
+    {
+      "id": "pyrewall",
+      "label": "LEGENDARY",
+      "name": "PYREWALL",
+      "fusion": "Phoenix × Firewall",
+      "number": "000",
+      "flavor": "Guardian of Port 443",
+      "a11y": "Pyrewall, a legendary phoenix fused with a firewall",
+      "sprite": {
+        "half": [
+          "y...............",
+          "fy..............",
+          "ofy.............",
+          "orfy..........y.",
+          "orrfy........yfy",
+          "obrrfy......offf",
+          "orrbrfy....offef",
+          "obrrbrfy...offfy",
+          "orrbrrbfy...offy",
+          ".obrrbrrbfy.offf",
+          "..obrrbrrbrffofc",
+          "...obbrrbrrffocw",
+          "....obrrbrrffocc",
+          ".....oobrrfffofc",
+          ".......oofffffoo",
+          "........offfffff",
+          ".........offyfff",
+          "..........ofyyfy",
+          "...........fyy.y",
+          "..........fy..yf",
+          ".........fy..fy.",
+          "........y...y...",
+          ".......y........"
+        ],
+        "palette": {
+          "o": "#1a0a12",
+          "r": "#c4372b",
+          "b": "#5a1414",
+          "f": "#ff7a1a",
+          "y": "#ffd23f",
+          "c": "accent",
+          "w": "#fff4d6",
+          "e": "#e8fbff"
+        },
+        "anim": {"f": "flicker", "y": "flicker", "c": "core_accent", "w": "core", "e": "eye"}
+      }
+    }
+  ]
+}

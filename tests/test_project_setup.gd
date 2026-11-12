@@ -38,4 +38,5 @@ func test_title_scene_loads() -> void:
 	assert_not_null(scene)
 	var title := scene.instantiate()
 	add_child_autofree(title)
-	assert_not_null(title.get_node_or_null("%Prompt"))
+	assert_not_null(title.get_node_or_null("Stage"), "the 1280x720 title stage")
+	assert_true("NEW GAME" in title.items)
