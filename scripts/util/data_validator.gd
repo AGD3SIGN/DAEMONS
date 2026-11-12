@@ -132,8 +132,11 @@ func _validate_title_screen(raw: Variant) -> void:
 		if typeof(f) != TYPE_DICTIONARY:
 			_err(where, "must be an object")
 			continue
-		for field in ["id", "label", "name", "fusion", "number", "flavor", "a11y"]:
+		for field in ["id", "label", "name", "fusion", "flavor", "a11y"]:
 			_string(f, field, where)
+		# A featured Daemon that's a species shows its CMDB number; one that isn't yet needs "number".
+		if not species.has(f.get("id", "")):
+			_string(f, "number", where)
 		var sprite: Variant = f.get("sprite")
 		if typeof(sprite) != TYPE_DICTIONARY:
 			_err(where, "'sprite' must be an object with half, palette and anim")
@@ -743,6 +746,8 @@ func _validate_species(s: Dictionary, where: String) -> void:
 		if total > 3:
 			_err(where + " › log_yield", "total is %d, max is 3" % total)
 
+	if s.has("legendary") and typeof(s["legendary"]) != TYPE_BOOL:
+		_err(where, "'legendary' must be true or false")
 	if s.has("art"):
 		var art: Variant = s["art"]
 		if typeof(art) != TYPE_DICTIONARY:

@@ -4,6 +4,18 @@ Newest entries at the top. Each entry: what's done, decisions, what's next.
 
 ---
 
+## 2026-11-11 — Pyrewall joins the roster
+
+- Pyrewall (phoenix x firewall) is now a real Daemon: CMDB #023, Security/Power, legendary (`"legendary": true`),
+  base stat total 580, catch rate 3, slow growth, 3 Encryption logs. Learns Static Zap, Firewall Up, Heatsink Slam,
+  Latency Spike, Brownout, and two new signature moves: **Burn Rule** (Security, 90, 30% Overheat) at 40 and
+  **Ash Reboot** (Power, heal 50%) at 50, then Thermal Runaway at 60.
+- Battle art comes from the same pixel map as the title (`tools/art_import/pixel_map_sheet.gd`), so it matches.
+- Title card now shows the real CMDB number (No. 023). Not placed in the world yet (design: post-game legendary).
+- Tests: 252/252. Checked in a battle at 1280x720.
+
+---
+
 ## 2026-11-11 — New title screen (Start Screen Style Guide)
 
 - Brandon designed a new start screen (PDF style guide, 1280x720 HTML reference): CRT boot-screen look with a

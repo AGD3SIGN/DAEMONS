@@ -62,6 +62,7 @@ It's never put in a learnset. Change it here; the id is `BattleSim.FALLBACK_MOVE
 | evolutions | `[{ "to": id, "trigger": "level", "level": 16 }]`, `"item"` + `"item": id` (item must have the `evolve` effect), or `"sync"`. `[]` for none |
 | cmdb | `{ "category": "Penguin / Echo Unit", "entry": "..." }` |
 | art (opt) | `{ "flip_back": true }` mirrors the back poses in battle (for sheets whose back view was drawn facing left; your Daemon must face up-right toward the foe) |
+| legendary (opt) | `true` for legendaries (Pyrewall). Informational for now; low `catch_rate` does the gameplay work |
 
 ## items.json
 | Field | Values |
@@ -185,11 +186,16 @@ layout/color/timing value lives in `scripts/ui/title/title_style.gd`).
 - `tagline`, `prompt`: text under the logo and the blinking prompt.
 - `boot_log`: terminal lines typed in the bottom-left; `{count}` becomes the number of species.
 - `featured`: legendaries that can take the hero spot (the first one is shown today). Each has `id`, `label`,
-  `name`, `fusion`, `number`, `flavor` (the card), `a11y` (screen-reader label) and `sprite`:
+  `name`, `fusion`, `flavor` (the card), `a11y` (screen-reader label) and `sprite`. If `id` is a species the
+  card shows its CMDB number; a title-only legendary needs a `number` instead.
+  `sprite`:
   - `half`: the LEFT half of the pixel map, rows of up to 16 characters (`.` = transparent). Rows are padded
     to 16 and mirrored, so the sprite is 32 wide with no seam. Drawn at 11x.
   - `palette`: character -> `#hex`, or `"accent"` to follow the theme accent color.
   - `anim`: character -> `flicker` (flame), `core` / `core_accent` (pulse), or `eye` (blink).
+
+`tools/art_import/pixel_map_sheet.gd -- <id>` turns a featured sprite into that Daemon's battle sheet
+(`assets/sprites/daemons/<id>_sheet.png`, 2x, poses by shape so it stays under 16 colors).
 
 `data/build_info.json` (`{"build": n}`) is the build number on the title's version tag; the web deploy writes
 its run number there before exporting.

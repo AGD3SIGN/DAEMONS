@@ -106,6 +106,7 @@ Draft type chart (attacker → defender; 2 = super effective, ½ = resisted, 0 =
 | **Cumulonimbyte** | Cloud | storm cloud that rains data; late-game |
 | **Hallucinaut** | AI | glitchy astronaut that's confidently wrong; legendary-tier |
 | **Uptimus** | Power/Security | legendary UPS guardian of the valley's power grid |
+| **Pyrewall** | Security/Power | legendary phoenix x firewall, guardian of Port 443; burns packets without a valid certificate and reboots from its own ash. On the title screen. Signature moves: Burn Rule, Ash Reboot |
 
 Target roster: **40–60 Daemons** for v1 (about 18 evolution lines + singles + 2–3 legendaries). Design rule: every Daemon is a real animal/creature fused with a real piece of tech, and its name is a pun. No silhouettes, names or palettes borrowed from any Pokémon.
 

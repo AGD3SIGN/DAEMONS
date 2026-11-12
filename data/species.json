@@ -212,5 +212,15 @@
       { "level": 12, "move": "defrag" }, { "level": 15, "move": "thermal_runaway" }, { "level": 22, "move": "hard_reset" }
     ],
     "evolutions": [],
-    "cmdb": { "category": "Turtle / Rack Server", "entry": "Carries a 2U server on its shell. Has not been rebooted since it hatched, and nobody dares try." } }
+    "cmdb": { "category": "Turtle / Rack Server", "entry": "Carries a 2U server on its shell. Has not been rebooted since it hatched, and nobody dares try." } },
+  { "id": "pyrewall", "name": "Pyrewall", "types": ["security", "power"], "legendary": true,
+    "base_stats": { "uptime": 95, "throughput": 90, "hardening": 100, "compute": 110, "encryption": 115, "bandwidth": 70 },
+    "growth_rate": "slow", "catch_rate": 3, "base_exp": 270, "log_yield": { "encryption": 3 },
+    "learnset": [
+      { "level": 1, "move": "static_zap" }, { "level": 1, "move": "firewall_up" }, { "level": 10, "move": "heatsink_slam" },
+      { "level": 20, "move": "latency_spike" }, { "level": 30, "move": "brownout" }, { "level": 40, "move": "burn_rule" },
+      { "level": 50, "move": "ash_reboot" }, { "level": 60, "move": "thermal_runaway" }
+    ],
+    "evolutions": [],
+    "cmdb": { "category": "Phoenix / Perimeter Firewall", "entry": "Legendary guardian of Port 443. Burns any packet without a valid certificate. When its rules go stale it collapses into ash and boots again with a fresh ruleset." } }
 ]

@@ -186,3 +186,29 @@ func test_options_have_crt_and_less_motion() -> void:
 	assert_true(Settings.reduced_motion)
 	DirAccess.remove_absolute(ProjectSettings.globalize_path(Settings.path))
 	Settings.path = saved_path
+
+
+func test_pyrewall_is_a_legendary_daemon() -> void:
+	var s := DataRegistry.get_species("pyrewall")
+	assert_false(s.is_empty(), "in species.json")
+	assert_true(s.get("legendary", false))
+	assert_eq(s["types"], ["security", "power"])
+	assert_eq(int(s["catch_rate"]), 3, "hard to quarantine")
+	var known := []
+	for entry: Dictionary in s["learnset"]:
+		assert_true(DataRegistry.moves.has(entry["move"]), entry["move"])
+		known.append(entry["move"])
+	assert_has(known, "burn_rule", "signature move")
+	assert_has(known, "ash_reboot", "signature move")
+	assert_true(DaemonSprites.has_sheet("pyrewall"), "battle art from the title pixel map")
+	var mon := DaemonInstance.create("pyrewall", 50, RandomNumberGenerator.new(), 1)
+	assert_eq(mon.species_id, "pyrewall")
+
+
+func test_title_card_shows_the_cmdb_number() -> void:
+	var T: GDScript = load("res://scripts/ui/title_screen.gd")
+	var number := "%03d" % (DataRegistry.species.keys().find("pyrewall") + 1)
+	assert_eq(T.cmdb_number({"id": "pyrewall"}), number)
+	assert_eq(T.cmdb_number({"id": "not_a_species_yet", "number": "000"}), "000", "fallback for a title-only legendary")
+	var title := _title()
+	assert_string_contains(" ".join(title.card_lines().slice(3).map(func(l: Array) -> String: return l[3])), "No. " + number)

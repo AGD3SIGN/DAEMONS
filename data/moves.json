@@ -128,5 +128,13 @@
   { "id": "cloud_burst", "name": "Cloud Burst", "type": "cloud", "category": "special", "power": 70, "accuracy": 100, "max_pp": 15, "priority": 0,
     "effect": { "id": "none", "params": {} },
     "fx": [{"kind": "fall", "glyph": "drop", "count": 16, "color": "#9FC8EC", "spread": 26}],
-    "description": "Scales up suddenly and rains data on the foe." }
+    "description": "Scales up suddenly and rains data on the foe." },
+  { "id": "burn_rule", "name": "Burn Rule", "type": "security", "category": "special", "power": 90, "accuracy": 100, "max_pp": 10, "priority": 0,
+    "effect": { "id": "status_chance", "params": { "status": "overheated", "chance": 30 } },
+    "fx": [{"kind": "wall", "color": "#FF7A1A"}, {"kind": "rise", "glyph": "wave", "count": 8, "color": "#FFD23F"}, {"kind": "flash", "color": "#FF7A1A", "alpha": 0.3}],
+    "description": "Pyrewall's signature. A firewall rule that burns blocked packets. 30% chance to Overheat." },
+  { "id": "ash_reboot", "name": "Ash Reboot", "type": "power", "category": "status", "power": 0, "accuracy": 0, "max_pp": 5, "priority": 0,
+    "effect": { "id": "heal", "params": { "fraction": 0.5 } },
+    "fx": [{"kind": "dim", "alpha": 0.5, "on": "user", "parallel": true}, {"kind": "rise", "on": "user", "glyph": "plus", "count": 10, "color": "#FFD23F"}, {"kind": "rings", "on": "user", "count": 1, "radius": 22, "color": "#2FD8FF"}],
+    "description": "Collapses into ash and cold-boots with a fresh ruleset. Restores half its Uptime." }
 ]
