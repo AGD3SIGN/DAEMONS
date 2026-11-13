@@ -60,7 +60,7 @@ Daemon sprites go from a ChatGPT prompt to the game in four steps (details in [d
 3. Import every sheet: `godot --headless -s tools/art_import/import_sheet.gd -- --all` (background removed, poses cut to 64x64).
 4. Polish to ~15 colors with Aseprite through the Aseprite MCP: `tools/art_import/polish_sheet.py` (setup in the vault's Assets > Tools).
 
-Overworld characters work the same way: save `art_src/characters/<id>_gpt_v1.png` (3 columns: stand, step,
+Overworld characters work the same way: save `art_src/characters/<group>/<id>_gpt_v1.png` (groups: 01-Main-Cast, 02-Help-Desk, 03-Trainers, 04-Townsfolk) (3 columns: stand, step,
 step x 4 rows: down, up, left, right), run `godot --headless -s tools/art_import/import_character.gd -- --all`,
 polish with `polish_sheet.py --colors 12`, and set `"sprite": "<id>"` in the NPC's `look` in its map.
 The importer also writes `<id>_battle.png` (front + back standing poses at 48x72, sampled straight from the

@@ -4,6 +4,21 @@ Newest entries at the top. Each entry: what's done, decisions, what's next.
 
 ---
 
+## 2026-11-13 — Network expansion part 1 (7 Daemons) + art folders tidied
+
+- New species (all Network): Spinode → Meshpider (Lv 18) → Arachnet (Lv 34), Nos. 041–043; Calfiber → Orcable
+  (Lv 30), 044–045; Proxkit → Proxferret (Lv 24), 046–047. Stats and levels are placeholders for balancing.
+- 5 new moves: Web Mesh (sharply lowers Bandwidth), World Wide Web (95, may Throttle), Fiber Spout (55, may lower
+  Hardening), Undersea Cable (85 physical), Proxy Tunnel (60 physical, raises evasion).
+- Spinode is wild in the Wi-Fi Dead Zone (Lv 5–7, weight 12). Calfiber and Proxkit are Port City Daemons in the
+  roster, so they wait for that area.
+- Source art: `art_src/daemons/13-Spinode`, `14-Calfiber`, `15-Proxkit`. Duplicate Pixelsier/Pasteslug/Tieweaver
+  folders removed (same files as `08-Singles`). Imported one by one and polished to 15 colors.
+- `art_src/characters/` grouped into `01-Main-Cast`, `02-Help-Desk`, `03-Trainers`, `04-Townsfolk`. The 18 loose
+  full-quality PNG originals from `art_src/` now sit next to their .webp as `<id>_gpt_v1.png` (the importer scans
+  subfolders; the newer .webp still wins, so the game art doesn't change).
+- Tests: 258/258.
+
 ## 2026-11-13 — Quarantine progress bar (SCAN / ISOLATE / ENCRYPT)
 
 - New `CaptureMeter` (scripts/battle/ui/capture_meter.gd): a 3-segment bar under the foe's info panel while a

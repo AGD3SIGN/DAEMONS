@@ -332,5 +332,71 @@
       { "level": 11, "move": "fast_ethernet" }, { "level": 15, "move": "chassis_guard" }, { "level": 26, "move": "packet_flood" }
     ],
     "evolutions": [],
-    "cmdb": { "category": "Weaver Bird / Cable Management", "entry": "Weaves loose cables into tidy bundles and ties them off with zip ties. Can't pass a tangle without fixing it." } }
+    "cmdb": { "category": "Weaver Bird / Cable Management", "entry": "Weaves loose cables into tidy bundles and ties them off with zip ties. Can't pass a tangle without fixing it." } },
+  { "id": "spinode", "number": 41, "name": "Spinode", "types": ["network"],
+    "base_stats": { "uptime": 40, "throughput": 45, "hardening": 40, "compute": 50, "encryption": 45, "bandwidth": 60 },
+    "growth_rate": "medium_fast", "catch_rate": 190, "base_exp": 52, "log_yield": { "bandwidth": 1 },
+    "learnset": [
+      { "level": 1, "move": "bump" }, { "level": 1, "move": "ping" }, { "level": 8, "move": "latency_spike" },
+      { "level": 12, "move": "fast_ethernet" }
+    ],
+    "evolutions": [ { "to": "meshpider", "trigger": "level", "level": 18 } ],
+    "cmdb": { "category": "Spider / Network Node", "entry": "Hangs from a single thread and pings anything that walks under it. Every web it spins is one hop bigger." } },
+  { "id": "meshpider", "number": 42, "name": "Meshpider", "types": ["network"],
+    "base_stats": { "uptime": 60, "throughput": 60, "hardening": 55, "compute": 75, "encryption": 60, "bandwidth": 80 },
+    "growth_rate": "medium_fast", "catch_rate": 90, "base_exp": 128, "log_yield": { "compute": 2 },
+    "learnset": [
+      { "level": 1, "move": "bump" }, { "level": 1, "move": "ping" }, { "level": 8, "move": "latency_spike" },
+      { "level": 12, "move": "fast_ethernet" }, { "level": 18, "move": "web_mesh" }, { "level": 26, "move": "packet_flood" }
+    ],
+    "evolutions": [ { "to": "arachnet", "trigger": "level", "level": 34 } ],
+    "cmdb": { "category": "Spider / Mesh Network", "entry": "Strings hexagonal meshes between server racks. If one strand breaks, the traffic just takes another." } },
+  { "id": "arachnet", "number": 43, "name": "Arachnet", "types": ["network"],
+    "base_stats": { "uptime": 80, "throughput": 75, "hardening": 70, "compute": 105, "encryption": 80, "bandwidth": 100 },
+    "growth_rate": "medium_fast", "catch_rate": 40, "base_exp": 215, "log_yield": { "compute": 3 },
+    "learnset": [
+      { "level": 1, "move": "bump" }, { "level": 1, "move": "ping" }, { "level": 8, "move": "latency_spike" },
+      { "level": 12, "move": "fast_ethernet" }, { "level": 18, "move": "web_mesh" }, { "level": 26, "move": "packet_flood" },
+      { "level": 34, "move": "world_wide_web" }, { "level": 42, "move": "bandwidth_hog" }
+    ],
+    "evolutions": [],
+    "cmdb": { "category": "Spider / World Wide Web", "entry": "Its web spans the whole valley, and every strand carries traffic. It feels a new device join from miles away." } },
+  { "id": "calfiber", "number": 44, "name": "Calfiber", "types": ["network"],
+    "base_stats": { "uptime": 65, "throughput": 55, "hardening": 50, "compute": 55, "encryption": 50, "bandwidth": 45 },
+    "growth_rate": "slow", "catch_rate": 120, "base_exp": 66, "log_yield": { "uptime": 1 },
+    "learnset": [
+      { "level": 1, "move": "bump" }, { "level": 1, "move": "ping" }, { "level": 7, "move": "fiber_spout" },
+      { "level": 12, "move": "latency_spike" }, { "level": 16, "move": "fast_ethernet" }
+    ],
+    "evolutions": [ { "to": "orcable", "trigger": "level", "level": 30 } ],
+    "cmdb": { "category": "Orca / Fiber Optic", "entry": "A playful calf that spouts glowing light from its blowhole. Follows boats that are laying cable." } },
+  { "id": "orcable", "number": 45, "name": "Orcable", "types": ["network"],
+    "base_stats": { "uptime": 100, "throughput": 95, "hardening": 75, "compute": 85, "encryption": 75, "bandwidth": 65 },
+    "growth_rate": "slow", "catch_rate": 45, "base_exp": 190, "log_yield": { "throughput": 2 },
+    "learnset": [
+      { "level": 1, "move": "bump" }, { "level": 1, "move": "ping" }, { "level": 7, "move": "fiber_spout" },
+      { "level": 12, "move": "latency_spike" }, { "level": 16, "move": "fast_ethernet" }, { "level": 30, "move": "undersea_cable" },
+      { "level": 36, "move": "packet_flood" }
+    ],
+    "evolutions": [],
+    "cmdb": { "category": "Orca / Undersea Cable", "entry": "Lays internet cable across the valley's lake floor. Pods of them keep the whole region online." } },
+  { "id": "proxkit", "number": 46, "name": "Proxkit", "types": ["network"],
+    "base_stats": { "uptime": 45, "throughput": 60, "hardening": 40, "compute": 45, "encryption": 40, "bandwidth": 75 },
+    "growth_rate": "medium_fast", "catch_rate": 150, "base_exp": 60, "log_yield": { "bandwidth": 1 },
+    "learnset": [
+      { "level": 1, "move": "bump" }, { "level": 1, "move": "fast_ethernet" }, { "level": 6, "move": "proxy_tunnel" },
+      { "level": 10, "move": "double_click" }, { "level": 14, "move": "latency_spike" }
+    ],
+    "evolutions": [ { "to": "proxferret", "trigger": "level", "level": 24 } ],
+    "cmdb": { "category": "Ferret / Proxy", "entry": "Wears a little mask and never shows its real address. Pops up somewhere else every time you look." } },
+  { "id": "proxferret", "number": 47, "name": "Proxferret", "types": ["network"],
+    "base_stats": { "uptime": 65, "throughput": 90, "hardening": 60, "compute": 65, "encryption": 60, "bandwidth": 110 },
+    "growth_rate": "medium_fast", "catch_rate": 70, "base_exp": 160, "log_yield": { "bandwidth": 2 },
+    "learnset": [
+      { "level": 1, "move": "bump" }, { "level": 1, "move": "fast_ethernet" }, { "level": 6, "move": "proxy_tunnel" },
+      { "level": 10, "move": "double_click" }, { "level": 14, "move": "latency_spike" }, { "level": 24, "move": "bandwidth_hog" },
+      { "level": 30, "move": "packet_flood" }
+    ],
+    "evolutions": [],
+    "cmdb": { "category": "Ferret / VPN Tunnel", "entry": "Tunnels under everything so nobody sees where it went. Leaves decoy copies of itself behind." } }
 ]

@@ -55,6 +55,12 @@
         "min": 6,
         "max": 8,
         "weight": 5
+      },
+      {
+        "species": "spinode",
+        "min": 5,
+        "max": 7,
+        "weight": 12
       }
     ]
   }

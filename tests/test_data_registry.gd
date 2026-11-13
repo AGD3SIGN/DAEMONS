@@ -47,8 +47,8 @@ func test_real_data_has_no_errors() -> void:
 
 func test_expected_counts() -> void:
 	assert_eq(DataRegistry.types.size(), 12)
-	assert_eq(DataRegistry.moves.size(), 45, "44 learnable + Force Quit")
-	assert_eq(DataRegistry.species.size(), 36, "22 + legendary Pyrewall + 13 Hardware expansion")
+	assert_eq(DataRegistry.moves.size(), 50, "49 learnable + Force Quit")
+	assert_eq(DataRegistry.species.size(), 43, "22 + Pyrewall + 13 Hardware + 7 Network expansion")
 	assert_eq(DataRegistry.items.size(), 12)
 
 
@@ -193,3 +193,20 @@ func test_validator_rejects_a_duplicate_cmdb_number() -> void:
 	raw["species"][1]["number"] = 0
 	var errors := Array(DataValidator.new().validate(raw)).filter(func(e: String) -> bool: return e.contains("already used"))
 	assert_eq(errors.size(), 1, str(errors))
+
+
+func test_network_expansion_lines() -> void:
+	var lines := [["spinode", "meshpider", "arachnet"], ["calfiber", "orcable"], ["proxkit", "proxferret"]]
+	var number := 41
+	for line: Array in lines:
+		for i in line.size():
+			var s := DataRegistry.get_species(line[i])
+			assert_eq(s["types"], ["network"], line[i])
+			assert_eq(DataRegistry.cmdb_number(line[i]), number, "%s is No. %03d in the roster" % [line[i], number])
+			number += 1
+			assert_true(DaemonSprites.has_sheet(line[i]), "%s has a battle sheet" % line[i])
+			var evos: Array = s["evolutions"]
+			if i + 1 < line.size():
+				assert_eq(evos[0]["to"], line[i + 1])
+			else:
+				assert_true(evos.is_empty())

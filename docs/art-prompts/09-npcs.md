@@ -2,9 +2,9 @@
 
 One character per image. Paste the **whole** block (style rules + character) each time.
 
-Save the approved image as `art_src/characters/<id>_gpt_v1.png` (or .webp), then:
+Save the approved image as `art_src/characters/<group>/<id>_gpt_v1.png` (or .webp; groups: `01-Main-Cast`, `02-Help-Desk`, `03-Trainers`, `04-Townsfolk`), then:
 
-    godot --headless -s tools/art_import/import_character.gd -- art_src/characters/<id>_gpt_v1.png <id>
+    godot --headless -s tools/art_import/import_character.gd -- art_src/characters/<group>/<id>_gpt_v1.png <id>
     cd <aseprite-mcp> && set -a && . ./.env && set +a
     PYTHONPATH=. uv run python <repo>/tools/art_import/polish_sheet.py <repo>/assets/sprites/characters/<id>.png --colors 12
     PYTHONPATH=. uv run python <repo>/tools/art_import/polish_sheet.py <repo>/assets/sprites/characters/<id>_battle.png --colors 16
