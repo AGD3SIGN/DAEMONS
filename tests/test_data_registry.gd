@@ -174,3 +174,22 @@ func test_hardware_expansion_lines() -> void:
 				assert_eq(evos[0]["to"], line[i + 1], "%s upgrades into %s" % [line[i], line[i + 1]])
 			else:
 				assert_true(evos.is_empty(), "%s is the last stage" % line[i])
+
+
+func test_cmdb_numbers_follow_the_master_roster() -> void:
+	var expected := {"pyrewall": 0, "chipmunk": 1, "pingo": 4, "glowbit": 7, "cablesnake": 14, "floppit": 16,
+		"dustbunny": 19, "fanbat": 20, "ramster": 21, "servurtle": 22, "clawptop": 28, "tieweaver": 40}
+	for id: String in expected:
+		assert_eq(DataRegistry.cmdb_number(id), expected[id], id)
+	assert_eq(DataRegistry.cmdb_number("not_a_daemon"), -1)
+	var last := -1
+	for id: String in DataRegistry.species:
+		assert_gt(DataRegistry.cmdb_number(id), last, "species.json is in CMDB order (%s)" % id)
+		last = DataRegistry.cmdb_number(id)
+
+
+func test_validator_rejects_a_duplicate_cmdb_number() -> void:
+	var raw := DataRegistry.read_raw()
+	raw["species"][1]["number"] = 0
+	var errors := Array(DataValidator.new().validate(raw)).filter(func(e: String) -> bool: return e.contains("already used"))
+	assert_eq(errors.size(), 1, str(errors))

@@ -36,11 +36,11 @@ func _ready() -> void:
 
 func open(species_id: String) -> void:
 	var data := DataRegistry.get_species(species_id)
-	var number := DataRegistry.species.keys().find(species_id) + 1
+	var number := DataRegistry.cmdb_number(species_id)
 	var caught: bool = GameState.cmdb_caught.get(species_id, false)
 	var types := "/".join(data["types"].map(func(t: String) -> String: return String(DataRegistry.types[t]["name"]).to_upper()))
 	_sprite.texture = DaemonSprites.front(species_id)
-	_text.text = "ASSET #%03d\n%s\n%s\n%s\nFound: %s" % [number, data["name"], data["cmdb"]["category"], types,
+	_text.text = "ASSET DMN-%03d\n%s\n%s\n%s\nFound: %s" % [number, data["name"], data["cmdb"]["category"], types,
 		GameState.cmdb_found_at.get(species_id, "Unknown")]
 	_entry.text = data["cmdb"]["entry"] if caught else "No data. Quarantine one to complete this record."
 	visible = true

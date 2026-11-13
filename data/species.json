@@ -1,5 +1,15 @@
 [
-  { "id": "chipmunk", "name": "Chipmunk", "types": ["hardware"], "art": { "flip_back": true },
+  { "id": "pyrewall", "number": 0, "name": "Pyrewall", "types": ["security", "hardware"], "legendary": true,
+    "base_stats": { "uptime": 95, "throughput": 90, "hardening": 100, "compute": 110, "encryption": 115, "bandwidth": 70 },
+    "growth_rate": "slow", "catch_rate": 3, "base_exp": 270, "log_yield": { "encryption": 3 },
+    "learnset": [
+      { "level": 1, "move": "static_zap" }, { "level": 1, "move": "firewall_up" }, { "level": 10, "move": "heatsink_slam" },
+      { "level": 20, "move": "latency_spike" }, { "level": 30, "move": "brownout" }, { "level": 40, "move": "burn_rule" },
+      { "level": 50, "move": "ash_reboot" }, { "level": 60, "move": "thermal_runaway" }
+    ],
+    "evolutions": [],
+    "cmdb": { "category": "Golden Pheasant / Perimeter Firewall", "entry": "Legendary guardian of Port 443. Its wings are brick firewalls with the flames kept inside. Burns any packet without a valid certificate, and reboots with a fresh ruleset when its rules go stale." } },
+  { "id": "chipmunk", "number": 1, "name": "Chipmunk", "types": ["hardware"], "art": { "flip_back": true },
     "base_stats": { "uptime": 44, "throughput": 58, "hardening": 48, "compute": 60, "encryption": 48, "bandwidth": 52 },
     "growth_rate": "medium_slow", "catch_rate": 45, "base_exp": 62, "log_yield": { "compute": 1 },
     "learnset": [
@@ -8,7 +18,7 @@
     ],
     "evolutions": [ { "to": "munkboard", "trigger": "level", "level": 16 } ],
     "cmdb": { "category": "Rodent / Thermal Unit", "entry": "Stores waste heat in its heatsink cheeks. Keeps a lap warm all winter. Do not pet after heavy use." } },
-  { "id": "munkboard", "name": "Munkboard", "types": ["hardware"], "art": { "flip_back": true },
+  { "id": "munkboard", "number": 2, "name": "Munkboard", "types": ["hardware"], "art": { "flip_back": true },
     "base_stats": { "uptime": 60, "throughput": 75, "hardening": 66, "compute": 78, "encryption": 60, "bandwidth": 66 },
     "growth_rate": "medium_slow", "catch_rate": 45, "base_exp": 142, "log_yield": { "compute": 1, "throughput": 1 },
     "learnset": [
@@ -18,7 +28,7 @@
     ],
     "evolutions": [ { "to": "mainmunk", "trigger": "level", "level": 34 } ],
     "cmdb": { "category": "Chipmunk / Logic Board", "entry": "Copper traces run down its back like stripes. Stuffs spare RAM in its cheeks for later." } },
-  { "id": "mainmunk", "name": "Mainmunk", "types": ["hardware"], "art": { "flip_back": true },
+  { "id": "mainmunk", "number": 3, "name": "Mainmunk", "types": ["hardware"], "art": { "flip_back": true },
     "base_stats": { "uptime": 80, "throughput": 98, "hardening": 90, "compute": 100, "encryption": 78, "bandwidth": 84 },
     "growth_rate": "medium_slow", "catch_rate": 45, "base_exp": 236, "log_yield": { "compute": 3 },
     "learnset": [
@@ -28,8 +38,7 @@
     ],
     "evolutions": [],
     "cmdb": { "category": "Chipmunk / Enterprise System", "entry": "An elder chipmunk the size of a server room. Has run payroll without a reboot since before anyone can remember." } },
-
-  { "id": "pingo", "name": "Pingo", "types": ["network"],
+  { "id": "pingo", "number": 4, "name": "Pingo", "types": ["network"],
     "base_stats": { "uptime": 48, "throughput": 50, "hardening": 58, "compute": 52, "encryption": 56, "bandwidth": 46 },
     "growth_rate": "medium_slow", "catch_rate": 45, "base_exp": 63, "log_yield": { "hardening": 1 },
     "learnset": [
@@ -38,7 +47,7 @@
     ],
     "evolutions": [ { "to": "pengwan", "trigger": "level", "level": 16 } ],
     "cmdb": { "category": "Penguin / Echo Unit", "entry": "Calls out \"ping\" and waits for a reply. Gets anxious if nobody answers within 4 ms." } },
-  { "id": "pengwan", "name": "Pengwan", "types": ["network"],
+  { "id": "pengwan", "number": 5, "name": "Pengwan", "types": ["network"],
     "base_stats": { "uptime": 62, "throughput": 66, "hardening": 76, "compute": 68, "encryption": 72, "bandwidth": 61 },
     "growth_rate": "medium_slow", "catch_rate": 45, "base_exp": 142, "log_yield": { "hardening": 1, "encryption": 1 },
     "learnset": [
@@ -48,7 +57,7 @@
     ],
     "evolutions": [ { "to": "emperoute", "trigger": "level", "level": 34 } ],
     "cmdb": { "category": "Penguin / Network Switch", "entry": "Waddles the halls keeping every port in line. Knows exactly which desk each cable goes to." } },
-  { "id": "emperoute", "name": "Emperoute", "types": ["network"],
+  { "id": "emperoute", "number": 6, "name": "Emperoute", "types": ["network"],
     "base_stats": { "uptime": 82, "throughput": 86, "hardening": 100, "compute": 88, "encryption": 96, "bandwidth": 78 },
     "growth_rate": "medium_slow", "catch_rate": 45, "base_exp": 239, "log_yield": { "hardening": 3 },
     "learnset": [
@@ -58,8 +67,7 @@
     ],
     "evolutions": [],
     "cmdb": { "category": "Penguin / Internet Backbone", "entry": "Stands at the edge of the valley and carries everyone's traffic. A dropped packet is a personal insult." } },
-
-  { "id": "glowbit", "name": "Glowbit", "types": ["software"],
+  { "id": "glowbit", "number": 7, "name": "Glowbit", "types": ["software"],
     "base_stats": { "uptime": 45, "throughput": 48, "hardening": 46, "compute": 62, "encryption": 55, "bandwidth": 54 },
     "growth_rate": "medium_slow", "catch_rate": 45, "base_exp": 64, "log_yield": { "compute": 1 },
     "learnset": [
@@ -68,7 +76,7 @@
     ],
     "evolutions": [ { "to": "scriptfly", "trigger": "level", "level": 16 } ],
     "cmdb": { "category": "Firefly / Cursor", "entry": "Its tail blinks like a cursor waiting for input. Follows whoever types the fastest." } },
-  { "id": "scriptfly", "name": "Scriptfly", "types": ["software"],
+  { "id": "scriptfly", "number": 8, "name": "Scriptfly", "types": ["software"],
     "base_stats": { "uptime": 58, "throughput": 62, "hardening": 60, "compute": 82, "encryption": 72, "bandwidth": 71 },
     "growth_rate": "medium_slow", "catch_rate": 45, "base_exp": 142, "log_yield": { "compute": 2 },
     "learnset": [
@@ -78,7 +86,7 @@
     ],
     "evolutions": [ { "to": "compilume", "trigger": "level", "level": 34 } ],
     "cmdb": { "category": "Firefly / Script Runner", "entry": "Writes glowing code in the air as it flies. Mutters comments nobody will ever read." } },
-  { "id": "compilume", "name": "Compilume", "types": ["software"],
+  { "id": "compilume", "number": 9, "name": "Compilume", "types": ["software"],
     "base_stats": { "uptime": 78, "throughput": 82, "hardening": 80, "compute": 106, "encryption": 94, "bandwidth": 90 },
     "growth_rate": "medium_slow", "catch_rate": 45, "base_exp": 240, "log_yield": { "compute": 3 },
     "learnset": [
@@ -88,8 +96,7 @@
     ],
     "evolutions": [],
     "cmdb": { "category": "Firefly / Compiler", "entry": "Its abdomen fills like a progress bar while it thinks. Warnings only make it glow brighter." } },
-
-  { "id": "wormby", "name": "Wormby", "types": ["malware"],
+  { "id": "wormby", "number": 10, "name": "Wormby", "types": ["malware"],
     "base_stats": { "uptime": 40, "throughput": 50, "hardening": 35, "compute": 30, "encryption": 35, "bandwidth": 60 },
     "growth_rate": "erratic", "catch_rate": 190, "base_exp": 55, "log_yield": { "bandwidth": 1 },
     "learnset": [
@@ -98,7 +105,7 @@
     ],
     "evolutions": [ { "to": "wormhole", "trigger": "level", "level": 22 } ],
     "cmdb": { "category": "Worm / Self-Replicator", "entry": "Tunnels through cable jackets. Where there is one, there are soon a hundred." } },
-  { "id": "wormhole", "name": "Wormhole", "types": ["malware"], "art": { "flip_back": true },
+  { "id": "wormhole", "number": 11, "name": "Wormhole", "types": ["malware"], "art": { "flip_back": true },
     "base_stats": { "uptime": 70, "throughput": 90, "hardening": 65, "compute": 70, "encryption": 65, "bandwidth": 110 },
     "growth_rate": "erratic", "catch_rate": 90, "base_exp": 158, "log_yield": { "bandwidth": 2 },
     "learnset": [
@@ -107,8 +114,7 @@
     ],
     "evolutions": [],
     "cmdb": { "category": "Worm / Spacetime Exploit", "entry": "Folds the network so two distant hosts touch. Packets arrive before they were sent." } },
-
-  { "id": "spigeon", "name": "Spigeon", "types": ["malware"],
+  { "id": "spigeon", "number": 12, "name": "Spigeon", "types": ["malware"],
     "base_stats": { "uptime": 50, "throughput": 30, "hardening": 40, "compute": 55, "encryption": 40, "bandwidth": 45 },
     "growth_rate": "fast", "catch_rate": 190, "base_exp": 58, "log_yield": { "compute": 1 },
     "learnset": [
@@ -117,7 +123,7 @@
     ],
     "evolutions": [ { "to": "botgeon", "trigger": "level", "level": 25 } ],
     "cmdb": { "category": "Pigeon / Junk Mail", "entry": "Delivers letters nobody asked for. Claims you have won a prize. You have not won a prize." } },
-  { "id": "botgeon", "name": "Botgeon", "types": ["malware"],
+  { "id": "botgeon", "number": 13, "name": "Botgeon", "types": ["malware"],
     "base_stats": { "uptime": 85, "throughput": 60, "hardening": 75, "compute": 90, "encryption": 75, "bandwidth": 60 },
     "growth_rate": "fast", "catch_rate": 75, "base_exp": 160, "log_yield": { "uptime": 2 },
     "learnset": [
@@ -126,28 +132,7 @@
     ],
     "evolutions": [],
     "cmdb": { "category": "Pigeon / Botnet", "entry": "One pigeon, ten thousand followers. When it coos, every inbox in the valley fills at once." } },
-
-  { "id": "dustbunny", "name": "Dustbunny", "types": ["peripheral"],
-    "base_stats": { "uptime": 40, "throughput": 45, "hardening": 35, "compute": 30, "encryption": 35, "bandwidth": 70 },
-    "growth_rate": "medium_fast", "catch_rate": 255, "base_exp": 50, "log_yield": { "bandwidth": 1 },
-    "learnset": [
-      { "level": 1, "move": "bump" }, { "level": 4, "move": "screen_glare" }, { "level": 9, "move": "double_click" },
-      { "level": 15, "move": "keyboard_smash" }
-    ],
-    "evolutions": [],
-    "cmdb": { "category": "Rabbit / Lint Trap", "entry": "Collects behind desktop towers. Scrappy, sneezy, and impossible to get rid of." } },
-
-  { "id": "fanbat", "name": "Fanbat", "types": ["hardware", "power"],
-    "base_stats": { "uptime": 55, "throughput": 65, "hardening": 50, "compute": 60, "encryption": 50, "bandwidth": 95 },
-    "growth_rate": "medium_fast", "catch_rate": 120, "base_exp": 110, "log_yield": { "bandwidth": 2 },
-    "learnset": [
-      { "level": 1, "move": "bump" }, { "level": 5, "move": "static_zap" }, { "level": 10, "move": "heatsink_slam" },
-      { "level": 16, "move": "bandwidth_hog" }, { "level": 22, "move": "brownout" }, { "level": 28, "move": "sleep_mode" }
-    ],
-    "evolutions": [],
-    "cmdb": { "category": "Bat / Case Fan", "entry": "Its wings are 120 mm case fans. Swarms hang from server room ceilings, humming at night." } },
-
-  { "id": "cablesnake", "name": "Cablesnake", "types": ["network"],
+  { "id": "cablesnake", "number": 14, "name": "Cablesnake", "types": ["network"],
     "base_stats": { "uptime": 45, "throughput": 60, "hardening": 45, "compute": 40, "encryption": 45, "bandwidth": 65 },
     "growth_rate": "slow", "catch_rate": 190, "base_exp": 58, "log_yield": { "bandwidth": 1 },
     "learnset": [
@@ -156,7 +141,7 @@
     ],
     "evolutions": [ { "to": "patchviper", "trigger": "level", "level": 24 } ],
     "cmdb": { "category": "Snake / Ethernet Run", "entry": "Lives in cable tangles and is often mistaken for one. Bites when unplugged." } },
-  { "id": "patchviper", "name": "Patchviper", "types": ["network"],
+  { "id": "patchviper", "number": 15, "name": "Patchviper", "types": ["network"],
     "base_stats": { "uptime": 70, "throughput": 90, "hardening": 70, "compute": 65, "encryption": 70, "bandwidth": 95 },
     "growth_rate": "slow", "catch_rate": 90, "base_exp": 155, "log_yield": { "throughput": 2 },
     "learnset": [
@@ -165,8 +150,7 @@
     ],
     "evolutions": [],
     "cmdb": { "category": "Viper / Patch Panel", "entry": "Coils around patch panels and decides which ports get to talk. Strikes at unlabeled cables." } },
-
-  { "id": "floppit", "name": "Floppit", "types": ["legacy"],
+  { "id": "floppit", "number": 16, "name": "Floppit", "types": ["legacy"],
     "base_stats": { "uptime": 45, "throughput": 40, "hardening": 55, "compute": 45, "encryption": 55, "bandwidth": 60 },
     "growth_rate": "fluctuating", "catch_rate": 190, "base_exp": 60, "log_yield": { "encryption": 1 },
     "learnset": [
@@ -175,7 +159,7 @@
     ],
     "evolutions": [ { "to": "ziphare", "trigger": "item", "item": "legacy_driver" } ],
     "cmdb": { "category": "Rabbit / 3.5\" Floppy", "entry": "Its ears are a metal shutter that snaps shut when startled. Holds exactly 1.44 MB of memories." } },
-  { "id": "ziphare", "name": "Ziphare", "types": ["legacy"],
+  { "id": "ziphare", "number": 17, "name": "Ziphare", "types": ["legacy"],
     "base_stats": { "uptime": 65, "throughput": 55, "hardening": 75, "compute": 70, "encryption": 75, "bandwidth": 75 },
     "growth_rate": "fluctuating", "catch_rate": 90, "base_exp": 140, "log_yield": { "encryption": 2 },
     "learnset": [
@@ -184,7 +168,7 @@
     ],
     "evolutions": [ { "to": "discohare", "trigger": "sync" } ],
     "cmdb": { "category": "Hare / Zip Disk", "entry": "Its ears hold a whole 100 MB. Whirs and clicks while it thinks, and insists the old format was better." } },
-  { "id": "discohare", "name": "Discohare", "types": ["legacy"],
+  { "id": "discohare", "number": 18, "name": "Discohare", "types": ["legacy"],
     "base_stats": { "uptime": 85, "throughput": 70, "hardening": 95, "compute": 95, "encryption": 95, "bandwidth": 85 },
     "growth_rate": "fluctuating", "catch_rate": 45, "base_exp": 230, "log_yield": { "encryption": 3 },
     "learnset": [
@@ -193,8 +177,25 @@
     ],
     "evolutions": [],
     "cmdb": { "category": "Hare / Optical Disc", "entry": "Its disc ears shimmer like a rainbow. Scratch them and it skips mid-sentence. Collectors pay a fortune." } },
-
-  { "id": "ramster", "name": "Ramster", "types": ["hardware"],
+  { "id": "dustbunny", "number": 19, "name": "Dustbunny", "types": ["peripheral"],
+    "base_stats": { "uptime": 40, "throughput": 45, "hardening": 35, "compute": 30, "encryption": 35, "bandwidth": 70 },
+    "growth_rate": "medium_fast", "catch_rate": 255, "base_exp": 50, "log_yield": { "bandwidth": 1 },
+    "learnset": [
+      { "level": 1, "move": "bump" }, { "level": 4, "move": "screen_glare" }, { "level": 9, "move": "double_click" },
+      { "level": 15, "move": "keyboard_smash" }
+    ],
+    "evolutions": [],
+    "cmdb": { "category": "Rabbit / Lint Trap", "entry": "Collects behind desktop towers. Scrappy, sneezy, and impossible to get rid of." } },
+  { "id": "fanbat", "number": 20, "name": "Fanbat", "types": ["hardware", "power"],
+    "base_stats": { "uptime": 55, "throughput": 65, "hardening": 50, "compute": 60, "encryption": 50, "bandwidth": 95 },
+    "growth_rate": "medium_fast", "catch_rate": 120, "base_exp": 110, "log_yield": { "bandwidth": 2 },
+    "learnset": [
+      { "level": 1, "move": "bump" }, { "level": 5, "move": "static_zap" }, { "level": 10, "move": "heatsink_slam" },
+      { "level": 16, "move": "bandwidth_hog" }, { "level": 22, "move": "brownout" }, { "level": 28, "move": "sleep_mode" }
+    ],
+    "evolutions": [],
+    "cmdb": { "category": "Bat / Case Fan", "entry": "Its wings are 120 mm case fans. Swarms hang from server room ceilings, humming at night." } },
+  { "id": "ramster", "number": 21, "name": "Ramster", "types": ["hardware"],
     "base_stats": { "uptime": 50, "throughput": 70, "hardening": 55, "compute": 40, "encryption": 45, "bandwidth": 75 },
     "growth_rate": "medium_fast", "catch_rate": 120, "base_exp": 92, "log_yield": { "bandwidth": 1 },
     "learnset": [
@@ -203,8 +204,7 @@
     ],
     "evolutions": [],
     "cmdb": { "category": "Hamster / Memory Module", "entry": "Runs on its wheel to keep its memory refreshed. Unplug it and it forgets everything, including you." } },
-
-  { "id": "servurtle", "name": "Servurtle", "types": ["hardware"],
+  { "id": "servurtle", "number": 22, "name": "Servurtle", "types": ["hardware"],
     "base_stats": { "uptime": 72, "throughput": 60, "hardening": 92, "compute": 50, "encryption": 70, "bandwidth": 28 },
     "growth_rate": "slow", "catch_rate": 60, "base_exp": 130, "log_yield": { "hardening": 2 },
     "learnset": [
@@ -213,17 +213,7 @@
     ],
     "evolutions": [],
     "cmdb": { "category": "Turtle / Rack Server", "entry": "Carries a 2U server on its shell. Has not been rebooted since it hatched, and nobody dares try." } },
-  { "id": "pyrewall", "name": "Pyrewall", "types": ["security", "power"], "legendary": true,
-    "base_stats": { "uptime": 95, "throughput": 90, "hardening": 100, "compute": 110, "encryption": 115, "bandwidth": 70 },
-    "growth_rate": "slow", "catch_rate": 3, "base_exp": 270, "log_yield": { "encryption": 3 },
-    "learnset": [
-      { "level": 1, "move": "static_zap" }, { "level": 1, "move": "firewall_up" }, { "level": 10, "move": "heatsink_slam" },
-      { "level": 20, "move": "latency_spike" }, { "level": 30, "move": "brownout" }, { "level": 40, "move": "burn_rule" },
-      { "level": 50, "move": "ash_reboot" }, { "level": 60, "move": "thermal_runaway" }
-    ],
-    "evolutions": [],
-    "cmdb": { "category": "Phoenix / Perimeter Firewall", "entry": "Legendary guardian of Port 443. Burns any packet without a valid certificate. When its rules go stale it collapses into ash and boots again with a fresh ruleset." } },
-  { "id": "clawptop", "name": "Clawptop", "types": ["hardware"],
+  { "id": "clawptop", "number": 28, "name": "Clawptop", "types": ["hardware"],
     "base_stats": { "uptime": 50, "throughput": 60, "hardening": 65, "compute": 35, "encryption": 45, "bandwidth": 35 },
     "growth_rate": "medium_slow", "catch_rate": 120, "base_exp": 60, "log_yield": { "hardening": 1 },
     "learnset": [
@@ -232,7 +222,7 @@
     ],
     "evolutions": [ { "to": "deskclaw", "trigger": "level", "level": 20 } ],
     "cmdb": { "category": "Hermit Crab / Laptop", "entry": "Moves into an old laptop instead of a shell. Snaps the lid shut on anyone who reaches for the keyboard." } },
-  { "id": "deskclaw", "name": "Deskclaw", "types": ["hardware"],
+  { "id": "deskclaw", "number": 29, "name": "Deskclaw", "types": ["hardware"],
     "base_stats": { "uptime": 65, "throughput": 80, "hardening": 85, "compute": 45, "encryption": 60, "bandwidth": 45 },
     "growth_rate": "medium_slow", "catch_rate": 60, "base_exp": 130, "log_yield": { "hardening": 2 },
     "learnset": [
@@ -242,7 +232,7 @@
     ],
     "evolutions": [ { "to": "crabinet", "trigger": "level", "level": 38 } ],
     "cmdb": { "category": "Hermit Crab / Desktop Tower", "entry": "Carries a desktop tower on its back and holds its big claw up like a shield. Its power button is the only part it lets you touch." } },
-  { "id": "crabinet", "name": "Crabinet", "types": ["hardware"],
+  { "id": "crabinet", "number": 30, "name": "Crabinet", "types": ["hardware"],
     "base_stats": { "uptime": 85, "throughput": 105, "hardening": 115, "compute": 55, "encryption": 80, "bandwidth": 50 },
     "growth_rate": "medium_slow", "catch_rate": 30, "base_exp": 210, "log_yield": { "hardening": 3 },
     "learnset": [
@@ -252,7 +242,7 @@
     ],
     "evolutions": [],
     "cmdb": { "category": "Hermit Crab / Server Cabinet", "entry": "Lives in a full server cabinet taller than its head. Every rack unit inside blinks; nobody remembers what half of them do." } },
-  { "id": "antsistor", "name": "Antsistor", "types": ["hardware"],
+  { "id": "antsistor", "number": 31, "name": "Antsistor", "types": ["hardware"],
     "base_stats": { "uptime": 35, "throughput": 55, "hardening": 40, "compute": 35, "encryption": 35, "bandwidth": 60 },
     "growth_rate": "medium_fast", "catch_rate": 200, "base_exp": 50, "log_yield": { "bandwidth": 1 },
     "learnset": [
@@ -261,7 +251,7 @@
     ],
     "evolutions": [ { "to": "transistant", "trigger": "level", "level": 18 } ],
     "cmdb": { "category": "Ant / Transistor", "entry": "A worker ant with a transistor for an abdomen. Thousands of them switch on and off together to carry one bit." } },
-  { "id": "transistant", "name": "Transistant", "types": ["hardware"],
+  { "id": "transistant", "number": 32, "name": "Transistant", "types": ["hardware"],
     "base_stats": { "uptime": 55, "throughput": 80, "hardening": 60, "compute": 50, "encryption": 50, "bandwidth": 85 },
     "growth_rate": "medium_fast", "catch_rate": 100, "base_exp": 125, "log_yield": { "throughput": 2 },
     "learnset": [
@@ -270,7 +260,7 @@
     ],
     "evolutions": [ { "to": "siliqueen", "trigger": "level", "level": 36 } ],
     "cmdb": { "category": "Ant / Microchip", "entry": "Soldier ants that guard the colony's circuits. They lay gold traces in perfectly straight lines and bite anything that crosses one." } },
-  { "id": "siliqueen", "name": "Siliqueen", "types": ["hardware"],
+  { "id": "siliqueen", "number": 33, "name": "Siliqueen", "types": ["hardware"],
     "base_stats": { "uptime": 80, "throughput": 90, "hardening": 80, "compute": 95, "encryption": 80, "bandwidth": 70 },
     "growth_rate": "medium_fast", "catch_rate": 35, "base_exp": 215, "log_yield": { "compute": 3 },
     "learnset": [
@@ -280,7 +270,7 @@
     ],
     "evolutions": [],
     "cmdb": { "category": "Ant / Chip Foundry", "entry": "The colony's queen. Her abdomen is a silicon wafer, and every die on it hatches into a new worker." } },
-  { "id": "coolippo", "name": "Coolippo", "types": ["hardware"],
+  { "id": "coolippo", "number": 34, "name": "Coolippo", "types": ["hardware"],
     "base_stats": { "uptime": 70, "throughput": 55, "hardening": 55, "compute": 45, "encryption": 50, "bandwidth": 30 },
     "growth_rate": "slow", "catch_rate": 150, "base_exp": 64, "log_yield": { "uptime": 1 },
     "learnset": [
@@ -289,7 +279,7 @@
     ],
     "evolutions": [ { "to": "coolapotamus", "trigger": "level", "level": 28 } ],
     "cmdb": { "category": "Hippo / Liquid Cooling", "entry": "Wallows in coolant and pumps it through a tube from its nostrils. Server rooms stay a few degrees colder when one moves in." } },
-  { "id": "coolapotamus", "name": "Coolapotamus", "types": ["hardware"],
+  { "id": "coolapotamus", "number": 35, "name": "Coolapotamus", "types": ["hardware"],
     "base_stats": { "uptime": 110, "throughput": 85, "hardening": 85, "compute": 70, "encryption": 80, "bandwidth": 40 },
     "growth_rate": "slow", "catch_rate": 60, "base_exp": 180, "log_yield": { "uptime": 2 },
     "learnset": [
@@ -298,7 +288,7 @@
     ],
     "evolutions": [],
     "cmdb": { "category": "Hippo / Cooling Loop", "entry": "Carries a full radiator and reservoir on its back. When it yawns, a cold wave rolls out across the floor." } },
-  { "id": "dillodisk", "name": "Dillodisk", "types": ["hardware"],
+  { "id": "dillodisk", "number": 36, "name": "Dillodisk", "types": ["hardware"],
     "base_stats": { "uptime": 45, "throughput": 55, "hardening": 75, "compute": 30, "encryption": 45, "bandwidth": 40 },
     "growth_rate": "medium_fast", "catch_rate": 160, "base_exp": 58, "log_yield": { "hardening": 1 },
     "learnset": [
@@ -307,7 +297,7 @@
     ],
     "evolutions": [ { "to": "armadrive", "trigger": "level", "level": 26 } ],
     "cmdb": { "category": "Armadillo / Hard Drive", "entry": "Rolls into a ball and spins like a platter when scared. Listen closely and you can hear it click." } },
-  { "id": "armadrive", "name": "Armadrive", "types": ["hardware"],
+  { "id": "armadrive", "number": 37, "name": "Armadrive", "types": ["hardware"],
     "base_stats": { "uptime": 70, "throughput": 85, "hardening": 110, "compute": 50, "encryption": 70, "bandwidth": 60 },
     "growth_rate": "medium_fast", "catch_rate": 70, "base_exp": 165, "log_yield": { "hardening": 2 },
     "learnset": [
@@ -316,7 +306,7 @@
     ],
     "evolutions": [],
     "cmdb": { "category": "Armadillo / Multi-Platter Drive", "entry": "Six aluminum bands and two platters. It remembers every place it has ever rolled, in no particular order." } },
-  { "id": "pasteslug", "name": "Pasteslug", "types": ["hardware"],
+  { "id": "pasteslug", "number": 38, "name": "Pasteslug", "types": ["hardware"],
     "base_stats": { "uptime": 75, "throughput": 40, "hardening": 60, "compute": 60, "encryption": 80, "bandwidth": 25 },
     "growth_rate": "fluctuating", "catch_rate": 140, "base_exp": 90, "log_yield": { "encryption": 1 },
     "learnset": [
@@ -325,7 +315,7 @@
     ],
     "evolutions": [],
     "cmdb": { "category": "Slug / Thermal Paste", "entry": "Made entirely of thermal paste and always uses too much. Leaves a silver trail across every CPU it crawls over." } },
-  { "id": "pixelsier", "name": "Pixelsier", "types": ["hardware"],
+  { "id": "pixelsier", "number": 39, "name": "Pixelsier", "types": ["hardware"],
     "base_stats": { "uptime": 45, "throughput": 40, "hardening": 40, "compute": 95, "encryption": 60, "bandwidth": 90 },
     "growth_rate": "medium_fast", "catch_rate": 75, "base_exp": 110, "log_yield": { "compute": 2 },
     "learnset": [
@@ -334,7 +324,7 @@
     ],
     "evolutions": [],
     "cmdb": { "category": "Tarsier / Graphics Card", "entry": "Its huge eyes render everything they see, one pixel at a time. The fans on its back spin up when it gets excited." } },
-  { "id": "tieweaver", "name": "Tieweaver", "types": ["hardware", "network"],
+  { "id": "tieweaver", "number": 40, "name": "Tieweaver", "types": ["hardware", "network"],
     "base_stats": { "uptime": 50, "throughput": 65, "hardening": 55, "compute": 50, "encryption": 55, "bandwidth": 80 },
     "growth_rate": "medium_fast", "catch_rate": 110, "base_exp": 100, "log_yield": { "bandwidth": 2 },
     "learnset": [

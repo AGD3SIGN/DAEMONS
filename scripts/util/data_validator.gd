@@ -95,8 +95,14 @@ func validate(raw: Dictionary) -> PackedStringArray:
 		_validate_move(moves[id], "moves › " + id)
 	for id: String in items:
 		_validate_item(items[id], "items › " + id)
+	var numbers := {}
 	for id: String in species:
 		_validate_species(species[id], "species › " + id)
+		if _int(species[id], "number", "species › " + id, 0, 999):
+			var n := int(species[id]["number"])
+			if numbers.has(n):
+				_err("species › " + id, "CMDB number %d is already used by '%s'" % [n, numbers[n]])
+			numbers[n] = id
 	_validate_certifications(raw.get("certifications"))
 	_validate_trainers(raw.get("trainers", {}))
 	_validate_dialogue_files(raw.get("dialogue", {}))

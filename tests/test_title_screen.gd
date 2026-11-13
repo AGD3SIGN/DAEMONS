@@ -22,7 +22,7 @@ func test_featured_legendary_comes_from_data() -> void:
 	assert_eq(data["tagline"], "CATCH · FUSE · COMPILE")
 	var pyrewall: Dictionary = data["featured"][0]
 	assert_eq(pyrewall["name"], "PYREWALL")
-	assert_eq(pyrewall["fusion"], "Phoenix × Firewall")
+	assert_eq(pyrewall["fusion"], "Pheasant × Firewall")
 	var title := _title()
 	var lines: Array = title.card_lines()
 	assert_eq(lines[1][3], "PYREWALL")
@@ -192,7 +192,7 @@ func test_pyrewall_is_a_legendary_daemon() -> void:
 	var s := DataRegistry.get_species("pyrewall")
 	assert_false(s.is_empty(), "in species.json")
 	assert_true(s.get("legendary", false))
-	assert_eq(s["types"], ["security", "power"])
+	assert_eq(s["types"], ["security", "hardware"])
 	assert_eq(int(s["catch_rate"]), 3, "hard to quarantine")
 	var known := []
 	for entry: Dictionary in s["learnset"]:
@@ -207,7 +207,7 @@ func test_pyrewall_is_a_legendary_daemon() -> void:
 
 func test_title_card_shows_the_cmdb_number() -> void:
 	var T: GDScript = load("res://scripts/ui/title_screen.gd")
-	var number := "%03d" % (DataRegistry.species.keys().find("pyrewall") + 1)
+	var number := "000"
 	assert_eq(T.cmdb_number({"id": "pyrewall"}), number)
 	assert_eq(T.cmdb_number({"id": "not_a_species_yet", "number": "000"}), "000", "fallback for a title-only legendary")
 	var title := _title()

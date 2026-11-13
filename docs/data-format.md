@@ -52,6 +52,7 @@ It's never put in a learnset. Change it here; the id is `BattleSim.FALLBACK_MOVE
 ## species.json
 | Field | Values |
 |---|---|
+| number | CMDB number from the master roster (0–999, unique). Shown as "#028" in the CMDB list and "DMN-028" on the record. Gaps are fine: roster slots not built yet keep their number. Keep the file sorted by it |
 | types | 1 or 2 type ids |
 | base_stats | uptime, throughput, hardening, compute, encryption, bandwidth (1–255 each) |
 | growth_rate | fast, medium_fast, medium_slow, slow, erratic, fluctuating |

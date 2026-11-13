@@ -418,7 +418,7 @@ func cmdb_screen() -> void:
 		for i in ids.size():
 			var seen: bool = GameState.cmdb_seen.get(ids[i], false)
 			var caught: bool = GameState.cmdb_caught.get(ids[i], false)
-			rows.append("#%03d %-11s %s" % [i + 1, DataRegistry.species[ids[i]]["name"] if seen else "----------", "*" if caught else ""])
+			rows.append("#%03d %-11s %s" % [DataRegistry.cmdb_number(ids[i]), DataRegistry.species[ids[i]]["name"] if seen else "----------", "*" if caught else ""])
 			enabled.append(seen)
 		list.describe = func(_i: int) -> String: return "SEEN %d   QUARANTINED* %d" % [GameState.cmdb_seen.size(), GameState.cmdb_caught.size()]
 		var r := await list.choose("CMDB", rows, enabled, start)

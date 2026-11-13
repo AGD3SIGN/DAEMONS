@@ -288,8 +288,8 @@ func card_lines() -> Array:
 ## The featured Daemon's CMDB asset number (its place in species.json), or the card's own "number"
 ## for one that isn't a species yet.
 static func cmdb_number(f: Dictionary) -> String:
-	var i := DataRegistry.species.keys().find(f.get("id", ""))
-	return "%03d" % (i + 1) if i >= 0 else str(f.get("number", "000"))
+	var n := DataRegistry.cmdb_number(f.get("id", ""))
+	return "%03d" % n if n >= 0 else str(f.get("number", "000"))
 
 
 static func wrap_text(f: Font, text: String, size_px: int, width: float) -> PackedStringArray:

@@ -4,6 +4,19 @@ Newest entries at the top. Each entry: what's done, decisions, what's next.
 
 ---
 
+## 2026-11-13 — CMDB numbers follow the master roster
+
+- species.json gets a `number` field (master roster, Nos. 000–178) and is sorted by it. The CMDB list, the CMDB
+  record (now "ASSET DMN-028") and the title card read it via `DataRegistry.cmdb_number(id)` instead of the file
+  position. Validator: whole number 0–999, no duplicates.
+- Renumbered: Pyrewall 000; Cablesnake/Patchviper 014–015; Floppit line 016–018; Dustbunny 019; Fanbat 020;
+  Ramster 021; Servurtle 022; Hardware expansion 028–040. 023–027 are reserved for Captchat, Phishgill,
+  Cumulonimbyte, Hallucinaut and Uptimus.
+- Pyrewall is now Security/Hardware, a golden pheasant (CMDB category, entry, title card "Pheasant × Firewall").
+- Not changed (open decisions in the roster): Ramster and Servurtle stay Hardware (Data/Security are only
+  proposed, and Dana's Hardware department uses both); evolution levels stay as placeholders.
+- Daemon Lab opens on No. 000 (Pyrewall) now. Tests: 255/255.
+
 ## 2026-11-12 — Hardware expansion: 13 new Daemons
 
 - New species (CMDB #024–#036, all Hardware; Tieweaver is Hardware/Network):

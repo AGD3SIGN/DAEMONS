@@ -10,11 +10,13 @@ func before_each() -> void:
 
 
 func test_starts_on_first_species_and_saves_ok() -> void:
-	assert_eq(_lab.daemon.species_id, "chipmunk")
+	assert_eq(_lab.daemon.species_id, DataRegistry.species.keys()[0], "No. 000, Pyrewall")
 	assert_true(_lab.save_ok)
 
 
 func test_browse_level_and_upgrade() -> void:
+	while _lab.daemon.species_id != "chipmunk":
+		_lab.change_species(1)
 	for i in 11:
 		_lab.change_level(1)  # level 16
 	_lab.upgrade()

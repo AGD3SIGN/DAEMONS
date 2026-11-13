@@ -174,6 +174,12 @@ func get_species(id: String) -> Dictionary:
 	return species.get(id, {})
 
 
+## The species' CMDB number from the master roster (species.json "number"), or -1 for an unknown id.
+## Numbers can have gaps: roster entries that aren't built yet keep their slot.
+func cmdb_number(id: String) -> int:
+	return int(species.get(id, {}).get("number", -1))
+
+
 func get_move(id: String) -> Dictionary:
 	return moves.get(id, {})
 
