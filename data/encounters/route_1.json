@@ -37,6 +37,24 @@
         "min": 3,
         "max": 5,
         "weight": 10
+      },
+      {
+        "species": "antsistor",
+        "min": 2,
+        "max": 4,
+        "weight": 15
+      },
+      {
+        "species": "dillodisk",
+        "min": 3,
+        "max": 5,
+        "weight": 10
+      },
+      {
+        "species": "pasteslug",
+        "min": 3,
+        "max": 5,
+        "weight": 5
       }
     ]
   }

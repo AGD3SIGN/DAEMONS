@@ -15,7 +15,10 @@ Newest entries at the top. Each entry: what's done, decisions, what's next.
 - Source art: `art_src/daemons/09-Clawptop`, `10-Antsistor`, `11-Coolippo`, `12-Dillodisk`, plus three new sheets in
   `08-Singles`. Imported one by one (6x2 layout) and polished to 15 colors each.
 - The prompt doc numbered them 028–040; the game numbers by species.json order, so they are #024–#036.
-- Not yet in any encounter table, so they can't be found in the wild yet.
+- Wild placement (first stages only; later stages come from upgrading): Route 1 gets Antsistor (Lv 2-4, weight 15),
+  Dillodisk (3-5, 10), Pasteslug (3-5, 5, rare). Wi-Fi Dead Zone gets Clawptop (5-7, 15), Coolippo (6-8, 10),
+  Tieweaver (6-8, 10), Pixelsier (6-8, 5, rare). `test_encounter_tables_and_rolls` now reads the table instead of
+  hard-coding Route 1's slot count and odds.
 - Tests: 253/253 (new: `test_hardware_expansion_lines`).
 
 ## 2026-11-11 — Pyrewall joins the roster

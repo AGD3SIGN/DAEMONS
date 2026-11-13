@@ -57,8 +57,16 @@ func test_encounter_tables_and_rolls() -> void:
 		species_seen[hit["species"]] = int(species_seen.get(hit["species"], 0)) + 1
 		if hit["species"] == "cablesnake":
 			assert_between(int(hit["level"]), 3, 5)
-	assert_eq(species_seen.size(), 6, "every slot shows up")
-	assert_between(int(species_seen["dustbunny"]), 550, 850, "about 35%")
+	var slots: Array = DataRegistry.encounters["route_1"]["zones"]["cable_tangle"]
+	assert_eq(species_seen.size(), slots.size(), "every slot shows up")
+	var total := 0.0
+	var dust_weight := 0.0
+	for slot: Dictionary in slots:
+		total += float(slot["weight"])
+		if slot["species"] == "dustbunny":
+			dust_weight = float(slot["weight"])
+	var expected := 2000.0 * dust_weight / total
+	assert_between(int(species_seen["dustbunny"]), int(expected * 0.8), int(expected * 1.2), "matches its weight")
 	assert_lt(int(species_seen["floppit"]), int(species_seen["spigeon"]), "rare slot is rarer")
 	assert_true(Encounters.roll("route_1", "cable_tangle", rng, 1, false, 0.0).is_empty(), "rate 0")
 	assert_true(Encounters.roll("route_1", "grass", rng, 1, false, 1.0).is_empty(), "plain grass")
