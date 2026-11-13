@@ -13,8 +13,8 @@ Newest entries at the top. Each entry: what's done, decisions, what's next.
   Ramster 021; Servurtle 022; Hardware expansion 028–040. 023–027 are reserved for Captchat, Phishgill,
   Cumulonimbyte, Hallucinaut and Uptimus.
 - Pyrewall is now Security/Hardware, a golden pheasant (CMDB category, entry, title card "Pheasant × Firewall").
-- Not changed (open decisions in the roster): Ramster and Servurtle stay Hardware (Data/Security are only
-  proposed, and Dana's Hardware department uses both); evolution levels stay as placeholders.
+- Ramster and Servurtle stay Hardware: Brandon decided 2026-11-13 (the roster had proposed Data/Security; Dana's
+  Hardware department uses both). Evolution levels stay as placeholders.
 - Daemon Lab opens on No. 000 (Pyrewall) now. Tests: 255/255.
 
 ## 2026-11-12 — Hardware expansion: 13 new Daemons

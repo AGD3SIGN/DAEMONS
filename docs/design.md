@@ -115,7 +115,7 @@ Draft type chart (attacker → defender; 2 = super effective, ½ = resisted, 0 =
 | **Pixelsier** | Hardware | tarsier + graphics card; enormous pixel-grid eyes, two-fan GPU backpack |
 | **Tieweaver** | Hardware/Network | weaver bird that ties cables into neat zip-tied bundles |
 
-CMDB numbers come from the master roster (179 Daemons, Nos. 000–178; `number` in species.json). Built so far: 000–022 and 028–040; 023–027 (Captchat, Phishgill, Cumulonimbyte, Hallucinaut, Uptimus) keep their slots until they are made.
+CMDB numbers come from the master roster (179 Daemons, Nos. 000–178; `number` in species.json). Ramster (021) and Servurtle (022) stay **Hardware** (decided 2026-11-13; the roster had proposed Data and Security). Built so far: 000–022 and 028–040; 023–027 (Captchat, Phishgill, Cumulonimbyte, Hallucinaut, Uptimus) keep their slots until they are made.
 
 Target roster: **40–60 Daemons** for v1 (about 18 evolution lines + singles + 2–3 legendaries). Design rule: every Daemon is a real animal/creature fused with a real piece of tech, and its name is a pun. No silhouettes, names or palettes borrowed from any Pokémon.
 
