@@ -1,6 +1,7 @@
 class_name BattleScene
 extends Control
-## The battle screen. Builds the GBA-style layout (320x180, anchored so bigger views still fit),
+## The battle screen: the "Server Floor" arena from Brandon's Battle Scene spec (2026-11-13), in a 960x640
+## frame scaled by whole numbers (see _layout),
 ## runs the turn loop on top of BattleSim, and plays events back through BattlePlayer.
 ##
 ## Start a battle from anywhere:
@@ -24,9 +25,19 @@ extends Control
 signal finished(result: Dictionary)
 
 const SCENE := "res://scenes/battle/battle_scene.tscn"
-const SKY := Color("d4e4ec")
-const GROUND := Color("bcdcac")
-const PLATFORM := Color("98c088")
+const FRAME := BattleStyle.FRAME
+const FIELD_SCALE := 3.0
+const PLAYER_SPRITE_SCALE := 4.0
+## Where things sit in the 960x640 frame (Battle Scene spec): sprite frames are 64x64 with the feet near
+## row 60, so the foe's feet land on the wild pad (~y 347) and the player's on the host pad (~y 466).
+const FOE_SPRITE_AT := Vector2(639, 167)
+const PLAYER_SPRITE_AT := Vector2(112, 226)
+const FOE_TRAINER_AT := Vector2(24, -33)       # relative to the foe slot, in frame pixels
+const PLAYER_TRAINER_AT := Vector2(32, -44)    # relative to the player slot
+const FOE_CARD_AT := Vector2(28, 28)
+const CONSOLE_RECT := Rect2(16, 476, 928, 148)
+const FOE_BOB := 6.0                           # wild Daemon bobs 6 px over 2.4 s
+const FOE_BOB_TIME := 2.4
 ## Trainer figures in the battle intro (and one frame of <id>_battle.png).
 const TRAINER_SIZE := Vector2(48, 72)
 const UPGRADE_BG := Color("181c30")
@@ -40,6 +51,10 @@ var auto: bool = false
 var auto_policy: String = "smart"
 var result: Dictionary = {}
 
+var stage: Control      # the 960x640 frame
+var arena: BattleArena
+var field: Control      # x3 layer for sprites, effects and the key
+var scanlines: Control
 var foe_slot: Control
 var player_slot: Control
 var foe_sprite: TextureRect
@@ -63,6 +78,8 @@ var _upgrade_sprite: TextureRect
 var _upgrading := false
 var _upgrade_cancel := false
 var _started := false
+var _foe_rest := Vector2.ZERO
+var _bob := 0.0
 
 
 func _ready() -> void:
@@ -96,6 +113,16 @@ static func trainer_flag(trainer_id: String) -> String:
 func _process(delta: float) -> void:
 	if _player != null:
 		_player.tick(delta)
+	# The wild Daemon bobs 6 px up and back (2.4 s ease-in-out loop).
+	if foe_sprite != null and foe_sprite.visible and time_scale > 0.0 and not Settings.wants_reduced_motion():
+		_bob += delta
+		var p := 0.5 - 0.5 * cos(TAU * _bob / FOE_BOB_TIME)
+		foe_slot.position = _foe_rest - Vector2(0, roundf(FOE_BOB * p) / FIELD_SCALE)
+	elif foe_slot != null:
+		foe_slot.position = _foe_rest
+	# "UNKNOWN HOST" sits under the wild pad until the player's card takes that space.
+	if arena != null and player_panel != null:
+		arena.show_unknown_host = not player_panel.visible
 
 func setup(cfg: Dictionary) -> void:
 	config = cfg
@@ -147,6 +174,8 @@ func _start() -> void:
 	text_box.auto_advance = auto
 	foe_panel.time_scale = time_scale
 	player_panel.time_scale = time_scale
+	foe_panel.wild = state.is_wild
+	arena.zone_id = String(config.get("zone", BattleStyle.DEFAULT_ZONE))
 	AudioManager.play_music(config.get("music", "battle_wild" if state.is_wild else "battle_trainer"))
 	_run()
 
@@ -194,8 +223,8 @@ func _choose_player_action() -> BattleAction:
 		return _auto_action()
 	var d := state.sides[BattleState.PLAYER].active()
 	while true:
-		text_box.show_now("%s is awaiting input." % d.display_name())
-		text_box.set_reserved_right(134)
+		text_box.set_reserved_right(int(BattleMenu.COMMAND_RECT.size.x))  # console shrinks to the left part
+		text_box.show_now("What will you run?")
 		match await menu.choose_command():
 			"fight":
 				if not BattleSim.has_pp(d):
@@ -460,52 +489,87 @@ static func trainer_frame(sprite_id: String, from_behind: bool) -> Texture2D:
 
 
 func _build() -> void:
-	var sky := ColorRect.new()
-	sky.color = SKY
-	sky.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	add_child(sky)
-	var ground := ColorRect.new()
-	ground.color = GROUND
-	ground.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	ground.anchor_top = 0.42
-	add_child(ground)
+	# The battle draws in a 960x640 design frame (Battle Scene spec), scaled by whole numbers of physical
+	# pixels and centered; the arena keeps going past the frame on wider or taller screens.
+	stage = Control.new()
+	stage.name = "Stage"
+	stage.size = FRAME
+	stage.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(stage)
+	arena = BattleArena.new()
+	arena.size = FRAME
+	stage.add_child(arena)
 
-	foe_slot = _slot(Vector4(1, 0, 1, 0), Rect2(-104, 16, 64, 64))
-	player_slot = _slot(Vector4(0, 1, 0, 1), Rect2(30, -118, 64, 64))
-	_platform(foe_slot, Rect2(-14, 46, 92, 16))
-	_platform(player_slot, Rect2(-22, 48, 108, 18))
+	# Sprites, trainers, move effects and the key live on a x3 layer (64 px Daemon frames = 192 px).
+	field = Control.new()
+	field.name = "Field"
+	field.scale = Vector2(FIELD_SCALE, FIELD_SCALE)
+	field.size = FRAME / FIELD_SCALE
+	field.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	stage.add_child(field)
+	foe_slot = _slot(FOE_SPRITE_AT / FIELD_SCALE)
+	player_slot = _slot(PLAYER_SPRITE_AT / FIELD_SCALE)
 	foe_sprite = _sprite_in(foe_slot)
 	player_sprite = _sprite_in(player_slot)
-	player_trainer = _trainer_in(player_slot, Vector2(8, -16))
-	foe_trainer = _trainer_in(foe_slot, Vector2(8, -16))
-	fx = BattleFx.new()  # move effects draw over the Daemons but under the info panels
-	add_child(fx)
-
-	foe_panel = BattleInfoPanel.new()
-	foe_panel.setup(false)
-	_place(foe_panel, Vector4(0, 0, 0, 0), Rect2(6, 8, 124, 30))
-	player_panel = BattleInfoPanel.new()
-	player_panel.setup(true)
-	_place(player_panel, Vector4(1, 1, 1, 1), Rect2(-144, -96, 140, 42))
-	foe_panel.visible = false
-	player_panel.visible = false
-
+	player_sprite.scale = Vector2.ONE * PLAYER_SPRITE_SCALE / FIELD_SCALE  # x4 in the frame: closer to the camera
+	player_trainer = _trainer_in(player_slot, PLAYER_TRAINER_AT / FIELD_SCALE)
+	player_trainer.scale = Vector2.ONE * PLAYER_SPRITE_SCALE / FIELD_SCALE
+	foe_trainer = _trainer_in(foe_slot, FOE_TRAINER_AT / FIELD_SCALE)
+	_foe_rest = foe_slot.position
+	fx = BattleFx.new()  # move effects draw over the Daemons but under the cards
+	field.add_child(fx)
 	key_sprite = TextureRect.new()
 	key_sprite.texture = DaemonSprites.quarantine_key()
 	key_sprite.size = Vector2(12, 18)
 	key_sprite.visible = false
-	add_child(key_sprite)
-	capture_meter = CaptureMeter.new()  # under the foe's info panel, clear of both Daemons
-	_place(capture_meter, Vector4(0, 0, 0, 0), Rect2(Vector2(6, 40), CaptureMeter.SIZE))
+	field.add_child(key_sprite)
+
+	foe_panel = BattleInfoPanel.new()
+	foe_panel.setup(false)
+	foe_panel.position = FOE_CARD_AT
+	foe_panel.visible = false
+	stage.add_child(foe_panel)
+	player_panel = BattleInfoPanel.new()
+	player_panel.setup(true)
+	player_panel.position = Vector2(FRAME.x - 28 - BattleInfoPanel.PLAYER_SIZE.x, 384)
+	player_panel.visible = false
+	stage.add_child(player_panel)
+	capture_meter = CaptureMeter.new()  # SCAN / ISOLATE / ENCRYPT, x2, under the wild card
+	capture_meter.position = Vector2(28, 162)
+	capture_meter.scale = Vector2(2, 2)
 	capture_meter.visible = false
+	stage.add_child(capture_meter)
 
 	stat_popup = Panel.new()
-	_place(stat_popup, Vector4(1, 0, 1, 0), Rect2(-122, 30, 118, 70))
+	var popup_style := StyleBoxFlat.new()
+	popup_style.bg_color = BattleStyle.PANEL
+	popup_style.border_color = BattleStyle.HOST
+	popup_style.set_border_width_all(3)
+	popup_style.shadow_color = Color.BLACK
+	popup_style.shadow_offset = Vector2(6, 6)
+	stat_popup.add_theme_stylebox_override("panel", popup_style)
+	stat_popup.position = Vector2(FRAME.x - 28 - 300, 150)
+	stat_popup.size = Vector2(300, 224)
 	stat_popup_label = Label.new()
-	stat_popup_label.position = Vector2(8, 7)
-	stat_popup_label.add_theme_constant_override("line_spacing", 2)
+	stat_popup_label.position = Vector2(18, 12)
+	stat_popup_label.add_theme_font_override("font", BattleStyle.vt323())
+	stat_popup_label.add_theme_font_size_override("font_size", 30)
+	stat_popup_label.add_theme_color_override("font_color", BattleStyle.TEXT_PRIMARY)
+	stat_popup_label.add_theme_constant_override("line_spacing", 0)
 	stat_popup.add_child(stat_popup_label)
 	stat_popup.visible = false
+	stage.add_child(stat_popup)
+
+	text_box = BattleConsole.new()
+	text_box.position = CONSOLE_RECT.position
+	text_box.size = CONSOLE_RECT.size
+	stage.add_child(text_box)
+	menu = BattleMenu.new()
+	stage.add_child(menu)
+	menu.hovered.connect(_on_menu_hovered)
+	scanlines = Scanlines.new()
+	scanlines.size = FRAME
+	stage.add_child(scanlines)
 
 	_upgrade_overlay = ColorRect.new()
 	_upgrade_overlay.color = UPGRADE_BG
@@ -522,31 +586,64 @@ func _build() -> void:
 	_upgrade_sprite.offset_top = -32
 	_upgrade_sprite.offset_bottom = 32
 	_upgrade_overlay.add_child(_upgrade_sprite)
-
-	text_box = TextBox.new()
-	_place(text_box, Vector4(0, 1, 1, 1), Rect2(2, -48, -4, 46))
-	menu = BattleMenu.new()
-	add_child(menu)
+	resized.connect(_layout)
+	_layout()
 
 
-## Positions a control by anchors (left, top, right, bottom) and an offset rect. For anchors that
-## stretch (left != right), rect.size.x is the right offset instead of a width.
-func _place(control: Control, anchors: Vector4, rect: Rect2) -> void:
-	control.anchor_left = anchors.x
-	control.anchor_top = anchors.y
-	control.anchor_right = anchors.z
-	control.anchor_bottom = anchors.w
-	control.offset_left = rect.position.x
-	control.offset_top = rect.position.y
-	control.offset_right = rect.size.x if anchors.x != anchors.z else rect.position.x + rect.size.x
-	control.offset_bottom = rect.position.y + rect.size.y
-	add_child(control)
+## Fits the 960x640 frame: the largest whole-number scale of physical pixels that fits (or a smaller
+## fractional one on screens under 960x640), centered. Tells the arena and scanlines how much of the
+## frame's surroundings are visible so they can fill them.
+func _layout() -> void:
+	if stage == null:
+		return
+	var view := size if size.x > 0.0 and size.y > 0.0 else get_viewport_rect().size
+	var px := pixels_per_unit()
+	var k := frame_scale(view * px)
+	stage.scale = Vector2.ONE * k / px
+	var origin_px := ((view * px - FRAME * k) / 2.0).floor()
+	stage.position = origin_px / px
+	var visible := Rect2(-stage.position / stage.scale, view / stage.scale)
+	arena.view_rect = visible
+	scanlines.view_rect = visible
+	# Move effects (dim, flash, cover) fill the whole view, not just the frame.
+	fx.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	fx.position = visible.position / FIELD_SCALE
+	fx.size = visible.size / FIELD_SCALE
 
 
-func _slot(anchors: Vector4, rect: Rect2) -> Control:
+## Physical screen pixels per viewport unit (canvas_items stretch: 4 on a 1280x720 window).
+func pixels_per_unit() -> float:
+	if not is_inside_tree():
+		return 1.0
+	var s := get_viewport().get_final_transform().get_scale().x
+	return s if s > 0.0 else 1.0
+
+
+## Scale for the frame on a screen of `physical` pixels: whole numbers when it fits at least once.
+static func frame_scale(physical: Vector2) -> float:
+	var fit := minf(physical.x / FRAME.x, physical.y / FRAME.y)
+	return floorf(fit) if fit >= 1.0 else fit
+
+
+func _on_menu_hovered(kind: String, index: int) -> void:
+	var console := text_box as BattleConsole
+	if console == null:
+		return
+	if kind == "command":
+		var cmd: Array = BattleMenu.COMMANDS[index]
+		console.set_man(String(cmd[0]).to_lower(), cmd[2])
+	else:
+		var d := state.sides[BattleState.PLAYER].active() if state != null else null
+		if d != null and index < d.moves.size():
+			console.set_man(String(d.moves[index]["id"]), menu.move_man(index))
+
+
+func _slot(at: Vector2) -> Control:
 	var slot := Control.new()
 	slot.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_place(slot, anchors, rect)
+	slot.position = at
+	slot.size = Vector2(64, 64)
+	field.add_child(slot)
 	return slot
 
 
@@ -559,22 +656,21 @@ func _sprite_in(slot: Control) -> TextureRect:
 	return sprite
 
 
-func _platform(slot: Control, rect: Rect2) -> void:
-	var platform := Platform.new()
-	platform.color = PLATFORM
-	platform.position = rect.position
-	platform.size = rect.size
-	slot.add_child(platform)
+## 1 px black lines at 16% every 3 px over the whole view (off with Options > CRT effects).
+class Scanlines extends Control:
+	var view_rect := Rect2(Vector2.ZERO, BattleStyle.FRAME):
+		set(value):
+			view_rect = value
+			queue_redraw()
 
+	func _ready() -> void:
+		mouse_filter = Control.MOUSE_FILTER_IGNORE
 
-class Platform extends Control:
-	var color := Color.WHITE
+	func _process(_delta: float) -> void:
+		visible = Settings.crt_effects
 
 	func _draw() -> void:
-		var points := PackedVector2Array()
-		var center := size / 2.0
-		for i in 32:
-			var angle := TAU * i / 32.0
-			points.append(center + Vector2(cos(angle) * center.x, sin(angle) * center.y))
-		draw_colored_polygon(points, color)
-		draw_polyline(points + PackedVector2Array([points[0]]), color.darkened(0.25), 1.0)
+		var y := floorf(view_rect.position.y / 3.0) * 3.0
+		while y < view_rect.end.y:
+			draw_rect(Rect2(view_rect.position.x, y, view_rect.size.x, 1), Color(0, 0, 0, 0.16))
+			y += 3.0

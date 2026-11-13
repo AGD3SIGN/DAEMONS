@@ -25,6 +25,8 @@ Architecture/System-Notes.md. Append; don't overwrite.
 - Base resolution 320x180 (16:9), stretch mode canvas_items, scale mode integer, texture filter Nearest.
 - Tiles 16x16. Overworld characters 20x28 frames, centered on their 16x16 tile. Battle sprites 64x64.
 - On wider/taller screens, show more world instead of letterboxing where possible.
+- Battle scene: a 960x640 frame scaled by whole numbers of physical pixels ("Server Floor" arena, see
+  docs/battle-scene-spec.md). No grass/sky/field visuals in battle.
 
 ## Architecture rules (do not break these)
 1. Data-driven. Species, moves, types, items, encounters, trainers live in data/ as JSON

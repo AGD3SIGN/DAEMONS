@@ -4,6 +4,21 @@ Newest entries at the top. Each entry: what's done, decisions, what's next.
 
 ---
 
+## 2026-11-13 — Battle scene rebuilt: the "Server Floor" arena (Brandon's Battle Scene spec)
+
+- Replaced the grass-field battle with a dark data center: server racks with flickering LEDs, a glowing
+  raised-floor grid, horizon trim and two socket pads (wild = orange, host = cyan), all drawn in code.
+- The battle draws in a 960x640 frame scaled by whole numbers of physical pixels (1x on 1280x720, 2x on 1440p,
+  3x on 4K; fractional below 960x640); the arena fills the rest of wider screens.
+- Process-card status panels (WILD/UNVERIFIED or HOSTILE, HOST), 20-segment UP bars that drain a segment at a time,
+  a terminal console ("daemon@field ~/encounter.log", > prompt, block cursor, pixel continue arrow) and the
+  EXECUTE / DAEMONS / INVENTORY / DISCONNECT command panel with key hints and a man line. Number keys 1-4
+  (new input actions quick_1..quick_4) jump to commands and moves.
+- Zones per map (`"battle_zone"`): Server Floor (Onboarding Town, Route 1, Patch Town), Coolant Loop (Wi-Fi Dead
+  Zone), Overheat (Department 1).
+- Fonts: Pixelify Sans and Silkscreen added (OFL, google/fonts), with VT323.
+- Spec saved as docs/battle-scene-spec.md, with what differs and why. Tests: 263/263.
+
 ## 2026-11-13 — Network expansion part 1 (7 Daemons) + art folders tidied
 
 - New species (all Network): Spinode → Meshpider (Lv 18) → Arachnet (Lv 34), Nos. 041–043; Calfiber → Orcable

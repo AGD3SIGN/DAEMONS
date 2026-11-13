@@ -1,6 +1,7 @@
 {
   "id": "wifi_dead_zone",
   "name": "Wi-Fi Dead Zone",
+  "battle_zone": "coolant_loop",
   "music": "dead_zone",
   "tint": "#7c88bc",
   "legend": {

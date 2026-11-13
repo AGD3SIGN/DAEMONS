@@ -162,7 +162,7 @@ func test_level_up_then_upgrade_on_screen() -> void:
 func _menu() -> BattleMenu:
 	var holder := Control.new()
 	holder.theme = UiTheme.get_theme()
-	holder.size = Vector2(320, 180)
+	holder.size = BattleStyle.FRAME
 	add_child_autofree(holder)
 	var menu := BattleMenu.new()
 	holder.add_child(menu)
@@ -173,15 +173,34 @@ func _press_later(button: BaseButton) -> void:
 	button.call_deferred("emit_signal", "pressed")
 
 
-func test_menus_fill_the_screen_and_stay_on_it() -> void:
+func test_menus_follow_the_battle_spec_layout() -> void:
 	var menu := _menu()
 	await wait_process_frames(1)
-	assert_eq(menu.size, Vector2(320, 180), "menu layer covers the whole view")
-	var screen := Rect2(Vector2.ZERO, Vector2(320, 180))
+	assert_eq(menu.size, BattleStyle.FRAME, "menu layer covers the 960x640 frame")
+	var frame := Rect2(Vector2.ZERO, BattleStyle.FRAME)
+	assert_eq(menu._command_panel.get_rect(), Rect2(524, 476, 420, 148), "right 16, y 476, 420x148")
 	for panel: Panel in [menu._command_panel, menu._move_panel, menu._list_panel, menu._confirm_panel]:
-		var rect := panel.get_rect()
-		assert_true(rect.size.x > 40 and rect.size.y > 30, "%s has a real size: %s" % [panel, rect])
-		assert_true(screen.encloses(rect), "%s is on screen: %s" % [panel, rect])
+		assert_true(frame.encloses(panel.get_rect()), "%s is inside the frame: %s" % [panel, panel.get_rect()])
+	var labels := menu._command_buttons.map(func(b: TermButton) -> String: return b.label_text)
+	assert_eq(labels, ["EXECUTE", "DAEMONS", "INVENTORY", "DISCONNECT"])
+	for b: TermButton in menu._command_buttons:
+		assert_gte(b.size.y, 52.0, "buttons are at least 52 px tall")
+	assert_true(menu._command_buttons[3].danger, "DISCONNECT stands out")
+	await wait_process_frames(1)
+
+
+func test_number_keys_and_man_line() -> void:
+	var menu := _menu()
+	var seen := []
+	menu.hovered.connect(func(kind: String, i: int) -> void: seen.append([kind, i]))
+	var key := InputEventAction.new()
+	key.action = "quick_3"
+	key.pressed = true
+	menu.call_deferred("_unhandled_input", key)
+	assert_eq(await menu.choose_command(), "bag", "3 jumps straight to INVENTORY")
+	assert_has(seen, ["command", 0], "the man line follows the selection from the start")
+	assert_has(seen, ["command", 2])
+	await wait_process_frames(1)
 
 
 func test_command_menu_returns_choice() -> void:
@@ -237,7 +256,7 @@ func test_text_box_waits_for_input() -> void:
 func test_long_text_is_split_into_pages() -> void:
 	var holder := Control.new()
 	holder.theme = UiTheme.get_theme()
-	holder.size = Vector2(320, 180)
+	holder.size = BattleStyle.FRAME
 	add_child_autofree(holder)
 	var box := TextBox.new()
 	box.position = Vector2(2, 132)
@@ -252,3 +271,56 @@ func test_long_text_is_split_into_pages() -> void:
 		box._label.text = page
 		assert_lte(box._label.get_line_count(), TextBox.MAX_LINES, "page fits: " + page)
 	assert_eq(box.paginate("Short line.").size(), 1)
+
+
+func test_server_floor_arena() -> void:
+	var team: Array[DaemonInstance] = [_daemon("chipmunk", 12)]
+	var scene: BattleScene = load(BattleScene.SCENE).instantiate()
+	scene.setup({"foe": [["dustbunny", 5]], "player_stack": team, "auto": true, "time_scale": 0.0, "seed": 1,
+		"zone": "coolant_loop"})
+	add_child_autofree(scene)
+	await wait_process_frames(2)
+	assert_eq(scene.arena.zone_id, "coolant_loop", "the area's zone palette")
+	assert_eq(scene.stage.size, BattleStyle.FRAME)
+	assert_eq(scene.text_box.get_rect(), Rect2(16, 476, 928, 148), "console: 16, 476, 928x148")
+	assert_eq(scene.foe_panel.position, Vector2(28, 28), "wild card top-left")
+	assert_eq(scene.foe_panel.size.x, 430.0)
+	var foe := scene.foe_sprite.get_global_rect()
+	var stage_xf := scene.stage.get_global_transform().affine_inverse()
+	var foe_frame := Rect2(stage_xf * foe.position, foe.size / scene.stage.get_global_transform().get_scale())
+	assert_almost_eq(foe_frame.size.x, 192.0, 0.5, "foe sprite at x3")
+	assert_almost_eq(foe_frame.get_center().x, BattleArena.WILD_PAD.get_center().x, 1.0, "centered on the wild pad")
+	scene.arena.zone_id = "overheat"
+	assert_eq(scene.arena.zone_id, "overheat", "zones swap without a layout change")
+	scene.arena.zone_id = "nope"
+	assert_eq(scene.arena.zone_id, BattleStyle.DEFAULT_ZONE, "unknown zones fall back to Server Floor")
+
+
+func test_up_bar_segments_and_colors() -> void:
+	assert_eq(BattleStyle.segments(1.0), 20)
+	assert_eq(BattleStyle.segments(0.0), 0)
+	assert_eq(BattleStyle.segments(0.52), 10, "round(52 / 5) = 10")
+	assert_eq(BattleStyle.segments(0.53), 11)
+	assert_eq(BattleStyle.up_color(0.51), BattleStyle.UP_HIGH, "green above 50")
+	assert_eq(BattleStyle.up_color(0.50), BattleStyle.UP_MID, "amber 21-50")
+	assert_eq(BattleStyle.up_color(0.21), BattleStyle.UP_MID)
+	assert_eq(BattleStyle.up_color(0.20), BattleStyle.UP_LOW, "red 20 and below")
+
+
+func test_frame_scales_by_whole_numbers() -> void:
+	assert_eq(BattleScene.frame_scale(Vector2(1280, 720)), 1.0, "1280x720: 960x640 at 1x")
+	assert_eq(BattleScene.frame_scale(Vector2(1920, 1080)), 1.0)
+	assert_eq(BattleScene.frame_scale(Vector2(2560, 1440)), 2.0)
+	assert_eq(BattleScene.frame_scale(Vector2(3840, 2160)), 3.0)
+	assert_almost_eq(BattleScene.frame_scale(Vector2(844, 390)), 390.0 / 640.0, 0.001, "phones: shrink to fit")
+
+
+func test_rack_row_matches_the_spec() -> void:
+	var arena := BattleArena.new()
+	add_child_autofree(arena)
+	assert_eq(arena.rack_rect(0), Rect2(10, 70, 92, 232), "first rack, bottom at the horizon (302)")
+	assert_eq(arena.rack_rect(1).position.x, 116.0, "92 px wide, 14 px gaps")
+	assert_eq(arena.rack_rect(8).end.x, 950.0, "9 racks end at 950")
+	assert_eq(BattleArena.slot_count(244), 11, "floor((244 - 20) / 20)")
+	var leds := arena.led_colors(0, 0)
+	assert_eq(leds[1], BattleStyle.BAR_EDGE, "k = 0: LED 2 is off")

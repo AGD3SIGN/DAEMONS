@@ -68,7 +68,10 @@ func _play_event(e: Dictionary) -> void:
 			_sprite(side).flip_h = side == BattleState.PLAYER and DaemonSprites.flip_back(d.species_id)
 			await _anim_enter(side)
 			_rest(side)
-			_panel(side).visible = true
+			if side == BattleState.FOE:
+				await _anim_card_in()
+			else:
+				_panel(side).visible = true
 			await _say(text)
 		"switch_out":
 			await _say(text, false)
@@ -195,7 +198,7 @@ func _play_move_fx(side: int, move_id: String) -> void:
 
 func _sprite_center(side: int) -> Vector2:
 	var s := _sprite(side)
-	return s.get_global_rect().get_center() - view.fx.get_global_rect().position
+	return view.fx.get_global_transform().affine_inverse() * s.get_global_rect().get_center()
 
 
 # --- poses (only for Daemons with a sprite sheet) -----------------------------
@@ -317,12 +320,40 @@ func _anim_trainer_out(side: int) -> void:
 
 func _anim_enter(side: int) -> void:
 	var s := _sprite(side)
+	var base_scale := s.scale if s.scale != Vector2.ZERO else Vector2.ONE
+	if side == BattleState.FOE and state.is_wild:
+		await _anim_materialize(s)
+		return
 	s.visible = true
 	s.modulate = Color.WHITE
-	s.scale = Vector2.ONE
+	s.scale = base_scale
 	s.position = Vector2(-140.0 if side == BattleState.PLAYER else 140.0, 0)
 	var t := _tween()
 	t.tween_property(s, "position", Vector2.ZERO, 0.45 * _ts()).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	await t.finished
+
+
+## A wild Daemon materializes on its pad: a few hard flickers of a white silhouette, then the real colors.
+func _anim_materialize(s: TextureRect) -> void:
+	s.position = Vector2.ZERO
+	s.visible = true
+	var t := _tween()
+	s.modulate = Color(4, 4, 4, 0.0)
+	for i in 3:
+		t.tween_property(s, "modulate", Color(4, 4, 4, 1.0), 0.06 * _ts())
+		t.tween_property(s, "modulate", Color(4, 4, 4, 0.2), 0.06 * _ts())
+	t.tween_property(s, "modulate", Color.WHITE, 0.2 * _ts())
+	await t.finished
+
+
+## The wild card slides in from the left after the Daemon appears.
+func _anim_card_in() -> void:
+	var card := view.foe_panel
+	var rest := BattleScene.FOE_CARD_AT
+	card.position = rest - Vector2(card.size.x + 60, 0)
+	card.visible = true
+	var t := _tween()
+	t.tween_property(card, "position", rest, 0.3 * _ts()).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	await t.finished
 
 
@@ -379,9 +410,9 @@ func _anim_throw_key() -> void:
 	key.visible = true
 	key.rotation = 0.0
 	key.modulate = Color.WHITE
-	key.global_position = view.player_slot.global_position + Vector2(48, 0)
+	key.position = view.player_slot.position + Vector2(48, 0)  # the key shares the field layer with the slots
 	var t := _tween()
-	t.tween_property(key, "global_position", view.foe_slot.global_position + Vector2(26, 14), 0.4 * _ts()).set_trans(Tween.TRANS_SINE)
+	t.tween_property(key, "position", view.foe_slot.position + Vector2(26, 14), 0.4 * _ts()).set_trans(Tween.TRANS_SINE)
 	await t.finished
 	var foe := _sprite(BattleState.FOE)
 	foe.pivot_offset = Vector2(32, 48)
@@ -391,7 +422,7 @@ func _anim_throw_key() -> void:
 	await absorb.finished
 	foe.visible = false
 	var drop := _tween()
-	drop.tween_property(key, "global_position", view.foe_slot.global_position + Vector2(26, 44), 0.25 * _ts()) \
+	drop.tween_property(key, "position", view.foe_slot.position + Vector2(26, 44), 0.25 * _ts()) \
 		.set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_OUT)
 	await drop.finished
 	view.capture_meter.reset()

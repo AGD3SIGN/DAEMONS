@@ -23,6 +23,10 @@ func _init() -> void:
 	_set_action("ui_cancel", [_key(KEY_X), _key(KEY_ESCAPE), _key(KEY_BACKSPACE), _joy_button(JOY_BUTTON_B)])
 	_set_action("menu", [_key(KEY_SPACE), _key(KEY_TAB), _joy_button(JOY_BUTTON_START)])
 	_set_action("run", [_key(KEY_SHIFT), _joy_button(JOY_BUTTON_X)])
+	# Battle command shortcuts: number keys 1-4 jump straight to a command or move.
+	var digits := [[KEY_1, KEY_KP_1], [KEY_2, KEY_KP_2], [KEY_3, KEY_KP_3], [KEY_4, KEY_KP_4]]
+	for i in digits.size():
+		_set_action("quick_%d" % (i + 1), [_key(digits[i][0]), _key(digits[i][1])])
 
 	var err := ProjectSettings.save()
 	print("Input map saved: ", error_string(err))

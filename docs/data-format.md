@@ -212,7 +212,7 @@ v2 (2026-11-08) renamed the redesigned species ids (`SaveManager.V2_SPECIES_RENA
 Options live separately in user://settings.cfg.
 
 ## Phase 7 additions
-**Maps:** optional `"music": "town"` (track id, see AudioManager) and `"tint": "#7c88bc"` (darkens the map, e.g. the Wi-Fi Dead Zone).
+**Maps:** optional `"music": "town"` (track id, see AudioManager) and `"tint": "#7c88bc"` (darkens the map, e.g. the Wi-Fi Dead Zone), and `"battle_zone"`: `server_floor` (default), `coolant_loop` or `overheat`, the battle arena palette for fights in that area.
 **Laser doors:** `{"type": "barrier", "x": 7, "y": 9, "open_flags": ["port_1", "port_3"], "closed_flags": ["port_2"]}` blocks its tile until every open flag is set and no closed flag is. Re-checked after every dialogue.
 **Arrival triggers:** a trigger zone on a spawn point runs when you arrive there (cutscenes).
 **Trainers:** `"story": true` (rival fights: losing doesn't black out, the story continues). Music is picked automatically: battle_boss (has a cert), battle_rival (story), battle_trainer.

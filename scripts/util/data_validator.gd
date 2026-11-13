@@ -256,6 +256,8 @@ func validate_map(m: Variant, map_id: String) -> PackedStringArray:
 	_string(m, "name", where)
 	if m.has("tint") and (typeof(m["tint"]) != TYPE_STRING or not Color.html_is_valid(m["tint"])):
 		_err(where, "'tint' must be a hex color")
+	if m.has("battle_zone") and not String(m["battle_zone"]) in BattleStyle.ZONES:
+		_err(where, "'battle_zone' must be one of: %s" % ", ".join(PackedStringArray(BattleStyle.ZONES.keys())))
 	var legend: Variant = m.get("legend")
 	if typeof(legend) != TYPE_DICTIONARY or legend.is_empty():
 		_err(where, "'legend' must map characters to tile names")

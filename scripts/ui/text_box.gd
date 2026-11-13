@@ -10,6 +10,7 @@ const MAX_LINES := 3      # longer text is split into pages at word boundaries
 
 var time_scale: float = 1.0   # 0 = instant (tests)
 var auto_advance: bool = false  # never wait for input (AI-vs-AI / tests)
+var max_lines: int = MAX_LINES  # BattleConsole fits 2 lines of its big terminal font
 
 var _label: Label
 var _arrow: Label
@@ -83,7 +84,7 @@ func paginate(text: String) -> PackedStringArray:
 	for word in text.split(" ", false):
 		var candidate := word if page.is_empty() else page + " " + word
 		_label.text = candidate
-		if _label.get_line_count() > MAX_LINES and not page.is_empty():
+		if _label.get_line_count() > max_lines and not page.is_empty():
 			pages.append(page)
 			page = word
 		else:

@@ -1,6 +1,7 @@
 {
   "id": "route_1",
   "name": "Route 1: Cable Run",
+  "battle_zone": "server_floor",
   "legend": {
     ".": "grass",
     ",": "path",

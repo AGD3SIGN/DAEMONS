@@ -1,6 +1,7 @@
 {
   "id": "onboarding_town",
   "name": "Onboarding Town",
+  "battle_zone": "server_floor",
   "legend": {
     ".": "grass",
     ",": "path",

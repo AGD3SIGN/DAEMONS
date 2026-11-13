@@ -368,6 +368,8 @@ func move_player(path: Array) -> void:
 func start_battle(config: Dictionary) -> void:
 	_remember_location()
 	config["return_scene"] = SCENE
+	if not config.has("zone"):  # the battle arena's palette for this area (Battle Scene spec)
+		config["zone"] = String(map.map_data.get("battle_zone", BattleStyle.DEFAULT_ZONE))
 	battle_requested.emit(config)
 	if allow_scene_change:
 		SceneRouter.goto(BattleScene.SCENE, {"battle": config})

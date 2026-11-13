@@ -1,6 +1,7 @@
 {
   "id": "department_1",
   "name": "Desktop Support Dept.",
+  "battle_zone": "overheat",
   "music": "department",
   "legend": {
     "_": "floor",

@@ -1,6 +1,7 @@
 {
   "id": "patch_town",
   "name": "Patch Town",
+  "battle_zone": "server_floor",
   "music": "town",
   "legend": {
     ".": "grass",
