@@ -53,6 +53,7 @@ var player_panel: BattleInfoPanel
 var text_box: TextBox
 var menu: BattleMenu
 var key_sprite: TextureRect
+var capture_meter: CaptureMeter  # SCAN / ISOLATE / ENCRYPT bar while a Quarantine Key works
 var stat_popup: Panel
 var stat_popup_label: Label
 
@@ -494,6 +495,9 @@ func _build() -> void:
 	key_sprite.size = Vector2(12, 18)
 	key_sprite.visible = false
 	add_child(key_sprite)
+	capture_meter = CaptureMeter.new()  # under the foe's info panel, clear of both Daemons
+	_place(capture_meter, Vector4(0, 0, 0, 0), Rect2(Vector2(6, 40), CaptureMeter.SIZE))
+	capture_meter.visible = false
 
 	stat_popup = Panel.new()
 	_place(stat_popup, Vector4(1, 0, 1, 0), Rect2(-122, 30, 118, 70))

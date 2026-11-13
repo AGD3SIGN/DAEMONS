@@ -138,14 +138,17 @@ func _play_event(e: Dictionary) -> void:
 			if int(e["target_index"]) == -1:
 				await _anim_throw_key()
 		"capture_shake":
-			await _anim_key_shake()
+			await _anim_stage_passed(int(e["n"]) - 1)
 			await _say(text, false)
 		"capture_failed":
+			await _anim_stage_failed(int(e["shakes"]))
 			await _anim_break_free()
 			await _say(text)
+			view.capture_meter.visible = false
 		"captured":
 			await _anim_captured()
 			await _say(text)
+			view.capture_meter.visible = false
 		"upgrade_ready":
 			upgrades.append(e)
 		_:
@@ -391,17 +394,35 @@ func _anim_throw_key() -> void:
 	drop.tween_property(key, "global_position", view.foe_slot.global_position + Vector2(26, 44), 0.25 * _ts()) \
 		.set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_OUT)
 	await drop.finished
+	view.capture_meter.reset()
+	view.capture_meter.visible = true
 
 
-func _anim_key_shake() -> void:
-	var key := view.key_sprite
-	key.pivot_offset = Vector2(6, 18)
+## One Quarantine stage (SCAN, ISOLATE, ENCRYPT) fills and turns green; the key's light blinks.
+func _anim_stage_passed(stage: int) -> void:
+	var meter := view.capture_meter
 	var t := _tween()
-	t.tween_property(key, "rotation", 0.35, 0.1 * _ts())
-	t.tween_property(key, "rotation", -0.35, 0.15 * _ts())
-	t.tween_property(key, "rotation", 0.0, 0.1 * _ts())
-	t.tween_interval(0.25 * _ts())
+	t.tween_method(func(v: float) -> void: meter.set_progress(stage, v), 0.0, 1.0, 0.45 * _ts())
+	t.parallel().tween_property(view.key_sprite, "modulate", Color(1.6, 1.6, 1.6), 0.2 * _ts())
+	t.tween_property(view.key_sprite, "modulate", Color.WHITE, 0.15 * _ts())
 	await t.finished
+	meter.set_state(stage, "ok")
+	var hold := _tween()
+	hold.tween_interval(0.15 * _ts())
+	await hold.finished
+
+
+## The stage it breaks free in fills part way, then turns red.
+func _anim_stage_failed(stage: int) -> void:
+	var meter := view.capture_meter
+	stage = clampi(stage, 0, CaptureMeter.STAGES.size() - 1)
+	var t := _tween()
+	t.tween_method(func(v: float) -> void: meter.set_progress(stage, v), 0.0, 0.55, 0.3 * _ts())
+	await t.finished
+	meter.set_state(stage, "fail")
+	var hold := _tween()
+	hold.tween_interval(0.25 * _ts())
+	await hold.finished
 
 
 func _anim_break_free() -> void:

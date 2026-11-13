@@ -62,6 +62,39 @@ func test_catch_a_wild_dustbunny() -> void:
 	assert_true(GameState.cmdb_caught.has("dustbunny"))
 	assert_false(bag.has("root_key"), "key used up")
 	assert_false(scene.key_sprite.visible and scene.key_sprite.modulate == Color.WHITE, "key dimmed after capture")
+	assert_eq(scene.capture_meter.passed(), 3, "SCAN, ISOLATE and ENCRYPT all went green")
+	assert_false(scene.capture_meter.visible, "the bar goes away after the catch")
+
+
+func test_capture_meter_stages() -> void:
+	var meter := CaptureMeter.new()
+	add_child_autofree(meter)
+	assert_eq(Array(CaptureMeter.STAGES), ["SCAN", "ISOLATE", "ENCRYPT"])
+	assert_eq(meter.size, CaptureMeter.SIZE)
+	assert_false(meter.visible, "hidden until a key is used")
+	meter.set_progress(0, 1.0)
+	meter.set_state(0, "ok")
+	meter.set_progress(1, 0.55)
+	meter.set_state(1, "fail")
+	assert_eq(meter.passed(), 1)
+	assert_eq(meter.states[1], "fail")
+	assert_eq(meter.label_color(1), CaptureMeter.FAIL, "red where it broke free")
+	assert_eq(meter.label_color(2), UiTheme.MUTED, "grey while waiting")
+	meter.set_progress(2, 3.0)
+	assert_eq(meter.progress[2], 1.0, "clamped")
+	meter.reset()
+	assert_eq(meter.passed(), 0)
+	assert_eq(meter.progress, [0.0, 0.0, 0.0] as Array[float])
+	for i in 3:
+		assert_true(Rect2(Vector2.ZERO, CaptureMeter.SIZE).encloses(meter.segment_rect(i)), "segment %d fits" % i)
+	var scene: BattleScene = load(BattleScene.SCENE).instantiate()
+	var team: Array[DaemonInstance] = [_daemon("chipmunk", 12)]
+	scene.setup({"foe": [["dustbunny", 5]], "player_stack": team, "auto": true, "time_scale": 0.0, "seed": 1})
+	add_child_autofree(scene)
+	await wait_process_frames(2)
+	var r: Rect2 = scene.capture_meter.get_rect()
+	assert_false(r.intersects(scene.foe_panel.get_rect()), "clear of the foe's info panel")
+	assert_false(r.intersects(Rect2(scene.foe_slot.position, Vector2(64, 64))), "clear of the foe")
 
 
 func test_trainer_battle_with_forced_switches() -> void:

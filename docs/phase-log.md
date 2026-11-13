@@ -4,6 +4,17 @@ Newest entries at the top. Each entry: what's done, decisions, what's next.
 
 ---
 
+## 2026-11-13 — Quarantine progress bar (SCAN / ISOLATE / ENCRYPT)
+
+- New `CaptureMeter` (scripts/battle/ui/capture_meter.gd): a 3-segment bar under the foe's info panel while a
+  Quarantine Key works. Each passed stage fills blue, then turns green; the stage where the Daemon breaks free fills
+  about half way and turns red. Labels go grey (waiting) → ink (working) → green / red. Text is drawn in `_draw`
+  so it stays centered with the 8 px pixel font.
+- Replaces the old key-wobble animation (the key's light now blinks as each stage fills). Hidden after the
+  catch or break-free text.
+- Tests: meter states/colors/layout (clear of the foe and its info panel) and "all 3 green" after a Root Key catch.
+  257/257.
+
 ## 2026-11-13 — Our own numbers, text and terms (distance from the classic formulas)
 
 - **Stats:** Build Quality 0–15 (was 0–31), Experience Logs 64 per stat / 192 total (was 252/510), 21 Config Profiles at
