@@ -4,7 +4,7 @@ extends RefCounted
 ## state.rng, so AI battles replay exactly with the same seed.
 ##
 ## Tiers:
-##   "random" — any move with PP left. Wild Daemons use this.
+##   "random" — any move with Cycles left. Wild Daemons use this.
 ##   "basic"  — best expected damage: power x type x STAB x accuracy. Skips moves the target is
 ##              immune to; falls back to status moves only when nothing can hurt it.
 ##   "smart"  — basic, plus: inflicts a status while the target is healthy, boosts itself early,
@@ -101,7 +101,7 @@ static func score_move(state: BattleState, side: int, slot: int, tier: String) -
 				if absi(int(stages[stat])) >= 2:
 					return 5.0
 			if params["target"] == "self":
-				return 110.0 if user_health > 0.7 else 5.0
+				return 100.0 if user_health > 0.7 else 5.0  # just under a super-effective 40-power native hit (40 x 2 x 1.35 = 108)
 			return 40.0
 		"heal":
 			return 250.0 if user_health < 0.4 else 0.0

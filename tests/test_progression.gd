@@ -380,3 +380,20 @@ func test_play_time_counts_only_in_game() -> void:
 	GameState._process(5.0)
 	assert_eq(GameState.play_time_sec, 5.0)
 	GameState.clock_running = false
+
+
+func test_v2_saves_rescale_build_quality_and_logs() -> void:
+	var mon := {"species": "pingo", "level": 12,
+		"build_quality": {"uptime": 31, "throughput": 0, "hardening": 17, "compute": 31, "encryption": 1, "bandwidth": 30},
+		"experience_logs": {"uptime": 252, "throughput": 252, "hardening": 6, "compute": 0, "encryption": 0, "bandwidth": 0}}
+	var old := {"stack": [mon], "rack": [[mon.duplicate(true)]], "credits": 5}
+	var data: Dictionary = SaveManager.migrate(old, 2)
+	var bq: Dictionary = data["stack"][0]["build_quality"]
+	assert_eq(bq, {"uptime": 15, "throughput": 0, "hardening": 8, "compute": 15, "encryption": 0, "bandwidth": 15})
+	var logs: Dictionary = data["stack"][0]["experience_logs"]
+	assert_eq(logs["uptime"], 64, "252 -> 64")
+	assert_eq(logs["hardening"], 1, "6 * 64 / 252")
+	assert_eq(data["rack"][0][0]["build_quality"]["uptime"], 15, "rack Daemons too")
+	assert_eq(data["credits"], 5, "everything else untouched")
+	var d := DaemonInstance.from_dict(data["stack"][0])
+	assert_eq(d.build_quality["compute"], 15)

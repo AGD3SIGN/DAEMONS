@@ -79,9 +79,9 @@ func test_priority_beats_bandwidth() -> void:
 func test_throttled_halves_bandwidth() -> void:
 	var pingo := _daemon("pingo", 20)
 	var bunny := _daemon("dustbunny", 20)
-	bunny.status = "throttled"  # 36 -> 18, now slower than Pingo's 26
+	bunny.status = "throttled"  # 40 -> 20, now slower than Pingo's 30
 	var state := _battle([pingo], [bunny])
-	assert_eq(BattleSim.effective_bandwidth(state, BattleState.FOE), 18.0)
+	assert_eq(BattleSim.effective_bandwidth(state, BattleState.FOE), 20.0)
 	var events := BattleSim.run_turn(state, BattleAction.fight(_slot(pingo, "ping")), BattleAction.fight(0))
 	assert_eq(_move_order(events)[0], BattleState.PLAYER, "Throttled may also skip the foe's turn")
 
@@ -214,7 +214,7 @@ func test_invalid_actions_are_rejected_without_playing_the_turn() -> void:
 	_assert_invalid(state, BattleAction.item("hard_reboot", 0), "hasn't crashed")
 	_assert_invalid(state, BattleAction.item("firewall_rule", 0), "can't be used in battle")
 	pingo.moves[0]["pp"] = 0
-	_assert_invalid(state, BattleAction.fight(0), "no PP")
+	_assert_invalid(state, BattleAction.fight(0), "no Cycles")
 	assert_eq(state.turn, 0, "no turn was played")
 	assert_eq(state.sides[0].items["coffee"], 1, "nothing was used up")
 

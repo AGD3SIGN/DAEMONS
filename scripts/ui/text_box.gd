@@ -49,7 +49,7 @@ func set_reserved_right(px: int) -> void:
 	_label.offset_right = -14 - px
 
 
-## Shows text immediately with no typing and no waiting (e.g. "What will Pingo do?").
+## Shows text immediately with no typing and no waiting (e.g. "Pingo is awaiting input.").
 func show_now(text: String) -> void:
 	_label.text = text
 	_label.visible_characters = -1

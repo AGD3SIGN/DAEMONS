@@ -11,9 +11,9 @@ extends RefCounted
 
 const MAX_LEVEL := GrowthRate.MAX_LEVEL
 const MAX_MOVES := 4
-const MAX_BUILD_QUALITY := 31
-const MAX_LOGS_PER_STAT := 252
-const MAX_LOGS_TOTAL := 510
+const MAX_BUILD_QUALITY := 15
+const MAX_LOGS_PER_STAT := 64
+const MAX_LOGS_TOTAL := 192
 const STATS := DataValidator.STATS
 
 var species_id: String = ""
@@ -24,8 +24,8 @@ var current_uptime: int = 0
 var status: String = ""                   # "" = healthy, else a status id (e.g. "corrupted")
 var status_turns: int = 0                 # Standby: turns left before it wakes
 var moves: Array[Dictionary] = []         # up to 4 of {"id": "ping", "pp": 35}
-var build_quality: Dictionary = {}        # stat -> 0..31, hidden per-Daemon variance
-var experience_logs: Dictionary = {}      # stat -> 0..252, total <= 510
+var build_quality: Dictionary = {}        # stat -> 0..15, hidden per-Daemon variance
+var experience_logs: Dictionary = {}      # stat -> 0..64, total <= 192
 var config_profile: String = "balanced"   # id from data/config_profiles.json
 var original_trainer_id: int = 0
 
@@ -70,24 +70,28 @@ func types() -> Array:
 
 # --- stats -------------------------------------------------------------------
 
-## Uptime = floor((2*Base + BQ + Logs/4) * L / 100) + L + 10
-## Others = floor((floor((2*Base + BQ + Logs/4) * L / 100) + 5) * profile)   profile = 1.1 / 1.0 / 0.9
+## DAEMONS stat formula (our own):
+##   core   = floor((2*Base + 2*BQ + Logs/2) * L / 100)        BQ 0..15, Logs 0..64
+##   Uptime = core + L + 12
+##   Others = floor((core + 6) * profile / 100)                  profile = 110 / 100 / 95
 @warning_ignore("integer_division")
 func get_stat(stat: String) -> int:
 	var base := int(species_data()["base_stats"][stat])
-	var core := (2 * base + int(build_quality.get(stat, 0)) + int(experience_logs.get(stat, 0)) / 4) * level / 100
+	var bq := int(build_quality.get(stat, 0))
+	var logs := int(experience_logs.get(stat, 0))
+	var core := (2 * base + 2 * bq + logs / 2) * level / 100
 	if stat == "uptime":
-		return core + level + 10
-	return (core + 5) * profile_percent(stat) / 100
+		return core + level + 12
+	return (core + 6) * profile_percent(stat) / 100
 
 
-## 110 if the Config Profile boosts this stat, 90 if it lowers it, else 100.
+## 110 if the Config Profile boosts this stat, 95 if it lowers it, else 100.
 func profile_percent(stat: String) -> int:
 	var profile: Dictionary = DataRegistry.config_profiles.get(config_profile, {})
 	if profile.get("up") == stat:
 		return 110
 	if profile.get("down") == stat:
-		return 90
+		return 95
 	return 100
 
 
@@ -157,7 +161,7 @@ func _level_up_once() -> Array[Dictionary]:
 	return events
 
 
-## Experience Logs from a defeated foe's log_yield. Caps: 252 per stat, 510 total.
+## Experience Logs from a defeated foe's log_yield. Caps: 64 per stat, 192 total.
 func add_experience_logs(log_yield: Dictionary) -> void:
 	for stat: String in log_yield:
 		if not stat in STATS:

@@ -9,7 +9,7 @@ func _rng(seed_value: int = 42) -> RandomNumberGenerator:
 
 
 ## A Daemon with fixed build quality, no logs, a chosen profile. No randomness.
-func _make(species: String, lvl: int, bq: int = 31, profile: String = "balanced") -> DaemonInstance:
+func _make(species: String, lvl: int, bq: int = 15, profile: String = "balanced") -> DaemonInstance:
 	var d := DaemonInstance.new()
 	d.species_id = species
 	d.level = lvl
@@ -71,32 +71,32 @@ func test_level_for_exp() -> void:
 # --- stat formulas -----------------------------------------------------------
 
 func test_stats_at_level_50() -> void:
-	# Chipmunk base 44/58/48/60/48/52, BQ 31, no logs, neutral profile. Worked by hand:
-	# Uptime = floor(119 * 50 / 100) + 50 + 10 = 119; Throughput = floor(147 * 50 / 100) + 5 = 78
+	# Chipmunk base 44/58/48/60/48/52, BQ 15, no logs, neutral profile. Worked by hand:
+	# Uptime = floor((88 + 30) * 50 / 100) + 50 + 12 = 121; Throughput = floor((116 + 30) * 50 / 100) + 6 = 79
 	var d := _make("chipmunk", 50)
-	assert_eq(d.stats(), {"uptime": 119, "throughput": 78, "hardening": 68, "compute": 80, "encryption": 68, "bandwidth": 72})
+	assert_eq(d.stats(), {"uptime": 121, "throughput": 79, "hardening": 69, "compute": 81, "encryption": 69, "bandwidth": 73})
 
 
 func test_config_profile_modifiers() -> void:
-	# Aggressive: +10% Throughput, -10% Hardening, floored.
-	var d := _make("chipmunk", 50, 31, "aggressive")
-	assert_eq(d.get_stat("throughput"), 85)  # floor(78 * 1.1)
-	assert_eq(d.get_stat("hardening"), 61)   # floor(68 * 0.9)
-	assert_eq(d.get_stat("compute"), 80)     # unchanged
-	assert_eq(d.get_stat("uptime"), 119)     # profiles never touch Uptime
+	# Aggressive: +10% Throughput, -5% Hardening, floored.
+	var d := _make("chipmunk", 50, 15, "aggressive")
+	assert_eq(d.get_stat("throughput"), 86)  # floor(79 * 1.10)
+	assert_eq(d.get_stat("hardening"), 65)   # floor(69 * 0.95)
+	assert_eq(d.get_stat("compute"), 81)     # unchanged
+	assert_eq(d.get_stat("uptime"), 121)     # profiles never touch Uptime
 
 
-func test_experience_logs_count_quarter() -> void:
+func test_experience_logs_count_half() -> void:
 	var d := _make("chipmunk", 100)
-	d.experience_logs["uptime"] = 252
-	# floor((88 + 31 + 63) * 100 / 100) + 100 + 10
-	assert_eq(d.max_uptime(), 292)
+	d.experience_logs["uptime"] = 64
+	# floor((88 + 30 + 32) * 100 / 100) + 100 + 12
+	assert_eq(d.max_uptime(), 262)
 
 
 func test_level_1_minimum() -> void:
 	var d := _make("chipmunk", 1, 0)
-	assert_eq(d.max_uptime(), 11)
-	assert_eq(d.get_stat("throughput"), 6)  # floor(116 * 1 / 100) + 5
+	assert_eq(d.max_uptime(), 13)           # 0 + 1 + 12
+	assert_eq(d.get_stat("throughput"), 7)  # floor(116 * 1 / 100) + 6
 
 
 # --- creation ----------------------------------------------------------------
@@ -113,7 +113,7 @@ func test_create_fills_everything_in_range() -> void:
 	assert_eq(d.current_uptime, d.max_uptime())
 	assert_true(DataRegistry.config_profiles.has(d.config_profile))
 	for stat in DaemonInstance.STATS:
-		assert_between(int(d.build_quality[stat]), 0, 31, stat)
+		assert_between(int(d.build_quality[stat]), 0, 15, stat)
 	# Learned by 15: bump, screen_glare, heatsink_slam, chassis_guard, double_click -> keeps the last 4.
 	var ids := d.moves.map(func(m: Dictionary) -> String: return m["id"])
 	assert_eq(ids, ["screen_glare", "heatsink_slam", "chassis_guard", "double_click"])
@@ -159,10 +159,11 @@ func test_level_cap() -> void:
 func test_experience_log_caps() -> void:
 	var d := _make("dustbunny", 10)
 	d.add_experience_logs({"uptime": 300})
-	assert_eq(d.experience_logs["uptime"], 252)
-	d.add_experience_logs({"throughput": 252})
+	assert_eq(d.experience_logs["uptime"], 64)
+	d.add_experience_logs({"throughput": 64})
+	d.add_experience_logs({"hardening": 60})
 	d.add_experience_logs({"compute": 10})
-	assert_eq(d.experience_logs["compute"], 6, "total capped at 510")
+	assert_eq(d.experience_logs["compute"], 4, "total capped at 192")
 	d.add_experience_logs({"bandwidth": 3})
 	assert_eq(d.experience_logs["bandwidth"], 0)
 
@@ -212,10 +213,10 @@ func test_load_unknown_species_returns_null() -> void:
 
 
 func test_config_profiles_data() -> void:
-	assert_eq(DataRegistry.config_profiles.size(), 25)
+	assert_eq(DataRegistry.config_profiles.size(), 21)
 	var neutral := 0
 	for p: Dictionary in DataRegistry.config_profiles.values():
 		if p["up"] == null:
 			neutral += 1
-	assert_eq(neutral, 5)
+	assert_eq(neutral, 1, "only Balanced")
 	assert_eq(DataRegistry.config_profiles["power_saver"]["down"], "bandwidth")

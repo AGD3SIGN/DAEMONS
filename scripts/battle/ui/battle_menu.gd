@@ -210,7 +210,7 @@ func _show_move_info(slot: int) -> void:
 		return
 	var move_slot: Dictionary = _shown_moves.moves[slot]
 	var move := DataRegistry.get_move(move_slot["id"])
-	_move_pp.text = "PP %d/%d" % [int(move_slot["pp"]), int(move["max_pp"])]
+	_move_pp.text = "CYC %d/%d" % [int(move_slot["pp"]), int(move["max_pp"])]
 	var type_data: Dictionary = DataRegistry.types[move["type"]]
 	_move_type.text = String(type_data["name"]).to_upper()
 	_move_type.add_theme_color_override("font_color", Color(type_data["color"]).darkened(0.3))

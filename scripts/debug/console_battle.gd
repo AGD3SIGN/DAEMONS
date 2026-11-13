@@ -176,7 +176,7 @@ static func _ask_action(out: Array[String], echo: bool, state: BattleState, foe_
 		var d := me.active()
 		for i in d.moves.size():
 			var move := DataRegistry.get_move(d.moves[i]["id"])
-			_say(out, echo, "  %d) %-16s PP %2d  %s" % [i + 1, move["name"], int(d.moves[i]["pp"]), DataRegistry.types[move["type"]]["name"]])
+			_say(out, echo, "  %d) %-16s CYC %2d  %s" % [i + 1, move["name"], int(d.moves[i]["pp"]), DataRegistry.types[move["type"]]["name"]])
 		_say(out, echo, "  s) switch   i) item   r) run   q) quit")
 		var line: Variant = _read_line()
 		if line == null or line == "q":

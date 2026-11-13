@@ -4,6 +4,26 @@ Newest entries at the top. Each entry: what's done, decisions, what's next.
 
 ---
 
+## 2026-11-13 — Our own numbers, text and terms (distance from the classic formulas)
+
+- **Stats:** Build Quality 0–15 (was 0–31), Experience Logs 64 per stat / 192 total (was 252/510), 21 Config Profiles at
+  +10%/−5% (was 25 at ±10%; the 4 duplicate neutral profiles are gone, "balanced" stays).
+  core = (2×Base + 2×BQ + Logs/2) × L/100; Uptime = core + L + 12; others = (core + 6) × profile.
+- **Damage:** Power × Atk × (L + 10) / (Def × 120) + 2; crit 1.5 at 1 in 20 (was 1 in 16); random 0.88–1.00;
+  native-type bonus 1.35 (was 1.5). Tuned so the Dana balance test matches the old numbers
+  (Lv12: Chipmunk path 21/60, Pingo 55/60, Glowbit 10/60; before: 22, 59, 8). Smart AI's self-boost score 110 -> 100
+  so an attack still beats it after the bonus change.
+- **Quarantine:** chance = catch rate/255 × key × status (1.8 / 1.4) × (1 − 0.75 × Uptime/Max), run as 3 stages
+  (Scanning, Isolating, Encrypting), each at chance^(1/3). Was the 4-shake check formula.
+- **Battle text:** replaced stock lines ("What will X do?", "But it failed!", "It doesn't affect X...", rose/sharply/
+  fell/harshly fell, "can't go any higher") with our own ("X is awaiting input.", "It returned an error!", ...).
+- **PP is now "Cycles"** everywhere players see it (CYC 20/25). The data field is still `max_pp`.
+- **Saves:** version 3. Version-2 saves convert on load (Build Quality halved, Logs scaled by 64/252).
+- **Public design doc:** the term table that mapped to another franchise is now our own glossary; "GBA" wording
+  replaced with "early-2000s handheld-style" in README, CLAUDE.md and design.md.
+- Still classic-shaped (mechanics, not copied text): EXP curves (`growth_rate.gd`), EXP yield, run odds, stat stages.
+- Tests: 256/256.
+
 ## 2026-11-13 — CMDB numbers follow the master roster
 
 - species.json gets a `number` field (master roster, Nos. 000–178) and is sorted by it. The CMDB list, the CMDB

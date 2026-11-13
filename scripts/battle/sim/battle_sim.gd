@@ -42,9 +42,9 @@ extends RefCounted
 ##   level_up / move_learned / move_learn_pending  (from DaemonInstance, plus side, index, daemon)
 ##   switch_needed     {side}
 ##   fled              {side}                                  run_failed {side}
-##   capture_shake     {n}                                     1..3, one per passed check
+##   capture_shake     {n}                                     1..3, one per passed stage (scan, isolate, encrypt)
 ##   captured          {side, daemon, species}                 outcome becomes "caught"
-##   capture_failed    {shakes}                                0..3 shakes before it broke free
+##   capture_failed    {shakes}                                0..2 stages passed before it broke free
 ##   battle_end        {outcome}
 ##   upgrade_ready     {side, index, daemon, to}               after battle_end; caller calls evolve()
 ##   invalid_action    {side, reason}                          turn not played; ask again
@@ -60,10 +60,10 @@ const BATTLE_ITEM_EFFECTS: PackedStringArray = ["heal_uptime", "full_restore", "
 ## Used when every move is out of PP (fight slot FALLBACK_SLOT), so a battle can always continue.
 const FALLBACK_MOVE := "force_quit"
 const FALLBACK_SLOT := -1
-const CRIT_CHANCE := 1.0 / 16.0
+const CRIT_CHANCE := 1.0 / 20.0
 const CRIT_MULTIPLIER := 1.5
-const STAB_MULTIPLIER := 1.5
-const ROLL_MIN := 85
+const STAB_MULTIPLIER := 1.35  # "native type" bonus: a move that matches one of the user's types
+const ROLL_MIN := 88
 const ROLL_MAX := 100
 const THROTTLED_SKIP_CHANCE := 0.25
 const HUNG_RECOVER_CHANCE := 0.2
@@ -74,7 +74,7 @@ const LOOPING_TURNS := Vector2i(2, 5)
 const CORRUPTED_FRACTION := 8     # loses 1/8 max Uptime per turn
 const OVERHEATED_FRACTION := 16   # loses 1/16 max Uptime per turn
 const TRAINER_EXP_BONUS := 1.5
-const CAPTURE_CHECKS := 4
+const CAPTURE_CHECKS := 3
 
 static var _effect_handlers: Dictionary = {}
 
@@ -146,11 +146,11 @@ static func validate_action(state: BattleState, side: int, action: BattleAction)
 			if user == null or user.is_fainted():
 				return "the active Daemon has crashed"
 			if action.slot == FALLBACK_SLOT:
-				return "" if not has_pp(user) else "it still has moves with PP"
+				return "" if not has_pp(user) else "it still has moves with Cycles left"
 			if action.slot < 0 or action.slot >= user.moves.size():
 				return "there's no move in that slot"
 			if int(user.moves[action.slot]["pp"]) <= 0:
-				return "no PP left for that move"
+				return "no Cycles left for that move"
 		BattleAction.Kind.SWITCH:
 			return _validate_switch_target(s, action.index)
 		BattleAction.Kind.ITEM:
@@ -214,8 +214,10 @@ static func accuracy_multiplier(stage: int) -> float:
 	return maxf(3.0, 3.0 + s) / maxf(3.0, 3.0 - s)
 
 
-## Damage for one hit, with the crit and random roll (85..100) passed in so it's testable.
-## floor(floor(floor(2L/5+2) * Power * Atk / Def) / 50) + 2, then x crit, x roll/100, x STAB, x type.
+## Damage for one hit, with the crit and random roll (88..100) passed in so it's testable.
+## DAEMONS formula (our own): floor(Power * Atk * (L + 10) / (Def * 120)) + 2,
+## then x crit 1.5, x roll/100, x native-type bonus 1.35, x type effectiveness.
+## Tuned 2026-11-13 so the Department 1 balance test matches the old numbers.
 @warning_ignore("integer_division")
 static func calc_damage(state: BattleState, side: int, move: Dictionary, critical: bool, roll: int) -> int:
 	var atk_side := state.sides[side]
@@ -234,7 +236,7 @@ static func calc_damage(state: BattleState, side: int, move: Dictionary, critica
 	var def := maxi(1, floori(defender.get_stat(def_stat) * stage_multiplier(def_stage)))
 	if physical and attacker.status == "overheated":
 		atk = atk / 2
-	var damage := (2 * attacker.level / 5 + 2) * int(move["power"]) * atk / def / 50 + 2
+	var damage := int(move["power"]) * atk * (attacker.level + 10) / (def * 120) + 2
 	if critical:
 		damage = floori(damage * CRIT_MULTIPLIER)
 	damage = damage * roll / 100
@@ -610,34 +612,32 @@ static func _fx_heal(ctx: Dictionary) -> void:
 
 # --- Quarantine (capture) ----------------------------------------------------
 
-## a = floor((3*Max - 2*Current) * catch_rate * key_bonus / (3*Max)) x status bonus
-## Status bonus: 2 for Standby/Hung, 1.5 for Throttled/Corrupted/Overheated. a >= 255 always catches.
-static func capture_value(foe: DaemonInstance, key_bonus: float) -> int:
-	var max_up := foe.max_uptime()
-	var catch_rate := int(foe.species_data()["catch_rate"])
-	var a := floorf((3 * max_up - 2 * foe.current_uptime) * catch_rate * key_bonus / (3.0 * max_up))
+## Quarantine odds (our own formula), 0..1:
+##   catch_rate/255 x key bonus x status bonus x (1 - 0.75 x Uptime/Max)
+## Status bonus: 1.8 for Standby/Hung, 1.4 for Throttled/Corrupted/Overheated. 1 or more always works.
+static func capture_chance(foe: DaemonInstance, key_bonus: float) -> float:
+	var max_up := float(maxi(1, foe.max_uptime()))
+	var catch_rate := float(foe.species_data()["catch_rate"])
+	var chance := catch_rate / 255.0 * key_bonus * (1.0 - 0.75 * foe.current_uptime / max_up)
 	match foe.status:
 		"standby", "hung":
-			a *= 2.0
+			chance *= 1.8
 		"throttled", "corrupted", "overheated":
-			a *= 1.5
-	return floori(a)
+			chance *= 1.4
+	return clampf(chance, 0.0, 1.0)
 
 
-## Each of the 4 checks passes if a random 0..65535 is below this.
-static func shake_threshold(a: int) -> int:
-	if a <= 0:
-		return 0
-	if a >= 255:
-		return 65536
-	return floori(1048560.0 / sqrt(sqrt(16711680.0 / a)))
+## The transfer runs 3 stages (scan, isolate, encrypt). Each passes with chance^(1/3), so all three
+## together pass with exactly `chance`, and a near miss shows as a late failure.
+static func check_chance(chance: float) -> float:
+	return pow(clampf(chance, 0.0, 1.0), 1.0 / CAPTURE_CHECKS)
 
 
 static func _attempt_capture(state: BattleState, key_bonus: float, events: Array[Dictionary]) -> void:
 	var foe := state.sides[BattleState.FOE].active()
-	var threshold := shake_threshold(capture_value(foe, key_bonus))
+	var per_check := check_chance(capture_chance(foe, key_bonus))
 	var passed := 0
-	while passed < CAPTURE_CHECKS and (threshold >= 65536 or state.rng.randi_range(0, 65535) < threshold):
+	while passed < CAPTURE_CHECKS and (per_check >= 1.0 or state.rng.randf() < per_check):
 		passed += 1
 	for n in mini(passed, 3):
 		events.append(_ev("capture_shake", {"n": n + 1}))

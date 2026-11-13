@@ -23,7 +23,7 @@ Dual types multiply: `DataRegistry.type_multiplier("network", ["hardware", "powe
 | category | `physical` (Throughput vs Hardening), `special` (Compute vs Encryption), `status` |
 | power | 0 for status moves, 1–250 otherwise |
 | accuracy | 1–100, or **0 = never misses** |
-| max_pp | 1–64 |
+| max_pp | 1–64. Shown to players as **Cycles** ("CYC 20/25"); the field keeps its old name |
 | priority | −7 to 7 (higher goes first) |
 | effect | `{ "id": ..., "params": {...} }`, see below |
 
@@ -45,7 +45,7 @@ or "#rrggbb"), `on` ("user"/"target"), `glyph` for particles (square, dot, plus,
 envelope, cell, code, wave, hook, drop), size/count/radius knobs, and `"parallel": true` to start the next step at
 once. Example (Packet Flood): `[{"kind": "stream", "count": 18, "size": 3}, {"kind": "burst", "count": 10}]`.
 
-**Force Quit** (`force_quit`) is the 0-PP fallback: when every move a Daemon knows is out of PP, choosing
+**Force Quit** (`force_quit`) is the 0-Cycles fallback: when every move a Daemon knows is out of Cycles, choosing
 FIGHT uses it automatically (fight slot `BattleSim.FALLBACK_SLOT`). Typeless, power 50, never misses, 1/4 recoil.
 It's never put in a learnset. Change it here; the id is `BattleSim.FALLBACK_MOVE`.
 
@@ -80,9 +80,12 @@ Starter design rule so far: each starter line has base stat totals of 310 / 405 
 Each non-neutral up/down pair appears exactly once.
 
 ## How stats are calculated (scripts/daemon/daemon_instance.gd)
-- Uptime = floor((2×Base + BuildQuality + floor(Logs/4)) × Level / 100) + Level + 10
-- Others = floor((floor((2×Base + BuildQuality + floor(Logs/4)) × Level / 100) + 5) × profile), profile = 1.1 / 1.0 / 0.9
-- Build Quality: 0–31 per stat (random when created). Experience Logs: 0–252 per stat, 510 total.
+- core = floor((2×Base + 2×BuildQuality + floor(Logs/2)) × Level / 100)
+- Uptime = core + Level + 12
+- Others = floor((core + 6) × profile / 100), profile = 110 (boosted) / 100 / 95 (lowered)
+- Build Quality: 0–15 per stat (random when created). Experience Logs: 0–64 per stat, 192 total.
+- 21 Config Profiles in `data/config_profiles.json`: "balanced" plus every (up, down) pair of the 5 battle stats.
+- Saves from before 2026-11-13 (save version 2) are converted on load: Build Quality halved, Logs scaled by 64/252.
 - EXP curves: `scripts/daemon/growth_rate.gd`. Total EXP to reach level 100: fast 800,000 · medium_fast 1,000,000 · medium_slow 1,059,860 · slow 1,250,000 · erratic 600,000 · fluctuating 1,640,000.
 
 ## tiles.json (overworld tiles)

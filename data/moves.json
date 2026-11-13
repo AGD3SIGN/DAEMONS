@@ -2,7 +2,7 @@
   { "id": "force_quit", "name": "Force Quit", "type": "none", "category": "physical", "power": 50, "accuracy": 0, "max_pp": 1, "priority": 0,
     "effect": { "id": "recoil", "params": { "fraction": 0.25 } },
     "fx": [{"kind": "xmark", "color": "#E04848"}, {"kind": "burst", "color": "#FFFFFF", "count": 12, "radius": 22}],
-    "description": "Last resort when every move is out of PP. Ends the foe's process the hard way; the user takes recoil. Never learned." },
+    "description": "Last resort when every move is out of Cycles. Ends the foe's process the hard way; the user takes recoil. Never learned." },
   { "id": "bump", "name": "Bump", "type": "peripheral", "category": "physical", "power": 40, "accuracy": 100, "max_pp": 35, "priority": 0,
     "effect": { "id": "none", "params": {} },
     "fx": [{"kind": "burst", "count": 8, "radius": 14}],

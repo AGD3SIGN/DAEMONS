@@ -102,7 +102,7 @@ func _render() -> void:
 		"MOVES":
 			for slot: Dictionary in d.moves:
 				var move := DataRegistry.get_move(slot["id"])
-				lines.append("%-15s PP%2d/%-2d" % [move["name"], int(slot["pp"]), int(move["max_pp"])])
+				lines.append("%-15s CY%2d/%-2d" % [move["name"], int(slot["pp"]), int(move["max_pp"])])
 			_footer.text = _move_details(d)
 	_body.text = "\n".join(lines)
 

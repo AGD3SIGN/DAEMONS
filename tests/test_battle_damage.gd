@@ -54,24 +54,24 @@ func _types(events: Array[Dictionary]) -> Array:
 # --- damage formula ----------------------------------------------------------
 
 func test_damage_formula_exact() -> void:
-	# floor(floor(10 * 40 * 28 / 27) / 50) + 2 = 10 -> roll -> STAB 1.5 -> Network vs Hardware 2x
+	# floor(40 * 32 * 30 / (31 * 120)) + 2 = 12 -> roll -> native type 1.35 -> Network vs Hardware 2x
 	var state := _battle([_daemon("pingo", 20)], [_daemon("chipmunk", 20)])
 	var ping := DataRegistry.get_move("ping")
-	assert_eq(BattleSim.calc_damage(state, 0, ping, false, 100), 30)
-	assert_eq(BattleSim.calc_damage(state, 0, ping, false, 85), 24)
-	assert_eq(BattleSim.calc_damage(state, 0, ping, true, 100), 44, "crit: 10 -> 15 -> 22 -> 44")
+	assert_eq(BattleSim.calc_damage(state, 0, ping, false, 100), 32)
+	assert_eq(BattleSim.calc_damage(state, 0, ping, false, 88), 26)
+	assert_eq(BattleSim.calc_damage(state, 0, ping, true, 100), 48, "crit: 12 -> 18 -> 24 -> 48")
 
 
 func test_stat_stages_change_damage_and_crits_ignore_bad_ones() -> void:
 	var state := _battle([_daemon("pingo", 20)], [_daemon("chipmunk", 20)])
 	var ping := DataRegistry.get_move("ping")
-	state.sides[0].stages["compute"] = 2  # 28 -> 56
-	assert_eq(BattleSim.calc_damage(state, 0, ping, false, 100), 54)
+	state.sides[0].stages["compute"] = 2  # 32 -> 64
+	assert_eq(BattleSim.calc_damage(state, 0, ping, false, 100), 58)
 	state.sides[0].stages["compute"] = -2
-	assert_eq(BattleSim.calc_damage(state, 0, ping, true, 100), 44, "crit ignores the attacker's drop")
+	assert_eq(BattleSim.calc_damage(state, 0, ping, true, 100), 48, "crit ignores the attacker's drop")
 	state.sides[0].stages["compute"] = 0
 	state.sides[1].stages["encryption"] = 2
-	assert_eq(BattleSim.calc_damage(state, 0, ping, true, 100), 44, "crit ignores the defender's boost")
+	assert_eq(BattleSim.calc_damage(state, 0, ping, true, 100), 48, "crit ignores the defender's boost")
 
 
 func test_overheated_halves_physical_only() -> void:
@@ -93,7 +93,7 @@ func test_damage_lands_in_range() -> void:
 		var state := _battle([pingo], [chipmunk], true, seed_value)
 		var events := BattleSim.run_turn(state, _fight(pingo, "ping"), _fight(chipmunk, "chassis_guard"))
 		var hit: Dictionary = _of(events, "damage")[0]
-		assert_between(int(hit["amount"]), 24, 44)
+		assert_between(int(hit["amount"]), 26, 48)
 		assert_eq(chipmunk.current_uptime, chipmunk.max_uptime() - int(hit["amount"]))
 
 
@@ -213,8 +213,8 @@ func test_status_move_sticks_once() -> void:
 
 
 func test_corrupted_and_overheated_residual_damage() -> void:
-	var chipmunk := _daemon("chipmunk", 20)  # Uptime 50 -> 6 per turn
-	var pingo := _daemon("pingo", 20)        # Uptime 52 -> 3 per turn
+	var chipmunk := _daemon("chipmunk", 20)  # Uptime 55 -> 6 per turn
+	var pingo := _daemon("pingo", 20)        # Uptime 57 -> 3 per turn
 	chipmunk.status = "corrupted"
 	pingo.status = "overheated"
 	var events := BattleSim.run_turn(_battle([chipmunk], [pingo]), _fight(chipmunk, "chassis_guard"), _fight(pingo, "bandwidth_hog"))
@@ -222,7 +222,7 @@ func test_corrupted_and_overheated_residual_damage() -> void:
 	assert_eq(hurt.size(), 2)
 	assert_eq(hurt[0]["amount"], 6)
 	assert_eq(hurt[1]["amount"], 3)
-	assert_eq(chipmunk.current_uptime, 44)
+	assert_eq(chipmunk.current_uptime, 49)
 
 
 func test_standby_blocks_then_wakes() -> void:
@@ -413,7 +413,7 @@ func test_out_of_pp_uses_force_quit_with_recoil() -> void:
 	var used := events.filter(func(e: Dictionary) -> bool: return e["type"] == "move_used" and e["side"] == BattleState.FOE)
 	assert_eq(used[0]["move"], "force_quit")
 	assert_true(events.any(func(e: Dictionary) -> bool: return e["type"] == "recoil" and e["side"] == BattleState.FOE), "recoil hurts the user")
-	assert_string_ends_with(BattleText.describe(events[types.find("out_of_pp")], false, "Kevin"), "Dustbunny has no PP left!")
+	assert_string_ends_with(BattleText.describe(events[types.find("out_of_pp")], false, "Kevin"), "Dustbunny has no Cycles left!")
 
 
 func test_force_quit_only_when_every_move_is_empty() -> void:

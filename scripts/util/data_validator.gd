@@ -594,7 +594,7 @@ func _validate_encounters(raw: Variant) -> void:
 
 # --- config profiles ---------------------------------------------------------
 
-## 25 profiles: each non-Uptime stat pair (up, down) once, plus 5 neutral ones (up/down null).
+## 21 profiles: each non-Uptime stat pair (up, down) once, plus one neutral "balanced" (up/down null).
 func _validate_profiles(raw: Variant) -> void:
 	config_profiles = _index(raw, "config_profiles")
 	var battle_stats := Array(STATS).slice(1)  # everything except uptime
@@ -615,8 +615,8 @@ func _validate_profiles(raw: Variant) -> void:
 			_err(where, "same up/down pair as '%s'" % seen_pairs[[up, down]])
 		else:
 			seen_pairs[[up, down]] = id
-	if typeof(raw) == TYPE_ARRAY and config_profiles.size() != 25:
-		_err("config_profiles", "expected 25 profiles, found %d" % config_profiles.size())
+	if typeof(raw) == TYPE_ARRAY and config_profiles.size() != 21:
+		_err("config_profiles", "expected 21 profiles, found %d" % config_profiles.size())
 
 
 # --- moves -------------------------------------------------------------------

@@ -193,12 +193,12 @@ func _choose_player_action() -> BattleAction:
 		return _auto_action()
 	var d := state.sides[BattleState.PLAYER].active()
 	while true:
-		text_box.show_now("What will %s do?" % d.display_name())
+		text_box.show_now("%s is awaiting input." % d.display_name())
 		text_box.set_reserved_right(134)
 		match await menu.choose_command():
 			"fight":
 				if not BattleSim.has_pp(d):
-					return BattleAction.fight(BattleSim.FALLBACK_SLOT)  # "X has no PP left!" -> Force Quit
+					return BattleAction.fight(BattleSim.FALLBACK_SLOT)  # "X has no Cycles left!" -> Force Quit
 				var slot := await menu.choose_move(d, true)
 				if slot >= 0:
 					return BattleAction.fight(slot)

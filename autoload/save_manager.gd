@@ -5,7 +5,7 @@ extends Node
 ##
 ## File shape: {"version": 1, "save_count": 7, "saved_at": unix, "checksum": sha256, "data": {...}}
 
-const SAVE_VERSION := 2
+const SAVE_VERSION := 3
 ## v2 (2026-11-08): evolution lines redesigned so each keeps the same animal; old species ids renamed.
 const V2_SPECIES_RENAMES := {
 	"motherboar": "munkboard", "mainframe": "mainmunk", "routeroo": "pengwan", "meshkraken": "emperoute",
@@ -111,7 +111,41 @@ func migrate(data: Dictionary, from_version: int) -> Dictionary:
 	var out := data
 	if from_version < 2:
 		out = _rename_species(out)
+	if from_version < 3:
+		out = _rescale_daemons(out)
 	return out
+
+
+## v2 -> v3: our own stat scale. Build Quality 0..31 -> 0..15 (halved), Experience Logs 252/510 caps ->
+## 64/192 (scaled by 64/252, then trimmed to the new total). Finds every saved Daemon (any dictionary with
+## "build_quality" and "experience_logs"), wherever it sits (stack, rack, daycare later...).
+@warning_ignore("integer_division")
+static func _rescale_daemons(value: Variant) -> Variant:
+	match typeof(value):
+		TYPE_ARRAY:
+			var arr: Array = []
+			for v: Variant in value:
+				arr.append(_rescale_daemons(v))
+			return arr
+		TYPE_DICTIONARY:
+			var dict: Dictionary = {}
+			for k: Variant in value:
+				dict[k] = _rescale_daemons(value[k])
+			if dict.has("build_quality") and dict.has("experience_logs"):
+				var bq := {}
+				for stat: Variant in dict["build_quality"]:
+					bq[stat] = clampi(int(dict["build_quality"][stat]) / 2, 0, DaemonInstance.MAX_BUILD_QUALITY)
+				var logs := {}
+				var total := 0
+				for stat: Variant in dict["experience_logs"]:
+					var v := mini(int(dict["experience_logs"][stat]) * 64 / 252, DaemonInstance.MAX_LOGS_PER_STAT)
+					v = mini(v, DaemonInstance.MAX_LOGS_TOTAL - total)
+					logs[stat] = v
+					total += v
+				dict["build_quality"] = bq
+				dict["experience_logs"] = logs
+			return dict
+	return value
 
 
 ## v1 -> v2: renames old species ids wherever they appear: a value ("species_id": "bitling"), a key

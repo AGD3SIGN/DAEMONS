@@ -30,13 +30,13 @@ static func describe(e: Dictionary, is_wild: bool, foe_trainer: String = "") -> 
 		"revived":
 			return "%s rebooted!" % _name(e, is_wild)
 		"out_of_pp":
-			return "%s has no PP left!" % _name(e, is_wild)
+			return "%s has no Cycles left!" % _name(e, is_wild)
 		"move_used":
 			return "%s ran %s!" % [_named(e["user"], e["side"], is_wild), e["move_name"]]
 		"move_missed":
 			return "%s's request timed out!" % _named(e["user"], e["side"], is_wild)
 		"move_failed":
-			return "But there was nothing to target..." if e["reason"] == "no_target" else "But it failed!"
+			return "But there was nothing to target..." if e["reason"] == "no_target" else "It returned an error!"
 		"damage":
 			return "Critical hit!" if e.get("critical", false) else ""
 		"hit_count":
@@ -44,7 +44,7 @@ static func describe(e: Dictionary, is_wild: bool, foe_trainer: String = "") -> 
 		"effectiveness":
 			return "It hit a weak spot!" if float(e["multiplier"]) > 1.0 else "It barely made a dent..."
 		"no_effect":
-			return "It doesn't affect %s..." % _named(e["target"], e["side"], is_wild)
+			return "%s ignored it completely!" % _named(e["target"], e["side"], is_wild)
 		"drain":
 			return "%s siphoned some Uptime!" % _name(e, is_wild)
 		"recoil":
@@ -52,15 +52,15 @@ static func describe(e: Dictionary, is_wild: bool, foe_trainer: String = "") -> 
 		"stat_changed":
 			var stat: String = STAT_NAMES.get(e["stat"], e["stat"])
 			var delta := int(e["delta"])
-			var how := ("rose" if delta == 1 else "rose sharply") if delta > 0 else ("fell" if delta == -1 else "harshly fell")
+			var how := ("went up" if delta == 1 else "spiked up") if delta > 0 else ("dropped" if delta == -1 else "plummeted")
 			return "%s's %s %s!" % [_name(e, is_wild), stat, how]
 		"stat_change_failed":
 			var stat_name: String = STAT_NAMES.get(e["stat"], e["stat"])
-			return "%s's %s can't go any %s!" % [_name(e, is_wild), stat_name, "higher" if int(e["direction"]) > 0 else "lower"]
+			return "%s's %s is already %s!" % [_name(e, is_wild), stat_name, "maxed out" if int(e["direction"]) > 0 else "at the floor"]
 		"status_applied":
 			return _status_applied(_name(e, is_wild), e["status"])
 		"status_failed":
-			return "But it failed!"
+			return "It returned an error!"
 		"status_blocked":
 			match e["status"]:
 				"standby":
@@ -100,12 +100,12 @@ static func describe(e: Dictionary, is_wild: bool, foe_trainer: String = "") -> 
 		"run_failed":
 			return "Couldn't disconnect!"
 		"capture_shake":
-			return ["Transferring...", "Transferring... 50%", "Transferring... 99%"][clampi(int(e["n"]) - 1, 0, 2)]
+			return ["Scanning...", "Isolating...", "Encrypting..."][clampi(int(e["n"]) - 1, 0, 2)]
 		"captured":
 			return "Done! %s was Quarantined!" % e["daemon"]
 		"capture_failed":
-			return ["It ejected the key instantly!", "Scan failed! It broke free!",
-				"So close! The transfer was interrupted!", "Argh! It broke free at 99%!"][clampi(int(e["shakes"]), 0, 3)]
+			return ["It ejected the key instantly!", "It broke free during isolation!",
+				"So close! It broke out before the encryption finished!"][clampi(int(e["shakes"]), 0, 2)]
 		"battle_end":
 			match e["outcome"]:
 				"player_won":

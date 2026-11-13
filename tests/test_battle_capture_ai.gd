@@ -38,24 +38,26 @@ func _move_id(state: BattleState, side: int, action: BattleAction) -> String:
 
 # --- capture -----------------------------------------------------------------
 
-func test_capture_value_formula() -> void:
+func test_capture_chance_formula() -> void:
 	var bunny := _daemon("dustbunny", 5)  # catch rate 255
-	assert_eq(BattleSim.capture_value(bunny, 1.0), 85, "full Uptime: 255 / 3")
+	assert_almost_eq(BattleSim.capture_chance(bunny, 1.0), 0.25, 0.001, "full Uptime: 1 - 0.75")
 	bunny.status = "standby"
-	assert_eq(BattleSim.capture_value(bunny, 1.0), 170)
+	assert_almost_eq(BattleSim.capture_chance(bunny, 1.0), 0.45, 0.001, "x1.8")
 	bunny.status = "corrupted"
-	assert_eq(BattleSim.capture_value(bunny, 1.0), 127)
+	assert_almost_eq(BattleSim.capture_chance(bunny, 1.0), 0.35, 0.001, "x1.4")
 	bunny.status = ""
 	bunny.current_uptime = 1
-	assert_gt(BattleSim.capture_value(bunny, 1.0), 240, "almost guaranteed at 1 Uptime")
-	assert_gt(BattleSim.capture_value(_daemon("chipmunk", 5), 255.0), 255, "Root Key")
+	assert_gt(BattleSim.capture_chance(bunny, 1.0), 0.9, "almost guaranteed at 1 Uptime")
+	assert_eq(BattleSim.capture_chance(_daemon("chipmunk", 5), 255.0), 1.0, "Root Key")
+	var pyre := _daemon("pyrewall", 50)  # catch rate 3
+	assert_lt(BattleSim.capture_chance(pyre, 1.0), 0.01, "legendaries are hard at full Uptime")
 
 
-func test_shake_threshold() -> void:
-	assert_eq(BattleSim.shake_threshold(0), 0)
-	assert_eq(BattleSim.shake_threshold(255), 65536)
-	assert_between(BattleSim.shake_threshold(85), 49700, 49900)
-	assert_gt(BattleSim.shake_threshold(170), BattleSim.shake_threshold(85))
+func test_three_stage_checks_multiply_back_to_the_chance() -> void:
+	assert_eq(BattleSim.check_chance(0.0), 0.0)
+	assert_eq(BattleSim.check_chance(1.0), 1.0)
+	assert_almost_eq(pow(BattleSim.check_chance(0.25), 3.0), 0.25, 0.0001)
+	assert_gt(BattleSim.check_chance(0.25), 0.6, "each stage is likelier than the whole")
 
 
 func _capture_rate(status: String, key: String, trials: int) -> int:
@@ -79,9 +81,9 @@ func _capture_rate(status: String, key: String, trials: int) -> int:
 
 
 func test_capture_odds() -> void:
-	var full := _capture_rate("", "thumb_drive", 300)    # about 1 in 3
-	var asleep := _capture_rate("standby", "thumb_drive", 300)  # about 2 in 3
-	assert_between(full, 70, 130)
+	var full := _capture_rate("", "thumb_drive", 300)    # about 1 in 4
+	var asleep := _capture_rate("standby", "thumb_drive", 300)  # about 9 in 20
+	assert_between(full, 50, 100)
 	assert_gt(asleep, full + 40)
 	assert_eq(_capture_rate("", "root_key", 20), 20, "Root Key never fails")
 
@@ -185,7 +187,7 @@ func test_smart_replacement_picks_the_best_matchup() -> void:
 func test_battle_text() -> void:
 	assert_eq(BattleText.describe({"type": "switch_in", "side": 1, "daemon": "Dustbunny"}, true), "A wild Dustbunny spawned!")
 	assert_eq(BattleText.describe({"type": "move_used", "side": 1, "user": "Pingo", "move_name": "Ping"}, false), "Foe Pingo ran Ping!")
-	assert_eq(BattleText.describe({"type": "stat_changed", "side": 0, "daemon": "Chipmunk", "stat": "throughput", "delta": 2}, true), "Chipmunk's Throughput rose sharply!")
+	assert_eq(BattleText.describe({"type": "stat_changed", "side": 0, "daemon": "Chipmunk", "stat": "throughput", "delta": 2}, true), "Chipmunk's Throughput spiked up!")
 	assert_eq(BattleText.describe({"type": "upgrade_ready", "daemon": "Pingo"}, true), "Your Pingo is upgrading!")
 	assert_eq(BattleText.describe({"type": "turn_start", "turn": 1}, true), "")
 

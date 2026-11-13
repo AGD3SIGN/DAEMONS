@@ -28,4 +28,4 @@
 - trainer jogger_jo: levels [6]
 - trainer signal_hunter_hal: levels [7, 7]
 - trainer phisher_pete: levels [8, 8]
-- PP: lowest total at Lv 5 is 35 (coolippo). 0-PP fallback (Force Quit): in place.
+- Cycles: lowest total at Lv 5 is 35 (coolippo). 0-Cycles fallback (Force Quit): in place.

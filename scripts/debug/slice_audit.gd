@@ -302,5 +302,5 @@ func _pp_note() -> String:
 		if total < lowest:
 			lowest = total
 			who = species_id
-	var fallback := "in place" if not DataRegistry.get_move(BattleSim.FALLBACK_MOVE).is_empty() else "MISSING (battles can soft-lock at 0 PP)"
-	return "PP: lowest total at Lv 5 is %d (%s). 0-PP fallback (Force Quit): %s." % [lowest, who, fallback]
+	var fallback := "in place" if not DataRegistry.get_move(BattleSim.FALLBACK_MOVE).is_empty() else "MISSING (battles can soft-lock at 0 Cycles)"
+	return "Cycles: lowest total at Lv 5 is %d (%s). 0-Cycles fallback (Force Quit): %s." % [lowest, who, fallback]

@@ -6,26 +6,22 @@
   { "id": "heavy_duty",   "name": "Heavy Duty",   "up": "throughput", "down": "bandwidth" },
 
   { "id": "defensive",    "name": "Defensive",    "up": "hardening",  "down": "throughput" },
-  { "id": "stable",       "name": "Stable",       "up": null,         "down": null },
   { "id": "ruggedized",   "name": "Ruggedized",   "up": "hardening",  "down": "compute" },
   { "id": "bunkered",     "name": "Bunkered",     "up": "hardening",  "down": "encryption" },
   { "id": "fortified",    "name": "Fortified",    "up": "hardening",  "down": "bandwidth" },
 
   { "id": "analytical",   "name": "Analytical",   "up": "compute",    "down": "throughput" },
   { "id": "glass_cannon", "name": "Glass Cannon", "up": "compute",    "down": "hardening" },
-  { "id": "default",      "name": "Default",      "up": null,         "down": null },
   { "id": "experimental", "name": "Experimental", "up": "compute",    "down": "encryption" },
   { "id": "batch_mode",   "name": "Batch Mode",   "up": "compute",    "down": "bandwidth" },
 
   { "id": "cautious",     "name": "Cautious",     "up": "encryption", "down": "throughput" },
   { "id": "sandboxed",    "name": "Sandboxed",    "up": "encryption", "down": "hardening" },
   { "id": "locked_down",  "name": "Locked Down",  "up": "encryption", "down": "compute" },
-  { "id": "vanilla",      "name": "Vanilla",      "up": null,         "down": null },
   { "id": "power_saver",  "name": "Power-Saver",  "up": "encryption", "down": "bandwidth" },
 
   { "id": "lightweight",  "name": "Lightweight",  "up": "bandwidth",  "down": "throughput" },
   { "id": "turbo",        "name": "Turbo",        "up": "bandwidth",  "down": "hardening" },
   { "id": "low_latency",  "name": "Low Latency",  "up": "bandwidth",  "down": "compute" },
-  { "id": "unencrypted",  "name": "Unencrypted",  "up": "bandwidth",  "down": "encryption" },
-  { "id": "stock",        "name": "Stock",        "up": null,         "down": null }
+  { "id": "unencrypted",  "name": "Unencrypted",  "up": "bandwidth",  "down": "encryption" }
 ]
