@@ -1,6 +1,6 @@
 # DAEMONS
 
-A GBA-style, top-down, turn-based monster collector where tech comes alive. You're the new hire on the
+An early-2000s handheld-style, top-down, turn-based creature collector where tech comes alive. You're the new hire on the
 help desk in **Root Valley**: catch Daemons in Quarantine Keys, earn Certifications, and stop the
 **Ransom** syndicate. Built with Godot 4.7 (GDScript).
 

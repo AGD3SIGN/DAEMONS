@@ -12,51 +12,57 @@
 ## 1. The concept
 
 ### Pitch
-A GBA-era, top-down, turn-based monster collector set in a world where tech comes alive. You're a new hire on the help desk at **Root Valley**, a tech town where wild Daemons live in server rooms, cable runs, abandoned data centers and the cloud. Catch them, train them, patch them into stronger versions, earn all 8 **Certifications**, and take down **Ransom**, a syndicate that's encrypting the whole valley.
+An early-2000s handheld-style, top-down, turn-based creature collector set in a world where tech comes alive. You're a new hire on the help desk at **Root Valley**, a tech town where wild Daemons live in server rooms, cable runs, abandoned data centers and the cloud. Catch them, train them, patch them into stronger versions, earn all 8 **Certifications**, and take down **Ransom**, a syndicate that's encrypting the whole valley.
 
-### Core loop (same bones as classic Pokémon, our own skin)
-Explore → find wild Daemons in "hot zones" (tall grass = **cable tangles**, server racks, Wi-Fi dead zones) → battle → **Quarantine** them into a USB key → build a team of 6 → beat trainers and Cert bosses → unlock new areas → fill the **CMDB** (the dex).
+### Core loop
+Explore → find wild Daemons in "hot zones" (**cable tangles**, server racks, Wi-Fi dead zones) → battle → **Quarantine** them into a USB key → build an **Active Stack** of 6 → beat trainers and Department bosses → unlock new areas → fill the **CMDB**.
 
-### Vocabulary map
-| Classic idea | Our version |
+### Glossary
+| Term | What it is |
 |---|---|
-| Pokémon | **Daemons** |
-| Poké Ball / capture | **Quarantine Key** (USB stick). Tiers: Thumb Drive → Encrypted Key → Hardware Token → Root Key (guaranteed) |
-| Pokédex | **CMDB** (Configuration Management Database). Entries are written like asset records |
-| Pokémon Center | **Help Desk**. Free heal; the tech says "Have you tried turning it off and on again?" |
-| Poké Mart | **Supply Closet** |
-| PC box storage | **Server Rack** (boxes = rack units) |
-| Party of 6 | **Active Stack** |
-| Gyms / badges | **Departments** → earn **Certifications** |
-| Elite Four | **The C-Suite** (CIO, CISO, CTO, CFO) + final boss **The Board** |
-| Evil team | **Ransom** syndicate (grunts = "Phishers", admins = "Exploit Kits") |
-| Evolution | **Upgrading**: "Your Pingo is upgrading!" |
-| Trade evolution | **Sync** (link with another save file or local multiplayer later) |
-| Potion / Super Potion | **Coffee** / **Energy Drink** / **Full Restore = Pizza Friday** |
-| Revive | **Hard Reboot** |
-| Repel | **Firewall Rule** |
-| Escape Rope | **Ctrl+Z** |
-| TMs | **Scripts** (teach a move; reusable) |
-| Rare Candy | **Overclock Chip** |
-| Money | **Credits** |
-| Rival | **Kevin**, the guy who always replies-all |
+| **Daemon** | a living tech creature, named after Unix background processes |
+| **Quarantine Key** | a USB stick that captures a weakened wild Daemon, chosen from the Bag in battle. Tiers: Thumb Drive → Encrypted Key → Hardware Token → Root Key (guaranteed) |
+| **CMDB** | Configuration Management Database: your record of every Daemon seen and caught, written like asset records (DMN-### numbers) |
+| **Help Desk** | free healing; the tech asks "Have you tried turning it off and on again?" |
+| **Supply Closet** | the shop |
+| **Server Rack** | storage for Daemons beyond your stack (racks = boxes of units) |
+| **Active Stack** | the 6 Daemons you carry |
+| **Departments** | the 8 bosses; beating one earns a **Certification**, which opens new areas |
+| **The C-Suite** | CIO, CISO, CTO and CFO, then the final boss, **The Board** |
+| **Ransom** | the villain syndicate (grunts = "Phishers", admins = "Exploit Kits") |
+| **Upgrading** | a Daemon growing into its next stage: "Your Pingo is upgrading!" |
+| **Sync** | upgrading that needs a link with another save file (later, local multiplayer) |
+| **Coffee / Energy Drink / Pizza Friday** | healing items, small to full |
+| **Hard Reboot** | brings back a crashed Daemon |
+| **Firewall Rule** | keeps weaker wild Daemons away for a while |
+| **Ctrl+Z** | escape back to a dungeon's entrance |
+| **Scripts** | reusable items that teach a move |
+| **Overclock Chip** | +1 level |
+| **Credits** | money |
+| **Cycles** | how many times a Daemon can still run a move |
+| **Kevin** | your rival, the guy who always replies-all |
 
-### Stats (6, same as Gen 3, renamed)
-| Classic | Ours | Meaning |
-|---|---|---|
-| HP | **Uptime** | how much it can take |
-| Attack | **Throughput** | physical-style damage |
-| Defense | **Hardening** | physical-style defense |
-| Sp. Atk | **Compute** | special-style damage |
-| Sp. Def | **Encryption** | special-style defense |
-| Speed | **Bandwidth** | who goes first |
+### Stats (6)
+| Stat | Meaning |
+|---|---|
+| **Uptime** | how much it can take before it crashes |
+| **Throughput** | physical damage |
+| **Hardening** | physical defense |
+| **Compute** | special damage |
+| **Encryption** | special defense |
+| **Bandwidth** | who goes first |
 
-Hidden per-Daemon variance (IVs) = **Build Quality**. Training points (EVs) = **Experience Logs**. Natures = **Config Profiles** (e.g. "Aggressive", "Defensive", "Power-Saver").
+Every Daemon also has hidden **Build Quality** (0–15 per stat, random when it's created), **Experience Logs** earned from battles (up to 64 per stat, 192 total) and a **Config Profile** (21 profiles: Balanced, or +10% to one stat and −5% to another, e.g. "Aggressive", "Defensive", "Power-Saver").
+
+Our formulas (see `scripts/daemon/daemon_instance.gd` and `scripts/battle/sim/battle_sim.gd`):
+- Stats: core = (2×Base + 2×BQ + Logs/2) × Level/100; Uptime = core + Level + 12; others = (core + 6) × profile.
+- Damage: Power × Atk × (Level + 10) / (Def × 120) + 2, then ×1.5 on a critical hit (1 in 20), ×0.88–1.00 random, ×1.35 when the move matches one of the user's types, × type effectiveness.
+- Quarantine: chance = catch rate/255 × key bonus × status bonus (1.8 Standby/Hung, 1.4 Throttled/Corrupted/Overheated) × (1 − 0.75 × Uptime/Max). The transfer runs three stages (Scanning, Isolating, Encrypting); each passes with chance^(1/3).
 
 ### Types (12)
 Hardware, Network, Software, Power, Cloud, Data, Security, Malware, Legacy, Mobile, AI, Peripheral.
 
-Starter triangle: **Hardware** (fire role) beats **Software** (grass role, "you can't patch bad RAM"), **Software** beats **Network** (water role, "SDN reroutes it"), **Network** beats **Hardware** ("a flood of packets cooks the box").
+Starter triangle: **Hardware** beats **Software** ("you can't patch bad RAM"), **Software** beats **Network** ("SDN reroutes it"), **Network** beats **Hardware** ("a flood of packets cooks the box").
 
 Draft type chart (attacker → defender; 2 = super effective, ½ = resisted, 0 = no effect). This is a starting point; tune it in playtesting.
 
@@ -78,14 +84,14 @@ Draft type chart (attacker → defender; 2 = super effective, ½ = resisted, 0 =
 (Blank = normal damage. Security being immune to Malware gives the anti-virus fantasy.)
 
 ### Status effects
-| Status | Effect | Classic role |
-|---|---|---|
-| **Throttled** | Bandwidth halved, 25% chance to skip turn | Paralysis |
-| **Corrupted** | loses 1/8 Uptime each turn | Poison |
-| **Overheated** | loses 1/16 Uptime per turn, Throughput halved | Burn |
-| **Standby** | can't act for 1–3 turns | Sleep |
-| **Hung** | can't act; 20% chance per turn to recover | Freeze |
-| **Looping** | volatile; 33% chance to hit itself | Confusion |
+| Status | Effect |
+|---|---|
+| **Throttled** | Bandwidth halved, 25% chance to skip its turn |
+| **Corrupted** | loses 1/8 Uptime each turn |
+| **Overheated** | loses 1/16 Uptime per turn, Throughput halved |
+| **Standby** | can't act for 1–3 turns |
+| **Hung** | can't act; 20% chance per turn to recover |
+| **Looping** | volatile; 33% chance to hit itself |
 
 ### Sample Daemons (original designs, starting roster ideas)
 **Rule:** an evolution line keeps the SAME animal. The animal grows up (baby → adult → elder) while its tech upgrades (home → business → enterprise gear).
@@ -117,13 +123,13 @@ Draft type chart (attacker → defender; 2 = super effective, ½ = resisted, 0 =
 
 CMDB numbers come from the master roster (179 Daemons, Nos. 000–178; `number` in species.json). Ramster (021) and Servurtle (022) stay **Hardware** (decided 2026-11-13; the roster had proposed Data and Security). Built so far: 000–022 and 028–040; 023–027 (Captchat, Phishgill, Cumulonimbyte, Hallucinaut, Uptimus) keep their slots until they are made.
 
-Target roster: **40–60 Daemons** for v1 (about 18 evolution lines + singles + 2–3 legendaries). Design rule: every Daemon is a real animal/creature fused with a real piece of tech, and its name is a pun. No silhouettes, names or palettes borrowed from any Pokémon.
+Target roster: **40–60 Daemons** for v1 (about 18 evolution lines + singles + 2–3 legendaries). Design rule: every Daemon is a real animal/creature fused with a real piece of tech, and its name is a pun. No silhouettes, names or palettes borrowed from any existing monster franchise.
 
 ### Region: Root Valley (one compact region, 8–15 hours of play)
 1. **Onboarding Town**: home + Help Desk HQ (start)
 2. **Route 1: Cable Run**
 3. **Patch Town**: Department 1, *Desktop Support* (Hardware cert)
-4. **Wi-Fi Dead Zone** (forest equivalent; dark, Network Daemons)
+4. **Wi-Fi Dead Zone** (dark woods; Network Daemons)
 5. **Port City**: Department 2, *Networking* (Network cert)
 6. **The Basement**: Legacy dungeon full of old servers
 7. **DevOps Heights**: Department 3, *Software* cert
@@ -141,8 +147,8 @@ Target roster: **40–60 Daemons** for v1 (about 18 evolution lines + singles + 
 - Ending: restore from backups (the backups were tested, a miracle).
 
 ### Legal guardrails (from the research; not legal advice)
-- 100% original names, creature designs, UI and music. Never use Pokémon assets, names, fonts, sounds or Pokémon Essentials.
-- Keep capture **menu-based inside turn-based battles**. No real-time throwing of a capture device in the overworld, no capture-odds reticle, no summon-then-auto-battle. That steers clear of Nintendo's capture/summon patents.
+- 100% original names, creature designs, UI, text, formulas and music. Never use another franchise's assets, names, fonts, sounds or code.
+- Keep capture **menu-based inside turn-based battles**. No real-time throwing of a capture device in the overworld, no capture-odds reticle, no summon-then-auto-battle. That steers clear of existing capture/summon patents.
 - Keep a dated design log (sketches + dates) for every Daemon.
 - Trademark-search the final title. Get an IP lawyer review before a paid release. Consider an LLC.
 
@@ -176,7 +182,7 @@ Each phase: **Goal → Prompt → Done when.** Big phases are split into sub-ste
 > Build the data layer. Create data/types.json (12 types + effectiveness chart from docs/design.md), data/moves.json (start with 30 moves: id, name, type, category physical/special/status, power, accuracy, max_pp, priority, effect id + params, description), data/species.json (the 3 starter lines + Wormby, Spamlet, Dustbunny, Fanbat, Cablesnake, Floppit — base stats for uptime/throughput/hardening/compute/encryption/bandwidth, types, growth_rate, catch_rate, base_exp, learnset by level, evolutions with trigger type level/item/sync, CMDB entry text), data/items.json (Coffee, Energy Drink, Pizza Friday, Hard Reboot, Firewall Rule, Ctrl+Z, Thumb Drive, Encrypted Key, Hardware Token, Root Key, Overclock Chip). DataRegistry loads all of them at startup, validates required fields and cross-references (every learnset move exists, every evolution target exists) and prints clear errors. Write GUT tests for loading and validation.
 
 **1b prompt:**
-> Create the DaemonInstance class (a caught Daemon): species id, nickname, level, exp, current uptime, status, 4 move slots with PP, build_quality (6 values 0–31), experience_logs (6 values, max 252 each, 510 total), config_profile (25 profiles, +10%/−10% to two stats), original trainer id. Implement stat formulas (Gen-3-style: Uptime = ((2*Base + BQ + Logs/4) * L/100) + L + 10; others = (((2*Base + BQ + Logs/4) * L/100) + 5) * profile modifier), the 6 growth-rate EXP curves, level up, learning moves on level up, and evolution checks. Add to_dict()/from_dict() for saving. Full GUT tests for the formulas.
+> Create the DaemonInstance class (a caught Daemon): species id, nickname, level, exp, current uptime, status, 4 move slots with Cycles, build_quality (6 values 0–15), experience_logs (6 values, max 64 each, 192 total), config_profile (21 profiles: Balanced, or +10%/−5% to two stats), original trainer id. Implement our stat formulas (see Stats above), the growth-rate EXP curves, level up, learning moves on level up, and evolution checks. Add to_dict()/from_dict() for saving. Full GUT tests for the formulas.
 
 **Done when:** game boots with no data errors, and tests prove stats and EXP math.
 
@@ -187,15 +193,15 @@ Each phase: **Goal → Prompt → Done when.** Big phases are split into sub-ste
 > Build the headless battle sim in scripts/battle/sim/. BattleState holds two sides (each an active Daemon + the rest of the stack), field effects, turn counter, and a seeded RNG. Each turn takes one action per side: fight(move_slot), switch(index), item(item_id, target), run. Turn order: switches first, then items, then moves by priority, then bandwidth (with throttled modifier), with random speed ties. Output a list of BattleEvent dictionaries. No nodes, no UI.
 
 **2b prompt:**
-> Add damage and effects. Damage = (((2*L/5 + 2) * Power * Atk/Def) / 50 + 2) × crit (1.5, base 1/16) × random(0.85–1.00) × STAB 1.5 × type effectiveness. Physical uses throughput/hardening, special uses compute/encryption. Accuracy checks with accuracy/evasion stages. Stat stages −6..+6 with the standard multipliers. Status effects from docs/design.md (Throttled, Corrupted, Overheated, Standby, Hung, Looping). Move effects as a registry of small handler functions keyed by effect id (e.g. "status_chance", "stat_change", "drain", "multi_hit", "recoil"). Fainting, forced switch, battle end, EXP + experience-log gain, level ups during battle, evolution flagged for after battle.
+> Add damage and effects. Damage: our formula from the Stats section above (crit 1.5 at 1 in 20, random 0.88–1.00, native-type bonus 1.35, type effectiveness). Physical uses throughput/hardening, special uses compute/encryption. Accuracy checks with accuracy/evasion stages. Stat stages −6..+6 with the standard multipliers. Status effects from docs/design.md (Throttled, Corrupted, Overheated, Standby, Hung, Looping). Move effects as a registry of small handler functions keyed by effect id (e.g. "status_chance", "stat_change", "drain", "multi_hit", "recoil"). Fainting, forced switch, battle end, EXP + experience-log gain, level ups during battle, evolution flagged for after battle.
 
 **2c prompt:**
-> Add wild battles and capture. Run chance based on bandwidth. Quarantine capture formula (Gen-3-style): a = ((3*MaxHP − 2*HP) * catch_rate * key_bonus) / (3*MaxHP) × status bonus (2 for Standby/Hung, 1.5 for Throttled/Corrupted/Overheated); if a ≥ 255 caught, else 4 shake checks. Emit capture_shake events. Add simple trainer AI tiers: "random" (picks any move), "basic" (prefers super-effective, avoids immune), "smart" (also uses status moves early and switches out of bad matchups). Write a debug scene that runs a text-only battle in the console, and GUT tests for turn order, damage range, type immunities, capture math with a fixed seed.
+> Add wild battles and capture. Run chance based on bandwidth. Quarantine: our formula from the Stats section above, run as three stages (scan, isolate, encrypt). Emit capture_shake events. Add simple trainer AI tiers: "random" (picks any move), "basic" (prefers super-effective, avoids immune), "smart" (also uses status moves early and switches out of bad matchups). Write a debug scene that runs a text-only battle in the console, and GUT tests for turn order, damage range, type immunities, capture math with a fixed seed.
 
 **Done when:** you can run a full text battle in the console, and the same seed always gives the same result.
 
 ### Phase 3 — Battle UI (2 sessions)
-**Goal:** It looks and feels like a GBA battle.
+**Goal:** It looks and feels like an early-2000s handheld battle, in our own style.
 
 **Prompt:**
 > Build the battle scene on top of the sim. Layout at 320x180: enemy Daemon top-right on a platform with name/level/uptime bar top-left; player Daemon bottom-left (back sprite) with name/level/uptime bar + EXP bar bottom-right; text box along the bottom; command menu Fight / Stack / Bag / Run; move menu showing PP and type. A BattlePlayer reads the sim's BattleEvent list and animates each in order: typewriter text, uptime bars draining smoothly, flash/shake on hit, faint drop, capture Quarantine Key shake animation, level-up stat popup, then "upgrading" evolution scene after battle. Use placeholder colored-shape sprites generated in code if no art exists yet (64x64 front/back). Every menu works with keyboard, gamepad, and touch/mouse taps.
@@ -203,7 +209,7 @@ Each phase: **Goal → Prompt → Done when.** Big phases are split into sub-ste
 **Done when:** you can fight and catch a wild Dustbunny from a debug button, start to finish, with no console needed.
 
 ### Phase 4 — Overworld (2–3 sessions)
-**Goal:** Walk around a map like a GBA game.
+**Goal:** Walk around a grid-based top-down map.
 
 **4a prompt:**
 > Build the overworld. A TileSet with 16x16 tiles and custom data layers: collision (bool), behavior (none / hot_zone / ledge_down / water / door / counter). Player moves one tile per step with a tween (walk 4 tiles/sec, run 8 with the run button), 4-direction facing, walk animation frames, bump sound on collision, ledges you can hop down but not up. Camera follows the player and clamps to map bounds. Make a placeholder tileset in code or a simple PNG and build Onboarding Town (about 30x25 tiles) with your house, the Help Desk, and an exit to Route 1.
@@ -235,11 +241,11 @@ Each phase: **Goal → Prompt → Done when.** Big phases are split into sub-ste
 Scope: Onboarding Town → Route 1: Cable Run → Wi-Fi Dead Zone (short) → Patch Town → Department 1 (Desktop Support, Hardware cert). About 10 Daemons, 3 starters, 8 trainers, Kevin rival fight #1.
 
 **Prompt:**
-> Build the vertical slice described in docs/design.md Phase 7. Write the intro cutscene (first day at the help desk, manager gives you the choice of 3 starters from the e-waste bin), Kevin's first rival battle, Route 1 with trainers, the Wi-Fi Dead Zone, Patch Town, and the Department 1 gym (a small puzzle: route cables to unlock doors, then the boss). Swap in real art from assets/ wherever it exists; keep placeholders elsewhere. Add music hooks: town, route, battle, trainer battle, boss, victory, Help Desk jingle. Balance levels so the cert boss is beatable at around level 12–14 without grinding. Then playtest the whole slice by reading through the scripts and listing any broken flags, dead ends or softlocks.
+> Build the vertical slice described in docs/design.md Phase 7. Write the intro cutscene (first day at the help desk, manager gives you the choice of 3 starters from the e-waste bin), Kevin's first rival battle, Route 1 with trainers, the Wi-Fi Dead Zone, Patch Town, and the Department 1 building (a small puzzle: route cables to unlock doors, then the boss). Swap in real art from assets/ wherever it exists; keep placeholders elsewhere. Add music hooks: town, route, battle, trainer battle, boss, victory, Help Desk jingle. Balance levels so the cert boss is beatable at around level 12–14 without grinding. Then playtest the whole slice by reading through the scripts and listing any broken flags, dead ends or softlocks.
 
 **Art/audio track during Phase 7 (outside Claude Code):**
 - Aseprite ($19.99): draw the 10 slice Daemons (64x64 front + back, 2-frame idle), player + Kevin + NPC overworld sprites, one town tileset, one route tileset.
-- Music: Furnace (GBA-style tracker) or Bosca Ceoil Blue (free, easy). Or commission (about $50–150/min entry level, work-for-hire contract).
+- Music: Furnace (chiptune tracker) or Bosca Ceoil Blue (free, easy). Or commission (about $50–150/min entry level, work-for-hire contract).
 - SFX: jsfxr/ChipTone for blips, hits, menu sounds.
 
 **Done when:** someone who's never seen it plays from title to the first cert without help or bugs.

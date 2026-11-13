@@ -1,7 +1,7 @@
 # DAEMONS — project rules for Claude Code
 
 ## What this is
-A GBA-era style, top-down, turn-based monster-collecting RPG with an IT theme.
+An early-2000s handheld-style, top-down, turn-based creature-collecting RPG with an IT theme.
 Creatures are "Daemons". Capture device is a "Quarantine Key". Healing is the "Help Desk".
 The full design doc lives in docs/design.md — read it before adding content.
 Progress lives in docs/phase-log.md.
