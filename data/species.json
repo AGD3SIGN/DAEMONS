@@ -222,5 +222,125 @@
       { "level": 50, "move": "ash_reboot" }, { "level": 60, "move": "thermal_runaway" }
     ],
     "evolutions": [],
-    "cmdb": { "category": "Phoenix / Perimeter Firewall", "entry": "Legendary guardian of Port 443. Burns any packet without a valid certificate. When its rules go stale it collapses into ash and boots again with a fresh ruleset." } }
+    "cmdb": { "category": "Phoenix / Perimeter Firewall", "entry": "Legendary guardian of Port 443. Burns any packet without a valid certificate. When its rules go stale it collapses into ash and boots again with a fresh ruleset." } },
+  { "id": "clawptop", "name": "Clawptop", "types": ["hardware"],
+    "base_stats": { "uptime": 50, "throughput": 60, "hardening": 65, "compute": 35, "encryption": 45, "bandwidth": 35 },
+    "growth_rate": "medium_slow", "catch_rate": 120, "base_exp": 60, "log_yield": { "hardening": 1 },
+    "learnset": [
+      { "level": 1, "move": "bump" }, { "level": 1, "move": "chassis_guard" }, { "level": 6, "move": "lid_slam" },
+      { "level": 10, "move": "heatsink_slam" }, { "level": 15, "move": "overclock" }
+    ],
+    "evolutions": [ { "to": "deskclaw", "trigger": "level", "level": 20 } ],
+    "cmdb": { "category": "Hermit Crab / Laptop", "entry": "Moves into an old laptop instead of a shell. Snaps the lid shut on anyone who reaches for the keyboard." } },
+  { "id": "deskclaw", "name": "Deskclaw", "types": ["hardware"],
+    "base_stats": { "uptime": 65, "throughput": 80, "hardening": 85, "compute": 45, "encryption": 60, "bandwidth": 45 },
+    "growth_rate": "medium_slow", "catch_rate": 60, "base_exp": 130, "log_yield": { "hardening": 2 },
+    "learnset": [
+      { "level": 1, "move": "bump" }, { "level": 1, "move": "chassis_guard" }, { "level": 6, "move": "lid_slam" },
+      { "level": 10, "move": "heatsink_slam" }, { "level": 15, "move": "overclock" }, { "level": 20, "move": "power_cycle" },
+      { "level": 28, "move": "hard_reset" }
+    ],
+    "evolutions": [ { "to": "crabinet", "trigger": "level", "level": 38 } ],
+    "cmdb": { "category": "Hermit Crab / Desktop Tower", "entry": "Carries a desktop tower on its back and holds its big claw up like a shield. Its power button is the only part it lets you touch." } },
+  { "id": "crabinet", "name": "Crabinet", "types": ["hardware"],
+    "base_stats": { "uptime": 85, "throughput": 105, "hardening": 115, "compute": 55, "encryption": 80, "bandwidth": 50 },
+    "growth_rate": "medium_slow", "catch_rate": 30, "base_exp": 210, "log_yield": { "hardening": 3 },
+    "learnset": [
+      { "level": 1, "move": "bump" }, { "level": 1, "move": "chassis_guard" }, { "level": 6, "move": "lid_slam" },
+      { "level": 10, "move": "heatsink_slam" }, { "level": 15, "move": "overclock" }, { "level": 20, "move": "power_cycle" },
+      { "level": 28, "move": "hard_reset" }, { "level": 38, "move": "thermal_exhaust" }
+    ],
+    "evolutions": [],
+    "cmdb": { "category": "Hermit Crab / Server Cabinet", "entry": "Lives in a full server cabinet taller than its head. Every rack unit inside blinks; nobody remembers what half of them do." } },
+  { "id": "antsistor", "name": "Antsistor", "types": ["hardware"],
+    "base_stats": { "uptime": 35, "throughput": 55, "hardening": 40, "compute": 35, "encryption": 35, "bandwidth": 60 },
+    "growth_rate": "medium_fast", "catch_rate": 200, "base_exp": 50, "log_yield": { "bandwidth": 1 },
+    "learnset": [
+      { "level": 1, "move": "bump" }, { "level": 1, "move": "switch_on" }, { "level": 5, "move": "double_click" },
+      { "level": 12, "move": "heatsink_slam" }
+    ],
+    "evolutions": [ { "to": "transistant", "trigger": "level", "level": 18 } ],
+    "cmdb": { "category": "Ant / Transistor", "entry": "A worker ant with a transistor for an abdomen. Thousands of them switch on and off together to carry one bit." } },
+  { "id": "transistant", "name": "Transistant", "types": ["hardware"],
+    "base_stats": { "uptime": 55, "throughput": 80, "hardening": 60, "compute": 50, "encryption": 50, "bandwidth": 85 },
+    "growth_rate": "medium_fast", "catch_rate": 100, "base_exp": 125, "log_yield": { "throughput": 2 },
+    "learnset": [
+      { "level": 1, "move": "bump" }, { "level": 1, "move": "switch_on" }, { "level": 5, "move": "double_click" },
+      { "level": 12, "move": "heatsink_slam" }, { "level": 18, "move": "logic_gate" }, { "level": 24, "move": "overclock" }
+    ],
+    "evolutions": [ { "to": "siliqueen", "trigger": "level", "level": 36 } ],
+    "cmdb": { "category": "Ant / Microchip", "entry": "Soldier ants that guard the colony's circuits. They lay gold traces in perfectly straight lines and bite anything that crosses one." } },
+  { "id": "siliqueen", "name": "Siliqueen", "types": ["hardware"],
+    "base_stats": { "uptime": 80, "throughput": 90, "hardening": 80, "compute": 95, "encryption": 80, "bandwidth": 70 },
+    "growth_rate": "medium_fast", "catch_rate": 35, "base_exp": 215, "log_yield": { "compute": 3 },
+    "learnset": [
+      { "level": 1, "move": "bump" }, { "level": 1, "move": "switch_on" }, { "level": 5, "move": "double_click" },
+      { "level": 12, "move": "heatsink_slam" }, { "level": 18, "move": "logic_gate" }, { "level": 24, "move": "overclock" },
+      { "level": 36, "move": "fab_line" }, { "level": 44, "move": "thermal_runaway" }
+    ],
+    "evolutions": [],
+    "cmdb": { "category": "Ant / Chip Foundry", "entry": "The colony's queen. Her abdomen is a silicon wafer, and every die on it hatches into a new worker." } },
+  { "id": "coolippo", "name": "Coolippo", "types": ["hardware"],
+    "base_stats": { "uptime": 70, "throughput": 55, "hardening": 55, "compute": 45, "encryption": 50, "bandwidth": 30 },
+    "growth_rate": "slow", "catch_rate": 150, "base_exp": 64, "log_yield": { "uptime": 1 },
+    "learnset": [
+      { "level": 1, "move": "bump" }, { "level": 6, "move": "coolant_spray" }, { "level": 10, "move": "chassis_guard" },
+      { "level": 14, "move": "heatsink_slam" }
+    ],
+    "evolutions": [ { "to": "coolapotamus", "trigger": "level", "level": 28 } ],
+    "cmdb": { "category": "Hippo / Liquid Cooling", "entry": "Wallows in coolant and pumps it through a tube from its nostrils. Server rooms stay a few degrees colder when one moves in." } },
+  { "id": "coolapotamus", "name": "Coolapotamus", "types": ["hardware"],
+    "base_stats": { "uptime": 110, "throughput": 85, "hardening": 85, "compute": 70, "encryption": 80, "bandwidth": 40 },
+    "growth_rate": "slow", "catch_rate": 60, "base_exp": 180, "log_yield": { "uptime": 2 },
+    "learnset": [
+      { "level": 1, "move": "bump" }, { "level": 6, "move": "coolant_spray" }, { "level": 10, "move": "chassis_guard" },
+      { "level": 14, "move": "heatsink_slam" }, { "level": 28, "move": "thermal_flood" }, { "level": 34, "move": "hard_reset" }
+    ],
+    "evolutions": [],
+    "cmdb": { "category": "Hippo / Cooling Loop", "entry": "Carries a full radiator and reservoir on its back. When it yawns, a cold wave rolls out across the floor." } },
+  { "id": "dillodisk", "name": "Dillodisk", "types": ["hardware"],
+    "base_stats": { "uptime": 45, "throughput": 55, "hardening": 75, "compute": 30, "encryption": 45, "bandwidth": 40 },
+    "growth_rate": "medium_fast", "catch_rate": 160, "base_exp": 58, "log_yield": { "hardening": 1 },
+    "learnset": [
+      { "level": 1, "move": "bump" }, { "level": 5, "move": "spin_up" }, { "level": 9, "move": "chassis_guard" },
+      { "level": 13, "move": "defrag" }
+    ],
+    "evolutions": [ { "to": "armadrive", "trigger": "level", "level": 26 } ],
+    "cmdb": { "category": "Armadillo / Hard Drive", "entry": "Rolls into a ball and spins like a platter when scared. Listen closely and you can hear it click." } },
+  { "id": "armadrive", "name": "Armadrive", "types": ["hardware"],
+    "base_stats": { "uptime": 70, "throughput": 85, "hardening": 110, "compute": 50, "encryption": 70, "bandwidth": 60 },
+    "growth_rate": "medium_fast", "catch_rate": 70, "base_exp": 165, "log_yield": { "hardening": 2 },
+    "learnset": [
+      { "level": 1, "move": "bump" }, { "level": 5, "move": "spin_up" }, { "level": 9, "move": "chassis_guard" },
+      { "level": 13, "move": "defrag" }, { "level": 18, "move": "heatsink_slam" }, { "level": 30, "move": "hard_reset" }
+    ],
+    "evolutions": [],
+    "cmdb": { "category": "Armadillo / Multi-Platter Drive", "entry": "Six aluminum bands and two platters. It remembers every place it has ever rolled, in no particular order." } },
+  { "id": "pasteslug", "name": "Pasteslug", "types": ["hardware"],
+    "base_stats": { "uptime": 75, "throughput": 40, "hardening": 60, "compute": 60, "encryption": 80, "bandwidth": 25 },
+    "growth_rate": "fluctuating", "catch_rate": 140, "base_exp": 90, "log_yield": { "encryption": 1 },
+    "learnset": [
+      { "level": 1, "move": "bump" }, { "level": 5, "move": "overapply" }, { "level": 9, "move": "chassis_guard" },
+      { "level": 14, "move": "heatsink_slam" }, { "level": 20, "move": "patch_up" }, { "level": 27, "move": "thermal_runaway" }
+    ],
+    "evolutions": [],
+    "cmdb": { "category": "Slug / Thermal Paste", "entry": "Made entirely of thermal paste and always uses too much. Leaves a silver trail across every CPU it crawls over." } },
+  { "id": "pixelsier", "name": "Pixelsier", "types": ["hardware"],
+    "base_stats": { "uptime": 45, "throughput": 40, "hardening": 40, "compute": 95, "encryption": 60, "bandwidth": 90 },
+    "growth_rate": "medium_fast", "catch_rate": 75, "base_exp": 110, "log_yield": { "compute": 2 },
+    "learnset": [
+      { "level": 1, "move": "bump" }, { "level": 1, "move": "screen_glare" }, { "level": 8, "move": "render" },
+      { "level": 12, "move": "double_click" }, { "level": 16, "move": "overclock" }, { "level": 24, "move": "thermal_runaway" }
+    ],
+    "evolutions": [],
+    "cmdb": { "category": "Tarsier / Graphics Card", "entry": "Its huge eyes render everything they see, one pixel at a time. The fans on its back spin up when it gets excited." } },
+  { "id": "tieweaver", "name": "Tieweaver", "types": ["hardware", "network"],
+    "base_stats": { "uptime": 50, "throughput": 65, "hardening": 55, "compute": 50, "encryption": 55, "bandwidth": 80 },
+    "growth_rate": "medium_fast", "catch_rate": 110, "base_exp": 100, "log_yield": { "bandwidth": 2 },
+    "learnset": [
+      { "level": 1, "move": "bump" }, { "level": 1, "move": "ping" }, { "level": 7, "move": "bundle_up" },
+      { "level": 11, "move": "fast_ethernet" }, { "level": 15, "move": "chassis_guard" }, { "level": 26, "move": "packet_flood" }
+    ],
+    "evolutions": [],
+    "cmdb": { "category": "Weaver Bird / Cable Management", "entry": "Weaves loose cables into tidy bundles and ties them off with zip ties. Can't pass a tangle without fixing it." } }
 ]

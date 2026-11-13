@@ -47,8 +47,8 @@ func test_real_data_has_no_errors() -> void:
 
 func test_expected_counts() -> void:
 	assert_eq(DataRegistry.types.size(), 12)
-	assert_eq(DataRegistry.moves.size(), 33, "32 learnable + Force Quit")
-	assert_eq(DataRegistry.species.size(), 23, "22 + legendary Pyrewall")
+	assert_eq(DataRegistry.moves.size(), 45, "44 learnable + Force Quit")
+	assert_eq(DataRegistry.species.size(), 36, "22 + legendary Pyrewall + 13 Hardware expansion")
 	assert_eq(DataRegistry.items.size(), 12)
 
 
@@ -158,3 +158,19 @@ func test_bad_type_chart_multiplier() -> void:
 func test_missing_file_is_reported() -> void:
 	_raw.erase("items")
 	_assert_error_contains(_validate(), "items.json is missing or isn't a list")
+
+
+func test_hardware_expansion_lines() -> void:
+	var lines := [["clawptop", "deskclaw", "crabinet"], ["antsistor", "transistant", "siliqueen"],
+		["coolippo", "coolapotamus"], ["dillodisk", "armadrive"], ["pasteslug"], ["pixelsier"], ["tieweaver"]]
+	for line: Array in lines:
+		for i in line.size():
+			var s := DataRegistry.get_species(line[i])
+			assert_false(s.is_empty(), line[i])
+			assert_has(s["types"], "hardware", line[i])
+			assert_true(DaemonSprites.has_sheet(line[i]), "%s has a battle sheet" % line[i])
+			var evos: Array = s["evolutions"]
+			if i + 1 < line.size():
+				assert_eq(evos[0]["to"], line[i + 1], "%s upgrades into %s" % [line[i], line[i + 1]])
+			else:
+				assert_true(evos.is_empty(), "%s is the last stage" % line[i])

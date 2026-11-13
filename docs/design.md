@@ -107,6 +107,13 @@ Draft type chart (attacker → defender; 2 = super effective, ½ = resisted, 0 =
 | **Hallucinaut** | AI | glitchy astronaut that's confidently wrong; legendary-tier |
 | **Uptimus** | Power/Security | legendary UPS guardian of the valley's power grid |
 | **Pyrewall** | Security/Power | legendary phoenix x firewall, guardian of Port 443; burns packets without a valid certificate and reboots from its own ash. On the title screen. Signature moves: Burn Rule, Ash Reboot |
+| **Clawptop → Deskclaw → Crabinet** | Hardware | hermit crab that lives in computer cases instead of shells: laptop → desktop tower → server cabinet. Big cream-tipped right claw, eye stalks |
+| **Antsistor → Transistant → Siliqueen** | Hardware | ant colony that builds circuits: transistor abdomen → microchip soldier → chip-foundry queen with a wafer abdomen |
+| **Coolippo → Coolapotamus** | Hardware | hippo + liquid cooling; coolant tubes run from its nostrils to a pump, later a radiator and reservoir |
+| **Dillodisk → Armadrive** | Hardware | armadillo + hard drive; aluminum shell bands, platter window, rolls up and spins when scared |
+| **Pasteslug** | Hardware | slug made of thermal paste with a paste syringe in its back; always uses too much |
+| **Pixelsier** | Hardware | tarsier + graphics card; enormous pixel-grid eyes, two-fan GPU backpack |
+| **Tieweaver** | Hardware/Network | weaver bird that ties cables into neat zip-tied bundles |
 
 Target roster: **40–60 Daemons** for v1 (about 18 evolution lines + singles + 2–3 legendaries). Design rule: every Daemon is a real animal/creature fused with a real piece of tech, and its name is a pun. No silhouettes, names or palettes borrowed from any Pokémon.
 

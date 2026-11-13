@@ -4,6 +4,20 @@ Newest entries at the top. Each entry: what's done, decisions, what's next.
 
 ---
 
+## 2026-11-12 — Hardware expansion: 13 new Daemons
+
+- New species (CMDB #024–#036, all Hardware; Tieweaver is Hardware/Network):
+  Clawptop → Deskclaw (Lv 20) → Crabinet (Lv 38); Antsistor → Transistant (Lv 18) → Siliqueen (Lv 36);
+  Coolippo → Coolapotamus (Lv 28); Dillodisk → Armadrive (Lv 26); singles Pasteslug, Pixelsier, Tieweaver.
+- 12 new moves from the prompt doc's special attacks: Lid Slam, Power Cycle, Thermal Exhaust, Switch On (priority +1),
+  Logic Gate, Fab Line, Coolant Spray, Thermal Flood, Spin Up, Overapply, Render, Bundle Up. Armadrive's "Defrag" reuses
+  the existing move.
+- Source art: `art_src/daemons/09-Clawptop`, `10-Antsistor`, `11-Coolippo`, `12-Dillodisk`, plus three new sheets in
+  `08-Singles`. Imported one by one (6x2 layout) and polished to 15 colors each.
+- The prompt doc numbered them 028–040; the game numbers by species.json order, so they are #024–#036.
+- Not yet in any encounter table, so they can't be found in the wild yet.
+- Tests: 253/253 (new: `test_hardware_expansion_lines`).
+
 ## 2026-11-11 — Pyrewall joins the roster
 
 - Pyrewall (phoenix x firewall) is now a real Daemon: CMDB #023, Security/Power, legendary (`"legendary": true`),
