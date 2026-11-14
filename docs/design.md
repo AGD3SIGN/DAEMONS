@@ -148,6 +148,7 @@ Target roster: **40–60 Daemons** for v1 (about 18 evolution lines + singles + 
 - Ransom is encrypting towns one by one; each Department boss helps you after you earn their cert.
 - Twist: Ransom's leader is the valley's old sysadmin, who was laid off when everything "moved to the cloud".
 - Ending: restore from backups (the backups were tested, a miracle).
+- Full act-by-act draft (awaiting sign-off): docs/story-outline.md
 
 ### Legal guardrails (from the research; not legal advice)
 - 100% original names, creature designs, UI, text, formulas and music. Never use another franchise's assets, names, fonts, sounds or code.
