@@ -59,20 +59,6 @@
       ]
     }
   ],
-  "demo_end": [
-    {
-      "text": "Route 2 is still under construction. A sign reads: \"Port City - coming soon.\""
-    },
-    {
-      "text": "That's the end of the DAEMONS demo. Thanks for playing!"
-    },
-    {
-      "cmd": "move_player",
-      "path": [
-        "down"
-      ]
-    }
-  ],
   "kevin_patch": [
     {
       "if_cert": "desktop_support",
@@ -224,6 +210,30 @@
     {
       "speaker": "Dana",
       "text": "Hardware that refuses to die. That's Desktop Support. Keep at it, {player}."
+    }
+  ],
+  "ransom_email": [
+    {
+      "text": "BZZT. Your phone buzzes. So does every phone in Patch Town."
+    },
+    {
+      "text": "FROM: R   SUBJECT: YOUR FILES HAVE BEEN QUARANTINED"
+    },
+    {
+      "text": "\"Root Valley: your data is ours. Pay up, or find out what 'no backups' really means. -R\""
+    },
+    {
+      "text": "BZZT. A second email."
+    },
+    {
+      "speaker": "Kevin (Reply All)",
+      "text": "Who is R?? Also whoever took my yogurt from the break room, I KNOW it was you."
+    },
+    {
+      "text": "BZZT. BZZT. BZZT. Forty-one people reply-all asking to be taken off the list."
+    },
+    {
+      "text": "Route 2 is open. Port City is somewhere past the construction."
     }
   ]
 }

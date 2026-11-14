@@ -1,0 +1,43 @@
+{
+  "rate": 0.12,
+  "zones": {
+    "cable_tangle": [
+      {
+        "species": "spinode",
+        "min": 9,
+        "max": 11,
+        "weight": 20
+      },
+      {
+        "species": "cablesnake",
+        "min": 9,
+        "max": 12,
+        "weight": 20
+      },
+      {
+        "species": "spigeon",
+        "min": 9,
+        "max": 11,
+        "weight": 15
+      },
+      {
+        "species": "tieweaver",
+        "min": 10,
+        "max": 12,
+        "weight": 15
+      },
+      {
+        "species": "dillodisk",
+        "min": 10,
+        "max": 12,
+        "weight": 15
+      },
+      {
+        "species": "proxkit",
+        "min": 10,
+        "max": 12,
+        "weight": 15
+      }
+    ]
+  }
+}

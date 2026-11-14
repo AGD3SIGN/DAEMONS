@@ -8,24 +8,44 @@
 - flag 'trainer_tech_theo' is set but never checked (fine for bookkeeping)
 - flag 'trainer_tech_tina' is set but never checked (fine for bookkeeping)
 - flag 'trainer_dana' is set but never checked (fine for bookkeeping)
+- flag 'trainer_net_admin_nia' is set but never checked (fine for bookkeeping)
+- flag 'trainer_packet_pat' is set but never checked (fine for bookkeeping)
+- flag 'trainer_ping_okoro' is set but never checked (fine for bookkeeping)
+- flag 'trainer_phisher_phil' is set but never checked (fine for bookkeeping)
 - flag 'trainer_intern_ian' is set but never checked (fine for bookkeeping)
 - flag 'trainer_sysadmin_sam' is set but never checked (fine for bookkeeping)
 - flag 'trainer_jogger_jo' is set but never checked (fine for bookkeeping)
+- flag 'trainer_lineworker_lou' is set but never checked (fine for bookkeeping)
+- flag 'trainer_gamer_gabe' is set but never checked (fine for bookkeeping)
+- flag 'trainer_phisher_phyllis' is set but never checked (fine for bookkeeping)
 - flag 'trainer_signal_hunter_hal' is set but never checked (fine for bookkeeping)
 - flag 'trainer_phisher_pete' is set but never checked (fine for bookkeeping)
 - flag 'trainer_kevin_rival_1_pingo' is set but never checked (fine for bookkeeping)
 - flag 'trainer_kevin_rival_1_glowbit' is set but never checked (fine for bookkeeping)
 - flag 'trainer_kevin_rival_1_chipmunk' is set but never checked (fine for bookkeeping)
-- maps reachable: 9 of 9; arrival points: 17
+- flag 'trainer_kevin_rival_2_pingo' is set but never checked (fine for bookkeeping)
+- flag 'trainer_kevin_rival_2_glowbit' is set but never checked (fine for bookkeeping)
+- flag 'trainer_kevin_rival_2_chipmunk' is set but never checked (fine for bookkeeping)
+- maps reachable: 12 of 12; arrival points: 23
 - trainer kevin_rival_1_pingo: levels [5]
 - trainer kevin_rival_1_glowbit: levels [5]
 - trainer kevin_rival_1_chipmunk: levels [5]
 - trainer tech_theo: levels [10, 10]
 - trainer tech_tina: levels [11]
 - trainer dana: levels [12, 13]
+- trainer kevin_rival_2_pingo: levels [16, 14, 15]
+- trainer kevin_rival_2_glowbit: levels [16, 14, 15]
+- trainer kevin_rival_2_chipmunk: levels [16, 14, 15]
+- trainer phisher_phil: levels [14, 14, 14]
+- trainer net_admin_nia: levels [16, 17]
+- trainer packet_pat: levels [16, 17]
+- trainer ping_okoro: levels [16, 17, 19]
 - trainer intern_ian: levels [4, 5]
 - trainer sysadmin_sam: levels [6, 5]
 - trainer jogger_jo: levels [6]
+- trainer lineworker_lou: levels [11, 12]
+- trainer gamer_gabe: levels [12]
+- trainer phisher_phyllis: levels [12, 12]
 - trainer signal_hunter_hal: levels [7, 7]
 - trainer phisher_pete: levels [8, 8]
 - Cycles: lowest total at Lv 5 is 35 (coolippo). 0-Cycles fallback (Force Quit): in place.

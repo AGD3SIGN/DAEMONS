@@ -63,6 +63,11 @@
       "x": 22,
       "y": 8,
       "facing": "down"
+    },
+    "north": {
+      "x": 14,
+      "y": 1,
+      "facing": "down"
     }
   },
   "events": [
@@ -134,8 +139,9 @@
       "dialogue": "kevin_patch",
       "look": {
         "shirt": "#40a0e0",
-        "hair": "#e0b040"
-      , "sprite": "kevin"}
+        "hair": "#e0b040",
+        "sprite": "kevin"
+      }
     },
     {
       "type": "npc",
@@ -147,8 +153,9 @@
       "dialogue": "patch_villager",
       "look": {
         "shirt": "#c08040",
-        "hair": "#e0e0e0"
-      , "sprite": "elder"}
+        "hair": "#e0e0e0",
+        "sprite": "elder"
+      }
     },
     {
       "type": "npc",
@@ -163,19 +170,35 @@
       }
     },
     {
-      "type": "trigger",
-      "x": 14,
-      "y": 1,
-      "w": 2,
-      "h": 1,
-      "dialogue": "demo_end"
-    },
-    {
       "type": "hidden_item",
       "x": 3,
       "y": 3,
       "item": "overclock_chip",
       "flag": "hidden_patch_chip"
+    },
+    {
+      "type": "trigger",
+      "x": 14,
+      "y": 1,
+      "w": 2,
+      "h": 1,
+      "dialogue": "ransom_email",
+      "once_flag": "ransom_email_seen",
+      "requires_flag": "patch_gate_open"
+    },
+    {
+      "type": "warp",
+      "x": 14,
+      "y": 0,
+      "to_map": "route_2",
+      "to_spawn": "south"
+    },
+    {
+      "type": "warp",
+      "x": 15,
+      "y": 0,
+      "to_map": "route_2",
+      "to_spawn": "south"
     }
   ]
 }

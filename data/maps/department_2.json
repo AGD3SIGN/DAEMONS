@@ -1,0 +1,135 @@
+{
+  "id": "department_2",
+  "name": "Networking Department",
+  "battle_zone": "server_floor",
+  "music": "department",
+  "legend": {
+    "_": "floor",
+    "I": "interior_wall",
+    "M": "exit_mat",
+    "k": "bookshelf",
+    "c": "server_rack",
+    "p": "plant",
+    "r": "rug",
+    "C": "counter",
+    "t": "table"
+  },
+  "rows": [
+    "IIIIIIIIIIIIIII",
+    "IIIIIIIIIIIIIII",
+    "I_____c_c_____I",
+    "I_____________I",
+    "I_p_________p_I",
+    "I_____________I",
+    "I_____________I",
+    "I_____________I",
+    "I_____________I",
+    "IIIIIII_IIIIIII",
+    "I_____________I",
+    "I_c___c___c___I",
+    "I_____________I",
+    "I____rrrrr__k_I",
+    "I_____________I",
+    "I_____________I",
+    "I_____________I",
+    "IIIIIIIMIIIIIII"
+  ],
+  "spawns": {
+    "default": {
+      "x": 7,
+      "y": 16,
+      "facing": "up"
+    }
+  },
+  "events": [
+    {
+      "type": "warp",
+      "x": 7,
+      "y": 17,
+      "to_map": "port_city",
+      "to_spawn": "from_department"
+    },
+    {
+      "type": "trigger",
+      "x": 7,
+      "y": 16,
+      "dialogue": "department_2_welcome",
+      "once_flag": "department_2_welcomed"
+    },
+    {
+      "type": "sign",
+      "x": 2,
+      "y": 11,
+      "dialogue": "vlan_a"
+    },
+    {
+      "type": "sign",
+      "x": 6,
+      "y": 11,
+      "dialogue": "vlan_b"
+    },
+    {
+      "type": "sign",
+      "x": 10,
+      "y": 11,
+      "dialogue": "vlan_c"
+    },
+    {
+      "type": "sign",
+      "x": 12,
+      "y": 13,
+      "dialogue": "routing_notes"
+    },
+    {
+      "type": "barrier",
+      "x": 7,
+      "y": 9,
+      "open_flags": [
+        "vlan_b",
+        "vlan_c"
+      ],
+      "closed_flags": [
+        "vlan_a"
+      ]
+    },
+    {
+      "type": "npc",
+      "id": "net_admin_nia",
+      "x": 2,
+      "y": 6,
+      "facing": "right",
+      "trainer": "net_admin_nia",
+      "look": {
+        "shirt": "#20a0a0",
+        "hair": "#202020",
+        "sprite": "tech_tina"
+      }
+    },
+    {
+      "type": "npc",
+      "id": "packet_pat",
+      "x": 12,
+      "y": 7,
+      "facing": "left",
+      "trainer": "packet_pat",
+      "look": {
+        "shirt": "#20a0a0",
+        "hair": "#e0a040",
+        "sprite": "tech_theo"
+      }
+    },
+    {
+      "type": "npc",
+      "id": "ping_okoro",
+      "x": 7,
+      "y": 3,
+      "facing": "down",
+      "trainer": "ping_okoro",
+      "dialogue": "ping",
+      "look": {
+        "shirt": "#1060a0",
+        "hair": "#101010"
+      }
+    }
+  ]
+}

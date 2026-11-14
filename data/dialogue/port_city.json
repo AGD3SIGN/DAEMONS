@@ -1,0 +1,391 @@
+{
+  "route_2_sign": [
+    {
+      "text": "ROUTE 2: UNDER CONSTRUCTION (mostly done). North: Port City. South: Patch Town."
+    }
+  ],
+  "route_2_north_sign": [
+    {
+      "text": "PORT CITY AHEAD. Harbor of Root Valley. Home of Port 443, the secure dock."
+    }
+  ],
+  "route_2_worker": [
+    {
+      "speaker": "Lineworker",
+      "text": "We're laying fiber all the way to Port City. Don't trip on the cables."
+    },
+    {
+      "speaker": "Lineworker",
+      "text": "Weird week. Half my crew got an email from someone called R. Now nobody can open their timesheets."
+    }
+  ],
+  "port_arrival": [
+    {
+      "text": "Salt air, gull cries, and the hum of a thousand routers. Port City."
+    },
+    {
+      "text": "The harbor lights flicker. Out on the water, the beacon over Port 443 burns a steady orange."
+    },
+    {
+      "speaker": "Dockworker",
+      "text": "New hire? Keep your head down. Gray hoodies have been sniffing around the docks all morning."
+    }
+  ],
+  "kevin_docks": [
+    {
+      "cmd": "show_npc",
+      "npc": "kevin_docks",
+      "facing": "down"
+    },
+    {
+      "cmd": "move_npc",
+      "npc": "kevin_docks",
+      "to": "player",
+      "run": true
+    },
+    {
+      "speaker": "Kevin",
+      "text": "{player}! Did you get R's email? I replied-all with a strongly worded GIF."
+    },
+    {
+      "speaker": "Kevin",
+      "text": "Then everyone replied-all to MY reply. My inbox is a crime scene."
+    },
+    {
+      "speaker": "Kevin",
+      "text": "Whatever. I'm here for the Networking Cert. And to beat you. Mostly to beat you."
+    },
+    {
+      "if_flag": "starter_chipmunk",
+      "then": [
+        {
+          "cmd": "start_battle",
+          "trainer": "kevin_rival_2_pingo"
+        }
+      ],
+      "else": [
+        {
+          "if_flag": "starter_pingo",
+          "then": [
+            {
+              "cmd": "start_battle",
+              "trainer": "kevin_rival_2_glowbit"
+            }
+          ],
+          "else": [
+            {
+              "cmd": "start_battle",
+              "trainer": "kevin_rival_2_chipmunk"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "kevin_docks_after": [
+    {
+      "if_flag": "pyrewall_offline",
+      "then": [
+        {
+          "speaker": "Kevin",
+          "text": "...The beacon just went out. I watched it. That guy didn't even look stressed."
+        },
+        {
+          "speaker": "Kevin",
+          "text": "I'm not replying-all to this one. It doesn't feel funny anymore."
+        }
+      ],
+      "else": [
+        {
+          "speaker": "Kevin",
+          "text": "Something's going on at Port 443. Those gray hoodies are all over Dock 443."
+        }
+      ]
+    }
+  ],
+  "port443_sign": [
+    {
+      "if_flag": "pyrewall_offline",
+      "then": [
+        {
+          "text": "PORT 443 - SECURE DOCK. The sign's lights are dead. Someone has spray-painted a small \"R\" on it."
+        }
+      ],
+      "else": [
+        {
+          "text": "PORT 443 - SECURE DOCK. Guarded by Pyrewall. All traffic must present a valid certificate."
+        }
+      ]
+    }
+  ],
+  "port443_breach": [
+    {
+      "cmd": "show_npc",
+      "npc": "zed",
+      "facing": "down"
+    },
+    {
+      "speaker": "???",
+      "text": "Huh. A help-desk kid. Cute."
+    },
+    {
+      "speaker": "Zed",
+      "text": "Name's Zed. I find the door nobody's patched, and I walk through it. Today it was this one."
+    },
+    {
+      "text": "Zed taps something on a phone. Out over the water, the great firewall-beacon of Pyrewall flares white..."
+    },
+    {
+      "text": "...and goes dark. Its wings fold. The flames inside the brick go cold."
+    },
+    {
+      "text": "Every light in the harbor blinks out at once."
+    },
+    {
+      "speaker": "Zed",
+      "text": "Port 443's closed. Permanently. Tell your manager R says hi."
+    },
+    {
+      "cmd": "hide_npc",
+      "npc": "zed"
+    },
+    {
+      "text": "Zed drops off the end of the dock into a waiting boat and is gone."
+    },
+    {
+      "cmd": "set_flag",
+      "flag": "pyrewall_offline"
+    }
+  ],
+  "zed_gone": [
+    {
+      "text": "Nobody's here anymore."
+    }
+  ],
+  "port_help_desk_locked": [
+    {
+      "text": "The Help Desk doors won't open. A red screen behind the glass reads: \"YOUR FILES HAVE BEEN QUARANTINED. -R\""
+    },
+    {
+      "text": "A hand-written note is taped below it: \"Pop-up Help Desk in the shipping container next door. We're still open!\""
+    },
+    {
+      "cmd": "move_player",
+      "path": [
+        "down"
+      ]
+    }
+  ],
+  "popup_sign": [
+    {
+      "text": "POP-UP HELP DESK. Same great service. Smaller box."
+    }
+  ],
+  "popup_help_desk": [
+    {
+      "speaker": "Help Desk",
+      "text": "Welcome to the Port City Help Desk! Well, the Port City Help Container."
+    },
+    {
+      "speaker": "Help Desk",
+      "choice": "Want me to restore your Daemons?",
+      "yes": [
+        {
+          "speaker": "Help Desk",
+          "text": "Have you tried turning it off and on again?"
+        },
+        {
+          "cmd": "heal_party"
+        },
+        {
+          "speaker": "Help Desk",
+          "text": "...All fixed. Our real building got encrypted, but our hands still work."
+        }
+      ],
+      "no": [
+        {
+          "speaker": "Help Desk",
+          "text": "Ticket closed. Stay safe out there."
+        }
+      ]
+    }
+  ],
+  "popup_supply": [
+    {
+      "speaker": "Supply Closet",
+      "text": "Supply Closet, harbor branch! It's a shelf. In a container. Still counts."
+    },
+    {
+      "cmd": "open_shop",
+      "stock": [
+        "coffee",
+        "energy_drink",
+        "hard_reboot",
+        "firewall_rule",
+        "thumb_drive",
+        "encrypted_key",
+        "hardware_token"
+      ]
+    }
+  ],
+  "dockworker": [
+    {
+      "if_flag": "pyrewall_offline",
+      "then": [
+        {
+          "speaker": "Dockworker",
+          "text": "Pyrewall's been guarding Port 443 since before I was born. Now it's just... cold brick."
+        },
+        {
+          "speaker": "Dockworker",
+          "text": "Without it, anything can sail into the valley's network. That's how this R gets in everywhere."
+        }
+      ],
+      "else": [
+        {
+          "speaker": "Dockworker",
+          "text": "See the orange beacon on Dock 443? That's Pyrewall. Nothing gets in without a valid certificate."
+        }
+      ]
+    }
+  ],
+  "port_barista": [
+    {
+      "speaker": "Barista",
+      "text": "Port City runs on two things: cold brew and packet loss."
+    }
+  ],
+  "port_kid": [
+    {
+      "speaker": "Kid",
+      "text": "I caught a Calfiber in the tall cables by the water! It spouts light like a tiny lighthouse."
+    }
+  ],
+  "department_2_sign": [
+    {
+      "text": "NETWORKING DEPARTMENT. Certification trials inside. Please do not unplug anything."
+    }
+  ],
+  "basement_sign": [
+    {
+      "text": "EAST: THE BASEMENT. Closed for maintenance."
+    }
+  ],
+  "basement_closed": [
+    {
+      "speaker": "Facilities",
+      "text": "The Basement's closed. Somebody's been messing with the old tape library down there."
+    },
+    {
+      "speaker": "Facilities",
+      "text": "(That's as far as the DAEMONS demo goes for now. Thanks for playing!)"
+    }
+  ],
+  "department_2_welcome": [
+    {
+      "speaker": "Receptionist",
+      "text": "Welcome to Networking! The trial room is past the laser door."
+    },
+    {
+      "speaker": "Receptionist",
+      "text": "Set the VLAN switches so only the right traffic reaches the core. The routing notes are on the shelf."
+    }
+  ],
+  "routing_notes": [
+    {
+      "text": "ROUTING NOTES: Trunks B and C carry staff traffic to the core."
+    },
+    {
+      "text": "Switch A is the guest Wi-Fi. NEVER bridge the guest network to the core. (Looking at you, Kevin.)"
+    }
+  ],
+  "ping": [
+    {
+      "if_cert": "networking",
+      "then": [
+        {
+          "speaker": "Ping",
+          "text": "Latency's down, morale's up. Go on, {player}. The valley needs people who read the routing notes."
+        }
+      ],
+      "else": [
+        {
+          "speaker": "Ping",
+          "text": "Every network's only as good as its weakest link. Let's find yours."
+        }
+      ]
+    }
+  ],
+  "vlan_a": [
+    {
+      "if_flag": "vlan_a",
+      "then": [
+        {
+          "text": "SWITCH A (guest): You switch it off. The port light goes dark."
+        },
+        {
+          "cmd": "set_flag",
+          "flag": "vlan_a",
+          "value": false
+        }
+      ],
+      "else": [
+        {
+          "text": "SWITCH A (guest): You switch it on. The port light blinks green."
+        },
+        {
+          "cmd": "set_flag",
+          "flag": "vlan_a"
+        }
+      ]
+    }
+  ],
+  "vlan_b": [
+    {
+      "if_flag": "vlan_b",
+      "then": [
+        {
+          "text": "SWITCH B (trunk): You switch it off. The port light goes dark."
+        },
+        {
+          "cmd": "set_flag",
+          "flag": "vlan_b",
+          "value": false
+        }
+      ],
+      "else": [
+        {
+          "text": "SWITCH B (trunk): You switch it on. The port light blinks green."
+        },
+        {
+          "cmd": "set_flag",
+          "flag": "vlan_b"
+        }
+      ]
+    }
+  ],
+  "vlan_c": [
+    {
+      "if_flag": "vlan_c",
+      "then": [
+        {
+          "text": "SWITCH C (trunk): You switch it off. The port light goes dark."
+        },
+        {
+          "cmd": "set_flag",
+          "flag": "vlan_c",
+          "value": false
+        }
+      ],
+      "else": [
+        {
+          "text": "SWITCH C (trunk): You switch it on. The port light blinks green."
+        },
+        {
+          "cmd": "set_flag",
+          "flag": "vlan_c"
+        }
+      ]
+    }
+  ]
+}

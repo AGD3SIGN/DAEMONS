@@ -1,0 +1,161 @@
+{
+  "kevin_rival_2_pingo": {
+    "name": "Kevin",
+    "sprite": "kevin",
+    "team": [
+      [
+        "pengwan",
+        16
+      ],
+      [
+        "spigeon",
+        14
+      ],
+      [
+        "cablesnake",
+        15
+      ]
+    ],
+    "ai": "basic",
+    "prize": 640,
+    "story": true,
+    "intro": "Reply-all, round two!",
+    "defeat": "How?! I even read the type chart this time. The summary, anyway.",
+    "after": "Fine. You win this thread."
+  },
+  "kevin_rival_2_glowbit": {
+    "name": "Kevin",
+    "sprite": "kevin",
+    "team": [
+      [
+        "scriptfly",
+        16
+      ],
+      [
+        "spigeon",
+        14
+      ],
+      [
+        "cablesnake",
+        15
+      ]
+    ],
+    "ai": "basic",
+    "prize": 640,
+    "story": true,
+    "intro": "Reply-all, round two!",
+    "defeat": "How?! I even read the type chart this time. The summary, anyway.",
+    "after": "Fine. You win this thread."
+  },
+  "kevin_rival_2_chipmunk": {
+    "name": "Kevin",
+    "sprite": "kevin",
+    "team": [
+      [
+        "munkboard",
+        16
+      ],
+      [
+        "spigeon",
+        14
+      ],
+      [
+        "cablesnake",
+        15
+      ]
+    ],
+    "ai": "basic",
+    "prize": 640,
+    "story": true,
+    "intro": "Reply-all, round two!",
+    "defeat": "How?! I even read the type chart this time. The summary, anyway.",
+    "after": "Fine. You win this thread."
+  },
+  "phisher_phil": {
+    "name": "Phisher Phil",
+    "sprite": "phisher_pete",
+    "team": [
+      [
+        "spigeon",
+        14
+      ],
+      [
+        "wormby",
+        14
+      ],
+      [
+        "spinode",
+        14
+      ]
+    ],
+    "ai": "basic",
+    "prize": 560,
+    "sight": 2,
+    "intro": "Dock 443 is closed for 'maintenance'. Our kind of maintenance.",
+    "defeat": "Ugh. Zed's gonna put this in my performance review.",
+    "after": "Ransom has performance reviews. They're brutal."
+  },
+  "net_admin_nia": {
+    "name": "Net Admin Nia",
+    "sprite": "tech_tina",
+    "team": [
+      [
+        "spinode",
+        16
+      ],
+      [
+        "tieweaver",
+        17
+      ]
+    ],
+    "ai": "basic",
+    "prize": 680,
+    "sight": 4,
+    "intro": "Your packets look suspicious. Let me inspect them.",
+    "defeat": "Packet inspected. Packet... approved.",
+    "after": "Ping set those VLANs up herself. Read the notes."
+  },
+  "packet_pat": {
+    "name": "Packet Pat",
+    "sprite": "tech_theo",
+    "team": [
+      [
+        "cablesnake",
+        16
+      ],
+      [
+        "proxkit",
+        17
+      ]
+    ],
+    "ai": "basic",
+    "prize": 680,
+    "sight": 4,
+    "intro": "I've never dropped a packet in my life! Battle!",
+    "defeat": "...I dropped a packet.",
+    "after": "Ping's Calfiber spouts more light than the whole harbor."
+  },
+  "ping_okoro": {
+    "name": "Department Head Ping",
+    "team": [
+      [
+        "spinode",
+        16
+      ],
+      [
+        "proxkit",
+        17
+      ],
+      [
+        "calfiber",
+        19
+      ]
+    ],
+    "ai": "basic",
+    "prize": 2000,
+    "cert": "networking",
+    "intro": "Ping Okoro, Networking. I keep this harbor talking. Today someone cut our best line. Let's see if you're a better one.",
+    "defeat": "Zero packet loss. You've earned the Networking Cert.",
+    "after": "Ransom came in through Port 443. Whoever fixes that will need friends in every department. Start with the Basement, once Facilities reopens it."
+  }
+}

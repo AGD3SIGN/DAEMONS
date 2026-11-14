@@ -1,0 +1,275 @@
+{
+  "id": "port_city",
+  "name": "Port City",
+  "battle_zone": "coolant_loop",
+  "music": "town",
+  "legend": {
+    ".": "grass",
+    ",": "path",
+    "\"": "cable_tangle",
+    "~": "water",
+    "T": "tree",
+    "F": "fence",
+    "f": "flowers",
+    "R": "roof_red",
+    "B": "roof_blue",
+    "W": "wall",
+    "w": "window",
+    "D": "door",
+    "L": "ledge",
+    "S": "sign"
+  },
+  "rows": [
+    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~,,~~~~~~~~~~~~~~~~~~~,~~~~~~~~",
+    "~~~~~~,,~~~~~~~~~~~~~~~~~~~,~~~~~~~~",
+    "~~~~~~,,~~~~~~~~~~~~~~~~~~~,~~~~~~~~",
+    "~~~~~~,,~~~~~~~~~~~~~~~~~~~,~~~~~~~~",
+    "TT,,,,,,,,,,,,,,,,,,,,,,,,,,S,,,,,TT",
+    "TT,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,TT",
+    "TT...............,,...............TT",
+    "TTf........f.....,,.RRRRRRRRRRR...TT",
+    "TT.BBBBBBB....f..,,.RRRRRRRRRRR.f.TT",
+    "TT.BBBBBBB.......,,.RRRRRRRRRRR...TT",
+    "TT.BBBBBBBWWW....,,.RRRRRRRRRRR...TT",
+    "TT.WwwDwwWWWW....,,.RRRRRRRRRRR...TT",
+    "TT....,......S...,,.WwwwwDwwwwW...TT",
+    "TT.,,,,,,,,,,,,,,,,,,,,,,,,S,,,,,STT",
+    "TT.,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FTT",
+    "TT...............,,...............TT",
+    "TT..RRRRR........,,.......BBBBBB..TT",
+    "TT..RRRRR....f...,,..f....BBBBBB..TT",
+    "TT..WwwwW........,,.......WwwwwW..TT",
+    "TT...............,,...............TT",
+    "TT\"\"\"\"\"\"\"\".......,,...\"\"\"\"\"\"\"\"\"\"..TT",
+    "TT\"\"\"\"\"\"\"\".......,,...\"\"\"\"\"\"\"\"\"\"..TT",
+    "TT\"\"\"\"\"\"\"\".......,,...\"\"\"\"\"\"\"\"\"\"..TT",
+    "TT\"\"\"\"\"\"\"\".......,,...\"\"\"\"\"\"\"\"\"\"..TT",
+    "TT\"\"\"\"\"\"\"\".......,,...\"\"\"\"\"\"\"\"\"\"..TT",
+    "TT\"\"\"\"\"\"\"\".......,,...\"\"\"\"\"\"\"\"\"\"..TT",
+    "TT\"\"\"\"\"\"\"\".......,,...\"\"\"\"\"\"\"\"\"\"..TT",
+    "TT...............,,...............TT",
+    "TTTTTTTTTTTTTTTTT,,TTTTTTTTTTTTTTTTT"
+  ],
+  "spawns": {
+    "default": {
+      "x": 17,
+      "y": 28,
+      "facing": "up"
+    },
+    "south": {
+      "x": 17,
+      "y": 28,
+      "facing": "up"
+    },
+    "from_department": {
+      "x": 25,
+      "y": 14,
+      "facing": "down"
+    }
+  },
+  "events": [
+    {
+      "type": "warp",
+      "x": 17,
+      "y": 29,
+      "to_map": "route_2",
+      "to_spawn": "north"
+    },
+    {
+      "type": "warp",
+      "x": 18,
+      "y": 29,
+      "to_map": "route_2",
+      "to_spawn": "north"
+    },
+    {
+      "type": "warp",
+      "x": 25,
+      "y": 13,
+      "to_map": "department_2",
+      "to_spawn": "default"
+    },
+    {
+      "type": "trigger",
+      "x": 17,
+      "y": 28,
+      "w": 2,
+      "h": 1,
+      "dialogue": "port_arrival",
+      "once_flag": "port_city_arrived"
+    },
+    {
+      "type": "trigger",
+      "x": 6,
+      "y": 12,
+      "dialogue": "port_help_desk_locked"
+    },
+    {
+      "type": "trigger",
+      "x": 17,
+      "y": 7,
+      "w": 2,
+      "h": 1,
+      "dialogue": "kevin_docks",
+      "once_flag": "kevin_docks_met"
+    },
+    {
+      "type": "trigger",
+      "x": 27,
+      "y": 3,
+      "dialogue": "port443_breach",
+      "once_flag": "pyrewall_offline"
+    },
+    {
+      "type": "sign",
+      "x": 28,
+      "y": 5,
+      "dialogue": "port443_sign"
+    },
+    {
+      "type": "sign",
+      "x": 13,
+      "y": 13,
+      "dialogue": "popup_sign"
+    },
+    {
+      "type": "sign",
+      "x": 27,
+      "y": 14,
+      "dialogue": "department_2_sign"
+    },
+    {
+      "type": "sign",
+      "x": 33,
+      "y": 14,
+      "dialogue": "basement_sign"
+    },
+    {
+      "type": "npc",
+      "id": "popup_tech",
+      "x": 10,
+      "y": 13,
+      "facing": "down",
+      "dialogue": "popup_help_desk",
+      "look": {
+        "shirt": "#3858c0",
+        "hair": "#902020",
+        "sprite": "help_desk_tech"
+      }
+    },
+    {
+      "type": "npc",
+      "id": "popup_clerk",
+      "x": 12,
+      "y": 13,
+      "facing": "down",
+      "dialogue": "popup_supply",
+      "look": {
+        "shirt": "#a04040",
+        "hair": "#303030",
+        "sprite": "supply_clerk"
+      }
+    },
+    {
+      "type": "npc",
+      "id": "dockworker",
+      "x": 9,
+      "y": 6,
+      "facing": "down",
+      "dialogue": "dockworker",
+      "look": {
+        "shirt": "#2060a0",
+        "hair": "#806040",
+        "sprite": "courier"
+      }
+    },
+    {
+      "type": "npc",
+      "id": "port_barista",
+      "x": 15,
+      "y": 16,
+      "facing": "down",
+      "wander": true,
+      "dialogue": "port_barista",
+      "look": {
+        "shirt": "#604030",
+        "hair": "#202020",
+        "sprite": "barista"
+      }
+    },
+    {
+      "type": "npc",
+      "id": "port_kid",
+      "x": 10,
+      "y": 18,
+      "facing": "right",
+      "wander": true,
+      "dialogue": "port_kid",
+      "look": {
+        "shirt": "#e04040",
+        "hair": "#e0c060",
+        "sprite": "kid"
+      }
+    },
+    {
+      "type": "npc",
+      "id": "basement_guard",
+      "x": 32,
+      "y": 15,
+      "facing": "left",
+      "dialogue": "basement_closed",
+      "look": {
+        "shirt": "#404858",
+        "hair": "#c0c0c0"
+      }
+    },
+    {
+      "type": "npc",
+      "id": "phisher_phil",
+      "x": 24,
+      "y": 5,
+      "facing": "right",
+      "trainer": "phisher_phil",
+      "look": {
+        "shirt": "#505860",
+        "hair": "#202020",
+        "sprite": "phisher_pete"
+      }
+    },
+    {
+      "type": "npc",
+      "id": "kevin_docks",
+      "x": 16,
+      "y": 6,
+      "facing": "left",
+      "hidden": true,
+      "dialogue": "kevin_docks_after",
+      "look": {
+        "shirt": "#40a0e0",
+        "hair": "#e0b040",
+        "sprite": "kevin"
+      }
+    },
+    {
+      "type": "npc",
+      "id": "zed",
+      "x": 27,
+      "y": 1,
+      "facing": "down",
+      "hidden": true,
+      "dialogue": "zed_gone",
+      "look": {
+        "shirt": "#181818",
+        "hair": "#c02040"
+      }
+    },
+    {
+      "type": "hidden_item",
+      "x": 2,
+      "y": 27,
+      "item": "encrypted_key",
+      "flag": "hidden_port_key"
+    }
+  ]
+}

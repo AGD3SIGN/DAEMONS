@@ -34,7 +34,7 @@ Order and types come from data/certifications.json. Names approved 2026-11-13.
 | # | Department | Town | Type | Head (proposal) | Personality | Ace (Lv) |
 |---|---|---|---|---|---|---|
 | 1 | Desktop Support | Patch Town | Hardware | **Dana** (built) | "Hardware that refuses to die." | Servurtle 13 |
-| 2 | Networking | Port City | Network | **Ping Okoro** | Harbor-master energy; talks in latency jokes | Orcable 20 |
+| 2 | Networking | Port City | Network | **Ping Okoro** | Harbor-master energy; talks in latency jokes | Calfiber 19 (balance: Orcable was too strong at 20) |
 | 3 | DevOps | DevOps Heights | Software | **Devi Shah** | Deploys on Fridays to prove a point | Mothread 26 |
 | 4 | Facilities | Power Plant | Power | **Rolf Brandt** | Old-school, owns 40 extension cords, all labeled | Surgupine 32 |
 | 5 | SecOps | SecOps Fortress | Security | **Major Vesna Kalb** | Trusts no one, including you, until you pass | Authoberman 38 |
@@ -71,7 +71,7 @@ Clondor (off-site), Sudofox (the key). The final restore needs all three.
 
 Levels: wild ranges, then trainer levels, then the department ace.
 
-### Act 1 — Onboarding (BUILT)
+### Act 1 — Onboarding (BUILT, incl. the "-R" email beat and Marge's name, 2026-11-13)
 Onboarding Town → Route 1 → Wi-Fi Dead Zone → Patch Town. Wild 2–8, trainers 4–8, Dana's ace 13.
 - Day 1, starter from the e-waste bin, Kevin's first battle.
 - Phisher Pete in the Dead Zone: "Ransom will hear about this... Who's Ransom?" (first hint).
@@ -80,6 +80,7 @@ Onboarding Town → Route 1 → Wi-Fi Dead Zone → Patch Town. Wild 2–8, trai
   "YOUR FILES HAVE BEEN QUARANTINED. -R". Kevin replies-all to it.
 
 ### Act 2 — The Outage
+*(Route 2, Port City and the Networking Department built 2026-11-13.)*
 **Route 2 → Port City (Dept 2).** Wild 9–14, trainers 12–17, ace 20.
 - Port City's harbor runs on Port 443. Ransom's Phishers block the docks. You and Kevin (rival battle #2 on the
   docks) push through, too late: Zed breaches **Port 443** and Pyrewall goes dark. The harbor lights go out.

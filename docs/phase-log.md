@@ -4,6 +4,30 @@ Newest entries at the top. Each entry: what's done, decisions, what's next.
 
 ---
 
+## 2026-11-13 — Act 1 polish + Act 2 part 1: Route 2, Port City, Networking Department
+
+- **Marge:** the Manager introduces herself by name; her dialogue speaker is "Marge".
+- **The "-R" email** (end of Act 1): leaving Patch Town through the opened gate, every phone buzzes with
+  "YOUR FILES HAVE BEEN QUARANTINED. -R" and Kevin replies-all about his yogurt. Replaces the old demo-end trigger;
+  the north exit now leads to Route 2.
+- **Route 2: Under Construction** (30x32): winding path, 4 cable-tangle patches, wild Lv 9-12 (Spinode, Cablesnake,
+  Spigeon, Tieweaver, Dillodisk, Proxkit), trainers Lineworker Lou, Gamer Gabe, Phisher Phyllis (Lv 11-12).
+- **Port City** (36x30, Coolant Loop battles): harbor, Dock 1 and the one-lane Port 443 dock.
+  - Arrival cutscene; the Help Desk is encrypted ("-R" screen), a pop-up Help Desk + Supply Closet in a shipping
+    container heals and becomes your last Help Desk.
+  - Kevin's second battle on the docks (picks the upgraded starter that beats yours: Lv 16 + Spigeon 14 + Cablesnake 15).
+  - **Port 443:** Zed shows up, Pyrewall's beacon goes dark, every harbor light goes out (flag `pyrewall_offline`);
+    the Port 443 sign, the dockworker and Kevin react afterwards.
+  - Phisher Phil (Lv 14) on the promenade; wild Lv 12-14 (Calfiber, Proxkit, Cablesnake, Spinode, Tieweaver).
+  - East gate to The Basement: closed for maintenance; the new "end of the demo" point.
+- **Networking Department** (Department 2): VLAN switch puzzle (trunks B + C on, guest switch A off), Net Admin Nia,
+  Packet Pat (Lv 16-17), **Department Head Ping** (Spinode 16, Proxkit 17, Calfiber 19) → Networking Cert.
+  - Balance: Orcable at 19-20 walled the Hardware and Network starter paths (0/60 wins), so Ping's ace is Calfiber.
+    New `test_ping_is_beatable_around_level_20`: Lv 19 team wins 12 / 11 / 60 of 60 (Munkboard / Pengwan /
+    Scriptfly paths), Lv 21 wins 39 / 50 / 60.
+- Placeholder looks (no art yet): Ping Okoro, Zed, the Basement guard, the Route 2 lineworker NPC.
+- Tests: 276/276 (new tests/test_act2.gd). Slice audit: 0 problems, 12/12 maps reachable.
+
 ## 2026-11-13 — Story outline approved
 
 - docs/story-outline.md signed off with every recommendation: the 3-2-1 trio; Pyrewall breached at Port 443 in

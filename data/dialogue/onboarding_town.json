@@ -271,15 +271,15 @@
       "path": ["up", "right", "right"]
     },
     {
-      "speaker": "Manager",
-      "text": "There you are, {player}! Welcome to the Help Desk."
+      "speaker": "Marge",
+      "text": "There you are, {player}! I'm Marge, your manager. Welcome to the Help Desk."
     },
     {
-      "speaker": "Manager",
+      "speaker": "Marge",
       "text": "Every new hire gets a Daemon to help with tickets. We keep them in the e-waste bin. Don't ask."
     },
     {
-      "speaker": "Manager",
+      "speaker": "Marge",
       "text": "Pick one. They all still have their warranty stickers."
     },
     {
@@ -292,7 +292,7 @@
       "level": 5
     },
     {
-      "speaker": "Manager",
+      "speaker": "Marge",
       "text": "Good choice. Treat it well and it'll outlast every laptop in this building."
     },
     {
@@ -357,30 +357,30 @@
       "if_cert": "desktop_support",
       "then": [
         {
-          "speaker": "Manager",
+          "speaker": "Marge",
           "text": "A Desktop Support Cert already? You'll have my job by Friday. Please don't."
         }
       ],
       "else": [
         {
-          "speaker": "Manager",
+          "speaker": "Marge",
           "text": "Your first assignment: head north through Route 1 and the Wi-Fi Dead Zone to Patch Town."
         },
         {
-          "speaker": "Manager",
+          "speaker": "Marge",
           "text": "The Desktop Support department there runs certification trials. Earn your first cert."
         },
         {
           "if_flag": "got_manager_keys",
           "then": [
             {
-              "speaker": "Manager",
+              "speaker": "Marge",
               "text": "Use Thumb Drives on weakened wild Daemons. Quarantine them, don't fight them all."
             }
           ],
           "else": [
             {
-              "speaker": "Manager",
+              "speaker": "Marge",
               "text": "Take these. Company property, so try not to lose them."
             },
             {

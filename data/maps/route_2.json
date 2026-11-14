@@ -1,0 +1,173 @@
+{
+  "id": "route_2",
+  "name": "Route 2: Under Construction",
+  "battle_zone": "server_floor",
+  "music": "route",
+  "legend": {
+    ".": "grass",
+    ",": "path",
+    "\"": "cable_tangle",
+    "~": "water",
+    "T": "tree",
+    "F": "fence",
+    "f": "flowers",
+    "R": "roof_red",
+    "B": "roof_blue",
+    "W": "wall",
+    "w": "window",
+    "D": "door",
+    "L": "ledge",
+    "S": "sign"
+  },
+  "rows": [
+    "TTTTTTTTTTTTTT,,TTTTTTTTTTTTTT",
+    "TT............,,S...........TT",
+    "TTTTTT........,,........TTTTTT",
+    "TTTTTT...f....,,........TTTTTT",
+    "TTTTTT.....f..,,,,,,,,,,TTTTTT",
+    "TTTTTT........,,,,,,,,,,TTTTTT",
+    "TTTTTT....\"\"\"\"\"\"\"\"\"\"..,,....TT",
+    "TTTTTT....\"\"\"\"\"\"\"\"\"\"..,,....TT",
+    "TTTTTT....\"\"\"\"\"\"\"\"\"\"..,,....TT",
+    "TT....................,,....TT",
+    "TT....,,,,,,,,,,,,,,,,,,....TT",
+    "TT....,,,,,,,,,,,,,,,,,,....TT",
+    "TT..f.,,....................TT",
+    "TT....,,.\"\"\"\"............TTTTT",
+    "TT....,,.\"\"\"\"............TTTTT",
+    "TT....,,.\"\"\"\".......f....TTTTT",
+    "TT....,,.\"\"\"\"............TTTTT",
+    "TT....,,.\"\"\"\".....f......TTTTT",
+    "TT....,,.\"\"\"\"............TTTTT",
+    "TT....,,.............f...TTTTT",
+    "TT....,,,,,,,,,,.........TTTTT",
+    "TT....,,,,,,,,,,............TT",
+    "TTFFFFFFFFF...,,.FFFFFFFFF..TT",
+    "TT.\"\"\"\"\"\"\"\"...,,.\"\"\"\"\"\"\"\"\"..TT",
+    "TT.\"\"\"\"\"\"\"\"...,,.\"\"\"\"\"\"\"\"\"..TT",
+    "TT.\"\"\"\"\"\"\"\"...,,.\"\"\"\"\"\"\"\"\"..TT",
+    "TT.\"\"\"\"\"\"\"\"...,,.\"\"\"\"\"\"\"\"\"..TT",
+    "TT.\"\"\"\"\"\"\"\"...,,.\"\"\"\"\"\"\"\"\"..TT",
+    "TT.\"\"\"\"\"\"\"\"...,,.\"\"\"\"\"\"\"\"\"..TT",
+    "TT.\"\"\"\"\"\"\"\"...,,.\"\"\"\"\"\"\"\"\"..TT",
+    "TT............,,S...........TT",
+    "TTTTTTTTTTTTTT,,TTTTTTTTTTTTTT"
+  ],
+  "spawns": {
+    "default": {
+      "x": 14,
+      "y": 30,
+      "facing": "up"
+    },
+    "south": {
+      "x": 14,
+      "y": 30,
+      "facing": "up"
+    },
+    "north": {
+      "x": 14,
+      "y": 1,
+      "facing": "down"
+    }
+  },
+  "events": [
+    {
+      "type": "warp",
+      "x": 14,
+      "y": 31,
+      "to_map": "patch_town",
+      "to_spawn": "north"
+    },
+    {
+      "type": "warp",
+      "x": 15,
+      "y": 31,
+      "to_map": "patch_town",
+      "to_spawn": "north"
+    },
+    {
+      "type": "warp",
+      "x": 14,
+      "y": 0,
+      "to_map": "port_city",
+      "to_spawn": "south"
+    },
+    {
+      "type": "warp",
+      "x": 15,
+      "y": 0,
+      "to_map": "port_city",
+      "to_spawn": "south"
+    },
+    {
+      "type": "sign",
+      "x": 16,
+      "y": 30,
+      "dialogue": "route_2_sign"
+    },
+    {
+      "type": "sign",
+      "x": 16,
+      "y": 1,
+      "dialogue": "route_2_north_sign"
+    },
+    {
+      "type": "npc",
+      "id": "lineworker_lou",
+      "x": 13,
+      "y": 25,
+      "facing": "right",
+      "trainer": "lineworker_lou",
+      "look": {
+        "shirt": "#e08020",
+        "hair": "#503020",
+        "sprite": "courier"
+      }
+    },
+    {
+      "type": "npc",
+      "id": "gamer_gabe",
+      "x": 8,
+      "y": 15,
+      "facing": "left",
+      "trainer": "gamer_gabe",
+      "look": {
+        "shirt": "#6040c0",
+        "hair": "#202020",
+        "sprite": "kid"
+      }
+    },
+    {
+      "type": "npc",
+      "id": "phisher_phyllis",
+      "x": 21,
+      "y": 8,
+      "facing": "down",
+      "trainer": "phisher_phyllis",
+      "look": {
+        "shirt": "#505860",
+        "hair": "#303030",
+        "sprite": "phisher_pete"
+      }
+    },
+    {
+      "type": "npc",
+      "id": "route_2_worker",
+      "x": 12,
+      "y": 21,
+      "facing": "up",
+      "dialogue": "route_2_worker",
+      "look": {
+        "shirt": "#f0c020",
+        "hair": "#202020"
+      }
+    },
+    {
+      "type": "hidden_item",
+      "x": 3,
+      "y": 30,
+      "item": "energy_drink",
+      "flag": "hidden_route2_drink"
+    }
+  ]
+}

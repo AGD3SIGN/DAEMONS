@@ -225,3 +225,28 @@ func _pad(button: JoyButton, pressed: bool) -> InputEventJoypadButton:
 	e.button_index = button
 	e.pressed = pressed
 	return e
+
+
+## Ping (Networking, Act 2): a starter that has upgraded once, plus two catches from Route 2 / Port City.
+func _ping_wins(starter: String, level: int) -> int:
+	var wins := 0
+	for i in 60:
+		var team: Array[DaemonInstance] = [
+			_daemon(starter, level, i), _daemon("spigeon", level - 2, i + 100), _daemon("calfiber", level - 3, i + 200)]
+		var foe: Array[DaemonInstance] = []
+		for entry: Array in DataRegistry.trainers["ping_okoro"]["team"]:
+			foe.append(_daemon(entry[0], int(entry[1]), i + 300))
+		if _sim(team, foe, i, DataRegistry.trainers["ping_okoro"]["ai"]) == "player_won":
+			wins += 1
+	return wins
+
+
+func test_ping_is_beatable_around_level_20() -> void:
+	var report := PackedStringArray()
+	for starter in ["munkboard", "pengwan", "scriptfly"]:
+		var at_21 := _ping_wins(starter, 21)
+		var at_19 := _ping_wins(starter, 19)
+		report.append("%-9s Lv21 team: %2d/60   Lv19 team: %2d/60" % [starter, at_21, at_19])
+		assert_gte(at_21, 18, "%s path at Lv21 should usually win (30%%+)" % starter)
+		assert_gte(at_19, 6, "%s path at Lv19 should be possible (10%%+)" % starter)
+	gut.p("Ping balance (no items, basic-AI player):\n" + "\n".join(report))

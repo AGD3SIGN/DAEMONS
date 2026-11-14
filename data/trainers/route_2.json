@@ -1,0 +1,58 @@
+{
+  "lineworker_lou": {
+    "name": "Lineworker Lou",
+    "sprite": "courier",
+    "team": [
+      [
+        "tieweaver",
+        11
+      ],
+      [
+        "cablesnake",
+        12
+      ]
+    ],
+    "ai": "basic",
+    "prize": 440,
+    "sight": 3,
+    "intro": "Hey! That's fresh fiber you're walking on!",
+    "defeat": "Okay, okay. Cable's fine. I'm not.",
+    "after": "Tieweavers keep my cables tidy. Mostly."
+  },
+  "gamer_gabe": {
+    "name": "Gamer Gabe",
+    "sprite": "kid",
+    "team": [
+      [
+        "pixelsier",
+        12
+      ]
+    ],
+    "ai": "basic",
+    "prize": 480,
+    "sight": 2,
+    "intro": "My Pixelsier renders at 240 frames per second! Watch!",
+    "defeat": "Frame drop... frame drop!",
+    "after": "I'm upgrading my graphics card. And my Pixelsier."
+  },
+  "phisher_phyllis": {
+    "name": "Phisher Phyllis",
+    "sprite": "phisher_pete",
+    "team": [
+      [
+        "spigeon",
+        12
+      ],
+      [
+        "wormby",
+        12
+      ]
+    ],
+    "ai": "basic",
+    "prize": 500,
+    "sight": 3,
+    "intro": "Congratulations! You've won a free cruise! Just enter your password below!",
+    "defeat": "Fine. The cruise was fake anyway.",
+    "after": "R says Port City's next. Not that I told you."
+  }
+}
