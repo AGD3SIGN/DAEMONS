@@ -1,7 +1,7 @@
-# DAEMONS — Story Outline (DRAFT for Brandon's sign-off)
+# DAEMONS — Story Outline (APPROVED 2026-11-13)
 
-Drafted 2026-11-13. Nothing here is built yet except Act 1. Every name, beat and level below is a proposal;
-section 7 lists the decisions that need a yes/no or a pick. Follows the design doc's four-line outline, the
+Drafted and approved 2026-11-13: Brandon accepted every recommendation in section 7. Nothing here is built yet
+except Act 1. Levels and smaller beats can still move during building. Follows the design doc's four-line outline, the
 master roster (Nos. 000–178) and the Battle Scene spec.
 
 ## 1. The pitch in one paragraph
@@ -25,11 +25,11 @@ patching, labeling cables) does.
 |---|---|---|
 | **You** | New help-desk hire | Named at the start. Silent, competent, slightly overworked. |
 | **Kevin** | Rival, always replies-all | Loud, competitive, secretly scared of failing. Arc in section 4. |
-| **The Manager** (name TBD, proposal: **Marge**) | Your boss at Onboarding Town | Calm, dry humor. Quietly runs a backup restore drill every Friday and bribes the team with pizza. This is the ending's payoff (see Act 5). |
+| **Marge**, the Manager | Your boss at Onboarding Town | Calm, dry humor. Quietly runs a backup restore drill every Friday and bribes the team with pizza. This is the ending's payoff (see Act 5). |
 | **Mom** | At home | Calls you about her printer. Heals your team in the post-game. |
 
 ### Department heads (the 8 Certifications)
-Order and types come from data/certifications.json. Names other than Dana are proposals.
+Order and types come from data/certifications.json. Names approved 2026-11-13.
 
 | # | Department | Town | Type | Head (proposal) | Personality | Ace (Lv) |
 |---|---|---|---|---|---|---|
@@ -47,7 +47,7 @@ Order and types come from data/certifications.json. Names other than Dana are pr
 |---|---|---|
 | **Phishers** | Grunts | Gray hoodies, fake lanyards. Use Spigeon, Phishgill, Wigglog, Cuckling. Phisher Pete is the first one (built). |
 | **Exploit Kits** | 3 admins | **Zed** (zero-days, fast and smug; Spoofish, Trojuckoo), **Brute** (brute force, says everything three times; Rootrat, Cryptodile), **Lyra** (social engineering, impersonates people; Lyrefake, Spyquito). |
-| **The leader** (name TBD, proposal: **Cron**) | The valley's old sysadmin | Did everything on a schedule, so everyone called him Cron. Laid off when the Board moved the backups "to the cloud" (into Clondor's care) and called him "redundant". Ace: **Extortodile** (Malware, the Hashling line). |
+| **Cron**, the leader | The valley's old sysadmin | Did everything on a schedule, so everyone called him Cron. Laid off when the Board moved the backups "to the cloud" (into Clondor's care) and called him "redundant". Ace: **Extortodile** (Malware, the Hashling line). |
 
 **Cron's motive (the twist, kept sympathetic):** he believes nobody ever tests backups, so the valley's "cloud
 migration" was a lie that cost him his job. Ransom encrypts everything to prove that when it's all gone, nobody
@@ -166,7 +166,7 @@ you can go up.
 | 4 | Lakeside Labs, Signal Ridge, AI Lab | ~20 | Data, Mobile, AI, Peripheral (089–175) | open-order departments, level scaling |
 | 5 | HQ Tower | ~15 + C-Suite + Board | trio + Extortodile | ending, credits, post-game flags |
 
-## 7. Decisions for Brandon
+## 7. Decisions (all approved by Brandon, 2026-11-13: the recommendation column is what we do)
 | # | Decision | Options | My recommendation |
 |---|---|---|---|
 | 1 | Sign off on the 3-2-1 trio (Restorephant, Clondor, Sudofox) | yes / change / drop | **Yes**, as written in section 3 |

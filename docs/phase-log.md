@@ -4,6 +4,15 @@ Newest entries at the top. Each entry: what's done, decisions, what's next.
 
 ---
 
+## 2026-11-13 — Story outline approved
+
+- docs/story-outline.md signed off with every recommendation: the 3-2-1 trio; Pyrewall breached at Port 443 in
+  Act 2 and caught post-game; Ransom's leader **Cron**; the Manager **Marge**; department heads 2–8 as proposed;
+  finale = Cron in HQ Tower, then the C-Suite + The Board as the "Annual Performance Review"; new towns Lakeside
+  Labs (Data) and Signal Ridge (Mobile); back-to-back fights instead of double battles for now; Sudofox is given to
+  you at the ending.
+- Nothing built from it yet. Next: Act 1's closing beat and the in-game names, then Act 2 (Route 2, Port City).
+
 ## 2026-11-13 — Controller pass (desktop, web and app)
 
 - Every gameplay action already had a gamepad binding (A/B/Start/X, D-pad and left stick); now a test checks it.

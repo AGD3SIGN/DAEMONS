@@ -148,7 +148,7 @@ Target roster: **40–60 Daemons** for v1 (about 18 evolution lines + singles + 
 - Ransom is encrypting towns one by one; each Department boss helps you after you earn their cert.
 - Twist: Ransom's leader is the valley's old sysadmin, who was laid off when everything "moved to the cloud".
 - Ending: restore from backups (the backups were tested, a miracle).
-- Full act-by-act draft (awaiting sign-off): docs/story-outline.md
+- Full act-by-act outline (approved 2026-11-13): docs/story-outline.md. Ransom's leader is **Cron**; the Manager is **Marge**; Pyrewall falls at Port 443 in the story and is caught post-game; the 3-2-1 trio (Restorephant, Clondor, Sudofox) is in; the finale is Cron, then the C-Suite and The Board as your Annual Performance Review.
 
 ### Legal guardrails (from the research; not legal advice)
 - 100% original names, creature designs, UI, text, formulas and music. Never use another franchise's assets, names, fonts, sounds or code.
