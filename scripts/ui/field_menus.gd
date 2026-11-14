@@ -149,23 +149,87 @@ func _type_name() -> String:
 	hint.text = name_entry_hint()
 	hint.add_theme_color_override("font_color", Color("505068"))
 	panel.add_child(hint)
+	var keys := _name_keys(edit)
+	keys.name = "Keys"
+	panel.add_child(keys)
 	# Stack by real (theme) heights so nothing overlaps whatever the font and padding are.
 	var y := label.position.y + label.get_combined_minimum_size().y + 3.0
 	edit.position = Vector2(8, y)
 	edit.size = Vector2(NAME_PANEL_W - 16, edit.get_combined_minimum_size().y)
 	y += edit.size.y + 4.0
+	keys.position = Vector2(8, y)
+	y += keys.get_combined_minimum_size().y + 4.0
 	hint.position = Vector2(8, y)
 	panel.offset_bottom = panel.offset_top + y + hint.get_combined_minimum_size().y + 7.0
-	edit.grab_focus()
+	# Keyboard players type straight into the field; with a gamepad the cursor starts on the letter grid.
+	if InputPrompts.scheme in ["xbox", "playstation", "nintendo"]:
+		keys.get_child(0).get_child(0).grab_focus()
+	else:
+		edit.grab_focus()
 	var cancel := func() -> void:
 		edit.text_submitted.emit("")
 	edit.gui_input.connect(func(e: InputEvent) -> void:
 		if e is InputEventKey and e.pressed and e.keycode == KEY_ESCAPE:
 			edit.accept_event()
 			cancel.call())
+	# B / Circle (or X / Backspace while on the grid) backs out to the name list.
+	var back := NameEntryBack.new()
+	back.cancelled.connect(cancel)
+	panel.add_child(back)
 	var typed: String = await edit.text_submitted
 	panel.queue_free()
 	return clean_name(typed)
+
+
+const NAME_KEY_ROWS: PackedStringArray = ["ABCDEFGHIJ", "KLMNOPQRST", "UVWXYZ0123", "456789"]
+
+
+## On-screen letter grid for the name box, so a gamepad (or mouse/touch) can enter a name without a
+## keyboard. Letters append, SPC adds a space, DEL removes the last letter, OK submits.
+func _name_keys(edit: LineEdit) -> VBoxContainer:
+	var box := VBoxContainer.new()
+	box.add_theme_constant_override("separation", 1)
+	var focus := StyleBoxFlat.new()
+	focus.bg_color = UiTheme.BORDER
+	var add_key := func(row: HBoxContainer, text: String, width: float, action: Callable) -> void:
+		var b := Button.new()
+		b.text = text
+		b.focus_mode = Control.FOCUS_ALL
+		b.custom_minimum_size = Vector2(width, 11)
+		b.add_theme_stylebox_override("focus", focus)
+		b.add_theme_color_override("font_focus_color", UiTheme.PAPER)
+		b.add_theme_color_override("font_hover_color", UiTheme.INK)
+		b.mouse_entered.connect(b.grab_focus)
+		b.pressed.connect(action)
+		row.add_child(b)
+	for letters in NAME_KEY_ROWS:
+		var row := HBoxContainer.new()
+		row.add_theme_constant_override("separation", 0)
+		box.add_child(row)
+		for ch in letters:
+			add_key.call(row, ch, 18.0, func() -> void:
+				if edit.text.length() < NAME_MAX:
+					edit.text += ch
+					edit.caret_column = edit.text.length())
+		if letters.length() < 10:
+			add_key.call(row, "SPC", 26.0, func() -> void:
+				if edit.text.length() < NAME_MAX and not edit.text.is_empty():
+					edit.text += " ")
+			add_key.call(row, "DEL", 26.0, func() -> void:
+				edit.text = edit.text.left(-1))
+			add_key.call(row, "OK", 22.0, func() -> void:
+				edit.text_submitted.emit(edit.text))
+	return box
+
+
+## Turns ui_cancel that nothing else used (B on a gamepad, X/Backspace while on the grid) into "back".
+class NameEntryBack extends Node:
+	signal cancelled
+
+	func _unhandled_input(event: InputEvent) -> void:
+		if event.is_action_pressed("ui_cancel"):
+			get_viewport().set_input_as_handled()
+			cancelled.emit()
 
 
 ## Letters, digits and spaces only, trimmed, at most NAME_MAX characters.
@@ -179,7 +243,12 @@ static func clean_name(typed: String) -> String:
 
 
 static func name_entry_hint() -> String:
-	return "Done: confirm   (blank = back)" if InputPrompts.scheme == "touch" else "Enter: OK   Esc: back"
+	match InputPrompts.scheme:
+		"touch":
+			return "Done: confirm   (blank = back)"
+		"keyboard":
+			return "Enter: OK   Esc: back"
+	return "%s: key   %s: back" % [InputPrompts.label("ui_accept"), InputPrompts.label("ui_cancel")]
 
 
 ## Starter choice from the e-waste bin. Shows each one's sprite, type and CMDB line.

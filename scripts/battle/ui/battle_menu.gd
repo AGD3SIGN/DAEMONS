@@ -115,7 +115,7 @@ func choose_from_list(title: String, options: PackedStringArray, enabled: Array 
 			first = button
 	if cancellable:
 		var back := _list_button("BACK")
-		back.key_hint = "[X]"
+		back.hint_action = "ui_cancel"
 		back.pressed.connect(func() -> void: _pick(-1))
 		_list_box.add_child(back)
 		if first == null:
@@ -241,7 +241,8 @@ func _build_move_panel() -> void:
 		_move_panel.add_child(button)
 		_move_buttons.append(button)
 	_link_grid(_move_buttons)
-	_move_back = TermButton.new("BACK", "[X]")
+	_move_back = TermButton.new("BACK")
+	_move_back.hint_action = "ui_cancel"
 	_move_back.font_size = 18
 	_move_back.position = BACK_RECT.position
 	_move_back.size = BACK_RECT.size

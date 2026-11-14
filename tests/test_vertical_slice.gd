@@ -188,3 +188,40 @@ func test_typed_name_box_fits_and_can_back_out() -> void:
 	assert_eq(result, ["Zra9"], "symbols stripped, trimmed")
 	assert_eq(FieldMenus.clean_name("ABCDEFGHIJKLMN"), "ABCDEFGHIJ", "10 letters max")
 	assert_eq(FieldMenus.clean_name("   "), "", "blank goes back to the presets")
+
+
+func test_name_entry_works_with_a_gamepad() -> void:
+	_open("player_house", "new_game")
+	world.auto_choice = null
+	var saved := InputPrompts.scheme
+	InputPrompts.scheme = "xbox"
+	var menus: FieldMenus = world.field_menus
+	var result := []
+	var run := func() -> void: result.append(await menus._type_name())
+	run.call()
+	await wait_process_frames(2)
+	var panel: Panel = menus.get_node("NameEntry")
+	var keys: Control = panel.get_node("Keys")
+	assert_true(panel.get_rect().encloses(Rect2(panel.position + keys.position, keys.get_combined_minimum_size())),
+		"the letter grid fits in the box")
+	var first: Button = keys.get_child(0).get_child(0)
+	assert_true(first.has_focus(), "on a pad the cursor starts on the letter grid")
+	for e: InputEvent in [_pad(JOY_BUTTON_A, true), _pad(JOY_BUTTON_A, false), _pad(JOY_BUTTON_DPAD_RIGHT, true),
+			_pad(JOY_BUTTON_DPAD_RIGHT, false), _pad(JOY_BUTTON_A, true), _pad(JOY_BUTTON_A, false)]:
+		Input.parse_input_event(e)
+		await wait_process_frames(1)
+	var edit: LineEdit = panel.get_node("Edit")
+	assert_eq(edit.text, "AB", "A types the letter under the cursor")
+	Input.parse_input_event(_pad(JOY_BUTTON_B, true))
+	Input.parse_input_event(_pad(JOY_BUTTON_B, false))
+	await wait_process_frames(2)
+	assert_eq(result, [""], "B backs out to the name list")
+	InputPrompts.scheme = saved
+
+
+func _pad(button: JoyButton, pressed: bool) -> InputEventJoypadButton:
+	var e := InputEventJoypadButton.new()
+	e.device = 0
+	e.button_index = button
+	e.pressed = pressed
+	return e

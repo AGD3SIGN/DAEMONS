@@ -11,7 +11,8 @@ var label_text := "":
 	set(value):
 		label_text = value
 		queue_redraw()
-var key_hint := ""
+var key_hint := ""             # e.g. "[1]": a keyboard shortcut, only shown while playing on a keyboard
+var hint_action := ""          # e.g. "ui_cancel": shows that action's button for the current controller
 var danger := false            # DISCONNECT: orange text so the flee option stands out
 var font: Font
 var font_size := 22
@@ -31,6 +32,16 @@ func _init(p_text: String = "", p_hint: String = "") -> void:
 			grab_focus())
 	focus_entered.connect(queue_redraw)
 	focus_exited.connect(queue_redraw)
+	InputPrompts.scheme_changed.connect(func(_s: String) -> void: queue_redraw())
+
+
+## The hint for the current input scheme: number keys only on a keyboard; an action's button
+## ("[B]", "[Circle]", "[X]") on a gamepad or keyboard; nothing on touch.
+func shown_hint() -> String:
+	var scheme := InputPrompts.scheme
+	if not hint_action.is_empty():
+		return "" if scheme == "touch" else "[%s]" % InputPrompts.label(hint_action).to_upper()
+	return key_hint if scheme == "keyboard" else ""
 
 
 func set_enabled(enabled: bool) -> void:
@@ -56,10 +67,11 @@ func _draw() -> void:
 	if sel:
 		draw_string(f, Vector2(10, base), ">", HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, text_color)
 	var hint_w := 0.0
-	if not key_hint.is_empty():
+	var hint := shown_hint()
+	if not hint.is_empty():
 		var sk := BattleStyle.silkscreen()
-		hint_w = sk.get_string_size(key_hint, HORIZONTAL_ALIGNMENT_LEFT, -1, 11).x + 10
-		draw_string(sk, Vector2(0, (size.y + sk.get_ascent(11)) / 2.0 - 1), key_hint, HORIZONTAL_ALIGNMENT_RIGHT,
+		hint_w = sk.get_string_size(hint, HORIZONTAL_ALIGNMENT_LEFT, -1, 11).x + 10
+		draw_string(sk, Vector2(0, (size.y + sk.get_ascent(11)) / 2.0 - 1), hint, HORIZONTAL_ALIGNMENT_RIGHT,
 			size.x - 10, 11, BattleStyle.HINT_ON_HOST if sel else BattleStyle.TEXT_MUTED)
 	draw_string(f, Vector2(10 + CARET_W, base), label_text, HORIZONTAL_ALIGNMENT_LEFT,
 		size.x - 20 - CARET_W - hint_w, font_size, text_color)

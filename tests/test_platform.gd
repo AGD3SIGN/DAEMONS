@@ -339,3 +339,63 @@ func test_text_box_stops_short_of_the_touch_buttons() -> void:
 func test_dpad_arms_are_big_enough_to_hit() -> void:
 	var ring: float = TouchControls.layout()["ring"]
 	assert_gte(ring * 2.0 / 3.0, TouchControls.points_to_logical(44.0), "each arm is at least 44pt wide")
+
+
+# --- controllers (desktop, web and app all use the same input actions) --------
+
+func _pad_button(button: JoyButton, pressed: bool) -> InputEventJoypadButton:
+	var e := InputEventJoypadButton.new()
+	e.device = 0
+	e.button_index = button
+	e.pressed = pressed
+	return e
+
+
+func test_every_gameplay_action_has_a_gamepad_binding() -> void:
+	var needed := ["ui_accept", "ui_cancel", "menu", "run", "move_up", "move_down", "move_left", "move_right",
+		"ui_up", "ui_down", "ui_left", "ui_right"]
+	for action: String in needed:
+		var pad := InputMap.action_get_events(action).filter(func(e: InputEvent) -> bool:
+			return e is InputEventJoypadButton or e is InputEventJoypadMotion)
+		assert_false(pad.is_empty(), "%s works on a gamepad" % action)
+	var stick := InputEventJoypadMotion.new()
+	stick.axis = JOY_AXIS_LEFT_X
+	stick.axis_value = 1.0
+	assert_true(InputMap.event_is_action(stick, "ui_right"), "the left stick moves menu cursors too")
+
+
+func test_battle_menu_works_with_a_gamepad() -> void:
+	var holder := Control.new()
+	holder.size = BattleStyle.FRAME
+	add_child_autofree(holder)
+	var menu := BattleMenu.new()
+	holder.add_child(menu)
+	await wait_process_frames(1)
+	var drive := func() -> void:
+		for e: InputEvent in [_pad_button(JOY_BUTTON_DPAD_RIGHT, true), _pad_button(JOY_BUTTON_DPAD_RIGHT, false),
+				_pad_button(JOY_BUTTON_A, true), _pad_button(JOY_BUTTON_A, false)]:
+			Input.parse_input_event(e)
+			await get_tree().process_frame
+	drive.call_deferred()
+	assert_eq(await menu.choose_command(), "stack", "D-pad right then A picks DAEMONS")
+	await wait_process_frames(1)
+
+
+func test_battle_hints_follow_the_controller() -> void:
+	var b := TermButton.new("EXECUTE", "[1]")
+	var back := TermButton.new("BACK")
+	back.hint_action = "ui_cancel"
+	add_child_autofree(b)
+	add_child_autofree(back)
+	var saved := InputPrompts.scheme
+	InputPrompts.scheme = "keyboard"
+	assert_eq(b.shown_hint(), "[1]", "number keys on a keyboard")
+	assert_eq(back.shown_hint(), "[X]")
+	InputPrompts.scheme = "xbox"
+	assert_eq(b.shown_hint(), "", "no number keys on a pad")
+	assert_eq(back.shown_hint(), "[B]")
+	InputPrompts.scheme = "playstation"
+	assert_eq(back.shown_hint(), "[CIRCLE]")
+	InputPrompts.scheme = "touch"
+	assert_eq(back.shown_hint(), "", "nothing to press on touch")
+	InputPrompts.scheme = saved

@@ -28,6 +28,12 @@ In debug builds the title menu also has a **Debug Menu** (test battles, the Daem
 | Back | X / Esc | B | BACK buttons |
 | Run (hold) | Shift | X | — |
 | Menu | Space / Tab | Start | — |
+| Battle command / move | 1–4 | D-pad + A | Click / tap |
+| Enter a name | Type it | Letter grid (D-pad + A, B = back) | Letter grid or the on-screen keyboard |
+
+Controllers work the same on desktop, in the browser and in the phone/tablet apps (Xbox, PlayStation, Switch Pro
+and other standard pads; button hints follow the pad you're using). In a browser, press a button on the pad once
+after the page loads; browsers only report a controller after it's been used on that page.
 
 On phones and tablets an on-screen d-pad and buttons appear (drag in the lower left to move, push far to run).
 

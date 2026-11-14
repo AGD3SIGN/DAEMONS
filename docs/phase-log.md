@@ -4,6 +4,17 @@ Newest entries at the top. Each entry: what's done, decisions, what's next.
 
 ---
 
+## 2026-11-13 — Controller pass (desktop, web and app)
+
+- Every gameplay action already had a gamepad binding (A/B/Start/X, D-pad and left stick); now a test checks it.
+- New Game name entry: an on-screen letter grid (A-Z, 0-9, SPC, DEL, OK) under the text field, so a pad (or mouse,
+  or touch) can enter a name; with a pad the cursor starts on the grid, and B backs out to the preset list (it used
+  to need a keyboard, so a pad player who chose TYPE NAME was stuck).
+- Battle buttons: number-key hints [1]-[4] only show on a keyboard; BACK shows the current pad's button ([B],
+  [CIRCLE], [A] on Switch) and nothing on touch.
+- Tests drive the battle menu and the name grid with simulated gamepad buttons. 267/267.
+- Browsers only expose a controller after a button is pressed on that page (browser rule); noted in the README.
+
 ## 2026-11-13 — Battle scene rebuilt: the "Server Floor" arena (Brandon's Battle Scene spec)
 
 - Replaced the grass-field battle with a dark data center: server racks with flickering LEDs, a glowing
