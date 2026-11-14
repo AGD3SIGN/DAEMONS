@@ -1,0 +1,152 @@
+{
+  "id": "the_basement",
+  "name": "The Basement",
+  "battle_zone": "server_floor",
+  "music": "dead_zone",
+  "tint": "#6f7896",
+  "legend": {
+    "_": "floor",
+    "I": "interior_wall",
+    "M": "exit_mat",
+    "k": "bookshelf",
+    "c": "server_rack",
+    "p": "plant",
+    "r": "rug",
+    "C": "counter",
+    "t": "table",
+    "\"": "cable_tangle"
+  },
+  "rows": [
+    "IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII",
+    "I_____c___________c_____ckkkkkkI",
+    "I_\"\"\"\"c_______\"\"\"\"c_____c______I",
+    "I_\"\"\"\"c_______\"\"\"\"c____________M",
+    "I_\"\"\"\"c_______\"\"\"\"c_____c______I",
+    "I_\"\"\"\"c_____c_\"\"\"\"c_____c______I",
+    "I_\"\"\"\"c_____c_\"\"\"\"c_____c______I",
+    "I_\"\"\"\"c_____c_\"\"\"\"c_____c______I",
+    "I_\"\"\"\"c_____c_\"\"\"\"c_____c______I",
+    "I_____c_____c_____c_____c______I",
+    "I_____c_____c_____c_____c______I",
+    "M_____c_____c_____c_____c______I",
+    "I_____c_\"\"\"\"c_____c_\"\"\"\"c______I",
+    "I_____c_\"\"\"\"c_____c_\"\"\"\"c______I",
+    "I_____c_\"\"\"\"c_____c_\"\"\"\"c______I",
+    "I_____c_\"\"\"\"c_____c_\"\"\"\"c______I",
+    "I_____c_\"\"\"\"c_____c_\"\"\"\"c______I",
+    "I_______\"\"\"\"c_______\"\"\"\"c______I",
+    "I_______\"\"\"\"c_______\"\"\"\"c______I",
+    "I___________c___________c___p__I",
+    "I_p_________c___________c______I",
+    "IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII"
+  ],
+  "spawns": {
+    "default": {
+      "x": 1,
+      "y": 11,
+      "facing": "right"
+    },
+    "west": {
+      "x": 1,
+      "y": 11,
+      "facing": "right"
+    },
+    "east": {
+      "x": 30,
+      "y": 3,
+      "facing": "left"
+    }
+  },
+  "events": [
+    {
+      "type": "warp",
+      "x": 0,
+      "y": 11,
+      "to_map": "port_city",
+      "to_spawn": "from_basement"
+    },
+    {
+      "type": "warp",
+      "x": 31,
+      "y": 3,
+      "to_map": "devops_heights",
+      "to_spawn": "from_basement"
+    },
+    {
+      "type": "trigger",
+      "x": 1,
+      "y": 11,
+      "dialogue": "basement_arrival",
+      "once_flag": "basement_arrived"
+    },
+    {
+      "type": "npc",
+      "id": "phisher_phoebe",
+      "x": 8,
+      "y": 11,
+      "facing": "down",
+      "trainer": "phisher_phoebe",
+      "look": {
+        "shirt": "#505860",
+        "hair": "#c06030",
+        "sprite": "phisher_pete"
+      }
+    },
+    {
+      "type": "npc",
+      "id": "phisher_phineas",
+      "x": 15,
+      "y": 10,
+      "facing": "down",
+      "trainer": "phisher_phineas",
+      "look": {
+        "shirt": "#505860",
+        "hair": "#202020",
+        "sprite": "phisher_pete"
+      }
+    },
+    {
+      "type": "npc",
+      "id": "brute",
+      "x": 24,
+      "y": 3,
+      "facing": "left",
+      "trainer": "brute_basement",
+      "hide_if_flag": "trainer_brute_basement",
+      "look": {
+        "shirt": "#303030",
+        "hair": "#806020"
+      }
+    },
+    {
+      "type": "trigger",
+      "x": 25,
+      "y": 2,
+      "w": 6,
+      "h": 3,
+      "dialogue": "restorephant_seen",
+      "once_flag": "restorephant_seen",
+      "requires_flag": "trainer_brute_basement"
+    },
+    {
+      "type": "npc",
+      "id": "archivist",
+      "x": 28,
+      "y": 5,
+      "facing": "left",
+      "dialogue": "archivist",
+      "look": {
+        "shirt": "#806040",
+        "hair": "#e0e0e0",
+        "sprite": "elder"
+      }
+    },
+    {
+      "type": "hidden_item",
+      "x": 1,
+      "y": 20,
+      "item": "hard_reboot",
+      "flag": "hidden_basement_reboot"
+    }
+  ]
+}

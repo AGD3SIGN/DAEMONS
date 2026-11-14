@@ -1,0 +1,176 @@
+{
+  "id": "abandoned_data_center",
+  "name": "Abandoned Data Center",
+  "battle_zone": "overheat",
+  "music": "dead_zone",
+  "tint": "#7c6e8e",
+  "legend": {
+    "_": "floor",
+    "I": "interior_wall",
+    "M": "exit_mat",
+    "k": "bookshelf",
+    "c": "server_rack",
+    "p": "plant",
+    "r": "rug",
+    "C": "counter",
+    "t": "table",
+    "\"": "cable_tangle"
+  },
+  "rows": [
+    "IIIIIIIIIIIIIIIIIIIIIIIIIIIIII",
+    "I____cccccccccccccccccccc____I",
+    "I____________________________I",
+    "I____________________________I",
+    "I____________________________I",
+    "Ic_ccccccccccccccccccccccccccI",
+    "I____________________________I",
+    "I_______\"\"\"\"\"\"\"\"\"\"\"\"\"________I",
+    "I_______\"\"\"\"\"\"\"\"\"\"\"\"\"________I",
+    "I____________________________I",
+    "Iccccccccccccccccccccccccc_ccI",
+    "I____________________________I",
+    "I_____\"\"\"\"\"\"\"\"\"______________I",
+    "I_____\"\"\"\"\"\"\"\"\"______________I",
+    "I____________________________I",
+    "Ic_ccccccccccccccccccccccccccI",
+    "I____________________________I",
+    "I_________\"\"\"\"\"\"\"\"\"\"\"________I",
+    "I_________\"\"\"\"\"\"\"\"\"\"\"________I",
+    "I____________________________I",
+    "Iccccccccccccccccccccccccc_ccI",
+    "I____________________________I",
+    "I__\"\"\"\"\"\"\"\"__________________I",
+    "I__\"\"\"\"\"\"\"\"__________________I",
+    "I____________________________I",
+    "IIIIIIIIIIIIIIMIIIIIIIIIIIIIII"
+  ],
+  "spawns": {
+    "default": {
+      "x": 14,
+      "y": 24,
+      "facing": "up"
+    },
+    "south": {
+      "x": 14,
+      "y": 24,
+      "facing": "up"
+    }
+  },
+  "events": [
+    {
+      "type": "warp",
+      "x": 14,
+      "y": 25,
+      "to_map": "devops_heights",
+      "to_spawn": "from_data_center"
+    },
+    {
+      "type": "trigger",
+      "x": 14,
+      "y": 24,
+      "dialogue": "data_center_arrival",
+      "once_flag": "data_center_arrived"
+    },
+    {
+      "type": "npc",
+      "id": "phisher_pam",
+      "x": 8,
+      "y": 21,
+      "facing": "down",
+      "trainer": "phisher_pam",
+      "look": {
+        "shirt": "#505860",
+        "hair": "#e0c060",
+        "sprite": "phisher_pete"
+      }
+    },
+    {
+      "type": "npc",
+      "id": "brute_dc",
+      "x": 26,
+      "y": 20,
+      "facing": "down",
+      "trainer": "brute_dc",
+      "hide_if_flag": "trainer_brute_dc",
+      "look": {
+        "shirt": "#303030",
+        "hair": "#806020"
+      }
+    },
+    {
+      "type": "npc",
+      "id": "phisher_paolo",
+      "x": 15,
+      "y": 16,
+      "facing": "down",
+      "trainer": "phisher_paolo",
+      "look": {
+        "shirt": "#505860",
+        "hair": "#202020",
+        "sprite": "phisher_pete"
+      }
+    },
+    {
+      "type": "sign",
+      "x": 8,
+      "y": 15,
+      "dialogue": "crac_a"
+    },
+    {
+      "type": "sign",
+      "x": 20,
+      "y": 15,
+      "dialogue": "crac_b"
+    },
+    {
+      "type": "barrier",
+      "x": 26,
+      "y": 10,
+      "open_flags": [
+        "crac_a",
+        "crac_b"
+      ]
+    },
+    {
+      "type": "npc",
+      "id": "zed_dc",
+      "x": 2,
+      "y": 5,
+      "facing": "down",
+      "trainer": "zed_dc",
+      "hide_if_flag": "trainer_zed_dc",
+      "look": {
+        "shirt": "#181818",
+        "hair": "#c02040"
+      }
+    },
+    {
+      "type": "trigger",
+      "x": 2,
+      "y": 4,
+      "dialogue": "cron_takes_sudofox",
+      "once_flag": "sudofox_taken",
+      "requires_flag": "trainer_zed_dc"
+    },
+    {
+      "type": "npc",
+      "id": "cron",
+      "x": 14,
+      "y": 2,
+      "facing": "down",
+      "hidden": true,
+      "dialogue": "cron_gone",
+      "look": {
+        "shirt": "#2a3a58",
+        "hair": "#d0d0d0"
+      }
+    },
+    {
+      "type": "hidden_item",
+      "x": 28,
+      "y": 24,
+      "item": "hardware_token",
+      "flag": "hidden_dc_token"
+    }
+  ]
+}

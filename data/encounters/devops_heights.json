@@ -1,0 +1,43 @@
+{
+  "rate": 0.12,
+  "zones": {
+    "cable_tangle": [
+      {
+        "species": "pixelsier",
+        "min": 18,
+        "max": 20,
+        "weight": 15
+      },
+      {
+        "species": "antsistor",
+        "min": 17,
+        "max": 19,
+        "weight": 20
+      },
+      {
+        "species": "pasteslug",
+        "min": 18,
+        "max": 20,
+        "weight": 15
+      },
+      {
+        "species": "tieweaver",
+        "min": 18,
+        "max": 20,
+        "weight": 20
+      },
+      {
+        "species": "coolippo",
+        "min": 18,
+        "max": 20,
+        "weight": 20
+      },
+      {
+        "species": "transistant",
+        "min": 19,
+        "max": 21,
+        "weight": 10
+      }
+    ]
+  }
+}

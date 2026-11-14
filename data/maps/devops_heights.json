@@ -1,0 +1,230 @@
+{
+  "id": "devops_heights",
+  "name": "DevOps Heights",
+  "battle_zone": "server_floor",
+  "music": "town",
+  "legend": {
+    ".": "grass",
+    ",": "path",
+    "\"": "cable_tangle",
+    "~": "water",
+    "T": "tree",
+    "F": "fence",
+    "f": "flowers",
+    "R": "roof_red",
+    "B": "roof_blue",
+    "W": "wall",
+    "w": "window",
+    "D": "door",
+    "L": "ledge",
+    "S": "sign"
+  },
+  "rows": [
+    "TTTTTTTTTTTTTTTT,,TTTTTTTTTTTTTTTT",
+    "TT..............,,S.............TT",
+    "TT..............,,..............TT",
+    "TT..........f...,,.RRRRRRRRRRR..TT",
+    "TTf.BBBBBBB.....,,.RRRRRRRRRRR..TT",
+    "TT..BBBBBBB.....,,.RRRRRRRRRRR..TT",
+    "TT..BBBBBBB.....,,.RRRRRRRRRRR..TT",
+    "TT..WwwDwwW.....,,.RRRRRRRRRRR..TT",
+    "TT.....,........,,.WwwwwDwwwwW..TT",
+    "TT.....,.....f..,,......,.S.....TT",
+    "TT.....,........,,......,\"\"\"\"\"\"\"TT",
+    "TT.....,........,,......,\"\"\"\"\"\"\"TT",
+    "TT.S...,........,,......,.......TT",
+    ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,",
+    ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,",
+    "TT..............,,............f.TT",
+    "TT..............,,..............TT",
+    "TT.\"\"\"\"\"\"\"....f.,,..............TT",
+    "TT.\"\"\"\"\"\"\"......,,..............TT",
+    "TT.\"\"\"\"\"\"\"......,,.............STT",
+    "TT.\"\"\"\"\"\"\"......,,,,,,,,,,,,,,,,,,",
+    "TT.\"\"\"\"\"\"\"......,,..............FT",
+    "TT.\"\"\"\"\"\"\"......,,...\"\"\"\"\"\"\"\"\"\".TT",
+    "TT.\"\"\"\"\"\"\"......,,...\"\"\"\"\"\"\"\"\"\".TT",
+    "TT.\"\"\"\"\"\"\"......,,...\"\"\"\"\"\"\"\"\"\".TT",
+    "TT.........f....,,...\"\"\"\"\"\"\"\"\"\".TT",
+    "TT..............,,...\"\"\"\"\"\"\"\"\"\".TT",
+    "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"
+  ],
+  "spawns": {
+    "default": {
+      "x": 1,
+      "y": 13,
+      "facing": "right"
+    },
+    "from_basement": {
+      "x": 1,
+      "y": 13,
+      "facing": "right"
+    },
+    "from_help_desk": {
+      "x": 7,
+      "y": 8,
+      "facing": "down"
+    },
+    "from_department": {
+      "x": 24,
+      "y": 9,
+      "facing": "down"
+    },
+    "from_data_center": {
+      "x": 16,
+      "y": 1,
+      "facing": "down"
+    }
+  },
+  "events": [
+    {
+      "type": "warp",
+      "x": 0,
+      "y": 13,
+      "to_map": "the_basement",
+      "to_spawn": "east"
+    },
+    {
+      "type": "warp",
+      "x": 0,
+      "y": 14,
+      "to_map": "the_basement",
+      "to_spawn": "east"
+    },
+    {
+      "type": "warp",
+      "x": 7,
+      "y": 7,
+      "to_map": "help_desk_devops",
+      "to_spawn": "default"
+    },
+    {
+      "type": "warp",
+      "x": 24,
+      "y": 8,
+      "to_map": "department_3",
+      "to_spawn": "default"
+    },
+    {
+      "type": "warp",
+      "x": 16,
+      "y": 0,
+      "to_map": "abandoned_data_center",
+      "to_spawn": "south"
+    },
+    {
+      "type": "warp",
+      "x": 17,
+      "y": 0,
+      "to_map": "abandoned_data_center",
+      "to_spawn": "south"
+    },
+    {
+      "type": "sign",
+      "x": 3,
+      "y": 12,
+      "dialogue": "devops_sign"
+    },
+    {
+      "type": "sign",
+      "x": 26,
+      "y": 9,
+      "dialogue": "department_3_sign"
+    },
+    {
+      "type": "sign",
+      "x": 31,
+      "y": 19,
+      "dialogue": "power_plant_sign"
+    },
+    {
+      "type": "sign",
+      "x": 18,
+      "y": 1,
+      "dialogue": "data_center_sign"
+    },
+    {
+      "type": "trigger",
+      "x": 21,
+      "y": 13,
+      "w": 1,
+      "h": 2,
+      "dialogue": "kevin_devops",
+      "once_flag": "kevin_devops_met"
+    },
+    {
+      "type": "npc",
+      "id": "kevin_devops",
+      "x": 22,
+      "y": 12,
+      "facing": "left",
+      "hidden": true,
+      "dialogue": "kevin_devops_after",
+      "look": {
+        "shirt": "#40a0e0",
+        "hair": "#e0b040",
+        "sprite": "kevin"
+      }
+    },
+    {
+      "type": "npc",
+      "id": "scrum_master_sid",
+      "x": 12,
+      "y": 15,
+      "facing": "up",
+      "trainer": "scrum_master_sid",
+      "look": {
+        "shirt": "#c04080",
+        "hair": "#202020",
+        "sprite": "intern"
+      }
+    },
+    {
+      "type": "npc",
+      "id": "friday_dev",
+      "x": 11,
+      "y": 10,
+      "facing": "down",
+      "wander": true,
+      "dialogue": "friday_dev",
+      "look": {
+        "shirt": "#40a060",
+        "hair": "#a06030",
+        "sprite": "sysadmin_sam"
+      }
+    },
+    {
+      "type": "npc",
+      "id": "devops_jogger",
+      "x": 20,
+      "y": 17,
+      "facing": "left",
+      "wander": true,
+      "dialogue": "devops_jogger",
+      "look": {
+        "shirt": "#e0e040",
+        "hair": "#202020",
+        "sprite": "jogger_jo"
+      }
+    },
+    {
+      "type": "npc",
+      "id": "power_guard",
+      "x": 32,
+      "y": 20,
+      "facing": "left",
+      "dialogue": "power_plant_closed",
+      "look": {
+        "shirt": "#e0a020",
+        "hair": "#404040"
+      }
+    },
+    {
+      "type": "hidden_item",
+      "x": 2,
+      "y": 26,
+      "item": "overclock_chip",
+      "flag": "hidden_devops_chip"
+    }
+  ]
+}

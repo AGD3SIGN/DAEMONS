@@ -1,0 +1,136 @@
+{
+  "id": "department_3",
+  "name": "DevOps Department",
+  "battle_zone": "server_floor",
+  "music": "department",
+  "legend": {
+    "_": "floor",
+    "I": "interior_wall",
+    "M": "exit_mat",
+    "k": "bookshelf",
+    "c": "server_rack",
+    "b": "bed",
+    "t": "table",
+    "p": "plant",
+    "r": "rug",
+    "C": "counter"
+  },
+  "rows": [
+    "IIIIIIIIIIIIIII",
+    "IIIIIIIIIIIIIII",
+    "I_____c_c_____I",
+    "I_____________I",
+    "I_p_________p_I",
+    "I_____________I",
+    "I_____________I",
+    "I_____________I",
+    "I_____________I",
+    "IIIIIII_IIIIIII",
+    "I_____________I",
+    "I_c___c___c___I",
+    "I_____________I",
+    "I____rrrrr__k_I",
+    "I_____________I",
+    "I_____________I",
+    "I_____________I",
+    "IIIIIIIMIIIIIII"
+  ],
+  "spawns": {
+    "default": {
+      "x": 7,
+      "y": 16,
+      "facing": "up"
+    }
+  },
+  "events": [
+    {
+      "type": "warp",
+      "x": 7,
+      "y": 17,
+      "to_map": "devops_heights",
+      "to_spawn": "from_department"
+    },
+    {
+      "type": "trigger",
+      "x": 7,
+      "y": 16,
+      "dialogue": "department_3_welcome",
+      "once_flag": "department_3_welcomed"
+    },
+    {
+      "type": "sign",
+      "x": 2,
+      "y": 11,
+      "dialogue": "pipe_build"
+    },
+    {
+      "type": "sign",
+      "x": 6,
+      "y": 11,
+      "dialogue": "pipe_test"
+    },
+    {
+      "type": "sign",
+      "x": 10,
+      "y": 11,
+      "dialogue": "pipe_friday"
+    },
+    {
+      "type": "sign",
+      "x": 12,
+      "y": 13,
+      "dialogue": "pipeline_notes"
+    },
+    {
+      "type": "barrier",
+      "x": 7,
+      "y": 9,
+      "open_flags": [
+        "pipe_build",
+        "pipe_test"
+      ],
+      "closed_flags": [
+        "pipe_friday"
+      ]
+    },
+    {
+      "type": "npc",
+      "id": "qa_tess",
+      "x": 2,
+      "y": 6,
+      "facing": "right",
+      "trainer": "qa_tess",
+      "look": {
+        "shirt": "#40a060",
+        "hair": "#202020",
+        "sprite": "tech_tina"
+      }
+    },
+    {
+      "type": "npc",
+      "id": "sre_raj",
+      "x": 12,
+      "y": 7,
+      "facing": "left",
+      "trainer": "sre_raj",
+      "look": {
+        "shirt": "#40a060",
+        "hair": "#e0a040",
+        "sprite": "tech_theo"
+      }
+    },
+    {
+      "type": "npc",
+      "id": "devi_shah",
+      "x": 7,
+      "y": 3,
+      "facing": "down",
+      "trainer": "devi_shah",
+      "dialogue": "devi",
+      "look": {
+        "shirt": "#20a060",
+        "hair": "#101010"
+      }
+    }
+  ]
+}

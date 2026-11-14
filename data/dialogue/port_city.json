@@ -268,17 +268,7 @@
   ],
   "basement_sign": [
     {
-      "text": "EAST: THE BASEMENT. Closed for maintenance."
-    }
-  ],
-  "basement_closed": [
-    {
-      "speaker": "Facilities",
-      "text": "The Basement's closed. Somebody's been messing with the old tape library down there."
-    },
-    {
-      "speaker": "Facilities",
-      "text": "(That's as far as the DAEMONS demo goes for now. Thanks for playing!)"
+      "text": "EAST: THE BASEMENT. The valley's old server rooms and tape library. Authorized staff only."
     }
   ],
   "department_2_welcome": [
@@ -305,7 +295,7 @@
       "then": [
         {
           "speaker": "Ping",
-          "text": "Latency's down, morale's up. Go on, {player}. The valley needs people who read the routing notes."
+          "text": "Latency's down, morale's up. Go on, {player}. Facilities will let you into the Basement now."
         }
       ],
       "else": [
@@ -384,6 +374,42 @@
         {
           "cmd": "set_flag",
           "flag": "vlan_c"
+        }
+      ]
+    }
+  ],
+  "basement_gate": [
+    {
+      "if_cert": "networking",
+      "then": [
+        {
+          "speaker": "Facilities",
+          "text": "Networking Cert? Ping vouched for you. Fine. Something's been chewing through the tape library down there."
+        },
+        {
+          "cmd": "set_flag",
+          "flag": "basement_open"
+        },
+        {
+          "cmd": "move_npc",
+          "npc": "self",
+          "path": [
+            "up"
+          ]
+        },
+        {
+          "speaker": "Facilities",
+          "text": "Bring a flashlight. And a Hard Reboot."
+        }
+      ],
+      "else": [
+        {
+          "speaker": "Facilities",
+          "text": "The Basement's closed. Somebody's been messing with the old tape library."
+        },
+        {
+          "speaker": "Facilities",
+          "text": "Get your Networking Cert from Ping first. Then we'll talk."
         }
       ]
     }

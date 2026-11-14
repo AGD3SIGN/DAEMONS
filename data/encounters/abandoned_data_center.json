@@ -1,0 +1,43 @@
+{
+  "rate": 0.1,
+  "zones": {
+    "cable_tangle": [
+      {
+        "species": "wormby",
+        "min": 20,
+        "max": 22,
+        "weight": 20
+      },
+      {
+        "species": "spigeon",
+        "min": 20,
+        "max": 22,
+        "weight": 15
+      },
+      {
+        "species": "fanbat",
+        "min": 21,
+        "max": 23,
+        "weight": 20
+      },
+      {
+        "species": "coolippo",
+        "min": 21,
+        "max": 23,
+        "weight": 15
+      },
+      {
+        "species": "servurtle",
+        "min": 21,
+        "max": 23,
+        "weight": 15
+      },
+      {
+        "species": "clawptop",
+        "min": 20,
+        "max": 22,
+        "weight": 15
+      }
+    ]
+  }
+}

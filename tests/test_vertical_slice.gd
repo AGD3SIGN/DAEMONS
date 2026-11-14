@@ -250,3 +250,28 @@ func test_ping_is_beatable_around_level_20() -> void:
 		assert_gte(at_21, 18, "%s path at Lv21 should usually win (30%%+)" % starter)
 		assert_gte(at_19, 6, "%s path at Lv19 should be possible (10%%+)" % starter)
 	gut.p("Ping balance (no items, basic-AI player):\n" + "\n".join(report))
+
+
+## Devi (DevOps, Act 2): a once-upgraded starter plus two catches from the road there.
+func _devi_wins(starter: String, level: int) -> int:
+	var wins := 0
+	for i in 60:
+		var team: Array[DaemonInstance] = [
+			_daemon(starter, level, i), _daemon("spigeon", level - 2, i + 100), _daemon("dillodisk", level - 3, i + 200)]
+		var foe: Array[DaemonInstance] = []
+		for entry: Array in DataRegistry.trainers["devi_shah"]["team"]:
+			foe.append(_daemon(entry[0], int(entry[1]), i + 300))
+		if _sim(team, foe, i, DataRegistry.trainers["devi_shah"]["ai"]) == "player_won":
+			wins += 1
+	return wins
+
+
+func test_devi_is_beatable_around_level_26() -> void:
+	var report := PackedStringArray()
+	for starter in ["munkboard", "pengwan", "scriptfly"]:
+		var at_28 := _devi_wins(starter, 28)
+		var at_26 := _devi_wins(starter, 26)
+		report.append("%-9s Lv28 team: %2d/60   Lv26 team: %2d/60" % [starter, at_28, at_26])
+		assert_gte(at_28, 18, "%s path at Lv28 should usually win (30%%+)" % starter)
+		assert_gte(at_26, 6, "%s path at Lv26 should be possible (10%%+)" % starter)
+	gut.p("Devi balance (no items, basic-AI player):\n" + "\n".join(report))

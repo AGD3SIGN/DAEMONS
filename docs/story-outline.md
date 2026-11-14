@@ -80,7 +80,7 @@ Onboarding Town → Route 1 → Wi-Fi Dead Zone → Patch Town. Wild 2–8, trai
   "YOUR FILES HAVE BEEN QUARANTINED. -R". Kevin replies-all to it.
 
 ### Act 2 — The Outage
-*(Route 2, Port City and the Networking Department built 2026-11-13.)*
+*(All of Act 2 built 2026-11-13. Devi's team uses the Glowbit line until Software Daemon art exists.)*
 **Route 2 → Port City (Dept 2).** Wild 9–14, trainers 12–17, ace 20.
 - Port City's harbor runs on Port 443. Ransom's Phishers block the docks. You and Kevin (rival battle #2 on the
   docks) push through, too late: Zed breaches **Port 443** and Pyrewall goes dark. The harbor lights go out.

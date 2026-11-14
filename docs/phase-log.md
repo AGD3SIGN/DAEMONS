@@ -4,6 +4,28 @@ Newest entries at the top. Each entry: what's done, decisions, what's next.
 
 ---
 
+## 2026-11-13 — Act 2 part 2: The Basement, DevOps Heights, Abandoned Data Center (Act 2 complete)
+
+- **Port City → The Basement:** the Facilities guard lets you east once you have the Networking Cert.
+- **The Basement** (dark dungeon, server-rack maze): Phishers Phoebe and Phineas, **Exploit Kit Brute** guarding the
+  tape library (Lv 18-19). After him, **Restorephant** reveals itself guarding the last tapes, and the archivist gives
+  you the **Legacy Driver** (Floppit → Ziphare is now reachable in normal play). Wild Lv 15-18.
+- **DevOps Heights:** town with a working Help Desk (heal + shop incl. Pizza Friday), Scrum Master Sid, Kevin's third
+  battle (Lv 21-23) and his confession: he got phished, Ransom used his password; he turned on MFA "for everything".
+  North road to the Data Center; the east road to the Power Plant is closed (the new end of the demo).
+- **DevOps Department** (Department 3): pipeline puzzle (BUILD + TESTS on, FRIDAY DEPLOY off), QA Tess, SRE Raj,
+  **Department Head Devi** (Pixelsier 23, Glowbit 23, Scriptfly 26) → Software Cert.
+  - Placeholder team: the only Software Daemons with art are the Glowbit starter line. Swap in Threadling / Lintbug
+    lines when their art exists.
+  - Balance (`test_devi_is_beatable_around_level_26`, team = starter + Spigeon + Dillodisk): Lv 26 wins 60 / 35 / 57
+    of 60 (Munkboard / Pengwan / Scriptfly paths).
+- **Abandoned Data Center** (Overheat battles, dark): two cooling units open the overheat-locked door, Phishers Pam
+  and Paolo, **Brute** again (Lv 24-26), **Zed** (Proxferret, Spigeon, Meshpider 25-27). Then **Cron** appears, takes
+  **Sudofox** in a red Quarantine Key, every Help Desk shows the ransom note, and **Marge** calls: "it needs Friday".
+  Flag `sudofox_taken`; the DevOps Help Desk reacts to it.
+- Placeholder looks (no art): Brute, Zed, Cron, Ping, Devi, the two Facilities guards, the Route 2 lineworker.
+- Tests: 284/284. Slice audit: 0 problems, 17/17 maps reachable.
+
 ## 2026-11-13 — Act 1 polish + Act 2 part 1: Route 2, Port City, Networking Department
 
 - **Marge:** the Manager introduces herself by name; her dialogue speaker is "Marge".

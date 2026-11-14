@@ -5,12 +5,18 @@
 
 ## Notes
 - flag 'starter_glowbit' is set but never checked (fine for bookkeeping)
+- flag 'trainer_phisher_pam' is set but never checked (fine for bookkeeping)
+- flag 'trainer_phisher_paolo' is set but never checked (fine for bookkeeping)
 - flag 'trainer_tech_theo' is set but never checked (fine for bookkeeping)
 - flag 'trainer_tech_tina' is set but never checked (fine for bookkeeping)
 - flag 'trainer_dana' is set but never checked (fine for bookkeeping)
 - flag 'trainer_net_admin_nia' is set but never checked (fine for bookkeeping)
 - flag 'trainer_packet_pat' is set but never checked (fine for bookkeeping)
 - flag 'trainer_ping_okoro' is set but never checked (fine for bookkeeping)
+- flag 'trainer_qa_tess' is set but never checked (fine for bookkeeping)
+- flag 'trainer_sre_raj' is set but never checked (fine for bookkeeping)
+- flag 'trainer_devi_shah' is set but never checked (fine for bookkeeping)
+- flag 'trainer_scrum_master_sid' is set but never checked (fine for bookkeeping)
 - flag 'trainer_phisher_phil' is set but never checked (fine for bookkeeping)
 - flag 'trainer_intern_ian' is set but never checked (fine for bookkeeping)
 - flag 'trainer_sysadmin_sam' is set but never checked (fine for bookkeeping)
@@ -18,15 +24,34 @@
 - flag 'trainer_lineworker_lou' is set but never checked (fine for bookkeeping)
 - flag 'trainer_gamer_gabe' is set but never checked (fine for bookkeeping)
 - flag 'trainer_phisher_phyllis' is set but never checked (fine for bookkeeping)
+- flag 'trainer_phisher_phoebe' is set but never checked (fine for bookkeeping)
+- flag 'trainer_phisher_phineas' is set but never checked (fine for bookkeeping)
 - flag 'trainer_signal_hunter_hal' is set but never checked (fine for bookkeeping)
 - flag 'trainer_phisher_pete' is set but never checked (fine for bookkeeping)
+- flag 'trainer_kevin_rival_3_pingo' is set but never checked (fine for bookkeeping)
+- flag 'trainer_kevin_rival_3_glowbit' is set but never checked (fine for bookkeeping)
+- flag 'trainer_kevin_rival_3_chipmunk' is set but never checked (fine for bookkeeping)
 - flag 'trainer_kevin_rival_1_pingo' is set but never checked (fine for bookkeeping)
 - flag 'trainer_kevin_rival_1_glowbit' is set but never checked (fine for bookkeeping)
 - flag 'trainer_kevin_rival_1_chipmunk' is set but never checked (fine for bookkeeping)
 - flag 'trainer_kevin_rival_2_pingo' is set but never checked (fine for bookkeeping)
 - flag 'trainer_kevin_rival_2_glowbit' is set but never checked (fine for bookkeeping)
 - flag 'trainer_kevin_rival_2_chipmunk' is set but never checked (fine for bookkeeping)
-- maps reachable: 12 of 12; arrival points: 23
+- maps reachable: 17 of 17; arrival points: 33
+- trainer kevin_rival_3_pingo: levels [23, 21, 22]
+- trainer kevin_rival_3_glowbit: levels [23, 21, 22]
+- trainer kevin_rival_3_chipmunk: levels [23, 21, 22]
+- trainer phisher_phoebe: levels [16, 17]
+- trainer phisher_phineas: levels [17, 17]
+- trainer brute_basement: levels [18, 18, 19]
+- trainer scrum_master_sid: levels [20, 21]
+- trainer qa_tess: levels [21, 22]
+- trainer sre_raj: levels [22, 22]
+- trainer devi_shah: levels [23, 23, 26]
+- trainer phisher_pam: levels [23, 23]
+- trainer phisher_paolo: levels [23, 24]
+- trainer brute_dc: levels [24, 25, 26]
+- trainer zed_dc: levels [25, 25, 27]
 - trainer kevin_rival_1_pingo: levels [5]
 - trainer kevin_rival_1_glowbit: levels [5]
 - trainer kevin_rival_1_chipmunk: levels [5]

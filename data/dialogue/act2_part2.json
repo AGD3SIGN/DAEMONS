@@ -1,0 +1,455 @@
+{
+  "basement_arrival": [
+    {
+      "text": "The air is cold and smells like old dust and hot capacitors. Somewhere deep in here, a tape drive clicks."
+    },
+    {
+      "text": "Footprints in the dust. Lots of them. And a gray hoodie thread snagged on a rack."
+    }
+  ],
+  "restorephant_seen": [
+    {
+      "text": "Behind the shelves, something enormous shifts in the dark."
+    },
+    {
+      "text": "An elephant, patient and very old. Its tusks are tape reels, and its hide is stamped with backup dates going back decades."
+    },
+    {
+      "text": "RESTOREPHANT looks at the shelves Brute was wiping... then at you. It nods, once, and settles in front of them."
+    },
+    {
+      "speaker": "Archivist",
+      "text": "The on-site backup. It never forgets. It's guarded this library since before the cloud was a thing."
+    }
+  ],
+  "archivist": [
+    {
+      "if_flag": "got_legacy_driver",
+      "then": [
+        {
+          "speaker": "Archivist",
+          "text": "Floppits love that driver. Ziphares even more."
+        }
+      ],
+      "else": [
+        {
+          "if_flag": "trainer_brute_basement",
+          "then": [
+            {
+              "speaker": "Archivist",
+              "text": "You chased that brute off before he wiped the last shelf. Thank you."
+            },
+            {
+              "speaker": "Archivist",
+              "text": "Take this. It's a driver for very old hardware. Some old Daemons only upgrade with it."
+            },
+            {
+              "cmd": "give_item",
+              "item": "legacy_driver"
+            },
+            {
+              "cmd": "set_flag",
+              "flag": "got_legacy_driver"
+            }
+          ],
+          "else": [
+            {
+              "speaker": "Archivist",
+              "text": "Shh! That big Ransom thug is still at the door. He's been wiping tapes all morning."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "devops_sign": [
+    {
+      "text": "DEVOPS HEIGHTS. \"We ship on Fridays.\" (Please don't.)"
+    }
+  ],
+  "department_3_sign": [
+    {
+      "text": "DEVOPS DEPARTMENT. Certification trials inside. Current build status: GREEN (probably)."
+    }
+  ],
+  "power_plant_sign": [
+    {
+      "text": "EAST: POWER PLANT. Road closed. Brownouts reported across the valley."
+    }
+  ],
+  "power_plant_closed": [
+    {
+      "speaker": "Facilities",
+      "text": "Power Plant's locked down. Somebody's siphoning the grid. Lights keep flickering."
+    },
+    {
+      "speaker": "Facilities",
+      "text": "(That's as far as the DAEMONS demo goes for now. Thanks for playing!)"
+    }
+  ],
+  "data_center_sign": [
+    {
+      "text": "NORTH: ROOT VALLEY DATA CENTER (DECOMMISSIONED). \"Everything moved to the cloud!\" - The Board"
+    }
+  ],
+  "friday_dev": [
+    {
+      "speaker": "Developer",
+      "text": "It's 4:55 on a Friday. Perfect time to deploy. What could go wrong?"
+    }
+  ],
+  "devops_jogger": [
+    {
+      "speaker": "Jogger",
+      "text": "I run every morning. Unlike our nightly build, which has not run since March."
+    }
+  ],
+  "kevin_devops": [
+    {
+      "cmd": "show_npc",
+      "npc": "kevin_devops",
+      "facing": "left"
+    },
+    {
+      "cmd": "move_npc",
+      "npc": "kevin_devops",
+      "to": "player",
+      "run": true
+    },
+    {
+      "speaker": "Kevin",
+      "text": "{player}. Before you go in there... battle me. I need to hit something that isn't my keyboard."
+    },
+    {
+      "if_flag": "starter_chipmunk",
+      "then": [
+        {
+          "cmd": "start_battle",
+          "trainer": "kevin_rival_3_pingo"
+        }
+      ],
+      "else": [
+        {
+          "if_flag": "starter_pingo",
+          "then": [
+            {
+              "cmd": "start_battle",
+              "trainer": "kevin_rival_3_glowbit"
+            }
+          ],
+          "else": [
+            {
+              "cmd": "start_battle",
+              "trainer": "kevin_rival_3_chipmunk"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "kevin_devops_after": [
+    {
+      "speaker": "Kevin",
+      "text": "...I have to tell you something. Remember the \"verify your password\" email? I clicked it."
+    },
+    {
+      "speaker": "Kevin",
+      "text": "Ransom got into DevOps with MY password. Devi showed me the logs. My name. Everywhere."
+    },
+    {
+      "speaker": "Kevin",
+      "text": "So I turned on MFA. For everything. My email. My bank. My toaster has MFA now, {player}."
+    },
+    {
+      "speaker": "Kevin",
+      "text": "Ransom's been coming and going from the old data center up north. Go. I'll... stay here and change all my passwords again."
+    }
+  ],
+  "help_desk_devops_tech": [
+    {
+      "speaker": "Help Desk",
+      "text": "Welcome to the DevOps Heights Help Desk! Our uptime is 99.9%. The other 0.1% is Fridays."
+    },
+    {
+      "speaker": "Help Desk",
+      "choice": "Want me to restore your Daemons?",
+      "yes": [
+        {
+          "speaker": "Help Desk",
+          "text": "Have you tried turning it off and on again?"
+        },
+        {
+          "cmd": "heal_party"
+        },
+        {
+          "if_flag": "sudofox_taken",
+          "then": [
+            {
+              "speaker": "Help Desk",
+              "text": "...Done. Ignore the red note on every screen. We're running from a laptop now."
+            }
+          ],
+          "else": [
+            {
+              "speaker": "Help Desk",
+              "text": "...Done. Deployed to production. Please don't tell anyone."
+            }
+          ]
+        }
+      ],
+      "no": [
+        {
+          "speaker": "Help Desk",
+          "text": "Ticket closed. Come back anytime!"
+        }
+      ]
+    }
+  ],
+  "supply_closet_devops": [
+    {
+      "speaker": "Supply Closet",
+      "text": "DevOps Supply Closet. Every item is versioned. This is version 47."
+    },
+    {
+      "cmd": "open_shop",
+      "stock": [
+        "coffee",
+        "energy_drink",
+        "pizza_friday",
+        "hard_reboot",
+        "firewall_rule",
+        "thumb_drive",
+        "encrypted_key",
+        "hardware_token"
+      ]
+    }
+  ],
+  "devops_patron": [
+    {
+      "speaker": "Barista",
+      "text": "Devi rolled back the whole town's coffee machines last week. Worth it. The new firmware made decaf."
+    }
+  ],
+  "department_3_welcome": [
+    {
+      "speaker": "Receptionist",
+      "text": "Welcome to DevOps! The trial room is past the pipeline door."
+    },
+    {
+      "speaker": "Receptionist",
+      "text": "Get the pipeline green to open it. The notes are on the shelf. And never, ever deploy on a Friday."
+    }
+  ],
+  "pipeline_notes": [
+    {
+      "text": "PIPELINE NOTES: A release needs a passing BUILD and passing TESTS."
+    },
+    {
+      "text": "The FRIDAY DEPLOY switch must stay OFF. Devi says otherwise. Devi is wrong."
+    }
+  ],
+  "devi": [
+    {
+      "if_cert": "software",
+      "then": [
+        {
+          "speaker": "Devi",
+          "text": "Ship it, {player}. Ransom's hideout is in the old data center up north. Bring backups. Test them."
+        }
+      ],
+      "else": [
+        {
+          "speaker": "Devi",
+          "text": "I deploy on Fridays to prove it can be done. Today I'm deploying you. Ready?"
+        }
+      ]
+    }
+  ],
+  "data_center_arrival": [
+    {
+      "text": "The old Root Valley Data Center. Half the racks are dark. The other half are humming with something that isn't supposed to be here."
+    },
+    {
+      "text": "Cold air pours from the vents. Somewhere above, a fan screams, then stops."
+    }
+  ],
+  "cron_takes_sudofox": [
+    {
+      "cmd": "show_npc",
+      "npc": "cron",
+      "facing": "down"
+    },
+    {
+      "text": "Among the dead racks stands a tired-looking man in an old Root Valley IT lanyard. He's holding a Quarantine Key that glows an angry red."
+    },
+    {
+      "speaker": "???",
+      "text": "You must be the new hire. Marge always did like the stubborn ones."
+    },
+    {
+      "speaker": "Cron",
+      "text": "Call me Cron. I ran this whole building. Every job, every backup, every night at 2 AM, on schedule."
+    },
+    {
+      "speaker": "Cron",
+      "text": "Then the Board \"moved everything to the cloud\" and called me redundant. Nobody tested that migration. Nobody tests anything."
+    },
+    {
+      "speaker": "Cron",
+      "text": "So I'm going to prove it. Without the root key, nobody can restore a single file. And the root key is right... here."
+    },
+    {
+      "text": "Inside the red key, a small fox with keys for a tail paces in circles. SUDOFOX."
+    },
+    {
+      "speaker": "Cron",
+      "text": "When it's all gone, they'll find out what \"no backups\" means. Then they can buy the key back from me."
+    },
+    {
+      "cmd": "hide_npc",
+      "npc": "cron"
+    },
+    {
+      "text": "Cron is gone. A second later, every screen in the data center flashes red."
+    },
+    {
+      "text": "BZZT. Your phone. \"-R: ALL HELP DESKS IN ROOT VALLEY HAVE BEEN QUARANTINED.\""
+    },
+    {
+      "text": "BZZT. A call. It's Marge."
+    },
+    {
+      "speaker": "Marge",
+      "text": "{player}, I saw the email. I know who it is. I know Cron."
+    },
+    {
+      "speaker": "Marge",
+      "text": "Keep going. Get your certs. I've got an idea, but it needs Friday."
+    },
+    {
+      "cmd": "set_flag",
+      "flag": "sudofox_taken"
+    }
+  ],
+  "cron_gone": [
+    {
+      "text": "Nothing but a warm spot on the floor and the smell of burnt thermal paste."
+    }
+  ],
+  "pipe_build": [
+    {
+      "if_flag": "pipe_build",
+      "then": [
+        {
+          "text": "BUILD: switched OFF."
+        },
+        {
+          "cmd": "set_flag",
+          "flag": "pipe_build",
+          "value": false
+        }
+      ],
+      "else": [
+        {
+          "text": "BUILD: switched ON. The light turns green."
+        },
+        {
+          "cmd": "set_flag",
+          "flag": "pipe_build"
+        }
+      ]
+    }
+  ],
+  "pipe_test": [
+    {
+      "if_flag": "pipe_test",
+      "then": [
+        {
+          "text": "TESTS: switched OFF."
+        },
+        {
+          "cmd": "set_flag",
+          "flag": "pipe_test",
+          "value": false
+        }
+      ],
+      "else": [
+        {
+          "text": "TESTS: switched ON. The light turns green."
+        },
+        {
+          "cmd": "set_flag",
+          "flag": "pipe_test"
+        }
+      ]
+    }
+  ],
+  "pipe_friday": [
+    {
+      "if_flag": "pipe_friday",
+      "then": [
+        {
+          "text": "FRIDAY DEPLOY: switched OFF."
+        },
+        {
+          "cmd": "set_flag",
+          "flag": "pipe_friday",
+          "value": false
+        }
+      ],
+      "else": [
+        {
+          "text": "FRIDAY DEPLOY: switched ON. The light turns green."
+        },
+        {
+          "cmd": "set_flag",
+          "flag": "pipe_friday"
+        }
+      ]
+    }
+  ],
+  "crac_a": [
+    {
+      "if_flag": "crac_a",
+      "then": [
+        {
+          "text": "COOLING UNIT A is humming. Cold air pours out."
+        }
+      ],
+      "else": [
+        {
+          "text": "COOLING UNIT A: You flip the breaker. The unit rattles awake and cold air pours out."
+        },
+        {
+          "cmd": "set_flag",
+          "flag": "crac_a"
+        },
+        {
+          "text": "Somewhere ahead, a door's overheat lock clicks."
+        }
+      ]
+    }
+  ],
+  "crac_b": [
+    {
+      "if_flag": "crac_b",
+      "then": [
+        {
+          "text": "COOLING UNIT B is humming. Cold air pours out."
+        }
+      ],
+      "else": [
+        {
+          "text": "COOLING UNIT B: You flip the breaker. The unit rattles awake and cold air pours out."
+        },
+        {
+          "cmd": "set_flag",
+          "flag": "crac_b"
+        },
+        {
+          "text": "Somewhere ahead, a door's overheat lock clicks."
+        }
+      ]
+    }
+  ]
+}

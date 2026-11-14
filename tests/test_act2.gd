@@ -143,3 +143,102 @@ func test_act2_levels_climb_from_dana_to_ping() -> void:
 	assert_gt(ace.call("ping_okoro"), ace.call("dana"))
 	assert_gt(ace.call("ping_okoro"), ace.call("kevin_rival_2_pingo"))
 	assert_gt(ace.call("kevin_rival_2_pingo"), ace.call("kevin_rival_1_pingo"))
+
+
+# --- Act 2 part 2: The Basement, DevOps Heights, the Abandoned Data Center --------
+
+func test_the_basement_gate_needs_the_networking_cert() -> void:
+	GameState.flags["port_city_arrived"] = true
+	await _open("port_city")
+	world.player.setup(world.map, Vector2i(32, 14), Vector2i.RIGHT)
+	await world.interact()
+	assert_true(_logged("Networking Cert"))
+	assert_false(GameState.flags.get("basement_open", false))
+	GameState.certifications.append("networking")
+	await world.interact()
+	assert_true(GameState.flags.get("basement_open", false))
+	assert_eq(await world.player.try_step(Vector2i.RIGHT), "moved", "the guard stepped aside")
+
+
+func test_restorephant_and_the_legacy_driver_after_brute() -> void:
+	GameState.flags["basement_arrived"] = true
+	await _open("the_basement", "east")
+	world.player.setup(world.map, Vector2i(28, 4), Vector2i.DOWN)
+	await world.interact()
+	assert_true(_logged("still at the door"), "the archivist hides while Brute is here")
+	assert_false(GameState.bag.has("legacy_driver"))
+	GameState.flags["trainer_brute_basement"] = true
+	world.player.setup(world.map, Vector2i(27, 4), Vector2i.UP)
+	await _step(Vector2i.UP)
+	assert_true(GameState.flags.get("restorephant_seen", false))
+	assert_true(_logged("RESTOREPHANT"))
+	world.player.setup(world.map, Vector2i(28, 4), Vector2i.DOWN)
+	await world.interact()
+	assert_true(GameState.bag.has("legacy_driver"), "Ziphare is reachable in normal play now")
+
+
+func test_kevin_admits_he_got_phished_in_devops_heights() -> void:
+	GameState.flags["starter_pingo"] = true
+	await _open("devops_heights")
+	world.player.setup(world.map, Vector2i(20, 13), Vector2i.RIGHT)
+	await _step(Vector2i.RIGHT)
+	await wait_until(func() -> bool: return not get_signal_parameters(world, "battle_requested").is_empty(), 5.0)
+	var config: Dictionary = get_signal_parameters(world, "battle_requested")[0]
+	assert_eq(config["trainer_id"], "kevin_rival_3_glowbit", "Scriptfly line beats Pengwan")
+	var kevin := world.find_npc("kevin_devops")
+	world.player.setup(world.map, kevin.cell + Vector2i.DOWN, Vector2i.UP)
+	await world.interact()
+	assert_true(_logged("MFA"), "he turned on MFA for everything")
+
+
+func test_devops_pipeline_door() -> void:
+	await _open("department_3")
+	await wait_until(func() -> bool: return world.is_idle(), 5.0)
+	assert_false(world.map.is_walkable(Vector2i(7, 9)))
+	for x in [2, 6]:  # BUILD and TESTS
+		world.player.setup(world.map, Vector2i(x, 12), Vector2i.UP)
+		await world.interact()
+	assert_true(world.map.is_walkable(Vector2i(7, 9)), "green pipeline -> open")
+	world.player.setup(world.map, Vector2i(10, 12), Vector2i.UP)
+	await world.interact()
+	assert_false(world.map.is_walkable(Vector2i(7, 9)), "never deploy on a Friday")
+
+
+func test_devi_awards_the_software_cert() -> void:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 3
+	var team: Array[DaemonInstance] = [DaemonInstance.create("mainmunk", 50, rng, 1)]
+	var config := BattleScene.trainer_config("devi_shah")
+	config.merge({"player_stack": team, "items": {}, "auto": true, "time_scale": 0.0, "seed": 2}, true)
+	var scene: BattleScene = load(BattleScene.SCENE).instantiate()
+	scene.setup(config)
+	add_child_autofree(scene)
+	await wait_for_signal(scene.finished, 30.0)
+	assert_eq(scene.result["outcome"], "player_won")
+	assert_true("software" in GameState.certifications)
+
+
+func test_cooling_units_open_the_data_center_door() -> void:
+	GameState.flags["data_center_arrived"] = true
+	await _open("abandoned_data_center")
+	assert_false(world.map.is_walkable(Vector2i(26, 10)), "overheat lock")
+	for x in [8, 20]:
+		world.player.setup(world.map, Vector2i(x, 14), Vector2i.DOWN)
+		await world.interact()
+	assert_true(world.map.is_walkable(Vector2i(26, 10)), "both cooling units on -> open")
+
+
+func test_cron_takes_sudofox_and_marge_calls() -> void:
+	GameState.flags["data_center_arrived"] = true
+	await _open("abandoned_data_center")
+	world.player.setup(world.map, Vector2i(2, 6), Vector2i.UP)
+	assert_false(world.map.is_walkable(Vector2i(2, 5)), "Zed blocks the last aisle")
+	GameState.flags["trainer_zed_dc"] = true
+	world.player.setup(world.map, Vector2i(2, 4), Vector2i.UP)
+	await world.player.try_step(Vector2i.RIGHT)
+	await world.player.try_step(Vector2i.LEFT)
+	await wait_until(func() -> bool: return world.is_idle(), 5.0)
+	assert_true(GameState.flags.get("sudofox_taken", false))
+	assert_true(_logged("SUDOFOX"))
+	assert_true(_logged("it needs Friday"), "Marge calls")
+	assert_false(world.find_npc("cron").visible, "Cron is gone")

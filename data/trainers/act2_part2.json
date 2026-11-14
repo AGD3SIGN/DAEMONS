@@ -1,0 +1,306 @@
+{
+  "kevin_rival_3_pingo": {
+    "name": "Kevin",
+    "sprite": "kevin",
+    "team": [
+      [
+        "pengwan",
+        23
+      ],
+      [
+        "spigeon",
+        21
+      ],
+      [
+        "cablesnake",
+        22
+      ]
+    ],
+    "ai": "basic",
+    "prize": 920,
+    "story": true,
+    "intro": "No reply-all this time. Just a battle.",
+    "defeat": "...Yeah. That tracks with my week.",
+    "after": "Talk to me. I need to tell you something."
+  },
+  "kevin_rival_3_glowbit": {
+    "name": "Kevin",
+    "sprite": "kevin",
+    "team": [
+      [
+        "scriptfly",
+        23
+      ],
+      [
+        "spigeon",
+        21
+      ],
+      [
+        "cablesnake",
+        22
+      ]
+    ],
+    "ai": "basic",
+    "prize": 920,
+    "story": true,
+    "intro": "No reply-all this time. Just a battle.",
+    "defeat": "...Yeah. That tracks with my week.",
+    "after": "Talk to me. I need to tell you something."
+  },
+  "kevin_rival_3_chipmunk": {
+    "name": "Kevin",
+    "sprite": "kevin",
+    "team": [
+      [
+        "munkboard",
+        23
+      ],
+      [
+        "spigeon",
+        21
+      ],
+      [
+        "cablesnake",
+        22
+      ]
+    ],
+    "ai": "basic",
+    "prize": 920,
+    "story": true,
+    "intro": "No reply-all this time. Just a battle.",
+    "defeat": "...Yeah. That tracks with my week.",
+    "after": "Talk to me. I need to tell you something."
+  },
+  "phisher_phoebe": {
+    "name": "Phisher Phoebe",
+    "sprite": "phisher_pete",
+    "team": [
+      [
+        "wormby",
+        16
+      ],
+      [
+        "spigeon",
+        17
+      ]
+    ],
+    "ai": "basic",
+    "prize": 680,
+    "sight": 3,
+    "intro": "This tape library is now under new management. Ours.",
+    "defeat": "I'll just... unsubscribe from this fight.",
+    "after": "Brute's at the back. He doesn't do subtle."
+  },
+  "phisher_phineas": {
+    "name": "Phisher Phineas",
+    "sprite": "phisher_pete",
+    "team": [
+      [
+        "ramster",
+        17
+      ],
+      [
+        "wormby",
+        17
+      ]
+    ],
+    "ai": "basic",
+    "prize": 680,
+    "sight": 4,
+    "intro": "Your session has expired! Please battle to log back in.",
+    "defeat": "Session terminated. Mine.",
+    "after": "We're not stealing the tapes. We're just making sure nobody can restore them."
+  },
+  "brute_basement": {
+    "name": "Exploit Kit Brute",
+    "team": [
+      [
+        "wormby",
+        18
+      ],
+      [
+        "servurtle",
+        18
+      ],
+      [
+        "spigeon",
+        19
+      ]
+    ],
+    "ai": "basic",
+    "prize": 1200,
+    "sight": 3,
+    "intro": "Password. Password. Password! I try them ALL. Then I try them all AGAIN.",
+    "defeat": "Locked out. Locked out. LOCKED OUT.",
+    "after": "Zed's gonna hear about this. Zed. Zed. Zed."
+  },
+  "scrum_master_sid": {
+    "name": "Scrum Master Sid",
+    "sprite": "intern",
+    "team": [
+      [
+        "transistant",
+        20
+      ],
+      [
+        "pixelsier",
+        21
+      ]
+    ],
+    "ai": "basic",
+    "prize": 840,
+    "sight": 2,
+    "intro": "Quick stand-up: what did you do yesterday? What will you do today? Any blockers? Me. I'm the blocker.",
+    "defeat": "Moving this to next sprint.",
+    "after": "Retro's at 4. Bring sticky notes."
+  },
+  "qa_tess": {
+    "name": "QA Tess",
+    "sprite": "tech_tina",
+    "team": [
+      [
+        "dillodisk",
+        21
+      ],
+      [
+        "ramster",
+        22
+      ]
+    ],
+    "ai": "basic",
+    "prize": 880,
+    "sight": 4,
+    "intro": "I found 400 bugs today. Let's see if you're 401.",
+    "defeat": "Works on my machine...",
+    "after": "Devi's Scriptfly automates anything it sees twice. Don't let it see you twice."
+  },
+  "sre_raj": {
+    "name": "SRE Raj",
+    "sprite": "tech_theo",
+    "team": [
+      [
+        "fanbat",
+        22
+      ],
+      [
+        "pixelsier",
+        22
+      ]
+    ],
+    "ai": "basic",
+    "prize": 880,
+    "sight": 4,
+    "intro": "I'm on call. If my pager goes off mid-battle, you win by default.",
+    "defeat": "...My pager went off.",
+    "after": "Five nines of uptime. Zero nines of sleep."
+  },
+  "devi_shah": {
+    "name": "Department Head Devi",
+    "team": [
+      [
+        "pixelsier",
+        23
+      ],
+      [
+        "glowbit",
+        23
+      ],
+      [
+        "scriptfly",
+        26
+      ]
+    ],
+    "ai": "basic",
+    "prize": 2600,
+    "cert": "software",
+    "intro": "Devi Shah, DevOps. Someone got into my pipeline with a phished password. I'm in a mood. Let's deploy.",
+    "defeat": "All green. Shipping you the Software Cert.",
+    "after": "Ransom's been in and out of the old data center up north. Cron's old building. Be careful."
+  },
+  "phisher_pam": {
+    "name": "Phisher Pam",
+    "sprite": "phisher_pete",
+    "team": [
+      [
+        "spigeon",
+        23
+      ],
+      [
+        "wormby",
+        23
+      ]
+    ],
+    "ai": "basic",
+    "prize": 920,
+    "sight": 3,
+    "intro": "Unauthorized access detected! That's you. We're the authorized ones now.",
+    "defeat": "Access... revoked.",
+    "after": "Brute's guarding the aisle. Zed's guarding Cron."
+  },
+  "phisher_paolo": {
+    "name": "Phisher Paolo",
+    "sprite": "phisher_pete",
+    "team": [
+      [
+        "cablesnake",
+        23
+      ],
+      [
+        "fanbat",
+        24
+      ]
+    ],
+    "ai": "basic",
+    "prize": 960,
+    "sight": 4,
+    "intro": "Hot aisle, cold aisle, battle aisle!",
+    "defeat": "I'm overheating.",
+    "after": "The cooling's off on purpose. Cron says heat keeps people out."
+  },
+  "brute_dc": {
+    "name": "Exploit Kit Brute",
+    "team": [
+      [
+        "wormby",
+        24
+      ],
+      [
+        "servurtle",
+        25
+      ],
+      [
+        "botgeon",
+        26
+      ]
+    ],
+    "ai": "basic",
+    "prize": 1600,
+    "sight": 3,
+    "intro": "YOU again. Again. AGAIN. This time I brought a bigger dictionary!",
+    "defeat": "Account locked. Locked. Locked.",
+    "after": "Just go. Go. Go."
+  },
+  "zed_dc": {
+    "name": "Exploit Kit Zed",
+    "team": [
+      [
+        "proxferret",
+        25
+      ],
+      [
+        "spigeon",
+        25
+      ],
+      [
+        "meshpider",
+        27
+      ]
+    ],
+    "ai": "basic",
+    "prize": 1800,
+    "sight": 3,
+    "intro": "The help-desk kid again. You patch one hole and I find two more. Let's see your attack surface.",
+    "defeat": "Huh. You're harder to get into than Port 443 was.",
+    "after": "Cron's right behind me. He wants to meet you. Don't say I didn't warn you."
+  }
+}

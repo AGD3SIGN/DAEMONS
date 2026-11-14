@@ -1,0 +1,43 @@
+{
+  "rate": 0.1,
+  "zones": {
+    "cable_tangle": [
+      {
+        "species": "floppit",
+        "min": 15,
+        "max": 17,
+        "weight": 20
+      },
+      {
+        "species": "wormby",
+        "min": 15,
+        "max": 17,
+        "weight": 20
+      },
+      {
+        "species": "ramster",
+        "min": 16,
+        "max": 18,
+        "weight": 20
+      },
+      {
+        "species": "dillodisk",
+        "min": 15,
+        "max": 17,
+        "weight": 20
+      },
+      {
+        "species": "fanbat",
+        "min": 16,
+        "max": 18,
+        "weight": 15
+      },
+      {
+        "species": "servurtle",
+        "min": 16,
+        "max": 17,
+        "weight": 5
+      }
+    ]
+  }
+}
