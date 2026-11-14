@@ -1,0 +1,197 @@
+{
+  "id": "cloud_summit",
+  "name": "Cloud Summit",
+  "battle_zone": "coolant_loop",
+  "music": "route",
+  "tint": "#dfe6f4",
+  "legend": {
+    ".": "grass",
+    ",": "path",
+    "\"": "cable_tangle",
+    "~": "water",
+    "T": "tree",
+    "F": "fence",
+    "f": "flowers",
+    "R": "roof_red",
+    "B": "roof_blue",
+    "W": "wall",
+    "w": "window",
+    "D": "door",
+    "L": "ledge",
+    "S": "sign"
+  },
+  "rows": [
+    "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTT",
+    "TT....TTTTTTTTTTTTTTTTTT....TT",
+    "TT....,,,,,,,,,,,,,,,,,,....TT",
+    "TT....,,,,,,,,,,,,,,,,,,....TT",
+    "TT....,,,,,,,,,,,,,,,,,,....TT",
+    "TT....,,,,,,,,,,,,,,,,,,,,,,,,",
+    "TT....,,,,,,,,,,,,,,,,,,....TT",
+    "TT..S.,,,,,,,,,,,,,,,,,,....TT",
+    "TTTTTTTTTTTTTT,TTTTTTTTTTTTTTT",
+    "TTTTT.........,,............TT",
+    "TTTTT.........,,,,,,,,,,,...TT",
+    "TTTTT.........,,,,,,,,,,,...TT",
+    "TTTTT..................,,...TT",
+    "TTTTT...\"\"\"\"\"....\"\"\"\"\".,,...TT",
+    "TTTTT...\"\"\"\"\"....\"\"\"\"\".,,...TT",
+    "TTTTT...\"\"\"\"\"....\"\"\"\"\".,,...TT",
+    "TTTTT...\"\"\"\"\"....\"\"\"\"\".,,...TT",
+    "TT......\"\"\"\"\"....\"\"\"\"\".,,...TT",
+    "TT......\"\"\"\"\"....\"\"\"\"\".,,...TT",
+    "TT.....................,,...TT",
+    "TT...,,,,,,,,,,,,,,,,,,,,...TT",
+    "TT...,,,,,,,,,,,,,,,,,,,,...TT",
+    "TT...,,.....................TT",
+    "TT...,,.\"\"\"\"\"\"...........TTTTT",
+    "TT...,,.\"\"\"\"\"\"....\"\"\"\"\"\"\"TTTTT",
+    "TT...,,.\"\"\"\"\"\"....\"\"\"\"\"\"\"TTTTT",
+    "TT...,,L\"\"\"\"\"\"....\"\"\"\"\"\"\"TTTTT",
+    "TT...,,.\"\"\"\"\"\"....\"\"\"\"\"\"\"TTTTT",
+    "TT...,,.\"\"\"\"\"\"....\"\"\"\"\"\"\"\"\".TT",
+    "TT...,,.....................TT",
+    "TT...,,,,,,,,,,,............TT",
+    "TT...,,,,,,,,,,,............TT",
+    "TT............,,.TTTTTTTTTT.TT",
+    "TT............,,.TTTTTTTTTT.TT",
+    "TT............,,.TTTTTTTTTT.TT",
+    "TT............,,.TTTTTTTTTT.TT",
+    "TT............,,............TT",
+    "TT............,,............TT",
+    "TT............,,S...........TT",
+    "TTTTTTTTTTTTTT,,TTTTTTTTTTTTTT"
+  ],
+  "spawns": {
+    "default": {
+      "x": 14,
+      "y": 38,
+      "facing": "up"
+    },
+    "south": {
+      "x": 14,
+      "y": 38,
+      "facing": "up"
+    },
+    "east": {
+      "x": 28,
+      "y": 5,
+      "facing": "left"
+    }
+  },
+  "events": [
+    {
+      "type": "warp",
+      "x": 14,
+      "y": 39,
+      "to_map": "power_plant",
+      "to_spawn": "from_summit"
+    },
+    {
+      "type": "warp",
+      "x": 15,
+      "y": 39,
+      "to_map": "power_plant",
+      "to_spawn": "from_summit"
+    },
+    {
+      "type": "warp",
+      "x": 29,
+      "y": 5,
+      "to_map": "secops_fortress",
+      "to_spawn": "west"
+    },
+    {
+      "type": "sign",
+      "x": 16,
+      "y": 38,
+      "dialogue": "cloud_summit_sign"
+    },
+    {
+      "type": "sign",
+      "x": 4,
+      "y": 7,
+      "dialogue": "summit_marker"
+    },
+    {
+      "type": "trigger",
+      "x": 7,
+      "y": 20,
+      "w": 1,
+      "h": 2,
+      "dialogue": "kevin_summit",
+      "once_flag": "kevin_summit_met"
+    },
+    {
+      "type": "npc",
+      "id": "kevin_summit",
+      "x": 8,
+      "y": 19,
+      "facing": "down",
+      "hidden": true,
+      "dialogue": "kevin_summit_after",
+      "look": {
+        "shirt": "#40a0e0",
+        "hair": "#e0b040",
+        "sprite": "kevin"
+      }
+    },
+    {
+      "type": "npc",
+      "id": "vacation_val",
+      "x": 22,
+      "y": 20,
+      "facing": "left",
+      "trainer": "vacation_val",
+      "look": {
+        "shirt": "#40c0a0",
+        "hair": "#e0c060",
+        "sprite": "jogger_jo"
+      }
+    },
+    {
+      "type": "npc",
+      "id": "phisher_phoenix",
+      "x": 14,
+      "y": 8,
+      "facing": "down",
+      "trainer": "phisher_phoenix",
+      "hide_if_flag": "trainer_phisher_phoenix",
+      "look": {
+        "shirt": "#505860",
+        "hair": "#c0c0c0",
+        "sprite": "phisher_pete"
+      }
+    },
+    {
+      "type": "trigger",
+      "x": 6,
+      "y": 6,
+      "w": 18,
+      "h": 2,
+      "dialogue": "clondor_flees",
+      "once_flag": "clondor_fled",
+      "requires_flag": "trainer_phisher_phoenix"
+    },
+    {
+      "type": "npc",
+      "id": "cron_summit",
+      "x": 20,
+      "y": 3,
+      "facing": "down",
+      "hidden": true,
+      "dialogue": "cron_gone",
+      "look": {
+        "shirt": "#2a3a58",
+        "hair": "#d0d0d0"
+      }
+    },
+    {
+      "type": "hidden_item",
+      "x": 3,
+      "y": 37,
+      "item": "pizza_friday",
+      "flag": "hidden_summit_pizza"
+    }
+  ]
+}

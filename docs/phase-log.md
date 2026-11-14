@@ -4,6 +4,31 @@ Newest entries at the top. Each entry: what's done, decisions, what's next.
 
 ---
 
+## 2026-11-13 — Act 3: Power Plant, Cloud Summit, SecOps Fortress
+
+- **DevOps Heights → Power Plant:** Facilities lets you east once you have the Software Cert.
+- **Power Plant** (Overheat battles, dim tint): Ransom wired a crypto-miner into the main bus. Beat Phisher Phelix,
+  unplug the rig, and the brownout ends; the Facilities Department door unlocks (barrier on `miner_unplugged`).
+  Working Help Desk (laptop-powered since the quarantine). Trainers Lineman Leo, Phisher Phanie. Wild Lv 24-28.
+- **Facilities Department** (Department 4): breaker puzzle (MAIN + COOLING on, OVERCLOCK off), Electrician Ella,
+  HVAC Hank, **Department Head Rolf** (smart AI: Fanbat 32, Meshpider 33, Siliqueen 34, Coolapotamus 35) →
+  Facilities Cert. Mentions Uptimus sleeping under the plant (post-game hook).
+- **Cloud Summit** (switchback trail, light tint): **Kevin fights beside you now** (no rival battle; he holds the
+  trail). Phisher Phoenix blocks the only way up. On the plateau, **Clondor** flees into the clouds from Cron's red key,
+  and Cron shows you his layoff letter ("22 years") and tells you to ask Marge about Fridays. Wild Lv 28-31.
+- **SecOps Fortress:** the Department door opens only after the sentry's 4-question **phishing quiz** (r00tvalley
+  link, gift-card "Marge" text, parking-lot USB: no; your own bookmarked portal: yes). Working Help Desk.
+- **SecOps Department** (Department 5): access-control puzzle (MFA + audit logging on, guest badges off), Pen Tester
+  Petra, Blue Team Bo, **Major Kalb** (smart AI: Armadrive 38, Scriptfly 37, Siliqueen 40, Crabinet 41) → Security
+  Cert, then she traces Ransom to **HQ Tower** (`hq_traced`). The east road to Act 4 is locked (new demo end).
+- **Placeholder teams:** there is no Power, Cloud or Security Daemon art yet, so Rolf, Kalb and the wild tables use
+  Hardware/Network Daemons (and Kalb a Scriptfly to cover Network-heavy teams). Swap when that art exists.
+- **Balance** (`test_rolf_and_kalb_are_beatable_on_every_path`): at the ace's level, Rolf 11 / 54 / 9 and Kalb
+  33 / 33 / 28 wins out of 60 (Munkboard / Pengwan / Scriptfly paths); 2 levels above, Rolf 22 / 60 / 28, Kalb 36 / 47 / 43.
+  Their aces are 35 and 41 (outline said 32 / 38; their teams were too weak at those levels).
+- Test helper: `Overworld.auto_choice` can be an Array of answers in order (used for the quiz).
+- Tests: 291/291. Slice audit: 0 problems, 24/24 maps reachable.
+
 ## 2026-11-13 — Act 2 part 2: The Basement, DevOps Heights, Abandoned Data Center (Act 2 complete)
 
 - **Port City → The Basement:** the Facilities guard lets you east once you have the Networking Cert.

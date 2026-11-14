@@ -1,0 +1,76 @@
+{
+  "id": "help_desk_power",
+  "name": "Power Plant Help Desk",
+  "legend": {
+    "_": "floor",
+    "I": "interior_wall",
+    "M": "exit_mat",
+    "k": "bookshelf",
+    "c": "server_rack",
+    "b": "bed",
+    "t": "table",
+    "p": "plant",
+    "r": "rug",
+    "C": "counter"
+  },
+  "rows": [
+    "IIIIIIIIIIIII",
+    "IIIIIIIIIIIII",
+    "Ip________ccI",
+    "I__CCCCCCC__I",
+    "I___________I",
+    "I___________I",
+    "Ik___rrr___pI",
+    "I____rrr____I",
+    "IIIIIIMIIIIII"
+  ],
+  "spawns": {
+    "default": {
+      "x": 6,
+      "y": 7,
+      "facing": "up"
+    }
+  },
+  "events": [
+    {
+      "type": "warp",
+      "x": 6,
+      "y": 8,
+      "to_map": "power_plant",
+      "to_spawn": "from_help_desk"
+    },
+    {
+      "type": "npc",
+      "id": "tech",
+      "x": 6,
+      "y": 2,
+      "facing": "down",
+      "dialogue": "help_desk_offline",
+      "look": {
+        "shirt": "#3858c0",
+        "hair": "#902020",
+        "sprite": "help_desk_tech"
+      }
+    },
+    {
+      "type": "npc",
+      "id": "supply_clerk",
+      "x": 8,
+      "y": 2,
+      "facing": "down",
+      "dialogue": "supply_closet_devops",
+      "look": {
+        "shirt": "#a04040",
+        "hair": "#303030",
+        "sprite": "supply_clerk"
+      }
+    },
+    {
+      "type": "sign",
+      "x": 10,
+      "y": 2,
+      "dialogue": "server_rack"
+    }
+  ],
+  "music": "help_desk"
+}

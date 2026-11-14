@@ -22,7 +22,7 @@ var events: Array[MapEvent] = []
 ## Tests / automation knobs.
 var time_scale: float = 1.0
 var auto_advance_text := false
-var auto_choice: Variant = null      # true / false answers every yes/no question automatically
+var auto_choice: Variant = null      # true / false answers every yes/no question automatically (or an Array: one answer per question, in order)
 var encounter_rate_override: float = -1.0  # >= 0 replaces the map's encounter rate (tests)
 var encounter_rng := RandomNumberGenerator.new()
 var allow_scene_change := true       # false: start_battle only emits battle_requested
@@ -350,6 +350,8 @@ func ask(question: String, speaker: String = "") -> bool:
 	text_box.show_now(question)
 	if auto_choice != null:
 		await get_tree().process_frame
+		if auto_choice is Array:  # tests: answers in order (e.g. a quiz), then "no"
+			return bool(auto_choice.pop_front()) if not auto_choice.is_empty() else false
 		return bool(auto_choice)
 	return await menu.confirm()
 

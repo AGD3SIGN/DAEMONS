@@ -1,0 +1,568 @@
+{
+  "power_plant_arrival": [
+    {
+      "text": "The Root Valley Power Plant. The lights flicker every few seconds. The cooling towers wheeze."
+    },
+    {
+      "text": "Every flicker comes with a faint electronic whine... like something running very hard, very close."
+    }
+  ],
+  "power_plant_town_sign": [
+    {
+      "text": "ROOT VALLEY POWER PLANT. \"Keeping the lights on since 1987.\" (Currently: mostly.)"
+    }
+  ],
+  "department_4_sign": [
+    {
+      "if_flag": "miner_unplugged",
+      "then": [
+        {
+          "text": "FACILITIES DEPARTMENT. Power restored. Trials open."
+        }
+      ],
+      "else": [
+        {
+          "text": "FACILITIES DEPARTMENT. CLOSED: BROWNOUT. The door won't open without power."
+        }
+      ]
+    }
+  ],
+  "miner_rig": [
+    {
+      "if_flag": "miner_unplugged",
+      "then": [
+        {
+          "text": "A dead stack of graphics cards, still warm. Someone has scrawled \"R\" on the side."
+        }
+      ],
+      "else": [
+        {
+          "if_flag": "trainer_phisher_phelix",
+          "then": [
+            {
+              "text": "A humming stack of graphics cards wired straight into the plant's main bus. A screen reads: MINING... 0.0003 COINS/HR."
+            },
+            {
+              "text": "You yank the cable. The rig dies with a sad beep. Across the plant, every light steadies."
+            },
+            {
+              "cmd": "set_flag",
+              "flag": "miner_unplugged"
+            },
+            {
+              "text": "With a clunk, the Facilities Department door unlocks."
+            }
+          ],
+          "else": [
+            {
+              "text": "A humming stack of graphics cards wired straight into the plant's main bus. Someone in a gray hoodie is guarding it."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "plant_worker": [
+    {
+      "if_flag": "miner_unplugged",
+      "then": [
+        {
+          "speaker": "Plant Worker",
+          "text": "Power's steady again! I can finally microwave my lunch without the whole valley flickering."
+        }
+      ],
+      "else": [
+        {
+          "speaker": "Plant Worker",
+          "text": "Ransom wired a crypto-miner into our main bus. It's drinking the grid dry. Rolf's furious."
+        }
+      ]
+    }
+  ],
+  "help_desk_offline": [
+    {
+      "speaker": "Help Desk",
+      "text": "Welcome to the Help Desk! Our real system is quarantined, so I'm running everything from a laptop."
+    },
+    {
+      "speaker": "Help Desk",
+      "choice": "Want me to restore your Daemons?",
+      "yes": [
+        {
+          "speaker": "Help Desk",
+          "text": "Have you tried turning it off and on again?"
+        },
+        {
+          "cmd": "heal_party"
+        },
+        {
+          "speaker": "Help Desk",
+          "text": "...Done. The laptop's at 4% battery, so let's call that a success."
+        }
+      ],
+      "no": [
+        {
+          "speaker": "Help Desk",
+          "text": "Ticket closed. Stay safe out there."
+        }
+      ]
+    }
+  ],
+  "department_4_welcome": [
+    {
+      "speaker": "Receptionist",
+      "text": "Welcome to Facilities! Lights are back, thanks to you. The trial room is past the breaker door."
+    },
+    {
+      "speaker": "Receptionist",
+      "text": "Rolf's notes are on the shelf. He labels everything. Everything."
+    }
+  ],
+  "breaker_notes": [
+    {
+      "text": "BREAKER NOTES (labeled by Rolf): MAIN on. COOLING on. Always."
+    },
+    {
+      "text": "OVERCLOCK: never. \"That's how you get a crypto-miner.\" - Rolf"
+    }
+  ],
+  "rolf": [
+    {
+      "if_cert": "facilities",
+      "then": [
+        {
+          "speaker": "Rolf",
+          "text": "Forty extension cords and every one is labeled. That's how you keep a valley running, kid. Head up the mountain. Cloud Summit."
+        }
+      ],
+      "else": [
+        {
+          "speaker": "Rolf",
+          "text": "You unplugged that miner. Good hands. Let's see if they hold steady under load."
+        }
+      ]
+    }
+  ],
+  "cloud_summit_sign": [
+    {
+      "text": "CLOUD SUMMIT TRAIL. Home of the valley's off-site backup. Thin air, thick fog."
+    }
+  ],
+  "summit_marker": [
+    {
+      "text": "SUMMIT MARKER. Elevation: very. A brass plate reads: \"Off-site copy maintained here since the Migration.\""
+    }
+  ],
+  "kevin_summit": [
+    {
+      "cmd": "show_npc",
+      "npc": "kevin_summit",
+      "facing": "down"
+    },
+    {
+      "cmd": "move_npc",
+      "npc": "kevin_summit",
+      "to": "player",
+      "run": true
+    },
+    {
+      "speaker": "Kevin",
+      "text": "{player}! Wait. I'm not here to battle. I'm here to help."
+    },
+    {
+      "speaker": "Kevin",
+      "text": "Ransom's crew went up the summit an hour ago. They're after the off-site copy. I heard them say \"delete\"."
+    },
+    {
+      "speaker": "Kevin",
+      "text": "I've got MFA on everything now, including my Daemons' feeding schedule."
+    },
+    {
+      "speaker": "Kevin",
+      "text": "I'll hold this trail so nobody sneaks up behind you. Go!"
+    }
+  ],
+  "kevin_summit_after": [
+    {
+      "if_flag": "clondor_fled",
+      "then": [
+        {
+          "speaker": "Kevin",
+          "text": "I heard wings up there. Huge ones. Whatever it was, it got away. Good."
+        }
+      ],
+      "else": [
+        {
+          "speaker": "Kevin",
+          "text": "Nobody gets past me. I've got two-factor AND a strongly worded email drafted."
+        }
+      ]
+    }
+  ],
+  "clondor_flees": [
+    {
+      "text": "The fog on the summit swirls. Something enormous is perched on the marker stone."
+    },
+    {
+      "text": "An Andean condor, its wings spread like a storage array, each feather a tiny blinking drive. CLONDOR. The valley's off-site copy."
+    },
+    {
+      "cmd": "show_npc",
+      "npc": "cron_summit",
+      "facing": "down"
+    },
+    {
+      "speaker": "Cron",
+      "text": "There it is. Every backup the Board paid to \"move to the cloud\". All in one bird."
+    },
+    {
+      "text": "Cron raises a red Quarantine Key. Clondor screams, beats its huge wings once... and climbs straight up into the clouds, out of reach."
+    },
+    {
+      "speaker": "Cron",
+      "text": "...Fine. It'll come down eventually. They always do."
+    },
+    {
+      "speaker": "Cron",
+      "text": "You want to know why, kid? Here."
+    },
+    {
+      "text": "Cron holds out a crumpled letter: \"Dear Cron: as part of our Cloud Migration, your role has been deemed redundant. Thank you for 22 years. -The Board\""
+    },
+    {
+      "speaker": "Cron",
+      "text": "Twenty-two years of 2 AM backups. Nobody ever checked if the new ones work. I did. They don't."
+    },
+    {
+      "speaker": "Cron",
+      "text": "Ask Marge. ...Ask her what she does on Fridays."
+    },
+    {
+      "cmd": "hide_npc",
+      "npc": "cron_summit"
+    },
+    {
+      "text": "Cron walks into the fog and is gone."
+    },
+    {
+      "cmd": "set_flag",
+      "flag": "clondor_fled"
+    }
+  ],
+  "secops_arrival": [
+    {
+      "text": "SecOps Fortress. Cameras swivel to follow you. A speaker crackles: \"VISITOR DETECTED. STAND BY FOR VERIFICATION.\""
+    }
+  ],
+  "secops_sign": [
+    {
+      "text": "SECOPS FORTRESS. \"Trust nothing. Verify everything. Especially this sign.\""
+    }
+  ],
+  "department_5_sign": [
+    {
+      "text": "SECOPS DEPARTMENT. Entry requires a passing score on the phishing test. Talk to the sentry."
+    }
+  ],
+  "act4_road_sign": [
+    {
+      "text": "EAST: LAKESIDE LABS, SIGNAL RIDGE, AI LAB. Road locked down by SecOps."
+    }
+  ],
+  "act4_closed": [
+    {
+      "speaker": "Sentry",
+      "text": "This road's locked until Major Kalb says otherwise. Ransom's everywhere out there."
+    },
+    {
+      "speaker": "Sentry",
+      "text": "(That's as far as the DAEMONS demo goes for now. Thanks for playing!)"
+    }
+  ],
+  "secops_analyst": [
+    {
+      "speaker": "Analyst",
+      "text": "I've watched 10,000 phishing emails this year. My favorite: \"URGENT: your password expires in -3 days.\""
+    }
+  ],
+  "phishing_quiz": [
+    {
+      "if_flag": "phish_test_passed",
+      "then": [
+        {
+          "speaker": "Sentry",
+          "text": "You passed. Door's open. Don't make me regret it."
+        }
+      ],
+      "else": [
+        {
+          "speaker": "Sentry",
+          "text": "Phishing test. Four questions. One wrong answer and you start over."
+        },
+        {
+          "speaker": "Sentry",
+          "text": "Question 1. Email from it-support@r00tvalley.co: \"Your mailbox is FULL! Click here and verify your password.\""
+        },
+        {
+          "choice": "Click it?",
+          "yes": [
+            {
+              "speaker": "Sentry",
+              "text": "WRONG. Zero, not O. r00tvalley. Try again."
+            }
+          ],
+          "no": [
+            {
+              "speaker": "Sentry",
+              "text": "Correct. Question 2. A text from \"Marge\": \"Buy 5 gift cards for a client and send me the codes. Don't tell anyone.\""
+            },
+            {
+              "choice": "Buy the gift cards?",
+              "yes": [
+                {
+                  "speaker": "Sentry",
+                  "text": "WRONG. Managers don't pay clients in gift cards. Try again."
+                }
+              ],
+              "no": [
+                {
+                  "speaker": "Sentry",
+                  "text": "Correct. Question 3. A USB stick in the parking lot, labeled SALARIES 2026."
+                },
+                {
+                  "choice": "Plug it in?",
+                  "yes": [
+                    {
+                      "speaker": "Sentry",
+                      "text": "WRONG. That's how half the valley got Wormby. Try again."
+                    }
+                  ],
+                  "no": [
+                    {
+                      "speaker": "Sentry",
+                      "text": "Correct. Question 4. You open the Root Valley IT portal from your own bookmark. Right address, valid certificate."
+                    },
+                    {
+                      "choice": "Log in?",
+                      "yes": [
+                        {
+                          "speaker": "Sentry",
+                          "text": "Correct. Not everything is a trap. Paranoia doesn't get tickets closed."
+                        },
+                        {
+                          "speaker": "Sentry",
+                          "text": "4 out of 4. The door's open. Major Kalb is expecting you."
+                        },
+                        {
+                          "cmd": "set_flag",
+                          "flag": "phish_test_passed"
+                        }
+                      ],
+                      "no": [
+                        {
+                          "speaker": "Sentry",
+                          "text": "WRONG. That one was real. You can't do your job if you trust nothing. Try again."
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "department_5_welcome": [
+    {
+      "speaker": "Receptionist",
+      "text": "SecOps. The trial room is past the access-control door. Read the notes. Then read them again."
+    }
+  ],
+  "access_notes": [
+    {
+      "text": "ACCESS CONTROL NOTES: MFA on. Audit logging on."
+    },
+    {
+      "text": "Guest badges: OFF. \"Guest\" is how Ransom got into the data center. - Maj. Kalb"
+    }
+  ],
+  "kalb": [
+    {
+      "if_cert": "security",
+      "then": [
+        {
+          "speaker": "Kalb",
+          "text": "While you were fighting my team, my analysts traced Ransom's command server."
+        },
+        {
+          "speaker": "Kalb",
+          "text": "HQ Tower. Right in the middle of the valley. Under the Board's nose."
+        },
+        {
+          "speaker": "Kalb",
+          "text": "The Tower only opens for the root key... or for someone every department vouches for."
+        },
+        {
+          "speaker": "Kalb",
+          "text": "Earn the Data, Mobile and AI Lab certs. Then all eight departments sign you onto the access list. I'll open the east road when you're ready."
+        },
+        {
+          "cmd": "set_flag",
+          "flag": "hq_traced"
+        }
+      ],
+      "else": [
+        {
+          "speaker": "Kalb",
+          "text": "Major Kalb. I don't trust you. I don't trust anyone. You'll have to earn it the hard way."
+        }
+      ]
+    }
+  ],
+  "brk_main": [
+    {
+      "if_flag": "brk_main",
+      "then": [
+        {
+          "text": "MAIN: switched OFF."
+        },
+        {
+          "cmd": "set_flag",
+          "flag": "brk_main",
+          "value": false
+        }
+      ],
+      "else": [
+        {
+          "text": "MAIN: switched ON."
+        },
+        {
+          "cmd": "set_flag",
+          "flag": "brk_main"
+        }
+      ]
+    }
+  ],
+  "brk_cooling": [
+    {
+      "if_flag": "brk_cooling",
+      "then": [
+        {
+          "text": "COOLING: switched OFF."
+        },
+        {
+          "cmd": "set_flag",
+          "flag": "brk_cooling",
+          "value": false
+        }
+      ],
+      "else": [
+        {
+          "text": "COOLING: switched ON."
+        },
+        {
+          "cmd": "set_flag",
+          "flag": "brk_cooling"
+        }
+      ]
+    }
+  ],
+  "brk_overclock": [
+    {
+      "if_flag": "brk_overclock",
+      "then": [
+        {
+          "text": "OVERCLOCK: switched OFF."
+        },
+        {
+          "cmd": "set_flag",
+          "flag": "brk_overclock",
+          "value": false
+        }
+      ],
+      "else": [
+        {
+          "text": "OVERCLOCK: switched ON."
+        },
+        {
+          "cmd": "set_flag",
+          "flag": "brk_overclock"
+        }
+      ]
+    }
+  ],
+  "sec_mfa": [
+    {
+      "if_flag": "sec_mfa",
+      "then": [
+        {
+          "text": "MFA: switched OFF."
+        },
+        {
+          "cmd": "set_flag",
+          "flag": "sec_mfa",
+          "value": false
+        }
+      ],
+      "else": [
+        {
+          "text": "MFA: switched ON."
+        },
+        {
+          "cmd": "set_flag",
+          "flag": "sec_mfa"
+        }
+      ]
+    }
+  ],
+  "sec_logs": [
+    {
+      "if_flag": "sec_logs",
+      "then": [
+        {
+          "text": "AUDIT LOGGING: switched OFF."
+        },
+        {
+          "cmd": "set_flag",
+          "flag": "sec_logs",
+          "value": false
+        }
+      ],
+      "else": [
+        {
+          "text": "AUDIT LOGGING: switched ON."
+        },
+        {
+          "cmd": "set_flag",
+          "flag": "sec_logs"
+        }
+      ]
+    }
+  ],
+  "sec_guest": [
+    {
+      "if_flag": "sec_guest",
+      "then": [
+        {
+          "text": "GUEST BADGES: switched OFF."
+        },
+        {
+          "cmd": "set_flag",
+          "flag": "sec_guest",
+          "value": false
+        }
+      ],
+      "else": [
+        {
+          "text": "GUEST BADGES: switched ON."
+        },
+        {
+          "cmd": "set_flag",
+          "flag": "sec_guest"
+        }
+      ]
+    }
+  ]
+}

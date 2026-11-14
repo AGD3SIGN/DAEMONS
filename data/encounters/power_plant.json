@@ -1,0 +1,43 @@
+{
+  "rate": 0.12,
+  "zones": {
+    "cable_tangle": [
+      {
+        "species": "fanbat",
+        "min": 24,
+        "max": 26,
+        "weight": 20
+      },
+      {
+        "species": "transistant",
+        "min": 25,
+        "max": 27,
+        "weight": 20
+      },
+      {
+        "species": "coolippo",
+        "min": 24,
+        "max": 26,
+        "weight": 20
+      },
+      {
+        "species": "pasteslug",
+        "min": 25,
+        "max": 27,
+        "weight": 15
+      },
+      {
+        "species": "deskclaw",
+        "min": 25,
+        "max": 27,
+        "weight": 15
+      },
+      {
+        "species": "coolapotamus",
+        "min": 27,
+        "max": 28,
+        "weight": 10
+      }
+    ]
+  }
+}

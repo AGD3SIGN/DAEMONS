@@ -242,3 +242,92 @@ func test_cron_takes_sudofox_and_marge_calls() -> void:
 	assert_true(_logged("SUDOFOX"))
 	assert_true(_logged("it needs Friday"), "Marge calls")
 	assert_false(world.find_npc("cron").visible, "Cron is gone")
+
+
+# --- Act 3: Power Plant, Cloud Summit, SecOps Fortress ---------------------------
+
+func test_the_power_plant_road_needs_the_software_cert() -> void:
+	await _open("devops_heights")
+	world.player.setup(world.map, Vector2i(30, 20), Vector2i.RIGHT)
+	await world.interact()
+	assert_false(GameState.flags.get("power_road_open", false))
+	GameState.certifications.append("software")
+	await world.interact()
+	assert_true(GameState.flags.get("power_road_open", false))
+	assert_eq(await world.player.try_step(Vector2i.RIGHT), "moved", "the guard stepped aside")
+
+
+func test_unplugging_the_miner_opens_facilities() -> void:
+	GameState.flags["power_plant_arrived"] = true
+	await _open("power_plant")
+	assert_false(world.map.is_walkable(Vector2i(25, 6)), "brownout: the door is dead")
+	world.player.setup(world.map, Vector2i(27, 9), Vector2i.UP)
+	await world.interact()
+	assert_false(GameState.flags.get("miner_unplugged", false), "the grunt guards the rig")
+	GameState.flags["trainer_phisher_phelix"] = true
+	await world.interact()
+	assert_true(GameState.flags.get("miner_unplugged", false))
+	assert_true(world.map.is_walkable(Vector2i(25, 6)), "power's back, the door opens")
+
+
+func test_facilities_breaker_door() -> void:
+	await _open("department_4")
+	await wait_until(func() -> bool: return world.is_idle(), 5.0)
+	for x in [2, 6]:
+		world.player.setup(world.map, Vector2i(x, 12), Vector2i.UP)
+		await world.interact()
+	assert_true(world.map.is_walkable(Vector2i(7, 9)), "MAIN + COOLING")
+	world.player.setup(world.map, Vector2i(10, 12), Vector2i.UP)
+	await world.interact()
+	assert_false(world.map.is_walkable(Vector2i(7, 9)), "never OVERCLOCK")
+
+
+func test_kevin_holds_the_trail_and_clondor_flees() -> void:
+	await _open("cloud_summit")
+	world.player.setup(world.map, Vector2i(6, 20), Vector2i.RIGHT)
+	await _step(Vector2i.RIGHT)
+	assert_true(_logged("I'm here to help"), "Kevin fights beside you now")
+	assert_signal_not_emitted(world, "battle_requested", "no rival battle this time")
+	assert_false(world.map.is_walkable(Vector2i(14, 8)), "the grunt blocks the way up")
+	GameState.flags["trainer_phisher_phoenix"] = true
+	world.player.setup(world.map, Vector2i(15, 6), Vector2i.LEFT)
+	await _step(Vector2i.LEFT)
+	assert_true(GameState.flags.get("clondor_fled", false))
+	assert_true(_logged("CLONDOR"))
+	assert_true(_logged("22 years"), "Cron shows the layoff letter")
+
+
+func test_the_phishing_quiz() -> void:
+	GameState.flags["secops_arrived"] = true
+	await _open("secops_fortress")
+	assert_false(world.map.is_walkable(Vector2i(17, 8)))
+	world.player.setup(world.map, Vector2i(17, 10), Vector2i.LEFT)
+	world.auto_choice = [true]  # clicks the r00tvalley link
+	await world.interact()
+	assert_true(_logged("Zero, not O"))
+	assert_false(GameState.flags.get("phish_test_passed", false))
+	world.auto_choice = [false, false, false, true]
+	await world.interact()
+	assert_true(GameState.flags.get("phish_test_passed", false), "4 out of 4")
+	assert_true(world.map.is_walkable(Vector2i(17, 8)), "the SecOps door opens")
+
+
+func test_kalb_traces_ransom_to_hq_tower() -> void:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 3
+	var team: Array[DaemonInstance] = [DaemonInstance.create("emperoute", 60, rng, 1)]
+	var config := BattleScene.trainer_config("major_kalb")
+	config.merge({"player_stack": team, "items": {}, "auto": true, "time_scale": 0.0, "seed": 2}, true)
+	var scene: BattleScene = load(BattleScene.SCENE).instantiate()
+	scene.setup(config)
+	add_child_autofree(scene)
+	await wait_for_signal(scene.finished, 30.0)
+	assert_eq(scene.result["outcome"], "player_won")
+	assert_true("security" in GameState.certifications)
+	scene.queue_free()
+	await _open("department_5")
+	await wait_until(func() -> bool: return world.is_idle(), 5.0)
+	world.player.setup(world.map, Vector2i(7, 4), Vector2i.UP)
+	await world.interact()
+	assert_true(_logged("HQ Tower"))
+	assert_true(GameState.flags.get("hq_traced", false))

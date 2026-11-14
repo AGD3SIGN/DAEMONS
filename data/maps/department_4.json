@@ -1,0 +1,137 @@
+{
+  "id": "department_4",
+  "name": "Facilities Department",
+  "battle_zone": "server_floor",
+  "music": "department",
+  "legend": {
+    "_": "floor",
+    "I": "interior_wall",
+    "M": "exit_mat",
+    "k": "bookshelf",
+    "c": "server_rack",
+    "b": "bed",
+    "t": "table",
+    "p": "plant",
+    "r": "rug",
+    "C": "counter"
+  },
+  "rows": [
+    "IIIIIIIIIIIIIII",
+    "IIIIIIIIIIIIIII",
+    "I_____c_c_____I",
+    "I_____________I",
+    "I_p_________p_I",
+    "I_____________I",
+    "I_____________I",
+    "I_____________I",
+    "I_____________I",
+    "IIIIIII_IIIIIII",
+    "I_____________I",
+    "I_c___c___c___I",
+    "I_____________I",
+    "I____rrrrr__k_I",
+    "I_____________I",
+    "I_____________I",
+    "I_____________I",
+    "IIIIIIIMIIIIIII"
+  ],
+  "spawns": {
+    "default": {
+      "x": 7,
+      "y": 16,
+      "facing": "up"
+    }
+  },
+  "events": [
+    {
+      "type": "warp",
+      "x": 7,
+      "y": 17,
+      "to_map": "power_plant",
+      "to_spawn": "from_department"
+    },
+    {
+      "type": "trigger",
+      "x": 7,
+      "y": 16,
+      "dialogue": "department_4_welcome",
+      "once_flag": "department_4_welcomed"
+    },
+    {
+      "type": "sign",
+      "x": 2,
+      "y": 11,
+      "dialogue": "brk_main"
+    },
+    {
+      "type": "sign",
+      "x": 6,
+      "y": 11,
+      "dialogue": "brk_cooling"
+    },
+    {
+      "type": "sign",
+      "x": 10,
+      "y": 11,
+      "dialogue": "brk_overclock"
+    },
+    {
+      "type": "sign",
+      "x": 12,
+      "y": 13,
+      "dialogue": "breaker_notes"
+    },
+    {
+      "type": "barrier",
+      "x": 7,
+      "y": 9,
+      "open_flags": [
+        "brk_main",
+        "brk_cooling"
+      ],
+      "closed_flags": [
+        "brk_overclock"
+      ]
+    },
+    {
+      "type": "npc",
+      "id": "electrician_ella",
+      "x": 2,
+      "y": 6,
+      "facing": "right",
+      "trainer": "electrician_ella",
+      "look": {
+        "shirt": "#e0a020",
+        "hair": "#202020",
+        "sprite": "tech_tina"
+      }
+    },
+    {
+      "type": "npc",
+      "id": "hvac_hank",
+      "x": 12,
+      "y": 7,
+      "facing": "left",
+      "trainer": "hvac_hank",
+      "look": {
+        "shirt": "#e0a020",
+        "hair": "#e0a040",
+        "sprite": "tech_theo"
+      }
+    },
+    {
+      "type": "npc",
+      "id": "rolf_brandt",
+      "x": 7,
+      "y": 3,
+      "facing": "down",
+      "trainer": "rolf_brandt",
+      "dialogue": "rolf",
+      "look": {
+        "shirt": "#c08020",
+        "hair": "#e0e0e0",
+        "sprite": "elder"
+      }
+    }
+  ]
+}

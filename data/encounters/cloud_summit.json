@@ -1,0 +1,43 @@
+{
+  "rate": 0.12,
+  "zones": {
+    "cable_tangle": [
+      {
+        "species": "botgeon",
+        "min": 28,
+        "max": 30,
+        "weight": 20
+      },
+      {
+        "species": "meshpider",
+        "min": 28,
+        "max": 30,
+        "weight": 20
+      },
+      {
+        "species": "patchviper",
+        "min": 28,
+        "max": 30,
+        "weight": 15
+      },
+      {
+        "species": "deskclaw",
+        "min": 28,
+        "max": 30,
+        "weight": 15
+      },
+      {
+        "species": "armadrive",
+        "min": 29,
+        "max": 31,
+        "weight": 15
+      },
+      {
+        "species": "fanbat",
+        "min": 29,
+        "max": 31,
+        "weight": 15
+      }
+    ]
+  }
+}

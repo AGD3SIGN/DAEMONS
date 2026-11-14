@@ -36,8 +36,8 @@ Order and types come from data/certifications.json. Names approved 2026-11-13.
 | 1 | Desktop Support | Patch Town | Hardware | **Dana** (built) | "Hardware that refuses to die." | Servurtle 13 |
 | 2 | Networking | Port City | Network | **Ping Okoro** | Harbor-master energy; talks in latency jokes | Calfiber 19 (balance: Orcable was too strong at 20) |
 | 3 | DevOps | DevOps Heights | Software | **Devi Shah** | Deploys on Fridays to prove a point | Mothread 26 |
-| 4 | Facilities | Power Plant | Power | **Rolf Brandt** | Old-school, owns 40 extension cords, all labeled | Surgupine 32 |
-| 5 | SecOps | SecOps Fortress | Security | **Major Vesna Kalb** | Trusts no one, including you, until you pass | Authoberman 38 |
+| 4 | Facilities | Power Plant | Power | **Rolf Brandt** | Old-school, owns 40 extension cords, all labeled | Coolapotamus 35 (placeholder until Power art; Surgupine planned) |
+| 5 | SecOps | SecOps Fortress | Security | **Major Vesna Kalb** | Trusts no one, including you, until you pass | Crabinet 41 (placeholder until Security art; Authoberman planned) |
 | 6 | Data & Analytics | Lakeside Labs (new town) | Data | **Quinn Pivot** | Speaks only in charts | Datadam 43 |
 | 7 | Mobile | Signal Ridge (new town) | Mobile | **Tasha Bars** | Never off her phone; it's always at 2% | Moosetower 48 |
 | 8 | AI Lab | AI Lab campus | AI | **Dr. Ada Lumen** | Kind, a bit too trusting of her models | Neurowl 53 |
@@ -105,6 +105,7 @@ Onboarding Town → Route 1 → Wi-Fi Dead Zone → Patch Town. Wild 2–8, trai
 - End of Act 2: the Manager tells you, quietly, "Keep going. I've got an idea, but it needs Friday."
 
 ### Act 3 — The Breach
+*(Built 2026-11-13. Rolf's and Kalb's teams are placeholders until Power/Security art exists.)*
 **Power Plant (Dept 4).** Wild 24–28, trainers 27–31, ace 32.
 - Ransom is cryptojacking the grid (Cryptleech everywhere). Brownouts hit the valley.
 - Rolf Brandt: Facilities Cert. Uptimus is mentioned in old plant logs (post-game hook).

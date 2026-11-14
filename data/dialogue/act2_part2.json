@@ -74,17 +74,7 @@
   ],
   "power_plant_sign": [
     {
-      "text": "EAST: POWER PLANT. Road closed. Brownouts reported across the valley."
-    }
-  ],
-  "power_plant_closed": [
-    {
-      "speaker": "Facilities",
-      "text": "Power Plant's locked down. Somebody's siphoning the grid. Lights keep flickering."
-    },
-    {
-      "speaker": "Facilities",
-      "text": "(That's as far as the DAEMONS demo goes for now. Thanks for playing!)"
+      "text": "EAST: POWER PLANT. Brownouts reported across the valley. Authorized staff only."
     }
   ],
   "data_center_sign": [
@@ -254,7 +244,7 @@
       "then": [
         {
           "speaker": "Devi",
-          "text": "Ship it, {player}. Ransom's hideout is in the old data center up north. Bring backups. Test them."
+          "text": "Ship it, {player}. After the data center, head east: the Power Plant needs you. Facilities will let you through."
         }
       ],
       "else": [
@@ -448,6 +438,38 @@
         },
         {
           "text": "Somewhere ahead, a door's overheat lock clicks."
+        }
+      ]
+    }
+  ],
+  "power_gate": [
+    {
+      "if_cert": "software",
+      "then": [
+        {
+          "speaker": "Facilities",
+          "text": "Software Cert? Devi said you'd come. Rolf could use help. Something's eating the grid."
+        },
+        {
+          "cmd": "set_flag",
+          "flag": "power_road_open"
+        },
+        {
+          "cmd": "move_npc",
+          "npc": "self",
+          "path": [
+            "down"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "speaker": "Facilities",
+          "text": "Power Plant's locked down. Somebody's siphoning the grid."
+        },
+        {
+          "speaker": "Facilities",
+          "text": "Devi at the DevOps Department has to clear you first."
         }
       ]
     }

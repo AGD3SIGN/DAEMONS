@@ -74,6 +74,11 @@
       "x": 16,
       "y": 1,
       "facing": "down"
+    },
+    "from_power_plant": {
+      "x": 32,
+      "y": 20,
+      "facing": "left"
     }
   },
   "events": [
@@ -210,14 +215,22 @@
     {
       "type": "npc",
       "id": "power_guard",
-      "x": 32,
+      "x": 31,
       "y": 20,
       "facing": "left",
-      "dialogue": "power_plant_closed",
+      "dialogue": "power_gate",
+      "hide_if_flag": "power_road_open",
       "look": {
         "shirt": "#e0a020",
         "hair": "#404040"
       }
+    },
+    {
+      "type": "warp",
+      "x": 33,
+      "y": 20,
+      "to_map": "power_plant",
+      "to_spawn": "west"
     },
     {
       "type": "hidden_item",

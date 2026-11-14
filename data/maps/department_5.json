@@ -1,0 +1,137 @@
+{
+  "id": "department_5",
+  "name": "SecOps Department",
+  "battle_zone": "server_floor",
+  "music": "department",
+  "legend": {
+    "_": "floor",
+    "I": "interior_wall",
+    "M": "exit_mat",
+    "k": "bookshelf",
+    "c": "server_rack",
+    "b": "bed",
+    "t": "table",
+    "p": "plant",
+    "r": "rug",
+    "C": "counter"
+  },
+  "rows": [
+    "IIIIIIIIIIIIIII",
+    "IIIIIIIIIIIIIII",
+    "I_____c_c_____I",
+    "I_____________I",
+    "I_p_________p_I",
+    "I_____________I",
+    "I_____________I",
+    "I_____________I",
+    "I_____________I",
+    "IIIIIII_IIIIIII",
+    "I_____________I",
+    "I_c___c___c___I",
+    "I_____________I",
+    "I____rrrrr__k_I",
+    "I_____________I",
+    "I_____________I",
+    "I_____________I",
+    "IIIIIIIMIIIIIII"
+  ],
+  "spawns": {
+    "default": {
+      "x": 7,
+      "y": 16,
+      "facing": "up"
+    }
+  },
+  "events": [
+    {
+      "type": "warp",
+      "x": 7,
+      "y": 17,
+      "to_map": "secops_fortress",
+      "to_spawn": "from_department"
+    },
+    {
+      "type": "trigger",
+      "x": 7,
+      "y": 16,
+      "dialogue": "department_5_welcome",
+      "once_flag": "department_5_welcomed"
+    },
+    {
+      "type": "sign",
+      "x": 2,
+      "y": 11,
+      "dialogue": "sec_mfa"
+    },
+    {
+      "type": "sign",
+      "x": 6,
+      "y": 11,
+      "dialogue": "sec_logs"
+    },
+    {
+      "type": "sign",
+      "x": 10,
+      "y": 11,
+      "dialogue": "sec_guest"
+    },
+    {
+      "type": "sign",
+      "x": 12,
+      "y": 13,
+      "dialogue": "access_notes"
+    },
+    {
+      "type": "barrier",
+      "x": 7,
+      "y": 9,
+      "open_flags": [
+        "sec_mfa",
+        "sec_logs"
+      ],
+      "closed_flags": [
+        "sec_guest"
+      ]
+    },
+    {
+      "type": "npc",
+      "id": "pen_tester_petra",
+      "x": 2,
+      "y": 6,
+      "facing": "right",
+      "trainer": "pen_tester_petra",
+      "look": {
+        "shirt": "#303848",
+        "hair": "#c02040",
+        "sprite": "tech_tina"
+      }
+    },
+    {
+      "type": "npc",
+      "id": "blue_team_bo",
+      "x": 12,
+      "y": 7,
+      "facing": "left",
+      "trainer": "blue_team_bo",
+      "look": {
+        "shirt": "#2050a0",
+        "hair": "#202020",
+        "sprite": "tech_theo"
+      }
+    },
+    {
+      "type": "npc",
+      "id": "major_kalb",
+      "x": 7,
+      "y": 3,
+      "facing": "down",
+      "trainer": "major_kalb",
+      "dialogue": "kalb",
+      "look": {
+        "shirt": "#303848",
+        "hair": "#a0a0a0",
+        "sprite": "dana"
+      }
+    }
+  ]
+}

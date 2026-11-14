@@ -1,0 +1,242 @@
+{
+  "phisher_phelix": {
+    "name": "Phisher Phelix",
+    "team": [
+      [
+        "botgeon",
+        27
+      ],
+      [
+        "wormhole",
+        27
+      ]
+    ],
+    "ai": "basic",
+    "prize": 1080,
+    "intro": "Don't touch the rig! It's almost mined a whole coin! ...A tenth of a coin!",
+    "defeat": "My hashrate...",
+    "after": "Fine. Unplug it. It cost us more than it made anyway.",
+    "sprite": "phisher_pete",
+    "sight": 3
+  },
+  "phisher_phanie": {
+    "name": "Phisher Phanie",
+    "team": [
+      [
+        "fanbat",
+        26
+      ],
+      [
+        "wormhole",
+        27
+      ]
+    ],
+    "ai": "basic",
+    "prize": 1080,
+    "intro": "Hi! I'm from the power company. Please read me your account number.",
+    "defeat": "That's... not my power company.",
+    "after": "Ransom pays in crypto. Mined right here. Ironic.",
+    "sprite": "phisher_pete",
+    "sight": 3
+  },
+  "lineman_leo": {
+    "name": "Lineman Leo",
+    "team": [
+      [
+        "transistant",
+        27
+      ],
+      [
+        "coolippo",
+        27
+      ]
+    ],
+    "ai": "basic",
+    "prize": 1080,
+    "intro": "I climb poles for a living. You're not even a challenge!",
+    "defeat": "I'm grounded.",
+    "after": "Rolf's the only one who knows where every wire goes. He wrote it all down.",
+    "sprite": "courier",
+    "sight": 3
+  },
+  "electrician_ella": {
+    "name": "Electrician Ella",
+    "team": [
+      [
+        "fanbat",
+        28
+      ],
+      [
+        "transistant",
+        29
+      ]
+    ],
+    "ai": "basic",
+    "prize": 1160,
+    "intro": "Watch your step. Some of these wires are live. So am I!",
+    "defeat": "Short-circuited!",
+    "after": "Rolf labels his labels.",
+    "sprite": "tech_tina",
+    "sight": 4
+  },
+  "hvac_hank": {
+    "name": "HVAC Hank",
+    "team": [
+      [
+        "coolippo",
+        28
+      ],
+      [
+        "coolapotamus",
+        29
+      ]
+    ],
+    "ai": "basic",
+    "prize": 1160,
+    "intro": "Let's turn the heat up. Then down. Then up. HVAC humor.",
+    "defeat": "I'm cooling off.",
+    "after": "The miner had the server room at 40 degrees. Rolf nearly cried.",
+    "sprite": "tech_theo",
+    "sight": 4
+  },
+  "rolf_brandt": {
+    "name": "Department Head Rolf",
+    "team": [
+      [
+        "fanbat",
+        32
+      ],
+      [
+        "meshpider",
+        33
+      ],
+      [
+        "siliqueen",
+        34
+      ],
+      [
+        "coolapotamus",
+        35
+      ]
+    ],
+    "ai": "smart",
+    "prize": 3200,
+    "intro": "Rolf Brandt, Facilities. Forty years keeping the lights on. Someone stole power from MY plant. Show me you can take the load.",
+    "defeat": "Steady current. You've earned the Facilities Cert.",
+    "after": "Uptimus sleeps under this plant, they say. Maybe someday you'll meet it.",
+    "sprite": "elder",
+    "cert": "facilities"
+  },
+  "vacation_val": {
+    "name": "Sysadmin Val",
+    "team": [
+      [
+        "meshpider",
+        30
+      ],
+      [
+        "armadrive",
+        30
+      ]
+    ],
+    "ai": "basic",
+    "prize": 1200,
+    "intro": "I'm on vacation. Which means I only check my email every 4 minutes. Battle!",
+    "defeat": "...I'm checking my email.",
+    "after": "There's no signal up top. Bliss.",
+    "sprite": "jogger_jo",
+    "sight": 3
+  },
+  "phisher_phoenix": {
+    "name": "Phisher Phoenix",
+    "team": [
+      [
+        "botgeon",
+        31
+      ],
+      [
+        "wormhole",
+        31
+      ],
+      [
+        "patchviper",
+        32
+      ]
+    ],
+    "ai": "basic",
+    "prize": 1300,
+    "intro": "Off-site backup? More like off-site... gone. Nobody gets past me.",
+    "defeat": "Somebody got past me.",
+    "after": "Cron's up there. He never looks happy.",
+    "sprite": "phisher_pete",
+    "sight": 2
+  },
+  "pen_tester_petra": {
+    "name": "Pen Tester Petra",
+    "team": [
+      [
+        "proxferret",
+        34
+      ],
+      [
+        "deskclaw",
+        35
+      ]
+    ],
+    "ai": "basic",
+    "prize": 1400,
+    "intro": "I break into things for a living. Legally! Let's test your defenses.",
+    "defeat": "Report filed: target secure.",
+    "after": "Kalb hired me to break in here. I'm still trying.",
+    "sprite": "tech_tina",
+    "sight": 4
+  },
+  "blue_team_bo": {
+    "name": "Blue Team Bo",
+    "team": [
+      [
+        "armadrive",
+        35
+      ],
+      [
+        "servurtle",
+        35
+      ]
+    ],
+    "ai": "basic",
+    "prize": 1400,
+    "intro": "Red team breaks in. Blue team holds the line. Guess which one I am.",
+    "defeat": "The line broke.",
+    "after": "Kalb's Crabinet has never once been breached.",
+    "sprite": "tech_theo",
+    "sight": 4
+  },
+  "major_kalb": {
+    "name": "Major Kalb",
+    "team": [
+      [
+        "armadrive",
+        38
+      ],
+      [
+        "scriptfly",
+        37
+      ],
+      [
+        "siliqueen",
+        40
+      ],
+      [
+        "crabinet",
+        41
+      ]
+    ],
+    "ai": "smart",
+    "prize": 3800,
+    "intro": "Major Vesna Kalb, SecOps. You passed my phishing test and my team. Now pass me.",
+    "defeat": "...Verified. You've earned the Security Cert. And maybe a little trust.",
+    "after": "Talk to me. I have something for you.",
+    "sprite": "dana",
+    "cert": "security"
+  }
+}

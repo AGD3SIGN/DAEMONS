@@ -1,0 +1,186 @@
+{
+  "id": "secops_fortress",
+  "name": "SecOps Fortress",
+  "battle_zone": "server_floor",
+  "music": "town",
+  "legend": {
+    ".": "grass",
+    ",": "path",
+    "\"": "cable_tangle",
+    "~": "water",
+    "T": "tree",
+    "F": "fence",
+    "f": "flowers",
+    "R": "roof_red",
+    "B": "roof_blue",
+    "W": "wall",
+    "w": "window",
+    "D": "door",
+    "L": "ledge",
+    "S": "sign"
+  },
+  "rows": [
+    "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT",
+    "TT..............................TT",
+    "TT..............................TT",
+    "TT........BBBBBBBBBBBBBBB.......TT",
+    "TT........BBBBBBBBBBBBBBB.......TT",
+    "TT...f....BBBBBBBBBBBBBBB...f...TT",
+    "TT........BBBBBBBBBBBBBBB.......TT",
+    "TT........BBBBBBBBBBBBBBB.......TT",
+    "TT........WwwwwwwDwwwwwwW.......TT",
+    "TT...............,..............TT",
+    "TT...............,.S.......f....TT",
+    "TT...............,..............TT",
+    "TT..........f....,..............TT",
+    "TT...............,..............TT",
+    "TT.S.............,.............STT",
+    ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,T",
+    ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FT",
+    "TT....,.........................TT",
+    "TT.BBBBBBB......................TT",
+    "TT.BBBBBBB......................TT",
+    "TT.BBBBBBB..............\"\"\"\"\"\"\"\"TT",
+    "TT.WwwDwwW..............\"\"\"\"\"\"\"\"TT",
+    "TT......................\"\"\"\"\"\"\"\"TT",
+    "TT......................\"\"\"\"\"\"\"\"TT",
+    "TT\"\"\"\"\"\"\"...............\"\"\"\"\"\"\"\"TT",
+    "TT\"\"\"\"\"\"\"...............\"\"\"\"\"\"\"\"TT",
+    "TT\"\"\"\"\"\"\"...............\"\"\"\"\"\"\"\"TT",
+    "TT\"\"\"\"\"\"\"...............\"\"\"\"\"\"\"\"TT",
+    "TT..............................TT",
+    "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"
+  ],
+  "spawns": {
+    "default": {
+      "x": 1,
+      "y": 15,
+      "facing": "right"
+    },
+    "west": {
+      "x": 1,
+      "y": 15,
+      "facing": "right"
+    },
+    "from_help_desk": {
+      "x": 6,
+      "y": 22,
+      "facing": "down"
+    },
+    "from_department": {
+      "x": 17,
+      "y": 9,
+      "facing": "down"
+    }
+  },
+  "events": [
+    {
+      "type": "warp",
+      "x": 0,
+      "y": 15,
+      "to_map": "cloud_summit",
+      "to_spawn": "east"
+    },
+    {
+      "type": "warp",
+      "x": 0,
+      "y": 16,
+      "to_map": "cloud_summit",
+      "to_spawn": "east"
+    },
+    {
+      "type": "warp",
+      "x": 6,
+      "y": 21,
+      "to_map": "help_desk_secops",
+      "to_spawn": "default"
+    },
+    {
+      "type": "warp",
+      "x": 17,
+      "y": 8,
+      "to_map": "department_5",
+      "to_spawn": "default"
+    },
+    {
+      "type": "barrier",
+      "x": 17,
+      "y": 8,
+      "open_flags": [
+        "phish_test_passed"
+      ]
+    },
+    {
+      "type": "trigger",
+      "x": 1,
+      "y": 15,
+      "w": 1,
+      "h": 2,
+      "dialogue": "secops_arrival",
+      "once_flag": "secops_arrived"
+    },
+    {
+      "type": "sign",
+      "x": 19,
+      "y": 10,
+      "dialogue": "department_5_sign"
+    },
+    {
+      "type": "sign",
+      "x": 3,
+      "y": 14,
+      "dialogue": "secops_sign"
+    },
+    {
+      "type": "sign",
+      "x": 31,
+      "y": 14,
+      "dialogue": "act4_road_sign"
+    },
+    {
+      "type": "npc",
+      "id": "gate_sentry",
+      "x": 16,
+      "y": 10,
+      "facing": "right",
+      "dialogue": "phishing_quiz",
+      "look": {
+        "shirt": "#303848",
+        "hair": "#202020"
+      }
+    },
+    {
+      "type": "npc",
+      "id": "act4_guard",
+      "x": 31,
+      "y": 15,
+      "facing": "left",
+      "dialogue": "act4_closed",
+      "look": {
+        "shirt": "#303848",
+        "hair": "#c0c0c0"
+      }
+    },
+    {
+      "type": "npc",
+      "id": "secops_analyst",
+      "x": 24,
+      "y": 12,
+      "facing": "down",
+      "wander": true,
+      "dialogue": "secops_analyst",
+      "look": {
+        "shirt": "#303848",
+        "hair": "#e0a040",
+        "sprite": "signal_hunter_hal"
+      }
+    },
+    {
+      "type": "hidden_item",
+      "x": 2,
+      "y": 27,
+      "item": "hard_reboot",
+      "flag": "hidden_secops_reboot"
+    }
+  ]
+}

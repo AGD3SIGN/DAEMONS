@@ -275,3 +275,31 @@ func test_devi_is_beatable_around_level_26() -> void:
 		assert_gte(at_28, 18, "%s path at Lv28 should usually win (30%%+)" % starter)
 		assert_gte(at_26, 6, "%s path at Lv26 should be possible (10%%+)" % starter)
 	gut.p("Devi balance (no items, basic-AI player):\n" + "\n".join(report))
+
+
+func _boss_wins(boss: String, starter: String, partners: Array, level: int) -> int:
+	var wins := 0
+	for i in 60:
+		var team: Array[DaemonInstance] = [_daemon(starter, level, i)]
+		for j in partners.size():
+			team.append(_daemon(partners[j], level - 2 - j, i + 100 * (j + 1)))
+		var foe: Array[DaemonInstance] = []
+		for entry: Array in DataRegistry.trainers[boss]["team"]:
+			foe.append(_daemon(entry[0], int(entry[1]), i + 300))
+		if _sim(team, foe, i, DataRegistry.trainers[boss]["ai"]) == "player_won":
+			wins += 1
+	return wins
+
+
+func test_rolf_and_kalb_are_beatable_on_every_path() -> void:
+	var report := PackedStringArray()
+	var bosses := {"rolf_brandt": [35, ["botgeon", "patchviper"]], "major_kalb": [41, ["botgeon", "orcable", "patchviper"]]}
+	for boss: String in bosses:
+		var ace: int = bosses[boss][0]
+		for starter in ["munkboard", "pengwan", "scriptfly"]:
+			var at_ace_plus_2 := _boss_wins(boss, starter, bosses[boss][1], ace + 2)
+			var at_ace := _boss_wins(boss, starter, bosses[boss][1], ace)
+			report.append("%-12s %-9s Lv%d: %2d/60   Lv%d: %2d/60" % [boss, starter, ace + 2, at_ace_plus_2, ace, at_ace])
+			assert_gte(at_ace_plus_2, 18, "%s, %s path at Lv%d should usually win" % [boss, starter, ace + 2])
+			assert_gte(at_ace, 6, "%s, %s path at Lv%d should be possible" % [boss, starter, ace])
+	gut.p("Act 3 boss balance (no items, basic-AI player):\n" + "\n".join(report))

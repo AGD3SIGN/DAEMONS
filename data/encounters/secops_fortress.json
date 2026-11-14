@@ -1,0 +1,43 @@
+{
+  "rate": 0.12,
+  "zones": {
+    "cable_tangle": [
+      {
+        "species": "armadrive",
+        "min": 31,
+        "max": 33,
+        "weight": 20
+      },
+      {
+        "species": "servurtle",
+        "min": 31,
+        "max": 33,
+        "weight": 15
+      },
+      {
+        "species": "deskclaw",
+        "min": 31,
+        "max": 33,
+        "weight": 20
+      },
+      {
+        "species": "proxferret",
+        "min": 31,
+        "max": 33,
+        "weight": 15
+      },
+      {
+        "species": "transistant",
+        "min": 31,
+        "max": 33,
+        "weight": 15
+      },
+      {
+        "species": "wormhole",
+        "min": 31,
+        "max": 33,
+        "weight": 15
+      }
+    ]
+  }
+}

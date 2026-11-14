@@ -1,0 +1,221 @@
+{
+  "id": "power_plant",
+  "name": "Root Valley Power Plant",
+  "battle_zone": "overheat",
+  "music": "town",
+  "tint": "#c4c0b8",
+  "legend": {
+    ".": "grass",
+    ",": "path",
+    "\"": "cable_tangle",
+    "~": "water",
+    "T": "tree",
+    "F": "fence",
+    "f": "flowers",
+    "R": "roof_red",
+    "B": "roof_blue",
+    "W": "wall",
+    "w": "window",
+    "D": "door",
+    "L": "ledge",
+    "S": "sign"
+  },
+  "rows": [
+    "TTTTTTTTTTTTTTTT,,TTTTTTTTTTTTTTTT",
+    "TT..............,,..............TT",
+    "TT..............,,..RRRRRRRRRRR.TT",
+    "TT..WWW..WWW....,,..RRRRRRRRRRR.TT",
+    "TT..WWW..WWW....,,..RRRRRRRRRRR.TT",
+    "TT..WWW..WWW....,,..RRRRRRRRRRR.TT",
+    "TT..............,,..WwwwwDwwwwW.TT",
+    "TTf.............,,.....S.,......TT",
+    "TT..BBBBBBB..f..,,.......,.S....TT",
+    "TT..BBBBBBB.....,,.......,......TT",
+    "TT..BBBBBBB.....,,.......,......TT",
+    "TT..WwwDwwW.....,,.......,......TT",
+    "TT.....,........,,.......,......TT",
+    "TT.....,........,,.......,......TT",
+    "TT.S...,........,,.......,......TT",
+    ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,.TT",
+    ",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,.TT",
+    "TT..............,,..............TT",
+    "TT..............,,..............TT",
+    "TT.\"\"\"\"\"\"\"\".....,,..FFFFFFFFFFFFTT",
+    "TT.\"\"\"\"\"\"\"\"..f..,,..F\"\"\"\"\"\"\"\"\"\"FTT",
+    "TT.\"\"\"\"\"\"\"\".....,,..F\"\"\"\"\"\"\"\"\"\"FTT",
+    "TT.\"\"\"\"\"\"\"\".....,,..F\"\"\"\"\"\"\"\"\"\"FTT",
+    "TT.\"\"\"\"\"\"\"\".....,,..,\"\"\"\"\"\"\"\"\"\"FTT",
+    "TT.\"\"\"\"\"\"\"\".....,,..F\"\"\"\"\"\"\"\"\"\"FTT",
+    "TT.\"\"\"\"\"\"\"\".....,,..F\"\"\"\"\"\"\"\"\"\"FTT",
+    "TT.\"\"\"\"\"\"\"\".....,,..F\"\"\"\"\"\"\"\"\"\"FTT",
+    "TT..............,,..FFFFFFFFFFFFTT",
+    "TT..............,,..............TT",
+    "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"
+  ],
+  "spawns": {
+    "default": {
+      "x": 1,
+      "y": 15,
+      "facing": "right"
+    },
+    "west": {
+      "x": 1,
+      "y": 15,
+      "facing": "right"
+    },
+    "from_help_desk": {
+      "x": 7,
+      "y": 12,
+      "facing": "down"
+    },
+    "from_department": {
+      "x": 25,
+      "y": 7,
+      "facing": "down"
+    },
+    "from_summit": {
+      "x": 16,
+      "y": 1,
+      "facing": "down"
+    }
+  },
+  "events": [
+    {
+      "type": "warp",
+      "x": 0,
+      "y": 15,
+      "to_map": "devops_heights",
+      "to_spawn": "from_power_plant"
+    },
+    {
+      "type": "warp",
+      "x": 0,
+      "y": 16,
+      "to_map": "devops_heights",
+      "to_spawn": "from_power_plant"
+    },
+    {
+      "type": "warp",
+      "x": 7,
+      "y": 11,
+      "to_map": "help_desk_power",
+      "to_spawn": "default"
+    },
+    {
+      "type": "warp",
+      "x": 25,
+      "y": 6,
+      "to_map": "department_4",
+      "to_spawn": "default"
+    },
+    {
+      "type": "barrier",
+      "x": 25,
+      "y": 6,
+      "open_flags": [
+        "miner_unplugged"
+      ]
+    },
+    {
+      "type": "warp",
+      "x": 16,
+      "y": 0,
+      "to_map": "cloud_summit",
+      "to_spawn": "south"
+    },
+    {
+      "type": "warp",
+      "x": 17,
+      "y": 0,
+      "to_map": "cloud_summit",
+      "to_spawn": "south"
+    },
+    {
+      "type": "trigger",
+      "x": 1,
+      "y": 15,
+      "w": 1,
+      "h": 2,
+      "dialogue": "power_plant_arrival",
+      "once_flag": "power_plant_arrived"
+    },
+    {
+      "type": "sign",
+      "x": 3,
+      "y": 14,
+      "dialogue": "power_plant_town_sign"
+    },
+    {
+      "type": "sign",
+      "x": 23,
+      "y": 7,
+      "dialogue": "department_4_sign"
+    },
+    {
+      "type": "sign",
+      "x": 27,
+      "y": 8,
+      "dialogue": "miner_rig"
+    },
+    {
+      "type": "npc",
+      "id": "phisher_phelix",
+      "x": 28,
+      "y": 10,
+      "facing": "left",
+      "trainer": "phisher_phelix",
+      "look": {
+        "shirt": "#505860",
+        "hair": "#40a040",
+        "sprite": "phisher_pete"
+      }
+    },
+    {
+      "type": "npc",
+      "id": "phisher_phanie",
+      "x": 12,
+      "y": 22,
+      "facing": "up",
+      "trainer": "phisher_phanie",
+      "look": {
+        "shirt": "#505860",
+        "hair": "#e04040",
+        "sprite": "phisher_pete"
+      }
+    },
+    {
+      "type": "npc",
+      "id": "lineman_leo",
+      "x": 19,
+      "y": 12,
+      "facing": "left",
+      "trainer": "lineman_leo",
+      "look": {
+        "shirt": "#e08020",
+        "hair": "#202020",
+        "sprite": "courier"
+      }
+    },
+    {
+      "type": "npc",
+      "id": "plant_worker",
+      "x": 13,
+      "y": 13,
+      "facing": "down",
+      "wander": true,
+      "dialogue": "plant_worker",
+      "look": {
+        "shirt": "#e0c020",
+        "hair": "#603018",
+        "sprite": "sysadmin_sam"
+      }
+    },
+    {
+      "type": "hidden_item",
+      "x": 30,
+      "y": 26,
+      "item": "hardware_token",
+      "flag": "hidden_plant_token"
+    }
+  ]
+}
