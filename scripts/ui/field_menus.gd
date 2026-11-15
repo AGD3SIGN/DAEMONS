@@ -23,6 +23,7 @@ var summary: SummaryPanel
 var cmdb_panel: CmdbPanel
 var card: TrainerCardPanel
 var phone: Phone
+var yes_no: MenuList     # bottom-right, just above the text box: the overworld's YES / NO
 
 var _qty_panel: Panel
 var _qty_label: Label
@@ -55,6 +56,9 @@ func _ready() -> void:
 	add_child(card)
 	phone = Phone.new()
 	add_child(phone)
+	yes_no = MenuList.new()
+	yes_no.setup(Vector4(1, 1, 1, 1), Vector4(-62, -50 - (5 + 2 * MenuList.ROW_H + 5), -4, -50), 2)
+	add_child(yes_no)
 	_qty_panel = Panel.new()
 	_qty_panel.anchor_left = 1
 	_qty_panel.anchor_right = 1
@@ -107,6 +111,7 @@ func open_pause(start_app: String = "") -> void:
 			"DEBUG":
 				SceneRouter.goto(DEBUG_MENU)
 				return
+		_hide_talk()  # e.g. "Saved." must not linger over the next app (Brandon, 2026-11-15)
 		app = ""
 		start_app = ""
 
@@ -929,6 +934,18 @@ func _sell() -> void:
 func _hide_talk() -> void:
 	if world != null:
 		world.text_box.visible = false
+		world.hide_speaker()
+
+
+## YES / NO next to the text box (the question itself is in the text box). BACK counts as NO.
+## default_yes = false starts on NO, for anything that throws something away.
+func confirm(default_yes: bool = true) -> bool:
+	if world != null:  # stay clear of the touch buttons on the right
+		yes_no.offset_right = -4.0 - TouchControls.reserved_right()
+		yes_no.offset_left = yes_no.offset_right - 58.0
+	var r := await yes_no.choose("", PackedStringArray(["YES", "NO"]), [], 0 if default_yes else 1)
+	yes_no.close()
+	return r["action"] == "pick" and r["index"] == 0
 
 
 # --- quantity chooser --------------------------------------------------------

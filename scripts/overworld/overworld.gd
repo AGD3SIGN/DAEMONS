@@ -30,7 +30,6 @@ var allow_scene_change := true       # false: start_battle only emits battle_req
 var dialogue_log: Array[String] = []  # every line shown, in order
 
 var text_box: TextBox
-var menu: BattleMenu
 var control_hint: ControlHint
 var field_menus: FieldMenus
 var _speaker_tab: Panel
@@ -436,7 +435,7 @@ func ask(question: String, speaker: String = "", default_yes: bool = true) -> bo
 		if auto_choice is Array:  # tests: answers in order (e.g. a quiz), then "no"
 			return bool(auto_choice.pop_front()) if not auto_choice.is_empty() else false
 		return bool(auto_choice)
-	return await menu.confirm(default_yes)
+	return await field_menus.confirm(default_yes)
 
 
 ## Walks the player along a path during a cutscene (no warps, triggers or encounters).
@@ -556,14 +555,16 @@ func _build_ui() -> void:
 	_speaker_label.position = Vector2(7, 5)
 	_speaker_tab.add_child(_speaker_label)
 
-	menu = BattleMenu.new()
-	root.add_child(menu)
 
 	_fade = ColorRect.new()
 	_fade.color = Color(0, 0, 0, 0)
 	_fade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_fade.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	root.add_child(_fade)
+
+
+func hide_speaker() -> void:
+	_speaker_tab.visible = false
 
 
 ## True while the area-name banner is on screen (the corner control hint steps aside for it).

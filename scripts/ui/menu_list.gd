@@ -15,6 +15,7 @@ var cancellable := true
 var describe: Callable  # optional (index) -> String shown in the footer
 
 var _title: Label
+var _box: VBoxContainer
 var _left_arrow: Button
 var _right_arrow: Button
 var _rows: Array[Button] = []
@@ -49,6 +50,7 @@ func setup(anchors: Vector4, offsets: Vector4, rows: int, footer_lines: int = 0)
 	box.position = Vector2(4, 17)
 	box.add_theme_constant_override("separation", 0)
 	add_child(box)
+	_box = box
 	for i in rows:
 		var row := Button.new()
 		row.flat = true
@@ -79,6 +81,7 @@ func choose(title: String, items: PackedStringArray, enabled: Array = [], start:
 	_items = items
 	_enabled = enabled
 	_title.text = title
+	_box.position.y = 17 if not title.is_empty() else 5  # no title: rows start at the top
 	_cursor = clampi(start, 0, maxi(0, items.size() - 1))
 	_top = 0
 	_scroll_to_cursor()

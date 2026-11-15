@@ -109,7 +109,7 @@ func test_mashing_accept_never_replaces_a_move() -> void:
 	# Back out: cancel the list, then say YES to skipping.
 	await _tap("ui_cancel")
 	await wait_process_frames(2)
-	world.menu._confirm_buttons[0].pressed.emit()
+	await _tap("ui_up")  # NO -> YES (skip learning it)
 	for i in 6:
 		await _tap("ui_accept")
 		if done[0]:

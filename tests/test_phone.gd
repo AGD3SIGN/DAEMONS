@@ -115,6 +115,8 @@ func test_menu_button_opens_the_phone_and_map_button_opens_maps() -> void:
 	assert_eq(phone.map_cursor, "route_1")
 	await _press("ui_cancel")
 	await wait_until(func() -> bool: return world.is_idle(), 5.0)
+	SaveManager.delete_saves()
+	SaveManager.slot_paths = SaveManager.SLOT_PATHS
 	assert_false(phone.visible, "closing Maps from the map button puts the phone away")
 	await _press("menu")
 	await wait_until(func() -> bool: return phone.mode == "home", 5.0)
@@ -127,6 +129,8 @@ func test_menu_button_opens_the_phone_and_map_button_opens_maps() -> void:
 	assert_eq(phone.mode, "home", "from the home screen, closing Maps goes back home")
 	await _press("ui_cancel")
 	await wait_until(func() -> bool: return world.is_idle(), 5.0)
+	SaveManager.delete_saves()
+	SaveManager.slot_paths = SaveManager.SLOT_PATHS
 	assert_false(phone.visible)
 
 
@@ -134,3 +138,37 @@ func test_phone_lists_every_old_menu_entry() -> void:
 	var ids := Phone.new().app_ids()
 	for app in ["MAP", "CMDB", "STACK", "BAG", "CARD", "SAVE", "CONTROLS", "OPTIONS", "FEEDBACK"]:
 		assert_has(ids, app)
+
+
+func test_yes_no_box_is_on_screen_and_answers() -> void:
+	await _open("route_1")
+	var answer := [null]
+	var run := func() -> void: answer[0] = await world.ask("Save your progress?")
+	run.call()
+	await wait_process_frames(2)
+	var box: MenuList = world.field_menus.yes_no
+	assert_true(box.is_choosing(), "YES / NO is showing")
+	assert_true(get_viewport().get_visible_rect().encloses(box.get_global_rect()), "and on screen: %s" % box.get_global_rect())
+	await _press("ui_down")    # YES -> NO
+	await _press("ui_accept")
+	await wait_until(func() -> bool: return answer[0] != null, 5.0)
+	assert_eq(answer[0], false)
+
+
+func test_saved_message_doesnt_linger_over_the_next_app() -> void:
+	SaveManager.slot_paths = PackedStringArray(["user://test_phone_save_a.json", "user://test_phone_save_b.json"])
+	await _open("route_1")
+	var phone: Phone = world.field_menus.phone
+	await _press("menu")
+	await wait_until(func() -> bool: return phone.mode == "home", 5.0)
+	phone.selected = phone.app_ids().find("SAVE")
+	await _press("ui_accept")
+	await wait_until(func() -> bool: return world.field_menus.yes_no.is_choosing(), 5.0)
+	await _press("ui_accept")  # YES
+	await wait_until(func() -> bool: return phone.mode == "home", 10.0)
+	assert_eq(phone.mode, "home", "back on the phone after saving")
+	assert_false(world.text_box.visible, "the Saved. message is gone")
+	await _press("ui_cancel")
+	await wait_until(func() -> bool: return world.is_idle(), 5.0)
+	SaveManager.delete_saves()
+	SaveManager.slot_paths = SaveManager.SLOT_PATHS
