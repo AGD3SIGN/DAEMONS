@@ -1,0 +1,142 @@
+{
+  "note": "GDD demo = Acts 1-2. Encounter tables in these areas may only use species with demo: true. pending_candidates are expansion creatures already placed there, waiting for Brandon to approve (set demo: true) or reject (remove them from the tables); the check allows only these while they're pending.",
+  "act_1_2_areas": [
+    "onboarding_town",
+    "route_1",
+    "patch_town",
+    "route_2",
+    "wifi_dead_zone",
+    "port_city"
+  ],
+  "pending_candidates": [
+    {
+      "species": "clawptop",
+      "number": 28,
+      "name": "Clawptop",
+      "areas": [
+        "wifi_dead_zone"
+      ],
+      "also_on_trainers": []
+    },
+    {
+      "species": "antsistor",
+      "number": 31,
+      "name": "Antsistor",
+      "areas": [
+        "route_1"
+      ],
+      "also_on_trainers": []
+    },
+    {
+      "species": "coolippo",
+      "number": 34,
+      "name": "Coolippo",
+      "areas": [
+        "wifi_dead_zone"
+      ],
+      "also_on_trainers": []
+    },
+    {
+      "species": "dillodisk",
+      "number": 36,
+      "name": "Dillodisk",
+      "areas": [
+        "route_1",
+        "route_2"
+      ],
+      "also_on_trainers": []
+    },
+    {
+      "species": "pasteslug",
+      "number": 38,
+      "name": "Pasteslug",
+      "areas": [
+        "route_1"
+      ],
+      "also_on_trainers": []
+    },
+    {
+      "species": "pixelsier",
+      "number": 39,
+      "name": "Pixelsier",
+      "areas": [
+        "wifi_dead_zone"
+      ],
+      "also_on_trainers": [
+        "Gamer Gabe"
+      ]
+    },
+    {
+      "species": "tieweaver",
+      "number": 40,
+      "name": "Tieweaver",
+      "areas": [
+        "port_city",
+        "route_2",
+        "wifi_dead_zone"
+      ],
+      "also_on_trainers": [
+        "Lineworker Lou",
+        "Net Admin Nia"
+      ]
+    },
+    {
+      "species": "spinode",
+      "number": 41,
+      "name": "Spinode",
+      "areas": [
+        "port_city",
+        "route_2",
+        "wifi_dead_zone"
+      ],
+      "also_on_trainers": [
+        "Department Head Ping",
+        "Net Admin Nia",
+        "Phisher Phil"
+      ]
+    },
+    {
+      "species": "calfiber",
+      "number": 44,
+      "name": "Calfiber",
+      "areas": [
+        "port_city"
+      ],
+      "also_on_trainers": [
+        "Department Head Ping"
+      ]
+    },
+    {
+      "species": "proxkit",
+      "number": 46,
+      "name": "Proxkit",
+      "areas": [
+        "port_city",
+        "route_2"
+      ],
+      "also_on_trainers": [
+        "Department Head Ping",
+        "Packet Pat"
+      ]
+    },
+    {
+      "species": "hummodem",
+      "number": 48,
+      "name": "Hummodem",
+      "areas": [
+        "route_2",
+        "wifi_dead_zone"
+      ],
+      "also_on_trainers": []
+    },
+    {
+      "species": "jellyband",
+      "number": 49,
+      "name": "Jellyband",
+      "areas": [
+        "port_city"
+      ],
+      "also_on_trainers": []
+    }
+  ]
+}

@@ -102,6 +102,7 @@ var balance: Dictionary = {}       # EXP rate and blackout penalty (data/balance
 var region_map: Dictionary = {}    # phone Maps app layout (data/region_map.json)
 var demo_end: Dictionary = {}      # end-of-demo card and credits (data/demo_end.json)
 var level_caps: Array = []         # level cap per Certification count (data/level_caps.json)
+var demo_roster: Dictionary = {}   # demo areas + pending candidates (data/demo_roster.json)
 
 
 ## raw = {"types": ..., "moves": ..., "species": ..., "items": ..., "config_profiles": ...}
@@ -136,6 +137,7 @@ func validate(raw: Dictionary) -> PackedStringArray:
 	_validate_region_map(raw.get("region_map"))
 	_validate_demo_end(raw.get("demo_end"))
 	_validate_level_caps(raw.get("level_caps"))
+	_validate_demo_roster(raw.get("demo_roster"))
 	return errors
 
 
@@ -820,6 +822,8 @@ func _validate_corrupted(s: Dictionary, where: String) -> void:
 
 func _validate_species(s: Dictionary, where: String) -> void:
 	_string(s, "name", where)
+	if typeof(s.get("demo")) != TYPE_BOOL:
+		_err(where, "'demo' must be true or false (in the Acts 1-2 demo?)")
 	if s.has("corrupted"):
 		_validate_corrupted(s, where + " › corrupted")
 	_one_of(s, "growth_rate", where, GROWTH_RATES)
@@ -1032,6 +1036,32 @@ func _validate_feedback(raw: Variant) -> void:
 	var categories: Variant = raw.get("categories")
 	if typeof(categories) != TYPE_ARRAY or categories.is_empty():
 		_err("feedback", "'categories' must be a non-empty list")
+
+
+# --- demo roster -----------------------------------------------------------------
+
+## GDD demo = Acts 1-2. Every species has "demo": true/false; encounter tables in the Acts 1-2 areas may only use
+## demo species, plus the expansion creatures listed as pending_candidates (waiting for Brandon's approval).
+func _validate_demo_roster(raw: Variant) -> void:
+	demo_roster = {}
+	if typeof(raw) != TYPE_DICTIONARY or typeof(raw.get("act_1_2_areas")) != TYPE_ARRAY:
+		_err("demo_roster", "must list 'act_1_2_areas'")
+		return
+	demo_roster = raw
+	var pending := {}
+	for c: Variant in raw.get("pending_candidates", []):
+		var id := String(c.get("species", "")) if typeof(c) == TYPE_DICTIONARY else ""
+		if not species.has(id):
+			_err("demo_roster › pending_candidates", "unknown species '%s'" % id)
+		elif species[id].get("demo", false):
+			_err("demo_roster › pending_candidates", "'%s' is already demo: true; take it off the list" % id)
+		pending[id] = true
+	for area: Variant in raw["act_1_2_areas"]:
+		for zone: Variant in encounters.get(area, {}).get("zones", {}).values():
+			for slot: Variant in zone:
+				var id := String(slot.get("species", ""))
+				if species.has(id) and not species[id].get("demo", false) and not pending.has(id):
+					_err("encounters › %s" % area, "'%s' isn't in the demo roster (demo: false) and isn't a pending candidate" % id)
 
 
 # --- level caps ----------------------------------------------------------------
