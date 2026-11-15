@@ -122,3 +122,47 @@ maps, dialogue). Nothing has been changed yet.
   earlier Battle Scene Spec)?
 - **Q5 (C15)** Is the GDD's "Dept 1 cable-routing gym" a request to change Dept 1's puzzle, or a loose reference to
   the existing puzzles?
+
+---
+
+## Session results (2026-11-15, steps 2–10)
+
+Your answers: Q1 → follow the GDD (Acts 1–2 map order done now, later acts in the backlog); Q2 → rewrite the built
+Act 1–2 beats this session; Q3 → list the expansion creatures as pending candidates; Q4 → keep EXECUTE / STACK /
+INVENTORY / DISCONNECT (the GDD's FIGHT / STACK / BAG / RUN should be updated to match); Q5 → no answer yet, Dept 1
+keeps ticket triage.
+
+| Conflict | Status |
+|---|---|
+| C1 design.md story | Fixed: short summary pointing to gdd.md §4 |
+| C2 region order | design.md fixed. Acts 1–2 maps rewired to the GDD order (Route 1 → Patch Town → Route 2 → Wi-Fi Dead Zone → Port City); the Dead Zone moved to Act 2 levels. Routes 3–4, the Power Plant before the Data Center, and the Data Dept remain backlog |
+| C3 tagline | Fixed: CATCH · CLEAN · RESTORE (PENDING_APPROVAL), only in data/title_screen.json |
+| C4 CLAUDE.md | Fixed |
+| C5 stubs | Fixed: 19 area files for the 7 acts |
+| C6 built Act 1–2 beats | Fixed: phishing email instead of -R, Port 443 only flickers ("bad signal"), Pyrewall stays up, Help Desk closed for rewiring, Zed removed from Port City, Kevin at trouble spots. Later-act content (Cron, Marge, Sudofox at the Data Center) is outside the demo and still old |
+| C7 corruption gating | Fixed: corruption_revealed (Power Plant), zero chances before it, validator check, hidden UI |
+| C8 demo ending | Fixed: Port City teaser after Cert 2; DEMO_BUILD ends there |
+| C9 level cap | Fixed (placeholder caps, TBD) |
+| C10 upgrade triggers | Fixed: flag and cert added |
+| C11 demo roster | Field + check added; 12 pending candidates in data/demo_roster.json |
+| C12 Nos. 023–025 | Still missing (demo backlog D3) |
+| C13 cert order | Fixed: Data is Cert 5, Security Cert 6 |
+| C14 battle menu | Kept by your choice; update the GDD |
+| C15 Dept 1 puzzle | Waiting on Q5 |
+
+### Input audit (step 9)
+- Every screen works with keyboard and controller (all actions have pad bindings, checked by a test).
+- Touch: every screen is reachable through the touch layer (web phone deck in portrait, the in-game overlay in
+  landscape: d-pad, A, B, MENU, RUN), plus direct taps on menus, the phone, Maps, YES/NO, the battle menus, the
+  CMDB/trainer card and the end card. Maps on touch is through the phone (no separate button).
+- Fixed: the Summary screen only closed on a tap; tapping its left or right edge now flips pages.
+- Gaps for the demo (D9): mouse-only desktop play can't walk the overworld, change Options values or use the
+  quantity picker without a keyboard (touch and controller can); no remapping yet; no hold-vs-toggle for RUN.
+
+### Demo candidates waiting for you (step 8)
+From the Acts 1–2 encounter tables (the master roster isn't in the repo, so this uses where they live in the game):
+Clawptop #028 (Dead Zone), Antsistor #031 (Route 1), Coolippo #034 (Dead Zone), Dillodisk #036 (Route 1, Route 2),
+Pasteslug #038 (Route 1), Pixelsier #039 (Dead Zone; Gamer Gabe), Tieweaver #040 (Route 2, Dead Zone, Port City;
+Lineworker Lou, Net Admin Nia), Spinode #041 (Route 2, Dead Zone, Port City; Ping, Nia, Phisher Phil), Calfiber #044
+(Port City; Ping), Proxkit #046 (Route 2, Port City; Ping, Packet Pat), Hummodem #048 (Route 2, Dead Zone),
+Jellyband #049 (Port City).

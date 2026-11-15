@@ -97,3 +97,23 @@ func test_battle_names_who_you_face() -> void:
 	GameState.cmdb_seen["dustbunny"] = true
 	assert_eq(scene.host_label(), "DUSTBUNNY", "named once it's in your CMDB")
 	scene.free()
+
+
+func test_summary_pages_flip_with_a_tap_on_the_edges() -> void:
+	var panel := SummaryPanel.new()
+	add_child_autofree(panel)
+	await wait_process_frames(1)
+	var w := panel.size.x
+	assert_eq(panel.tap_page(1), -1, "left edge: previous page")
+	assert_eq(panel.tap_page(w - 1), 1, "right edge: next page")
+	assert_eq(panel.tap_page(w / 2.0), 0, "middle: close, as before")
+
+
+func test_every_action_has_a_controller_button_and_a_touch_path() -> void:
+	for action in ["ui_accept", "ui_cancel", "ui_up", "ui_down", "ui_left", "ui_right", "menu", "run", "map"]:
+		var pad := InputMap.action_get_events(action).any(func(e: InputEvent) -> bool:
+			return e is InputEventJoypadButton or e is InputEventJoypadMotion)
+		assert_true(pad, "%s has a controller binding" % action)
+	for action in ["ui_accept", "ui_cancel", "menu", "run"]:
+		assert_has(TouchControls.DECK_ACTIONS, action, "%s is on the touch deck" % action)
+	assert_eq(InputPrompts.label("map", "touch"), "Maps on your phone", "touch reaches the map through the phone")

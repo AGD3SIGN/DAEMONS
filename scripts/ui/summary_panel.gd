@@ -54,6 +54,15 @@ func open(stack: Array, index: int) -> void:
 	visible = false
 
 
+## -1 / +1 for a tap in the left / right quarter of the panel, 0 in the middle.
+func tap_page(x: float) -> int:
+	if x < size.x * 0.25:
+		return -1
+	if x > size.x * 0.75:
+		return 1
+	return 0
+
+
 func _unhandled_input(event: InputEvent) -> void:
 	if not _open:
 		return
@@ -65,6 +74,10 @@ func _unhandled_input(event: InputEvent) -> void:
 		_index = wrapi(_index + 1, 0, _stack.size())
 	elif event.is_action_pressed("ui_up"):
 		_index = wrapi(_index - 1, 0, _stack.size())
+	elif event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT \
+			and tap_page(get_local_mouse_position().x) != 0:
+		# Touch / mouse: tap the left or right edge to flip pages (the d-pad isn't the only way); middle closes.
+		_page = wrapi(_page + tap_page(get_local_mouse_position().x), 0, PAGES.size())
 	elif event.is_action_pressed("ui_cancel") or event.is_action_pressed("ui_accept") \
 			or (event is InputEventMouseButton and event.pressed):
 		_open = false
