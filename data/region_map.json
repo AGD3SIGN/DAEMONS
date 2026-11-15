@@ -1,46 +1,221 @@
 {
   "name": "Root Valley",
   "locations": [
-    { "id": "onboarding_town", "label_at": "right", "name": "Onboarding Town", "kind": "town", "x": 34, "y": 122,
-      "maps": ["onboarding_town", "player_house", "kevin_house", "help_desk"],
-      "blurb": "Home. The Help Desk HQ, and Marge's office." },
-    { "id": "route_1", "name": "Route 1: Cable Run", "kind": "route", "x": 34, "y": 92,
-      "maps": ["route_1"], "blurb": "A cable run through tall grass. Dustbunnies everywhere." },
-    { "id": "wifi_dead_zone", "name": "Wi-Fi Dead Zone", "kind": "wild", "x": 34, "y": 58,
-      "maps": ["wifi_dead_zone"], "blurb": "Dark woods. No bars. Something hums in there." },
-    { "id": "patch_town", "label_at": "above", "name": "Patch Town", "kind": "town", "x": 82, "y": 34,
-      "maps": ["patch_town", "department_1", "help_desk_patch"],
-      "blurb": "Desktop Support Department. Dana fixes what won't die." },
-    { "id": "route_2", "name": "Route 2", "kind": "route", "x": 128, "y": 34,
-      "maps": ["route_2"], "blurb": "Still under construction. Mind the open trenches." },
-    { "id": "port_city", "label_at": "below", "name": "Port City", "kind": "town", "x": 176, "y": 26,
-      "maps": ["port_city", "department_2"],
-      "blurb": "Harbor town on Port 443. Networking Department." },
-    { "id": "the_basement", "name": "The Basement", "kind": "dungeon", "x": 176, "y": 62,
-      "maps": ["the_basement"], "blurb": "Old servers, older tapes. Nobody comes down here." },
-    { "id": "devops_heights", "label_at": "below", "name": "DevOps Heights", "kind": "town", "x": 176, "y": 100,
-      "maps": ["devops_heights", "department_3", "help_desk_devops"],
-      "blurb": "DevOps Department. They deploy on Fridays." },
-    { "id": "abandoned_data_center", "name": "Abandoned Data Center", "kind": "dungeon", "x": 128, "y": 112,
-      "maps": ["abandoned_data_center"], "blurb": "Decommissioned years ago. The lights are still on." },
-    { "id": "power_plant", "label_at": "above", "name": "Power Plant", "kind": "town", "x": 226, "y": 100,
-      "maps": ["power_plant", "department_4", "help_desk_power"],
-      "blurb": "Facilities Department. Powers the whole valley." },
-    { "id": "cloud_summit", "name": "Cloud Summit", "kind": "wild", "x": 258, "y": 64,
-      "maps": ["cloud_summit"], "blurb": "The valley's off-site copy lives up here. Supposedly." },
-    { "id": "secops_fortress", "label_at": "below", "short": "SecOps", "name": "SecOps Fortress", "kind": "town", "x": 258, "y": 26,
-      "maps": ["secops_fortress", "department_5", "help_desk_secops"],
-      "blurb": "SecOps Department. The east road out of the valley is locked." },
-    { "id": "hq_tower", "label_at": "below", "name": "HQ Tower", "kind": "locked", "x": 106, "y": 76, "maps": [],
-      "show_if_flag": "hq_traced", "blurb": "Root Valley HQ. Locked to anyone without the root key." }
+    {
+      "id": "onboarding_town",
+      "label_at": "right",
+      "name": "Onboarding Town",
+      "kind": "town",
+      "x": 34,
+      "y": 122,
+      "maps": [
+        "onboarding_town",
+        "player_house",
+        "kevin_house",
+        "help_desk"
+      ],
+      "blurb": "Home. The Help Desk HQ, and Marge's office."
+    },
+    {
+      "id": "route_1",
+      "name": "Route 1: Cable Run",
+      "kind": "route",
+      "x": 34,
+      "y": 92,
+      "maps": [
+        "route_1"
+      ],
+      "blurb": "A cable run through tall grass. Dustbunnies everywhere."
+    },
+    {
+      "id": "wifi_dead_zone",
+      "name": "Wi-Fi Dead Zone",
+      "kind": "wild",
+      "x": 128,
+      "y": 34,
+      "maps": [
+        "wifi_dead_zone"
+      ],
+      "blurb": "Dark woods past Route 2. No bars. Port City is on the far side."
+    },
+    {
+      "id": "patch_town",
+      "label_at": "right",
+      "name": "Patch Town",
+      "kind": "town",
+      "x": 34,
+      "y": 56,
+      "maps": [
+        "patch_town",
+        "department_1",
+        "help_desk_patch"
+      ],
+      "blurb": "Desktop Support Department. Dana fixes what won't die."
+    },
+    {
+      "id": "route_2",
+      "name": "Route 2",
+      "kind": "route",
+      "x": 82,
+      "y": 34,
+      "maps": [
+        "route_2"
+      ],
+      "blurb": "Still under construction. Mind the open trenches."
+    },
+    {
+      "id": "port_city",
+      "label_at": "below",
+      "name": "Port City",
+      "kind": "town",
+      "x": 176,
+      "y": 26,
+      "maps": [
+        "port_city",
+        "department_2"
+      ],
+      "blurb": "Harbor town on Port 443. Networking Department."
+    },
+    {
+      "id": "the_basement",
+      "name": "The Basement",
+      "kind": "dungeon",
+      "x": 176,
+      "y": 62,
+      "maps": [
+        "the_basement"
+      ],
+      "blurb": "Old servers, older tapes. Nobody comes down here."
+    },
+    {
+      "id": "devops_heights",
+      "label_at": "below",
+      "name": "DevOps Heights",
+      "kind": "town",
+      "x": 176,
+      "y": 100,
+      "maps": [
+        "devops_heights",
+        "department_3",
+        "help_desk_devops"
+      ],
+      "blurb": "DevOps Department. They deploy on Fridays."
+    },
+    {
+      "id": "abandoned_data_center",
+      "name": "Abandoned Data Center",
+      "kind": "dungeon",
+      "x": 128,
+      "y": 112,
+      "maps": [
+        "abandoned_data_center"
+      ],
+      "blurb": "Decommissioned years ago. The lights are still on."
+    },
+    {
+      "id": "power_plant",
+      "label_at": "above",
+      "name": "Power Plant",
+      "kind": "town",
+      "x": 226,
+      "y": 100,
+      "maps": [
+        "power_plant",
+        "department_4",
+        "help_desk_power"
+      ],
+      "blurb": "Facilities Department. Powers the whole valley."
+    },
+    {
+      "id": "cloud_summit",
+      "name": "Cloud Summit",
+      "kind": "wild",
+      "x": 258,
+      "y": 64,
+      "maps": [
+        "cloud_summit"
+      ],
+      "blurb": "The valley's off-site copy lives up here. Supposedly."
+    },
+    {
+      "id": "secops_fortress",
+      "label_at": "below",
+      "short": "SecOps",
+      "name": "SecOps Fortress",
+      "kind": "town",
+      "x": 258,
+      "y": 26,
+      "maps": [
+        "secops_fortress",
+        "department_5",
+        "help_desk_secops"
+      ],
+      "blurb": "SecOps Department. The east road out of the valley is locked."
+    },
+    {
+      "id": "hq_tower",
+      "label_at": "below",
+      "name": "HQ Tower",
+      "kind": "locked",
+      "x": 106,
+      "y": 76,
+      "maps": [],
+      "show_if_flag": "hq_traced",
+      "blurb": "Root Valley HQ. Locked to anyone without the root key."
+    }
   ],
   "links": [
-    ["onboarding_town", "route_1"], ["route_1", "wifi_dead_zone"], ["wifi_dead_zone", "patch_town"],
-    ["patch_town", "route_2"], ["route_2", "port_city"], ["port_city", "the_basement"],
-    ["the_basement", "devops_heights"], ["devops_heights", "abandoned_data_center"],
-    ["devops_heights", "power_plant"], ["power_plant", "cloud_summit"], ["cloud_summit", "secops_fortress"]
+    [
+      "route_1",
+      "patch_town"
+    ],
+    [
+      "route_2",
+      "wifi_dead_zone"
+    ],
+    [
+      "wifi_dead_zone",
+      "port_city"
+    ],
+    [
+      "onboarding_town",
+      "route_1"
+    ],
+    [
+      "patch_town",
+      "route_2"
+    ],
+    [
+      "port_city",
+      "the_basement"
+    ],
+    [
+      "the_basement",
+      "devops_heights"
+    ],
+    [
+      "devops_heights",
+      "abandoned_data_center"
+    ],
+    [
+      "devops_heights",
+      "power_plant"
+    ],
+    [
+      "power_plant",
+      "cloud_summit"
+    ],
+    [
+      "cloud_summit",
+      "secops_fortress"
+    ]
   ],
   "exits": [
-    { "from": "secops_fortress", "label": "EAST", "dx": 1, "dy": 0 }
+    {
+      "from": "secops_fortress",
+      "label": "EAST",
+      "dx": 1,
+      "dy": 0
+    }
   ]
 }

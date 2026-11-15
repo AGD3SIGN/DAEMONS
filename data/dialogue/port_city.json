@@ -1,12 +1,12 @@
 {
   "route_2_sign": [
     {
-      "text": "ROUTE 2: UNDER CONSTRUCTION (mostly done). North: Port City. South: Patch Town."
+      "text": "ROUTE 2: UNDER CONSTRUCTION (mostly done). North: Wi-Fi Dead Zone, then Port City. South: Patch Town."
     }
   ],
   "route_2_north_sign": [
     {
-      "text": "PORT CITY AHEAD. Harbor of Root Valley. Home of Port 443, the secure dock."
+      "text": "WI-FI DEAD ZONE AHEAD. Port City is on the far side. Signal not guaranteed."
     }
   ],
   "route_2_worker": [

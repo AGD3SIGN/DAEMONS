@@ -98,8 +98,9 @@
       "trainer": "intern_ian",
       "look": {
         "shirt": "#e0a030",
-        "hair": "#402010"
-      , "sprite": "intern"}
+        "hair": "#402010",
+        "sprite": "intern"
+      }
     },
     {
       "type": "npc",
@@ -110,21 +111,22 @@
       "trainer": "sysadmin_sam",
       "look": {
         "shirt": "#505868",
-        "hair": "#a0a0a0"
-      , "sprite": "sysadmin_sam"}
+        "hair": "#a0a0a0",
+        "sprite": "sysadmin_sam"
+      }
     },
     {
       "type": "warp",
       "x": 9,
       "y": 0,
-      "to_map": "wifi_dead_zone",
+      "to_map": "patch_town",
       "to_spawn": "south"
     },
     {
       "type": "warp",
       "x": 10,
       "y": 0,
-      "to_map": "wifi_dead_zone",
+      "to_map": "patch_town",
       "to_spawn": "south"
     },
     {
@@ -136,8 +138,9 @@
       "trainer": "jogger_jo",
       "look": {
         "shirt": "#40c0a0",
-        "hair": "#e0c060"
-      , "sprite": "jogger_jo"}
+        "hair": "#e0c060",
+        "sprite": "jogger_jo"
+      }
     }
   ],
   "music": "route"

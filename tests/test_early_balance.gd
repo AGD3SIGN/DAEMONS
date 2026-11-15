@@ -12,11 +12,12 @@ const FIGHTS := [
 	["intern_ian", 6, [], 20, 40],
 	["sysadmin_sam", 6, [["dustbunny", 4]], 10, 34],
 	["jogger_jo", 7, [["cablesnake", 5], ["dustbunny", 5]], 12, 40],
-	["signal_hunter_hal", 8, [["cablesnake", 6], ["dustbunny", 5]], 10, 34],
-	["phisher_pete", 9, [["cablesnake", 7], ["dustbunny", 6]], 20, 40],
 	["tech_theo", 10, [["cablesnake", 7], ["ramster", 6]], 10, 32],
 	["tech_tina", 10, [["cablesnake", 7], ["ramster", 6]], 10, 32],
 	["dana", 12, [["cablesnake", 10], ["ramster", 9]], 10, 30],
+	# GDD order (2026-11-15): the Wi-Fi Dead Zone comes after Route 2, so Hal and Pete are met after Cert 1.
+	["signal_hunter_hal", 14, [["cablesnake", 12], ["ramster", 11]], 10, 36],
+	["phisher_pete", 14, [["cablesnake", 12], ["ramster", 11]], 16, 40],
 ]
 
 
@@ -73,7 +74,7 @@ func test_every_early_trainer_is_winnable_on_every_starter_path() -> void:
 ## "You shouldn't lose to one hit early on" (2026-11-15). The worst normal hit (no crit, top damage roll) from
 ## any wild Daemon or trainer before Dana must leave a full-Uptime starter standing at the level you meet it.
 ## Crits can still do it now and then; that's the risk that keeps fights tense.
-const ONE_HIT_AREAS := [["onboarding_town", 5], ["route_1", 5], ["wifi_dead_zone", 8]]
+const ONE_HIT_AREAS := [["onboarding_town", 5], ["route_1", 5], ["route_2", 12], ["wifi_dead_zone", 13]]
 
 
 func _worst_hit(attacker: DaemonInstance, target: DaemonInstance) -> int:

@@ -89,14 +89,14 @@
       "type": "warp",
       "x": 14,
       "y": 0,
-      "to_map": "port_city",
+      "to_map": "wifi_dead_zone",
       "to_spawn": "south"
     },
     {
       "type": "warp",
       "x": 15,
       "y": 0,
-      "to_map": "port_city",
+      "to_map": "wifi_dead_zone",
       "to_spawn": "south"
     },
     {

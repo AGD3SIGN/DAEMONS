@@ -4,68 +4,68 @@
     "cable_tangle": [
       {
         "species": "cablesnake",
-        "min": 5,
-        "max": 7,
+        "min": 11,
+        "max": 13,
         "weight": 30
       },
       {
         "species": "fanbat",
-        "min": 6,
-        "max": 8,
+        "min": 12,
+        "max": 14,
         "weight": 20
       },
       {
         "species": "ramster",
-        "min": 5,
-        "max": 7,
+        "min": 11,
+        "max": 13,
         "weight": 20
       },
       {
         "species": "spigeon",
-        "min": 5,
-        "max": 7,
+        "min": 11,
+        "max": 13,
         "weight": 20
       },
       {
         "species": "floppit",
-        "min": 6,
-        "max": 7,
+        "min": 12,
+        "max": 13,
         "weight": 10
       },
       {
         "species": "clawptop",
-        "min": 5,
-        "max": 7,
+        "min": 11,
+        "max": 13,
         "weight": 15
       },
       {
         "species": "coolippo",
-        "min": 6,
-        "max": 8,
+        "min": 12,
+        "max": 14,
         "weight": 10
       },
       {
         "species": "tieweaver",
-        "min": 6,
-        "max": 8,
+        "min": 12,
+        "max": 14,
         "weight": 10
       },
       {
         "species": "pixelsier",
-        "min": 6,
-        "max": 8,
+        "min": 10,
+        "max": 11,
         "weight": 5
       },
       {
         "species": "spinode",
-        "min": 5,
-        "max": 7,
+        "min": 11,
+        "max": 13,
         "weight": 12
       },
       {
         "species": "hummodem",
-        "min": 5,
-        "max": 7,
+        "min": 11,
+        "max": 13,
         "weight": 8
       }
     ]

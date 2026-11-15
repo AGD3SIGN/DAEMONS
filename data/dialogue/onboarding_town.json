@@ -372,7 +372,7 @@
       "else": [
         {
           "speaker": "Marge",
-          "text": "Your first assignment: head north through Route 1 and the Wi-Fi Dead Zone to Patch Town."
+          "text": "Your first assignment: head north up Route 1 to Patch Town."
         },
         {
           "speaker": "Marge",
@@ -407,7 +407,7 @@
   ],
   "route_1_north_sign": [
     {
-      "text": "NORTH: Wi-Fi Dead Zone, then Patch Town."
+      "text": "NORTH: Patch Town."
     },
     {
       "text": "Bring a map. Your phone won't help."

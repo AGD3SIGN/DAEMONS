@@ -72,17 +72,17 @@ func test_walking_into_a_map_marks_its_place_visited_and_saves_it() -> void:
 
 func test_old_saves_count_the_road_from_home_as_visited() -> void:
 	GameState.from_dict({"location": {"map": "port_city", "x": 1, "y": 1, "facing": "down"}})
-	for place in ["onboarding_town", "route_1", "wifi_dead_zone", "patch_town", "route_2", "port_city"]:
+	for place in ["onboarding_town", "route_1", "patch_town", "route_2", "wifi_dead_zone", "port_city"]:
 		assert_true(GameState.visited.has(place), place)
 	assert_false(GameState.visited.has("the_basement"), "nothing past where you saved")
 
 
 func test_places_are_known_rumored_or_hidden() -> void:
 	GameState.location = {"map": "patch_town", "x": 1, "y": 1}
-	GameState.visited = {"onboarding_town": true, "route_1": true, "wifi_dead_zone": true, "patch_town": true}
+	GameState.visited = {"onboarding_town": true, "route_1": true, "patch_town": true}
 	assert_eq(Phone.place_state(Phone.place("patch_town")), "known")
 	assert_eq(Phone.place_state(Phone.place("route_2")), "rumored", "next to somewhere you've been: ???")
-	assert_eq(Phone.place_state(Phone.place("port_city")), "hidden")
+	assert_eq(Phone.place_state(Phone.place("wifi_dead_zone")), "hidden")
 	assert_eq(Phone.place_state(Phone.place("hq_tower")), "hidden", "HQ Tower waits for Kalb's trace")
 	GameState.flags["hq_traced"] = true
 	assert_eq(Phone.place_state(Phone.place("hq_tower")), "known")
@@ -97,10 +97,10 @@ func test_maps_cursor_starts_here_and_moves_between_shown_places() -> void:
 	assert_eq(phone.map_cursor, "route_1")
 	assert_string_contains(phone.cursor_info()[0], "YOU ARE HERE")
 	phone.move_map_cursor(Vector2.UP)
-	assert_eq(phone.map_cursor, "wifi_dead_zone")
+	assert_eq(phone.map_cursor, "patch_town", "Route 1 leads to Patch Town (GDD order)")
 	assert_eq(phone.cursor_info()[0], "???", "not visited yet")
 	phone.move_map_cursor(Vector2.UP)
-	assert_eq(phone.map_cursor, "wifi_dead_zone", "nothing shown further up")
+	assert_eq(phone.map_cursor, "patch_town", "nothing shown further up")
 	phone.move_map_cursor(Vector2.DOWN)
 	phone.move_map_cursor(Vector2.DOWN)
 	assert_eq(phone.map_cursor, "onboarding_town")

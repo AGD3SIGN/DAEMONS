@@ -78,14 +78,14 @@
       "type": "warp",
       "x": 17,
       "y": 29,
-      "to_map": "route_2",
+      "to_map": "wifi_dead_zone",
       "to_spawn": "north"
     },
     {
       "type": "warp",
       "x": 18,
       "y": 29,
-      "to_map": "route_2",
+      "to_map": "wifi_dead_zone",
       "to_spawn": "north"
     },
     {
