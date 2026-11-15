@@ -355,3 +355,20 @@ func test_lasting_statuses_show_an_effect_on_both_sides() -> void:
 			seen[0] = true
 		return seen[0], 15.0)
 	assert_true(seen[0], "your own Forgeling, seen from behind, shows it too")
+
+
+func test_phones_held_upright_get_the_tall_battle_layout() -> void:
+	# 2026-11-15 (Brandon, on his phone): the wide 960x640 frame only fit once on a portrait phone and was hard to read.
+	assert_true(BattleLayout.pick(Vector2(430, 465)).tall_layout, "portrait phone: tall")
+	assert_false(BattleLayout.pick(Vector2(1280, 720)).tall_layout, "desktop / landscape: wide")
+	var tall := BattleLayout.tall()
+	var frame := Rect2(Vector2.ZERO, tall.frame)
+	for r: Rect2 in [tall.console_rect, tall.command_rect, tall.list_rect, tall.back_rect, tall.wild_pad, tall.host_pad]:
+		assert_true(frame.encloses(r), "%s inside the tall frame" % r)
+	assert_false(tall.console_rect.intersects(tall.command_rect), "console and commands stack, no overlap")
+	assert_true(tall.console_rect.encloses(tall.back_rect), "BACK sits inside the console")
+	# On a phone's game area (~1290x1395 physical px) the tall frame draws ~1.7x bigger than the wide one did.
+	var phone := Vector2(1290, 1395)
+	var before := BattleScene.frame_scale(phone)
+	var now := BattleScene.frame_scale(phone, tall.frame, tall.allow_fractional)
+	assert_gt(now / before, 1.6)

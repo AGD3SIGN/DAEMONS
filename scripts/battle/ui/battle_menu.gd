@@ -28,6 +28,8 @@ const COMMANDS := [
 	["DISCONNECT", "run", "drop the connection and flee."],
 ]
 
+## Set before adding to the tree (BattleScene does) to use the tall phone layout; defaults to the wide one.
+var layout: BattleLayout = BattleLayout.wide()
 var _cancel_value: Variant = NO_CANCEL
 var _command_panel: Panel
 var _command_buttons: Array[TermButton] = []
@@ -44,7 +46,7 @@ var _shown_moves: DaemonInstance
 
 func _ready() -> void:
 	position = Vector2.ZERO
-	size = BattleStyle.FRAME
+	size = layout.frame
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_build_command_panel()
 	_build_move_panel()
@@ -211,7 +213,7 @@ func _grid(panel: Panel, count: int) -> Array[Rect2]:
 
 
 func _build_command_panel() -> void:
-	_command_panel = _panel(COMMAND_RECT)
+	_command_panel = _panel(layout.command_rect)
 	var cells := _grid(_command_panel, 4)
 	for i in COMMANDS.size():
 		var button := TermButton.new(COMMANDS[i][0], "[%d]" % (i + 1))
@@ -227,7 +229,7 @@ func _build_command_panel() -> void:
 
 
 func _build_move_panel() -> void:
-	_move_panel = _panel(COMMAND_RECT)
+	_move_panel = _panel(layout.command_rect)
 	var cells := _grid(_move_panel, 4)
 	for i in 4:
 		var button := TermButton.new("-", "[%d]" % (i + 1))
@@ -242,9 +244,9 @@ func _build_move_panel() -> void:
 	_move_back = TermButton.new("BACK")
 	_move_back.hint_action = "ui_cancel"
 	_move_back.font_size = 18
-	_move_back.position = BACK_RECT.position
-	_move_back.size = BACK_RECT.size
-	_move_back.custom_minimum_size = Vector2(0, BACK_RECT.size.y)
+	_move_back.position = layout.back_rect.position
+	_move_back.size = layout.back_rect.size
+	_move_back.custom_minimum_size = Vector2(0, layout.back_rect.size.y)
 	_move_back.pressed.connect(func() -> void: _pick(-1))
 	add_child(_move_back)
 
@@ -270,7 +272,7 @@ func _list_button(label: String) -> TermButton:
 
 
 func _build_list_panel() -> void:
-	_list_panel = _panel(LIST_RECT)
+	_list_panel = _panel(layout.list_rect)
 	_list_panel.draw.connect(func() -> void:
 		var bar := Rect2(3, 3, _list_panel.size.x - 6, BattleConsole.TITLE_H)
 		_list_panel.draw_rect(bar, BattleStyle.CONSOLE_HEADER)
@@ -282,19 +284,19 @@ func _build_list_panel() -> void:
 			_list_title, HORIZONTAL_ALIGNMENT_LEFT, -1, 11, BattleStyle.TEXT_MUTED))
 	_list_box = VBoxContainer.new()
 	_list_box.position = Vector2(PADDING, 3 + BattleConsole.TITLE_H + 8)
-	_list_box.size = Vector2(LIST_RECT.size.x - PADDING * 2, LIST_RECT.size.y - BattleConsole.TITLE_H - 20)
+	_list_box.size = Vector2(layout.list_rect.size.x - PADDING * 2, layout.list_rect.size.y - BattleConsole.TITLE_H - 20)
 	_list_box.add_theme_constant_override("separation", 2)
 	_list_panel.add_child(_list_box)
 
 
 func _build_confirm_panel() -> void:
-	_confirm_panel = _panel(COMMAND_RECT)
-	var w := (COMMAND_RECT.size.x - PADDING * 2 - GAP) / 2.0
+	_confirm_panel = _panel(layout.command_rect)
+	var w := (layout.command_rect.size.x - PADDING * 2 - GAP) / 2.0
 	for i in 2:
 		var entry: Array = [["YES", true, "[1]"], ["NO", false, "[2]"]][i]
 		var button := TermButton.new(entry[0], entry[2])
 		button.position = Vector2(PADDING + i * (w + GAP), PADDING)
-		button.size = Vector2(w, COMMAND_RECT.size.y - PADDING * 2)
+		button.size = Vector2(w, layout.command_rect.size.y - PADDING * 2)
 		var value: bool = entry[1]
 		button.pressed.connect(func() -> void: _pick(value))
 		_confirm_panel.add_child(button)

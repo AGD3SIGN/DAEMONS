@@ -379,7 +379,7 @@ func _anim_materialize(s: TextureRect) -> void:
 ## The wild card slides in from the left after the Daemon appears.
 func _anim_card_in() -> void:
 	var card := view.foe_panel
-	var rest := BattleScene.FOE_CARD_AT
+	var rest := view.layout.foe_card_at
 	card.position = rest - Vector2(card.size.x + 60, 0)
 	card.visible = true
 	var t := _tween()

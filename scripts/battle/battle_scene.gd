@@ -48,6 +48,8 @@ var state: BattleState
 var trainer_name: String = ""
 var foe_tier: String = "random"
 var time_scale: float = 1.0
+## Wide (960x640) or tall (640x800, phones held upright); picked from the screen shape when the battle is built.
+var layout: BattleLayout = BattleLayout.wide()
 var auto: bool = false
 var auto_policy: String = "smart"
 var result: Dictionary = {}
@@ -250,7 +252,7 @@ func _choose_player_action() -> BattleAction:
 		return _auto_action()
 	var d := state.sides[BattleState.PLAYER].active()
 	while true:
-		text_box.set_reserved_right(int(BattleMenu.COMMAND_RECT.size.x))  # console shrinks to the left part
+		text_box.set_reserved_right(int(layout.command_rect.size.x))  # menu mode (wide: the console shrinks to the left)
 		text_box.show_now("What will you run?")
 		match await menu.choose_command():
 			"fight":
@@ -542,29 +544,32 @@ static func trainer_frame(sprite_id: String, from_behind: bool) -> Texture2D:
 func _build() -> void:
 	# The battle draws in a 960x640 design frame (Battle Scene spec), scaled by whole numbers of physical
 	# pixels and centered; the arena keeps going past the frame on wider or taller screens.
+	var start_view := size if size.x > 0.0 and size.y > 0.0 else get_viewport_rect().size
+	layout = BattleLayout.pick(start_view)
 	stage = Control.new()
 	stage.name = "Stage"
-	stage.size = FRAME
+	stage.size = layout.frame
 	stage.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(stage)
 	arena = BattleArena.new()
-	arena.size = FRAME
+	arena.layout = layout
+	arena.size = layout.frame
 	stage.add_child(arena)
 
 	# Sprites, trainers, move effects and the key live on a x3 layer (64 px Daemon frames = 192 px).
 	field = Control.new()
 	field.name = "Field"
 	field.scale = Vector2(FIELD_SCALE, FIELD_SCALE)
-	field.size = FRAME / FIELD_SCALE
+	field.size = layout.frame / FIELD_SCALE
 	field.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	stage.add_child(field)
-	foe_slot = _slot(FOE_SPRITE_AT / FIELD_SCALE)
-	player_slot = _slot(PLAYER_SPRITE_AT / FIELD_SCALE)
+	foe_slot = _slot(layout.foe_sprite_at / FIELD_SCALE)
+	player_slot = _slot(layout.player_sprite_at / FIELD_SCALE)
 	foe_sprite = _sprite_in(foe_slot)
 	player_sprite = _sprite_in(player_slot)
-	player_sprite.scale = Vector2.ONE * PLAYER_SPRITE_SCALE / FIELD_SCALE  # x4 in the frame: closer to the camera
+	player_sprite.scale = Vector2.ONE * layout.player_sprite_scale / FIELD_SCALE  # bigger in the frame: closer to the camera
 	player_trainer = _trainer_in(player_slot, PLAYER_TRAINER_AT / FIELD_SCALE)
-	player_trainer.scale = Vector2.ONE * PLAYER_SPRITE_SCALE / FIELD_SCALE
+	player_trainer.scale = Vector2.ONE * layout.player_sprite_scale / FIELD_SCALE
 	foe_trainer = _trainer_in(foe_slot, FOE_TRAINER_AT / FIELD_SCALE)
 	_foe_rest = foe_slot.position
 	fx = BattleFx.new()  # move effects draw over the Daemons but under the cards
@@ -577,16 +582,16 @@ func _build() -> void:
 
 	foe_panel = BattleInfoPanel.new()
 	foe_panel.setup(false)
-	foe_panel.position = FOE_CARD_AT
+	foe_panel.position = layout.foe_card_at
 	foe_panel.visible = false
 	stage.add_child(foe_panel)
 	player_panel = BattleInfoPanel.new()
 	player_panel.setup(true)
-	player_panel.position = Vector2(FRAME.x - 28 - BattleInfoPanel.PLAYER_SIZE.x, 384)
+	player_panel.position = layout.player_panel_at
 	player_panel.visible = false
 	stage.add_child(player_panel)
 	capture_meter = CaptureMeter.new()  # SCAN / ISOLATE / ENCRYPT, x2, under the wild card
-	capture_meter.position = Vector2(28, 162)
+	capture_meter.position = layout.capture_meter_at
 	capture_meter.scale = Vector2(2, 2)
 	capture_meter.visible = false
 	stage.add_child(capture_meter)
@@ -599,7 +604,7 @@ func _build() -> void:
 	popup_style.shadow_color = Color.BLACK
 	popup_style.shadow_offset = Vector2(6, 6)
 	stat_popup.add_theme_stylebox_override("panel", popup_style)
-	stat_popup.position = Vector2(FRAME.x - 28 - 300, 150)
+	stat_popup.position = layout.stat_popup_at
 	stat_popup.size = Vector2(300, 224)
 	stat_popup_label = Label.new()
 	stat_popup_label.position = Vector2(18, 12)
@@ -612,14 +617,17 @@ func _build() -> void:
 	stage.add_child(stat_popup)
 
 	text_box = BattleConsole.new()
-	text_box.position = CONSOLE_RECT.position
-	text_box.size = CONSOLE_RECT.size
+	text_box.full_width = layout.console_rect.size.x
+	text_box.menu_width = layout.console_menu_width
+	text_box.position = layout.console_rect.position
+	text_box.size = layout.console_rect.size
 	stage.add_child(text_box)
 	menu = BattleMenu.new()
+	menu.layout = layout
 	stage.add_child(menu)
 	menu.hovered.connect(_on_menu_hovered)
 	scanlines = Scanlines.new()
-	scanlines.size = FRAME
+	scanlines.size = layout.frame
 	stage.add_child(scanlines)
 
 	_upgrade_overlay = ColorRect.new()
@@ -649,9 +657,9 @@ func _layout() -> void:
 		return
 	var view := size if size.x > 0.0 and size.y > 0.0 else get_viewport_rect().size
 	var px := pixels_per_unit()
-	var k := frame_scale(view * px)
+	var k := frame_scale(view * px, layout.frame, layout.allow_fractional)
 	stage.scale = Vector2.ONE * k / px
-	var origin_px := ((view * px - FRAME * k) / 2.0).floor()
+	var origin_px := ((view * px - layout.frame * k) / 2.0).floor()
 	stage.position = origin_px / px
 	var visible := Rect2(-stage.position / stage.scale, view / stage.scale)
 	arena.view_rect = visible
@@ -671,8 +679,11 @@ func pixels_per_unit() -> float:
 
 
 ## Scale for the frame on a screen of `physical` pixels: whole numbers when it fits at least once.
-static func frame_scale(physical: Vector2) -> float:
-	var fit := minf(physical.x / FRAME.x, physical.y / FRAME.y)
+## The tall phone layout may scale fractionally to fill the screen (phone pixel densities hide the uneven pixels).
+static func frame_scale(physical: Vector2, frame: Vector2 = FRAME, fractional: bool = false) -> float:
+	var fit := minf(physical.x / frame.x, physical.y / frame.y)
+	if fractional:
+		return fit
 	return floorf(fit) if fit >= 1.0 else fit
 
 
@@ -686,7 +697,7 @@ func _on_menu_hovered(kind: String, index: int) -> void:
 	else:
 		var d := state.sides[BattleState.PLAYER].active() if state != null else null
 		if d != null and index < d.moves.size():
-			var room := BattleMenu.BACK_RECT.position.x - CONSOLE_RECT.position.x - BattleConsole.BORDER - 14 - 12
+			var room := layout.back_rect.position.x - layout.console_rect.position.x - BattleConsole.BORDER - 14 - 12
 			console.set_man(String(d.moves[index]["id"]), menu.move_man(index), room)
 
 

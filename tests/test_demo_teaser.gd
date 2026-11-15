@@ -69,30 +69,32 @@ func test_demo_build_ends_on_thanks_for_playing() -> void:
 	assert_eq(Demo.teaser_battle_config()["return_scene"], DemoEnd.SCENE)
 
 
-func test_port_city_runs_the_teaser_only_after_ping() -> void:
+func _open_port_city_from_the_department() -> void:
 	GameState.flags["got_starter"] = true
 	GameState.flags["port_city_arrived"] = true
 	GameState.active_stack.assign(_team())
-	for beaten in [false, true]:
-		if beaten:
-			GameState.flags["trainer_ping_okoro"] = true
-		SceneRouter.params = {"map": "port_city", "spawn": "from_department"}
-		world = load(Overworld.SCENE).instantiate()
-		world.allow_scene_change = false
-		world.auto_advance_text = true
-		watch_signals(world)
-		add_child_autofree(world)
-		world.set_time_scale(0.0)
-		await wait_process_frames(3)
-		await wait_until(func() -> bool: return world.is_idle(), 5.0)
-		if beaten:
-			assert_signal_emitted(world, "battle_requested", "after Cert 2 the teaser starts")
-			var config: Dictionary = get_signal_parameters(world, "battle_requested")[0]
-			assert_true(config.get("teaser", false))
-		else:
-			assert_signal_not_emitted(world, "battle_requested", "not before beating Ping")
-		world.queue_free()
-		await wait_process_frames(2)
+	SceneRouter.params = {"map": "port_city", "spawn": "from_department"}
+	world = load(Overworld.SCENE).instantiate()
+	world.allow_scene_change = false
+	world.auto_advance_text = true
+	watch_signals(world)
+	add_child_autofree(world)
+	world.set_time_scale(0.0)
+	await wait_process_frames(3)
+	await wait_until(func() -> bool: return world.is_idle(), 5.0)
+
+
+func test_port_city_waits_for_ping() -> void:
+	await _open_port_city_from_the_department()
+	assert_signal_not_emitted(world, "battle_requested", "not before beating Ping")
+
+
+func test_port_city_runs_the_teaser_after_cert_2() -> void:
+	GameState.flags["trainer_ping_okoro"] = true
+	await _open_port_city_from_the_department()
+	assert_signal_emitted(world, "battle_requested", "after Cert 2 the teaser starts")
+	var config: Dictionary = get_signal_parameters(world, "battle_requested")[0]
+	assert_true(config.get("teaser", false))
 
 
 func test_saves_round_trip_the_new_flags() -> void:

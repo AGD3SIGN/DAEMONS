@@ -24,6 +24,11 @@ const HOST_INSET := Vector2(38, 14)
 const PAD_PULSE := 2.0
 const ZONE_TAG_TEXT := Color("cfe3ff")
 
+## Which layout the arena draws for (BattleScene sets it before adding the arena).
+var layout: BattleLayout = BattleLayout.wide():
+	set(value):
+		layout = value
+		queue_redraw()
 var zone_id := BattleStyle.DEFAULT_ZONE:
 	set(value):
 		zone_id = value if BattleStyle.ZONES.has(value) else BattleStyle.DEFAULT_ZONE
@@ -66,12 +71,13 @@ func _draw() -> void:
 	_draw_racks(v)
 	_draw_floor(v)
 	_draw_trim(v)
-	_draw_pad(WILD_PAD, BattleStyle.WILD, WILD_INSET)
-	_draw_pad(HOST_PAD, BattleStyle.HOST, HOST_INSET)
+	_draw_pad(layout.wild_pad, BattleStyle.WILD, WILD_INSET)
+	_draw_pad(layout.host_pad, BattleStyle.HOST, HOST_INSET)
 	if show_unknown_host:
-		draw_string(BattleStyle.silkscreen(), Vector2(WILD_PAD.position.x, 388 + 14), host_label,
-			HORIZONTAL_ALIGNMENT_CENTER, WILD_PAD.size.x, 12, Color(BattleStyle.WILD, 0.85))
-	_draw_zone_tag()
+		draw_string(BattleStyle.silkscreen(), Vector2(layout.wild_pad.position.x, layout.host_label_y), host_label,
+			HORIZONTAL_ALIGNMENT_CENTER, layout.wild_pad.size.x, 12, Color(BattleStyle.WILD, 0.85))
+	if layout.show_zone_tag:
+		_draw_zone_tag()
 
 
 # --- racks -------------------------------------------------------------------
@@ -79,7 +85,7 @@ func _draw() -> void:
 ## Rack i sits at x = 10 + i * 106; indices outside 0..8 repeat the pattern past the frame.
 func rack_rect(i: int) -> Rect2:
 	var h := float(RACK_HEIGHTS[posmod(i, RACK_HEIGHTS.size())])
-	return Rect2(RACK_X0 + i * (RACK_W + RACK_GAP), RACK_BOTTOM - h, RACK_W, h)
+	return Rect2(RACK_X0 + i * (RACK_W + RACK_GAP), (layout.horizon + 2.0) - h, RACK_W, h)
 
 
 static func slot_count(height: float) -> int:
@@ -130,24 +136,24 @@ func _flicker(color: Color, offset: float) -> Color:
 # --- floor -------------------------------------------------------------------
 
 ## Screen y of a floor line at plane depth `depth` (0 = the frame's bottom edge).
-static func floor_y(depth: float) -> float:
-	return HORIZON + (BattleStyle.FRAME.y - HORIZON) * GRID_DEPTH / (GRID_DEPTH + depth)
+func floor_y(depth: float) -> float:
+	return layout.horizon + (layout.frame.y - layout.horizon) * GRID_DEPTH / (GRID_DEPTH + depth)
 
 
-static func floor_depth(y: float) -> float:
-	return GRID_DEPTH * (BattleStyle.FRAME.y - HORIZON) / maxf(0.5, y - HORIZON) - GRID_DEPTH
+func floor_depth(y: float) -> float:
+	return GRID_DEPTH * (layout.frame.y - layout.horizon) / maxf(0.5, y - layout.horizon) - GRID_DEPTH
 
 
 func _draw_floor(v: Rect2) -> void:
-	var bottom := maxf(v.end.y, BattleStyle.FRAME.y)
-	draw_rect(Rect2(v.position.x, HORIZON, v.size.x, bottom - HORIZON + 1), z("floor"))
+	var bottom := maxf(v.end.y, layout.frame.y)
+	draw_rect(Rect2(v.position.x, layout.horizon, v.size.x, bottom - layout.horizon + 1), z("floor"))
 	var grid := z("grid")
-	var cx := BattleStyle.FRAME.x / 2.0
+	var cx := layout.frame.x / 2.0
 	# Lines across: every 96 px of plane depth, from the bottom of the view back to the horizon.
 	var depth := floorf(floor_depth(bottom) / GRID_STEP) * GRID_STEP
 	while true:
 		var y := floor_y(depth)
-		if y - HORIZON < 3.0:
+		if y - layout.horizon < 3.0:
 			break
 		if y <= bottom:
 			draw_rect(Rect2(v.position.x, roundf(y) - 1, v.size.x, 3), grid)
@@ -165,8 +171,8 @@ func _draw_floor(v: Rect2) -> void:
 	# The top 70 px fade from floor color to transparent so the grid dissolves into the horizon.
 	var f := z("floor")
 	var clear := Color(f, 0.0)
-	draw_polygon(PackedVector2Array([Vector2(v.position.x, HORIZON), Vector2(v.end.x, HORIZON),
-		Vector2(v.end.x, HORIZON + FADE), Vector2(v.position.x, HORIZON + FADE)]),
+	draw_polygon(PackedVector2Array([Vector2(v.position.x, layout.horizon), Vector2(v.end.x, layout.horizon),
+		Vector2(v.end.x, layout.horizon + FADE), Vector2(v.position.x, layout.horizon + FADE)]),
 		PackedColorArray([f, f, clear, clear]))
 
 
@@ -175,9 +181,9 @@ func _draw_trim(v: Rect2) -> void:
 	# 18 px glow above and below, fading out, then the 4 px line itself.
 	for i in 9:
 		var a := 0.22 * (1.0 - i / 9.0)
-		draw_rect(Rect2(v.position.x, TRIM_Y - 2 - i * 2, v.size.x, 2), Color(trim, a))
-		draw_rect(Rect2(v.position.x, TRIM_Y + 4 + i * 2, v.size.x, 2), Color(trim, a))
-	draw_rect(Rect2(v.position.x, TRIM_Y, v.size.x, 4), trim)
+		draw_rect(Rect2(v.position.x, (layout.horizon - 2.0) - 2 - i * 2, v.size.x, 2), Color(trim, a))
+		draw_rect(Rect2(v.position.x, (layout.horizon - 2.0) + 4 + i * 2, v.size.x, 2), Color(trim, a))
+	draw_rect(Rect2(v.position.x, (layout.horizon - 2.0), v.size.x, 4), trim)
 
 
 # --- pads --------------------------------------------------------------------
@@ -222,7 +228,7 @@ func zone_tag_rect() -> Rect2:
 	var text := "ZONE // " + String(BattleStyle.zone(zone_id)["name"])
 	var w := 12 + font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, 12).x + 10 + 22 + 12
 	var h := 6 + 16 + 6
-	return Rect2(BattleStyle.FRAME.x - 28 - w, 28, w, h)
+	return Rect2(layout.frame.x - 28 - w, 28, w, h)
 
 
 func _draw_zone_tag() -> void:
