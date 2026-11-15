@@ -74,9 +74,13 @@ const ITEM_EFFECTS := {
 	"level_up": [],
 	"evolve": [],
 }
+## Upgrade triggers (GDD: items and events, not only levels): level reached, an upgrade item used (firmware,
+## patches), a story flag set, or holding at least N Certifications. "sync" is the old Discohare special.
 const EVOLUTION_TRIGGERS := {
 	"level": ["level"],
 	"item": ["item"],
+	"flag": ["flag"],
+	"cert": ["certs"],
 	"sync": [],
 }
 
@@ -903,6 +907,10 @@ func _validate_species(s: Dictionary, where: String) -> void:
 					_err(ew, "unknown item '%s'" % str(item_id))
 				elif items[item_id].get("effect", {}).get("id") != "evolve":
 					_err(ew, "item '%s' doesn't have the 'evolve' effect" % item_id)
+			"flag":
+				_string(evo, "flag", ew)
+			"cert":
+				_int(evo, "certs", ew, 1, 8)
 
 	var cmdb: Variant = s.get("cmdb")
 	if typeof(cmdb) != TYPE_DICTIONARY:

@@ -87,6 +87,28 @@ func add_daemon(d: DaemonInstance) -> String:
 	return "rack" if rack_add(d) >= 0 else "full"
 
 
+## Story upgrades (flag / cert triggers): upgrades every Hexforged in the stack and racks that now qualifies.
+## Returns [[old name, new name], ...] for the messages. Called after dialogue sets a flag or awards a Cert.
+func apply_story_upgrades() -> Array:
+	var done := []
+	var everyone: Array = active_stack.duplicate()
+	for rack: Array in racks:
+		everyone.append_array(rack)
+	for d: DaemonInstance in everyone:
+		if d.is_corrupted:
+			continue
+		for trigger in ["flag", "cert"]:
+			var target := d.check_evolution(trigger)
+			if not target.is_empty():
+				var old_name := d.display_name()
+				d.evolve(target)
+				cmdb_seen[target] = true
+				cmdb_caught[target] = true
+				done.append([old_name, d.display_name()])
+				break
+	return done
+
+
 ## GDD: each Certification raises the level cap; EXP stops at the cap until the next Cert (data/level_caps.json).
 func level_cap() -> int:
 	if DataRegistry.level_caps.is_empty():

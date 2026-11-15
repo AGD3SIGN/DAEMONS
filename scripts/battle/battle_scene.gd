@@ -395,6 +395,8 @@ func _trainer_rewards() -> void:
 		GameState.certifications.append(cert)
 		AudioManager.play_sfx("confirm")
 		await text_box.show_text("You earned the %s!" % DataRegistry.certifications[cert]["name"])
+		for pair: Array in GameState.apply_story_upgrades():  # "cert" upgrade triggers
+			await text_box.show_text("%s upgraded into %s!" % [pair[0], pair[1]])
 
 
 ## Story battles (rival fights) don't black out: the story goes on either way.

@@ -225,6 +225,37 @@ Blacking out costs `percent`% of your credits, at most `cap_base + cap_per_cert 
 A place is named once visited (`GameState.visited`), shown as ??? when it's next to a visited place, hidden otherwise;
 `show_if_flag` places appear only once the flag is set.
 
+## Upgrade triggers (GDD: items and events, not only levels)
+Species `"evolutions": [{"to": id, "trigger": ...}]`, triggers:
+`{"trigger": "level", "level": 16}` · `{"trigger": "item", "item": "legacy_driver"}` (an item with the `evolve`
+effect: firmware, patches) · `{"trigger": "flag", "flag": "port443_flicker"}` (a story event) ·
+`{"trigger": "cert", "certs": 2}` (Certifications held) · `{"trigger": "sync"}` (Discohare's old special).
+Flag and cert upgrades happen right after the dialogue that sets the flag or awards the Cert, and after a boss
+battle's Cert (stack and racks; corrupted ones wait until cleaned).
+
+**Triggers still to decide (Brandon), current values kept:**
+- Chipmunk → Munkboard (level: Lv 16)
+- Munkboard → Mainmunk (level: Lv 34)
+- Pingo → Pengwan (level: Lv 16)
+- Pengwan → Emperoute (level: Lv 34)
+- Glowbit → Scriptfly (level: Lv 16)
+- Scriptfly → Compilume (level: Lv 34)
+- Wormby → Wormhole (level: Lv 22)
+- Spigeon → Botgeon (level: Lv 25)
+- Cablesnake → Patchviper (level: Lv 24)
+- Floppit → Ziphare (item: legacy_driver)
+- Ziphare → Discohare (sync: sync)
+- Clawptop → Deskclaw (level: Lv 20)
+- Deskclaw → Crabinet (level: Lv 38)
+- Antsistor → Transistant (level: Lv 18)
+- Transistant → Siliqueen (level: Lv 36)
+- Coolippo → Coolapotamus (level: Lv 28)
+- Dillodisk → Armadrive (level: Lv 26)
+- Spinode → Meshpider (level: Lv 18)
+- Meshpider → Arachnet (level: Lv 34)
+- Calfiber → Orcable (level: Lv 30)
+- Proxkit → Proxferret (level: Lv 24)
+
 ## level_caps.json (GDD level cap)
 `{"note": "...", "caps": [14, 20, 28, 36, 42, 48, 54, 60, 100]}`: `caps[n]` is the highest level while holding n
 Certifications. **Placeholder numbers (TBD), flagged for balancing.** EXP stops at the cap and the overflow is

@@ -78,6 +78,7 @@ func _command(step: Dictionary) -> void:
 	match step["cmd"]:
 		"set_flag":
 			GameState.flags[step["flag"]] = step.get("value", true)
+			await _story_upgrades()
 		"add_var":
 			GameState.counters[step["var"]] = int(GameState.counters.get(step["var"], 0)) + int(step["value"])
 		"set_var":
@@ -132,6 +133,7 @@ func _command(step: Dictionary) -> void:
 				GameState.certifications.append(step["cert"])
 				AudioManager.play_sfx("confirm")
 				await world.show_message("You earned the %s!" % DataRegistry.certifications[step["cert"]]["name"])
+				await _story_upgrades()
 		"open_shop":
 			await world.field_menus.shop(step["stock"])
 		"open_rack":
@@ -170,6 +172,13 @@ func _command(step: Dictionary) -> void:
 			var gone: NpcEvent = world.find_npc(step["npc"])
 			if gone != null:
 				gone.disappear()
+
+
+## Upgrades triggered by a story flag or a Certification (species "trigger": "flag" / "cert").
+func _story_upgrades() -> void:
+	for pair: Array in GameState.apply_story_upgrades():
+		AudioManager.play_jingle("heal")
+		await world.show_message("%s upgraded into %s!" % [pair[0], pair[1]])
 
 
 ## The Help Desk scan for corrupted Hexforged in the Quarantined pocket (nothing if it's empty).
