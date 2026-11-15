@@ -4,6 +4,41 @@ Newest entries at the top. Each entry: what's done, decisions, what's next.
 
 ---
 
+## 2026-11-15 — Realigned to the GDD (Master Prompt v2)
+
+docs/gdd.md is the source of truth (CLAUDE.md says so). Step 1 gap report: docs/gdd-gap-report.md (15 conflicts,
+demo backlog D1–D10, post-demo list). Brandon's answers: follow the GDD for the world, rewrite the built Act 1–2 beats
+now, list expansion creatures as pending demo candidates, keep the EXECUTE / STACK / INVENTORY / DISCONNECT menu.
+
+- **Docs** (13c77fb): design.md story → summary pointing to gdd.md §4; GDD region order; tagline CATCH · CLEAN ·
+  RESTORE (PENDING_APPROVAL, data/title_screen.json only); CLAUDE.md: GDD required, 5 lore rules, input rule.
+- **Story** (02d3ef9): Act 1 ends on a petty phishing email (no -R); Port 443 only flickers ("bad signal"), Pyrewall
+  stays up, Port City Help Desk closed for rewiring, Zed gone from Port City, Kevin at trouble spots. hx_ stubs for
+  the 7 acts (19 areas, TODO) incl. the 3-2-1 ticket, first old tape label, first fresh note.
+- **World order** (8512618): Route 1 → Patch Town → Route 2 → Wi-Fi Dead Zone → Port City; Dead Zone at Act 2 levels.
+- **Corruption gate** (5c0ac5e): corruption_revealed set at the Power Plant; no corrupted_chance before it (validated);
+  pocket / cleaning / CMDB status hidden until then.
+- **Demo teaser** (9c660d9): after Cert 2, a glitched "???" Cablesnake you can't catch flees after 2 turns;
+  demo_teaser_seen + CMDB "Status: UNKNOWN"; never corruption_revealed. DEMO_BUILD (export feature demo_build, preset
+  "Web (Demo)") ends on the Thanks screen. Kalb's old end-of-demo hook removed.
+- **Level cap** (607d298): data/level_caps.json [14, 20, 28, 36, 42, 48, 54, 60, 100] (TBD); EXP stops, overflow
+  discarded, once-per-battle message, Overclock Chip refused. Cert order: Data 5, Security 6.
+- **Upgrade triggers** (c48c0d9): level, item, flag, cert (+ sync). 21 upgrade steps waiting for decisions
+  (listed in docs/data-format.md).
+- **Demo roster** (7c94b34): species demo field (001–025 true); Acts 1–2 tables checked; 12 pending candidates in
+  data/demo_roster.json.
+- **Input** (070f1e6): all screens work with keyboard + controller; touch through the touch layer; Summary pages flip
+  with a tap; coverage test. Mouse-only gaps in the gap report (D9).
+- Tests: test_demo_teaser, test_level_cap, test_upgrade_triggers, test_demo_roster, gate tests in test_corruption.
+  Suite 368/368.
+
+**Open decisions (Brandon):** 1 final tagline; 2 [SYSADMIN_NAME], [RANSOM_LEADER], [VENDOR_NAME], [INSIDER]; 3 level
+cap numbers; 4 upgrade triggers per species; 5 which of the 12 candidates join the demo roster; 6 clean Pyrewall timing,
+corrupted starters for Ransom trainers; 7 corrupted stat mods and post-Power Plant corrupted_chance; 8 code/ID rename;
+9 trademark check. Also: Q5 (Dept 1 "cable-routing gym"?) and updating the GDD's battle menu line to EXECUTE etc.
+
+---
+
 ## 2026-11-15 — HEXFORGED: rename, new story, Infected status, corrupted Hexforged
 
 From Brandon's master prompt ("HEXFORGED — rename + story + corrupted creatures"). Six commits:
