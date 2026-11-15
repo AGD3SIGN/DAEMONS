@@ -248,27 +248,31 @@ func test_pause_menu_opens_stack_summary_and_cmdb() -> void:
 	GameState.add_daemon(_daemon("pingo", 9))
 	GameState.cmdb_seen["dustbunny"] = true
 	_open("onboarding_town")
+	var phone: Phone = world.field_menus.phone
 	await _press("menu")
-	assert_true(world.field_menus.side.is_choosing(), "pause menu is open")
-	await _press("ui_down")    # CMDB -> STACK
+	await wait_until(func() -> bool: return phone.mode == "home", 5.0)
+	assert_eq(phone.mode, "home", "the menu button opens your phone")
+	await _press("ui_right")   # MAPS -> CMDB
+	await _press("ui_right")   # CMDB -> STACK
 	await _press("ui_accept")
+	await wait_until(func() -> bool: return world.field_menus.list.is_choosing(), 5.0)
 	await _press("ui_accept")  # Pingo
 	await _press("ui_accept")  # SUMMARY
 	assert_true(world.field_menus.summary.visible)
 	await _press("ui_right")   # STATS page
 	await _press("ui_cancel")
 	await wait_until(func() -> bool: return world.field_menus.list.is_choosing(), 5.0)
-	await _press("ui_cancel")  # back to pause
-	await wait_until(func() -> bool: return world.field_menus.side.is_choosing(), 5.0)
-	await _press("ui_up")      # STACK -> CMDB
+	await _press("ui_cancel")  # back to the phone
+	await wait_until(func() -> bool: return phone.mode == "home", 5.0)
+	await _press("ui_left")    # STACK -> CMDB
 	await _press("ui_accept")
 	await wait_until(func() -> bool: return world.field_menus.list.is_choosing(), 5.0)
 	await _press("ui_cancel")
-	await wait_until(func() -> bool: return world.field_menus.side.is_choosing(), 5.0)
-	await _press("ui_cancel")  # close pause
+	await wait_until(func() -> bool: return phone.mode == "home", 5.0)
+	await _press("ui_cancel")  # put the phone away
 	await wait_until(func() -> bool: return world.is_idle(), 5.0)
 	assert_true(world.is_idle())
-	assert_false(world.field_menus.side.visible)
+	assert_false(phone.visible)
 
 
 # --- the whole loop ----------------------------------------------------------

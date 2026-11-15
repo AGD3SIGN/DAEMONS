@@ -218,6 +218,13 @@ tests/test_early_balance.gd keeps early fights winnable but not pushovers, and f
 one-shot a full-Uptime starter without a crit.
 Blacking out costs `percent`% of your credits, at most `cap_base + cap_per_cert x certs` (`GameState.blackout_loss()`).
 
+## region_map.json (the phone's Maps app)
+`{"name", "locations": [{"id", "name", "kind": town|route|wild|dungeon|locked, "x": 0-288, "y": 0-136, "maps": [map ids],
+"blurb", optional "label_at": above|below|left|right, "short", "show_if_flag"}], "links": [[place, place]],
+"exits": [{"from": place, "label"}]}`. Every map in data/maps must belong to exactly one place (`DataRegistry.region_of`).
+A place is named once visited (`GameState.visited`), shown as ??? when it's next to a visited place, hidden otherwise;
+`show_if_flag` places appear only once the flag is set.
+
 ## Save files (user://save_a.json, save_b.json)
 `{"version", "save_count", "saved_at", "checksum" (sha256 of the data), "data": GameState.to_dict()}`.
 Saves alternate between the two files; loading picks the newest one whose checksum matches.

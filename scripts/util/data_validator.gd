@@ -81,6 +81,7 @@ var certifications: Dictionary = {}  # cert id -> {id, name, department, type, o
 var title_screen: Dictionary = {}  # tagline, prompt, boot_log, featured legendaries (data/title_screen.json)
 var feedback: Dictionary = {}      # Feedback form config (data/feedback.json)
 var balance: Dictionary = {}       # EXP rate and blackout penalty (data/balance.json)
+var region_map: Dictionary = {}    # phone Maps app layout (data/region_map.json)
 
 
 ## raw = {"types": ..., "moves": ..., "species": ..., "items": ..., "config_profiles": ...}
@@ -112,6 +113,7 @@ func validate(raw: Dictionary) -> PackedStringArray:
 	_validate_title_screen(raw.get("title_screen"))
 	_validate_feedback(raw.get("feedback"))
 	_validate_balance(raw.get("balance"))
+	_validate_region_map(raw.get("region_map"))
 	return errors
 
 
@@ -927,6 +929,57 @@ func _validate_feedback(raw: Variant) -> void:
 	var categories: Variant = raw.get("categories")
 	if typeof(categories) != TYPE_ARRAY or categories.is_empty():
 		_err("feedback", "'categories' must be a non-empty list")
+
+
+# --- region map ----------------------------------------------------------------
+
+const REGION_KINDS: PackedStringArray = ["town", "route", "wild", "dungeon", "locked"]
+
+## data/region_map.json: places on the phone's map (x 0-288, y 0-136), the roads between them, and which maps
+## belong to each place. A map may belong to only one place.
+func _validate_region_map(raw: Variant) -> void:
+	region_map = {}
+	if typeof(raw) != TYPE_DICTIONARY or typeof(raw.get("locations")) != TYPE_ARRAY:
+		_err("region_map", "must be an object with a 'locations' list")
+		return
+	region_map = raw
+	var ids := {}
+	var owner := {}
+	for i in raw["locations"].size():
+		var loc: Variant = raw["locations"][i]
+		var where := "region_map › locations[%d]" % i
+		if typeof(loc) != TYPE_DICTIONARY:
+			_err(where, "must be an object")
+			continue
+		_string(loc, "id", where)
+		_string(loc, "name", where)
+		_string(loc, "blurb", where)
+		_one_of(loc, "kind", where, REGION_KINDS)
+		_int(loc, "x", where, 0, 288)
+		_int(loc, "y", where, 0, 136)
+		if loc.has("label_at"):
+			_one_of(loc, "label_at", where, PackedStringArray(["above", "below", "left", "right"]))
+		var id := String(loc.get("id", ""))
+		if ids.has(id):
+			_err(where, "id '%s' is used twice" % id)
+		ids[id] = true
+		if typeof(loc.get("maps")) != TYPE_ARRAY:
+			_err(where, "'maps' must be a list of map ids")
+			continue
+		for m: Variant in loc["maps"]:
+			if owner.has(m):
+				_err(where, "map '%s' already belongs to '%s'" % [m, owner[m]])
+			owner[m] = id
+	for key: String in ["links", "exits"]:
+		if typeof(raw.get(key, [])) != TYPE_ARRAY:
+			_err("region_map", "'%s' must be a list" % key)
+			return
+	for link: Variant in raw.get("links", []):
+		if typeof(link) != TYPE_ARRAY or link.size() != 2 or not ids.has(link[0]) or not ids.has(link[1]):
+			_err("region_map › links", "%s must be [place id, place id]" % str(link))
+	for exit: Variant in raw.get("exits", []):
+		if typeof(exit) != TYPE_DICTIONARY or not ids.has(exit.get("from", "")):
+			_err("region_map › exits", "%s needs a 'from' place id" % str(exit))
 
 
 # --- balance -----------------------------------------------------------------

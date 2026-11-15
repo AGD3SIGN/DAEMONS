@@ -36,10 +36,10 @@ func test_corner_hint_names_the_buttons_for_each_scheme() -> void:
 	await _open()
 	InputPrompts.scheme = "keyboard"
 	world.control_hint.refresh()
-	assert_eq(world.control_hint.text(), "Space MENU  Z TALK")
+	assert_eq(world.control_hint.text(), "Space PHONE  M MAP  Z TALK")
 	assert_true(world.control_hint.should_show(), "shown while walking around")
 	InputPrompts.scheme = "playstation"
-	assert_eq(world.control_hint.text(), "Options MENU  Cross TALK")
+	assert_eq(world.control_hint.text(), "Options PHONE  Create MAP  Cross TALK")
 	InputPrompts.scheme = "touch"
 	assert_false(world.control_hint.should_show(), "touch has real on-screen buttons")
 	InputPrompts.scheme = "keyboard"
@@ -60,11 +60,11 @@ func test_controls_page_lists_every_action() -> void:
 	for s in InputPrompts.SCHEMES:
 		var rows: Array = InputPrompts.controls(s)
 		var actions := rows.map(func(r: Array) -> String: return r[0])
-		for needed in ["MOVE", "TALK / OK", "BACK", "MENU"]:
+		for needed in ["MOVE", "TALK / OK", "BACK", "PHONE", "MAP"]:
 			assert_has(actions, needed, "%s lists %s" % [s, needed])
-	assert_eq(InputPrompts.controls("keyboard")[4], ["MENU", "Space / Tab"])
-	var source := FileAccess.get_file_as_string("res://scripts/ui/field_menus.gd")
-	assert_string_contains(source, "\"SAVE\", \"CONTROLS\", \"OPTIONS\"")
+	assert_eq(InputPrompts.controls("keyboard")[4], ["PHONE", "Space / Tab"])
+	assert_eq(InputPrompts.controls("keyboard")[5], ["MAP", "M"])
+	assert_has(Phone.new().app_ids(), "CONTROLS")
 
 
 func test_title_prompt_matches_the_input() -> void:

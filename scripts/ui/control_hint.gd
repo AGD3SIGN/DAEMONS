@@ -1,6 +1,6 @@
 class_name ControlHint
 extends PanelContainer
-## Overworld corner tag: "Space MENU  Z TALK" in the buttons of whatever you're holding, so a browser
+## Overworld corner tag: "Space PHONE  M MAP  Z TALK" in the buttons of whatever you're holding, so a browser
 ## player knows how to open the menu (player feedback, 2026-11-14). Hidden on touch (the overlay has
 ## real buttons), while a menu or dialogue is open, and when Options > CONTROL HINTS is off.
 
@@ -26,7 +26,7 @@ func _ready() -> void:
 
 
 func text() -> String:
-	return "%s MENU  %s TALK" % [InputPrompts.label("menu"), InputPrompts.label("ui_accept")]
+	return "%s PHONE  %s MAP  %s TALK" % [InputPrompts.label("menu"), InputPrompts.label("map"), InputPrompts.label("ui_accept")]
 
 
 func refresh() -> void:

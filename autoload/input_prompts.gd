@@ -7,11 +7,11 @@ signal scheme_changed(scheme: String)
 
 const SCHEMES: PackedStringArray = ["keyboard", "xbox", "playstation", "nintendo", "touch"]
 const LABELS := {
-	"keyboard":    {"ui_accept": "Z", "ui_cancel": "X", "menu": "Space", "run": "Shift"},
-	"xbox":        {"ui_accept": "A", "ui_cancel": "B", "menu": "Start", "run": "X"},
-	"playstation": {"ui_accept": "Cross", "ui_cancel": "Circle", "menu": "Options", "run": "Square"},
-	"nintendo":    {"ui_accept": "B", "ui_cancel": "A", "menu": "+", "run": "Y"},
-	"touch":       {"ui_accept": "the check button", "ui_cancel": "the back button", "menu": "the menu button", "run": "push the d-pad far"},
+	"keyboard":    {"ui_accept": "Z", "ui_cancel": "X", "menu": "Space", "map": "M", "run": "Shift"},
+	"xbox":        {"ui_accept": "A", "ui_cancel": "B", "menu": "Start", "map": "View", "run": "X"},
+	"playstation": {"ui_accept": "Cross", "ui_cancel": "Circle", "menu": "Options", "map": "Create", "run": "Square"},
+	"nintendo":    {"ui_accept": "B", "ui_cancel": "A", "menu": "+", "map": "-", "run": "Y"},
+	"touch":       {"ui_accept": "the check button", "ui_cancel": "the back button", "menu": "the menu button", "map": "Maps on your phone", "run": "push the d-pad far"},
 }
 
 var scheme: String = "keyboard"
@@ -64,18 +64,18 @@ func press(action: String) -> String:
 	return ("tap " if scheme == "touch" else "press ") + label(action)
 
 
-## Every control for a scheme, as [what it does, which buttons] rows (pause menu > CONTROLS).
+## Every control for a scheme, as [what it does, which buttons] rows (phone > CONTROLS).
 func controls(for_scheme: String = "") -> Array:
 	var s := for_scheme if not for_scheme.is_empty() else scheme
 	match s:
 		"keyboard":
 			return [["MOVE", "Arrows / WASD"], ["RUN", "Hold Shift"], ["TALK / OK", "Z / Enter"],
-				["BACK", "X / Esc"], ["MENU", "Space / Tab"], ["BATTLE", "1-4 pick a command"]]
+				["BACK", "X / Esc"], ["PHONE", "Space / Tab"], ["MAP", "M"], ["BATTLE", "1-4 pick a command"]]
 		"touch":
 			return [["MOVE", "D-pad (left)"], ["RUN", "Push the d-pad far"], ["TALK / OK", "Check button"],
-				["BACK", "Back button"], ["MENU", "Menu button"]]
+				["BACK", "Back button"], ["PHONE", "Menu button"], ["MAP", "Phone > Maps"]]
 	return [["MOVE", "D-pad / Left stick"], ["RUN", "Hold " + label("run", s)], ["TALK / OK", label("ui_accept", s)],
-		["BACK", label("ui_cancel", s)], ["MENU", label("menu", s)]]
+		["BACK", label("ui_cancel", s)], ["PHONE", label("menu", s)], ["MAP", label("map", s)]]
 
 
 ## The title screen's "press start" line in words that match what you're holding.

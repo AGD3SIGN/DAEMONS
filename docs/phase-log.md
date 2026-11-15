@@ -4,6 +4,26 @@ Newest entries at the top. Each entry: what's done, decisions, what's next.
 
 ---
 
+## 2026-11-15 — Your phone: menu + Maps app; balance round 2; four new Daemons
+
+- **Phone** (`scripts/ui/phone.gd`, class Phone): the menu button opens your work phone instead of the side menu.
+  Home screen = 3x3 app grid (MAPS, CMDB, STACK, BAG, ID CARD, SAVE, CONTROLS, SETTINGS, FEEDBACK, + DEBUG in
+  debug builds), status bar (clock, signal bars that drop in the Wi-Fi Dead Zone, battery), current place name.
+  FieldMenus.open_pause(app) runs the app loop; open_pause("MAP") is the new `map` action (M / View / Select / -),
+  and closing Maps from there puts the phone away.
+- **Maps app:** the phone turns sideways; Root Valley drawn as a circuit board from `data/region_map.json`
+  (towns = chips, routes = vias, wild areas = green pads, dungeons = red, HQ Tower = locked chip once
+  `hq_traced`). Visited places are named, places next to them show as ???, the rest are hidden. You-are-here
+  ring pulses; arrows move a cursor between shown places; the bottom bar names the place and describes it.
+- **Visited places:** `GameState.visited` (place ids), set on every map load via `DataRegistry.region_of()`,
+  saved. Older saves count the road from Onboarding Town to where you saved.
+- `region_map.json` validated (kinds, coordinates, links, label_at, each map in one place); a test checks every
+  map in data/maps is on the valley map. Control hint now "Space PHONE  M MAP  Z TALK". tests/test_phone.gd.
+- Balance round 2 (damage curve + Uptime bonus in balance.json, one-hit-KO test) and Hummodem / Jellyband /
+  Murmuroute / Storkache (#048–#051) also landed today; see the vault devlog. Suite 326/326.
+
+---
+
 ## 2026-11-14 — Player feedback pass: balance, moves, shop, controls
 
 - **Early-game balance** (first real player report: ~10 min of grinding). Cause: starters only knew Bump until

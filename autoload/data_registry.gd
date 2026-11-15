@@ -15,6 +15,7 @@ const FILES := {
 	"title_screen": "title_screen.json",
 	"feedback": "feedback.json",
 	"balance": "balance.json",
+	"region_map": "region_map.json",
 }
 const MAPS_DIR := "res://data/maps/"
 const DIALOGUE_DIR := "res://data/dialogue/"
@@ -35,6 +36,7 @@ var certifications: Dictionary = {}   # cert id -> {id, name, department, type, 
 var title_screen: Dictionary = {}     # title screen copy + featured legendaries (data/title_screen.json)
 var feedback: Dictionary = {}         # in-game Feedback form: relay endpoint and limits (data/feedback.json)
 var balance: Dictionary = {}          # EXP rate and the blackout credit penalty (data/balance.json)
+var region_map: Dictionary = {}       # the phone's Maps app: places, links, which maps belong where (data/region_map.json)
 
 var _validator: DataValidator
 var _maps: Dictionary = {}            # map id -> validated map data (loaded on first use)
@@ -130,6 +132,7 @@ func load_from(raw: Dictionary, report: bool = true) -> bool:
 	title_screen = validator.title_screen
 	feedback = validator.feedback
 	balance = validator.balance
+	region_map = validator.region_map
 	if report:
 		_report()
 	return errors.is_empty()
@@ -159,6 +162,14 @@ func get_map(map_id: String) -> Dictionary:
 
 
 ## Every map id in data/maps/.
+## The region-map location a map belongs to ("" if none), e.g. "department_1" -> "patch_town".
+func region_of(map_id: String) -> String:
+	for loc: Dictionary in region_map.get("locations", []):
+		if map_id in loc.get("maps", []):
+			return String(loc["id"])
+	return ""
+
+
 func map_ids() -> PackedStringArray:
 	var ids := PackedStringArray()
 	for file in DirAccess.get_files_at(MAPS_DIR):

@@ -27,7 +27,8 @@ In debug builds the title menu also has a **Debug Menu** (test battles, the Daem
 | Confirm / talk | Z / Enter | A | Click / tap |
 | Back | X / Esc | B | BACK buttons |
 | Run (hold) | Shift | X | — |
-| Menu | Space / Tab | Start | — |
+| Phone (menu) | Space / Tab | Start | Menu button |
+| Map | M | View / Select | Phone > Maps |
 | Battle command / move | 1–4 | D-pad + A | Click / tap |
 | Enter a name | Type it | Letter grid (D-pad + A, B = back) | Letter grid or the on-screen keyboard |
 

@@ -143,8 +143,8 @@ func test_unconfigured_builds_say_so() -> void:
 
 
 func test_pause_menu_has_feedback() -> void:
-	var source := FileAccess.get_file_as_string("res://scripts/ui/field_menus.gd")
-	assert_string_contains(source, "\"OPTIONS\", \"FEEDBACK\"]", "listed after OPTIONS")
+	var ids := Phone.new().app_ids()
+	assert_eq(ids.find("FEEDBACK"), ids.find("OPTIONS") + 1, "the phone lists FEEDBACK after SETTINGS")
 
 
 func test_writing_with_a_gamepad_and_sending() -> void:

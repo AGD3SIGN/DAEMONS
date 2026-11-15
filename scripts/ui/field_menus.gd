@@ -1,7 +1,8 @@
 class_name FieldMenus
 extends Control
 ## Menus used outside battle, all as awaitable flows:
-##   open_pause()        CMDB / STACK / BAG / CARD / SAVE / OPTIONS / FEEDBACK (+ DEBUG in debug builds)
+##   open_pause(app)     your phone: MAPS / CMDB / STACK / BAG / CARD / SAVE / CONTROLS / SETTINGS / FEEDBACK
+##                       (+ DEBUG in debug builds); open_pause("MAP") goes straight to Maps
 ##   feedback_screen()   send a bug report or idea to the team (see FeedbackClient)
 ##   stack_screen()      summary, swap order, use an item on a Daemon
 ##   bag_screen()        4 pockets (left/right), use / toss
@@ -21,6 +22,7 @@ var sub: MenuList       # bottom-right: small submenus over a list (SUMMARY/SWAP
 var summary: SummaryPanel
 var cmdb_panel: CmdbPanel
 var card: TrainerCardPanel
+var phone: Phone
 
 var _qty_panel: Panel
 var _qty_label: Label
@@ -51,6 +53,8 @@ func _ready() -> void:
 	add_child(cmdb_panel)
 	card = TrainerCardPanel.new()
 	add_child(card)
+	phone = Phone.new()
+	add_child(phone)
 	_qty_panel = Panel.new()
 	_qty_panel.anchor_left = 1
 	_qty_panel.anchor_right = 1
@@ -70,19 +74,20 @@ func _ready() -> void:
 
 # --- pause -------------------------------------------------------------------
 
-func open_pause() -> void:
-	var options := PackedStringArray(["CMDB", "STACK", "BAG", "CARD", "SAVE", "CONTROLS", "OPTIONS", "FEEDBACK"])
-	if OS.is_debug_build():
-		options.append("DEBUG")
-	options.append("CLOSE")
-	var start := 0
+func open_pause(start_app: String = "") -> void:
+	var last := "MAP"
+	var app := start_app
 	while true:
-		var r := await side.choose("MENU", options, [], start)
-		if r["action"] != "pick" or options[r["index"]] == "CLOSE":
-			break
-		start = r["index"]
-		side.close()
-		match options[r["index"]]:
+		if app.is_empty():
+			app = await phone.home(last)
+			if app.is_empty():
+				break
+		last = app
+		match app:
+			"MAP":
+				await phone.maps()
+				if start_app == "MAP":
+					break  # the map button is a quick look: closing Maps puts the phone away
 			"CMDB":
 				await cmdb_screen()
 			"STACK":
@@ -102,7 +107,8 @@ func open_pause() -> void:
 			"DEBUG":
 				SceneRouter.goto(DEBUG_MENU)
 				return
-	side.close()
+		app = ""
+		start_app = ""
 
 
 # --- feedback ----------------------------------------------------------------

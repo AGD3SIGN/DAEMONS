@@ -89,6 +89,7 @@ func load_map(map_id: String, spawn_name: String = "default") -> bool:
 	_spawn_events()
 	refresh_barriers()
 	_remember_location()
+	GameState.visit(map_id)
 	_apply_map_mood()
 	_show_banner(String(map.map_data.get("name", map_id)))
 	map_loaded.emit(map_id)
@@ -399,13 +400,17 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif event.is_action_pressed("menu") and is_idle():
 		get_viewport().set_input_as_handled()
 		open_pause()
+	elif event.is_action_pressed("map") and is_idle():
+		get_viewport().set_input_as_handled()
+		open_pause("MAP")
 
 
-func open_pause() -> void:
+## Opens your phone (the menu button) or goes straight to one app ("MAP" for the map button).
+func open_pause(app: String = "") -> void:
 	_busy = true
 	player.input_enabled = false
 	AudioManager.play_sfx("select")
-	await field_menus.open_pause()
+	await field_menus.open_pause(app)
 	_busy = false
 	player.input_enabled = true
 

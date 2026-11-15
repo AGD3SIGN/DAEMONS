@@ -19,6 +19,7 @@ var cmdb_seen: Dictionary = {}      # species_id -> true
 var cmdb_caught: Dictionary = {}    # species_id -> true
 var cmdb_found_at: Dictionary = {}  # species_id -> map name where it was first met in the wild
 var location: Dictionary = {}       # {"map": id, "x": cell x, "y": cell y, "facing": "down"}
+var visited: Dictionary = {}        # region-map place id -> true (the phone's Maps app)
 var repel_steps: int = 0            # Firewall Rule steps left
 var trainer_id: int = 0             # shown on the trainer card; stamped on caught Daemons
 var last_help_desk: Dictionary = {} # where you wake up after a black-out
@@ -50,6 +51,7 @@ func reset() -> void:
 	cmdb_caught.clear()
 	cmdb_found_at.clear()
 	location.clear()
+	visited.clear()
 	repel_steps = 0
 	trainer_id = 0
 	last_help_desk = DEFAULT_HELP_DESK.duplicate()
@@ -185,6 +187,7 @@ func to_dict() -> Dictionary:
 		"cmdb_caught": cmdb_caught.keys(),
 		"cmdb_found_at": cmdb_found_at.duplicate(),
 		"location": location.duplicate(),
+		"visited": visited.keys(),
 		"last_help_desk": last_help_desk.duplicate(),
 		"repel_steps": repel_steps,
 	}
@@ -218,9 +221,44 @@ func from_dict(d: Dictionary) -> void:
 		cmdb_caught[species_id] = true
 	cmdb_found_at = d.get("cmdb_found_at", {}).duplicate()
 	location = _cell_dict(d.get("location", {}))
+	for place: String in d.get("visited", []):
+		visited[place] = true
+	if not d.has("visited"):
+		_guess_visited()
 	if d.has("last_help_desk"):
 		last_help_desk = _cell_dict(d["last_help_desk"])
 	repel_steps = int(d.get("repel_steps", 0))
+
+
+## Marks the map's region-map place as visited (called whenever the overworld loads a map).
+func visit(map_id: String) -> void:
+	var place := DataRegistry.region_of(map_id)
+	if not place.is_empty():
+		visited[place] = true
+
+
+## Saves from before the Maps app (2026-11-15) don't list visited places: everything on the road from home to
+## where you saved counts, which is the only way to get there.
+func _guess_visited() -> void:
+	var here := DataRegistry.region_of(String(location.get("map", "")))
+	if here.is_empty():
+		return
+	var links: Array = DataRegistry.region_map.get("links", [])
+	var from := {"onboarding_town": ""}
+	var queue := ["onboarding_town"]
+	while not queue.is_empty():
+		var at: String = queue.pop_front()
+		for link: Array in links:
+			for side in 2:
+				if link[side] == at and not from.has(link[1 - side]):
+					from[link[1 - side]] = at
+					queue.append(link[1 - side])
+	var step := here
+	while from.has(step):
+		visited[step] = true
+		step = from[step]
+		if step.is_empty():
+			break
 
 
 static func _cell_dict(loc: Dictionary) -> Dictionary:
