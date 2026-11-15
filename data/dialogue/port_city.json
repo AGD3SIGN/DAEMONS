@@ -187,6 +187,10 @@
       "text": "Welcome to the Port City Help Desk! Well, the Port City Help Container."
     },
     {
+      "cmd": "clean_quarantined",
+      "speaker": "Help Desk"
+    },
+    {
       "speaker": "Help Desk",
       "choice": "Want me to restore your Hexforged?",
       "yes": [

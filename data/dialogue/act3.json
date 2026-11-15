@@ -85,6 +85,10 @@
       "text": "Welcome to the Help Desk! Our real system is quarantined, so I'm running everything from a laptop."
     },
     {
+      "cmd": "clean_quarantined",
+      "speaker": "Help Desk"
+    },
+    {
       "speaker": "Help Desk",
       "choice": "Want me to restore your Hexforged?",
       "yes": [

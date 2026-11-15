@@ -161,6 +161,10 @@
       "text": "Welcome to the DevOps Heights Help Desk! Our uptime is 99.9%. The other 0.1% is Fridays."
     },
     {
+      "cmd": "clean_quarantined",
+      "speaker": "Help Desk"
+    },
+    {
       "speaker": "Help Desk",
       "choice": "Want me to restore your Hexforged?",
       "yes": [

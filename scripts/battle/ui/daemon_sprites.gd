@@ -47,6 +47,96 @@ static func pose(species_id: String, pose_name: String) -> Texture2D:
 	return atlas
 
 
+# --- corrupted look (2026-11-15) ------------------------------------------------------------------------------
+
+## Corrupted art is front-only: a 6-frame 384x64 sheet (species "corrupted.sprite_front"). Other poses fall back.
+const CORRUPTED_FRAMES := {"idle": 0, "idle_b": 1, "attack": 2, "special": 3, "hurt": 4, "faint": 5}
+const ERROR_RED := Color("d41e3c")
+
+
+## A pose of the corrupted version: real art if it exists, else a placeholder made from the normal pose
+## (dead, desaturated palette; a few rows shifted 1-2 px; red pupils; a few void pixels). No horns, flames,
+## glowing eyes or goo: corruption is a broken computer.
+static func corrupted_pose(species_id: String, pose_name: String) -> Texture2D:
+	var key := "%s#ERR#%s" % [species_id, pose_name]
+	if _cache.has(key):
+		return _cache[key]
+	var tex: Texture2D = null
+	var block: Dictionary = DataRegistry.get_species(species_id).get("corrupted", {})
+	var path := "res://" + String(block.get("sprite_front", ""))
+	if block.has("sprite_front") and ResourceLoader.exists(path) and CORRUPTED_FRAMES.has(pose_name):
+		var atlas := AtlasTexture.new()
+		atlas.atlas = load(path)
+		atlas.region = Rect2(int(CORRUPTED_FRAMES[pose_name]) * SIZE, 0, SIZE, SIZE)
+		tex = atlas
+	else:
+		var clean := pose(species_id, pose_name)
+		if clean == null:
+			clean = front(species_id)
+		if clean != null:
+			tex = ImageTexture.create_from_image(corrupt_image(clean.get_image(), species_id.hash()))
+	_cache[key] = tex
+	return tex
+
+
+## The placeholder corruption, deterministic per species (seed).
+static func corrupt_image(src: Image, seed_value: int) -> Image:
+	var img := src.duplicate() as Image
+	img.convert(Image.FORMAT_RGBA8)
+	var w := img.get_width()
+	var h := img.get_height()
+	# 1) dead, ashy palette: mostly grey, a little of the old hue left, darker
+	for y in h:
+		for x in w:
+			var c := img.get_pixel(x, y)
+			if c.a < 0.5:
+				continue
+			var grey := c.get_luminance()
+			img.set_pixel(x, y, Color(grey, grey, grey).lerp(c, 0.25).darkened(0.35))
+	# 2) red pupils: dark pixels touching a near-white eye shine (never the outline), at most a dozen
+	var orig := src.duplicate() as Image
+	orig.convert(Image.FORMAT_RGBA8)
+	var reds := 0
+	for y in range(1, int(h * 0.6)):
+		for x in range(1, w - 1):
+			if reds >= 12:
+				break
+			var c := orig.get_pixel(x, y)
+			if c.a < 0.5 or c.get_luminance() > 0.14:
+				continue
+			var inside := true
+			var shine := false
+			for d: Vector2i in [Vector2i(1, 0), Vector2i(-1, 0), Vector2i(0, 1), Vector2i(0, -1)]:
+				var n := orig.get_pixel(x + d.x, y + d.y)
+				if n.a < 0.5:
+					inside = false
+				elif n.get_luminance() > 0.85:
+					shine = true
+			if inside and shine:
+				img.set_pixel(x, y, ERROR_RED)
+				reds += 1
+	# 3) glitch: a few rows shifted 1-2 px, and a few void pixels knocked out of the body
+	var rng := RandomNumberGenerator.new()
+	rng.seed = seed_value
+	for i in 4:
+		var row := rng.randi_range(8, h - 8)
+		var shift := 1 if rng.randf() < 0.5 else 2
+		for y in range(row, mini(row + rng.randi_range(1, 2), h)):
+			var line := img.get_region(Rect2i(0, y, w, 1))
+			img.fill_rect(Rect2i(0, y, w, 1), Color(0, 0, 0, 0))
+			img.blit_rect(line, Rect2i(0, 0, w - shift, 1), Vector2i(shift, y))
+	var voids := 0
+	for attempt in 200:
+		if voids >= 5:
+			break
+		var x := rng.randi_range(4, w - 6)
+		var y := rng.randi_range(4, h - 6)
+		if img.get_pixel(x, y).a > 0.5 and img.get_pixel(x + 1, y + 1).a > 0.5:
+			img.fill_rect(Rect2i(x, y, 2, 2), Color("0b0b10"))
+			voids += 1
+	return img
+
+
 static func _sheet(species_id: String) -> Texture2D:
 	var key := species_id + "#sheet"
 	if not _cache.has(key):

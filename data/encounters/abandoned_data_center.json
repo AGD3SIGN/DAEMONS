@@ -18,7 +18,8 @@
         "species": "fanbat",
         "min": 21,
         "max": 23,
-        "weight": 20
+        "weight": 20,
+        "corrupted_chance": 0.5
       },
       {
         "species": "coolippo",
@@ -30,7 +31,8 @@
         "species": "servurtle",
         "min": 21,
         "max": 23,
-        "weight": 15
+        "weight": 15,
+        "corrupted_chance": 0.5
       },
       {
         "species": "clawptop",

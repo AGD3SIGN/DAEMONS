@@ -5,7 +5,8 @@ extends RefCounted
 ## A Firewall Rule (repel) blocks anything below the lead Daemon's level.
 
 
-## Returns {"species": id, "level": n} or {} for no encounter.
+## Returns {"species": id, "level": n, "corrupted": bool} or {} for no encounter. A slot's "corrupted_chance"
+## (0..1, default 0) is rolled only for species that can be corrupted, so Malware lines never are.
 ## rate_override >= 0 replaces the table's rate.
 static func roll(map_id: String, tile_name: String, rng: RandomNumberGenerator, lead_level: int, repel_active: bool, rate_override: float = -1.0) -> Dictionary:
 	var table: Dictionary = DataRegistry.encounters.get(map_id, {})
@@ -19,7 +20,9 @@ static func roll(map_id: String, tile_name: String, rng: RandomNumberGenerator, 
 	var level := rng.randi_range(int(slot["min"]), int(slot["max"]))
 	if repel_active and level < lead_level:
 		return {}
-	return {"species": slot["species"], "level": level}
+	var chance := float(slot.get("corrupted_chance", 0.0))
+	var corrupted := chance > 0.0 and DaemonInstance.can_be_corrupted(slot["species"]) and rng.randf() < chance
+	return {"species": slot["species"], "level": level, "corrupted": corrupted}
 
 
 ## Weighted pick.

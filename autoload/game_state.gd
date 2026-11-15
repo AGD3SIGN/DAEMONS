@@ -20,7 +20,10 @@ var cmdb_caught: Dictionary = {}    # species_id -> true
 var cmdb_found_at: Dictionary = {}  # species_id -> map name where it was first met in the wild
 var location: Dictionary = {}       # {"map": id, "x": cell x, "y": cell y, "facing": "down"}
 var counters: Dictionary = {}       # story/puzzle numbers (power load, pipeline stage), name -> int
-var visited: Dictionary = {}        # region-map place id -> true (the phone's Maps app)
+var visited: Dictionary = {}
+var quarantined: Array = []         # corrupted Hexforged you caught, waiting for a Help Desk clean (can't battle)
+var cmdb_compromised: Dictionary = {}  # species_id -> true once you've seen a corrupted one
+var cmdb_recovered: Dictionary = {}    # species_id -> true once a Help Desk cleaned one of yours        # region-map place id -> true (the phone's Maps app)
 var repel_steps: int = 0            # Firewall Rule steps left
 var trainer_id: int = 0             # shown on the trainer card; stamped on caught Daemons
 var last_help_desk: Dictionary = {} # where you wake up after a black-out
@@ -53,6 +56,9 @@ func reset() -> void:
 	cmdb_found_at.clear()
 	location.clear()
 	visited.clear()
+	quarantined.clear()
+	cmdb_compromised.clear()
+	cmdb_recovered.clear()
 	counters.clear()
 	repel_steps = 0
 	trainer_id = 0
@@ -64,13 +70,32 @@ func reset() -> void:
 
 ## Adds a Daemon to the Active Stack, or the Server Rack if the stack is full.
 ## Returns "stack", "rack" or "full" (everything is full).
+## Returns where it went: "stack", "rack", "full", or "quarantined" (a corrupted Hexforged never joins the stack
+## or rack; it waits in the Quarantined pocket until a Help Desk cleans it).
 func add_daemon(d: DaemonInstance) -> String:
 	cmdb_seen[d.species_id] = true
 	cmdb_caught[d.species_id] = true
+	if d.is_corrupted:
+		cmdb_compromised[d.species_id] = true
+		quarantined.append(d)
+		return "quarantined"
 	if active_stack.size() < MAX_STACK:
 		active_stack.append(d)
 		return "stack"
 	return "rack" if rack_add(d) >= 0 else "full"
+
+
+## Help Desk scan ("Have you tried turning it off and on again?"): cleans the quarantined Hexforged at `index`
+## and adds it like a new catch. Returns where it went ("stack", "rack", "full") or "" if there's nothing there.
+func clean_quarantined(index: int) -> String:
+	if index < 0 or index >= quarantined.size():
+		return ""
+	var d: DaemonInstance = quarantined[index]
+	quarantined.remove_at(index)
+	d.is_corrupted = false
+	d.status = ""
+	cmdb_recovered[d.species_id] = true
+	return add_daemon(d)
 
 
 func has_usable_daemon() -> bool:
@@ -190,6 +215,9 @@ func to_dict() -> Dictionary:
 		"cmdb_found_at": cmdb_found_at.duplicate(),
 		"location": location.duplicate(),
 		"visited": visited.keys(),
+		"quarantined": quarantined.map(func(d: DaemonInstance) -> Dictionary: return d.to_dict()),
+		"cmdb_compromised": cmdb_compromised.keys(),
+		"cmdb_recovered": cmdb_recovered.keys(),
 		"counters": counters.duplicate(),
 		"last_help_desk": last_help_desk.duplicate(),
 		"repel_steps": repel_steps,
@@ -224,6 +252,14 @@ func from_dict(d: Dictionary) -> void:
 		cmdb_caught[species_id] = true
 	cmdb_found_at = d.get("cmdb_found_at", {}).duplicate()
 	location = _cell_dict(d.get("location", {}))
+	for entry: Dictionary in d.get("quarantined", []):
+		var q := DaemonInstance.from_dict(entry)
+		if q != null:
+			quarantined.append(q)
+	for species_id: String in d.get("cmdb_compromised", []):
+		cmdb_compromised[species_id] = true
+	for species_id: String in d.get("cmdb_recovered", []):
+		cmdb_recovered[species_id] = true
 	for name: String in d.get("counters", {}):
 		counters[name] = int(d["counters"][name])
 	for place: String in d.get("visited", []):

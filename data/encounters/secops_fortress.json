@@ -12,7 +12,8 @@
         "species": "servurtle",
         "min": 31,
         "max": 33,
-        "weight": 15
+        "weight": 15,
+        "corrupted_chance": 0.3
       },
       {
         "species": "deskclaw",

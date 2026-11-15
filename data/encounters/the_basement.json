@@ -6,7 +6,8 @@
         "species": "floppit",
         "min": 15,
         "max": 17,
-        "weight": 20
+        "weight": 20,
+        "corrupted_chance": 0.4
       },
       {
         "species": "wormby",
@@ -18,7 +19,8 @@
         "species": "ramster",
         "min": 16,
         "max": 18,
-        "weight": 20
+        "weight": 20,
+        "corrupted_chance": 0.4
       },
       {
         "species": "dillodisk",
@@ -30,13 +32,15 @@
         "species": "fanbat",
         "min": 16,
         "max": 18,
-        "weight": 15
+        "weight": 15,
+        "corrupted_chance": 0.4
       },
       {
         "species": "servurtle",
         "min": 16,
         "max": 17,
-        "weight": 5
+        "weight": 5,
+        "corrupted_chance": 0.4
       }
     ]
   }

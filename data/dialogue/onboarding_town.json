@@ -117,6 +117,10 @@
       "text": "Welcome to the Help Desk!"
     },
     {
+      "cmd": "clean_quarantined",
+      "speaker": "Help Desk"
+    },
+    {
       "speaker": "Help Desk",
       "choice": "Want me to restore your Hexforged?",
       "yes": [
@@ -268,7 +272,11 @@
   "manager_starter": [
     {
       "cmd": "move_player",
-      "path": ["up", "right", "right"]
+      "path": [
+        "up",
+        "right",
+        "right"
+      ]
     },
     {
       "speaker": "Marge",

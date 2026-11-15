@@ -6,7 +6,8 @@
         "species": "fanbat",
         "min": 24,
         "max": 26,
-        "weight": 20
+        "weight": 20,
+        "corrupted_chance": 0.5
       },
       {
         "species": "transistant",

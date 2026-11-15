@@ -12,7 +12,8 @@
         "species": "cablesnake",
         "min": 9,
         "max": 12,
-        "weight": 20
+        "weight": 20,
+        "corrupted_chance": 0.25
       },
       {
         "species": "spigeon",

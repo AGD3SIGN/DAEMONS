@@ -10,6 +10,7 @@ extends Control
 ##
 ## config keys (all optional):
 ##   foe: [[species_id, level], ...]    or foe_stack: Array[DaemonInstance]     default: Dustbunny Lv5
+##        a third entry true = the corrupted (ERR::) version, if the species can be corrupted
 ##   wild: bool (default: true unless trainer_name)   trainer_name: String   ai: random | basic | smart
 ##   player_stack: Array[DaemonInstance]  (default GameState.active_stack)
 ##   items: Dictionary                     (default GameState.bag; used up in place)
@@ -145,7 +146,9 @@ func setup(cfg: Dictionary) -> void:
 		foe_stack.assign(cfg["foe_stack"])
 	else:
 		for entry: Array in cfg.get("foe", [["dustbunny", 5]]):
-			foe_stack.append(DaemonInstance.create(entry[0], int(entry[1]), rng, 0 if wild else 2))
+			var foe := DaemonInstance.create(entry[0], int(entry[1]), rng, 0 if wild else 2)
+			foe.is_corrupted = entry.size() > 2 and bool(entry[2]) and DaemonInstance.can_be_corrupted(entry[0])
+			foe_stack.append(foe)
 	state = BattleState.new(BattleSide.new("You", player_stack, items),
 		BattleSide.new(trainer_name if not trainer_name.is_empty() else "Wild", foe_stack), rng, wild)
 	if is_inside_tree() and not _started:
@@ -173,6 +176,8 @@ func host_label() -> String:
 	if not trainer_name.is_empty():
 		return trainer_name.to_upper()
 	var foe := state.sides[BattleState.FOE].active()
+	if foe != null and foe.is_corrupted:
+		return foe.display_name()  # ERR::CABLESNAKE: its broken name tag is all it shows
 	if foe != null and GameState.cmdb_seen.get(foe.species_id, false):
 		return String(foe.species_data()["name"]).to_upper()
 	return "UNKNOWN HOST"
@@ -194,7 +199,9 @@ func _start() -> void:
 
 func _run() -> void:
 	for d in state.sides[BattleState.FOE].stack:
-		GameState.cmdb_seen[d.species_id] = true
+		GameState.cmdb_seen[d.species_id] = true  # a corrupted one counts as seen for its species
+		if d.is_corrupted:
+			GameState.cmdb_compromised[d.species_id] = true
 	await _player.play(BattleSim.start(state))
 	while not state.is_over():
 		await _send_replacements()
@@ -348,6 +355,8 @@ func _after_battle() -> void:
 					await text_box.show_text("%s was added to your Active Stack." % caught.display_name())
 				"rack":
 					await text_box.show_text("Your stack is full. %s was sent to the Server Rack." % caught.display_name())
+				"quarantined":
+					await text_box.show_text("%s is locked in your Quarantined pocket. A Help Desk can clean it." % caught.display_name())
 				_:
 					await text_box.show_text("Every rack is full! %s had to be released." % caught.display_name())
 	result = {"outcome": state.outcome, "turns": state.turn, "captured": state.captured}

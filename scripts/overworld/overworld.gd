@@ -233,7 +233,7 @@ func _check_encounter(cell: Vector2i) -> void:
 	var rate := encounter_rate_override if encounter_rate_override >= 0.0 else float(table["rate"])
 	var hit := Encounters.roll(map.map_id, info["name"], encounter_rng, GameState.lead_level(), GameState.repel_steps > 0, rate)
 	if not hit.is_empty():
-		start_wild_battle(hit["species"], hit["level"])
+		start_wild_battle(hit["species"], hit["level"], bool(hit.get("corrupted", false)))
 
 
 ## Security cameras turn on your steps; if one sees you after turning, you're walked back to its spawn point.
@@ -299,13 +299,13 @@ func engage_trainer(npc: NpcEvent, walk_up: bool) -> void:
 		player.input_enabled = true
 
 
-func start_wild_battle(species_id: String, level: int) -> void:
+func start_wild_battle(species_id: String, level: int, corrupted: bool = false) -> void:
 	_busy = true
 	player.input_enabled = false
 	if not GameState.cmdb_found_at.has(species_id):
 		GameState.cmdb_found_at[species_id] = String(map.map_data.get("name", map.map_id))
 	await _encounter_flash()
-	start_battle({"foe": [[species_id, level]], "wild": true})
+	start_battle({"foe": [[species_id, level, corrupted]], "wild": true})
 	if not allow_scene_change:
 		_busy = false
 		player.input_enabled = true

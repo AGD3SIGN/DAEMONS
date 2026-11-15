@@ -225,6 +225,27 @@ Blacking out costs `percent`% of your credits, at most `cap_base + cap_per_cert 
 A place is named once visited (`GameState.visited`), shown as ??? when it's next to a visited place, hidden otherwise;
 `show_if_flag` places appear only once the flag is set.
 
+## Corrupted Hexforged (2026-11-15)
+The same species in a glitched, hostile state (Ransom's code pushed through the broken Hexforge). Not a separate
+species or CMDB entry: `DaemonInstance.is_corrupted` (saved as `"corrupted"`).
+- **species.json** optional block, only for species met in the wild and never Malware lines (validated):
+  `"corrupted": {"sprite_front": "assets/sprites/hexforged/corrupted/<id>_front.png", "name_prefix": "ERR::",
+  "add_type": "Malware", "stat_mods": {"throughput": 1.10, "encryption": 0.90}}`. Blocks so far: Pyrewall,
+  Cablesnake, Floppit, Dustbunny, Fanbat, Ramster, Servurtle.
+- **While corrupted:** second type becomes Malware (Security hits it super-effectively), stats x `stat_mods`
+  (never Uptime), name `ERR::CABLESNAKE`. Trainer AI unchanged.
+- **Encounters:** per-slot `"corrupted_chance": 0.0-1.0` (only on species with a block). Battle config foe entry
+  `[species, level, true]` spawns the corrupted version.
+- **Catching:** any Quarantine Key; it goes to `GameState.quarantined` (Bag > QUARANTINED page), never the stack or
+  rack, and can't battle. **Cleaning:** dialogue `{"cmd": "clean_quarantined"}` (in every Help Desk script) runs
+  the shared CleanEffect (scripts/ui/clean_effect.gd: glitch slices, falling void squares, 4-step dithered palette
+  swap) and adds the clean version like a new catch: "ERR::CABLESNAKE was restored to CABLESNAKE!".
+- **CMDB:** seeing one counts as seen; record shows `Status: COMPROMISED | Note: Unauthorized code detected. Do not
+  connect to production.` until a Help Desk cleans one (`Status: Recovered`).
+- **Art:** front-only 6 frames (idle, idle_b, attack, special, hurt, faint), 384x64. Until it exists,
+  DaemonSprites.corrupted_pose() makes a placeholder from the normal pose (ashy palette, shifted rows, red #D41E3C
+  pupils, void pixels).
+
 ## Save files (user://save_a.json, save_b.json)
 `{"version", "save_count", "saved_at", "checksum" (sha256 of the data), "data": GameState.to_dict()}`.
 Saves alternate between the two files; loading picks the newest one whose checksum matches.

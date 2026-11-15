@@ -17,6 +17,7 @@ extends RefCounted
 ##   {"cmd": "add_var", "var": "load", "value": -4}  /  {"cmd": "set_var", "var": "stage", "value": 0}
 ##   {"cmd": "clear_flags", "flags": ["brk_a", "brk_b"]}
 ##   {"cmd": "send_player", "spawn": "entrance"}     fade out and back in at a spawn point on this map
+##   {"cmd": "clean_quarantined"}                   Help Desk: offer to clean every corrupted Hexforged you caught
 ##   {"cmd": "sfx", "id": "error"}                 play a sound effect (AudioManager ids)
 ##   {"cmd": "end_demo"}                              sets demo_complete, saves, rolls the end card + credits
 ##   {"cmd": "move_npc", "npc": "kid", "path": ["left", "right"]}   npc "self" = whoever is talking
@@ -85,6 +86,8 @@ func _command(step: Dictionary) -> void:
 				GameState.flags.erase(flag)
 		"sfx":
 			AudioManager.play_sfx(step["id"])
+		"clean_quarantined":
+			await _clean_quarantined(step.get("speaker", "Help Desk"))
 		"end_demo":
 			stopped = true
 			world.end_demo()
@@ -163,6 +166,32 @@ func _command(step: Dictionary) -> void:
 			var gone: NpcEvent = world.find_npc(step["npc"])
 			if gone != null:
 				gone.disappear()
+
+
+## The Help Desk scan for corrupted Hexforged in the Quarantined pocket (nothing if it's empty).
+func _clean_quarantined(speaker: String) -> void:
+	var count := GameState.quarantined.size()
+	if count == 0:
+		return
+	await world.say("Your Quarantined pocket has %d corrupted Hexforged in it. Unauthorized code, the works." % count, speaker)
+	if not await world.ask("Run a scan and clean %s?" % ("it" if count == 1 else "them"), speaker):
+		await world.say("They'll stay locked up until you're ready.", speaker)
+		return
+	await world.say("Have you tried turning it off and on again?", speaker)
+	while not GameState.quarantined.is_empty():
+		var d: DaemonInstance = GameState.quarantined[0]
+		var err_name := d.display_name()
+		world.text_box.visible = false
+		await world.field_menus.clean_animation(d)
+		var where := GameState.clean_quarantined(0)
+		await world.show_message("%s was restored to %s!" % [err_name, d.clean_name().to_upper()])
+		match where:
+			"stack":
+				await world.show_message("%s joined your Active Stack." % d.display_name())
+			"rack":
+				await world.show_message("Your stack is full, so %s went to the Server Rack." % d.display_name())
+			"full":
+				await world.show_message("Every rack is full! %s had to be released." % d.display_name())
 
 
 static func compare(a: int, op: String, b: int) -> bool:

@@ -43,10 +43,23 @@ func open(species_id: String) -> void:
 	_text.text = "ASSET DMN-%03d\n%s\n%s\n%s\nFound: %s" % [number, data["name"], data["cmdb"]["category"], types,
 		GameState.cmdb_found_at.get(species_id, "Unknown")]
 	_entry.text = data["cmdb"]["entry"] if caught else "No data. Quarantine one to complete this record."
+	var status := status_line(species_id)
+	if not status.is_empty():
+		_entry.text = status + "\n" + _entry.text
 	visible = true
 	_open = true
 	await _closed
 	visible = false
+
+
+## Corruption status on the record (2026-11-15): COMPROMISED once you've seen a corrupted one, Recovered once a
+## Help Desk has cleaned one of yours. "" for species you've only met clean.
+static func status_line(species_id: String) -> String:
+	if GameState.cmdb_recovered.get(species_id, false):
+		return "Status: Recovered"
+	if GameState.cmdb_compromised.get(species_id, false):
+		return "Status: COMPROMISED | Note: Unauthorized code detected. Do not connect to production."
+	return ""
 
 
 func _unhandled_input(event: InputEvent) -> void:

@@ -36,7 +36,8 @@
         "species": "fanbat",
         "min": 29,
         "max": 31,
-        "weight": 15
+        "weight": 15,
+        "corrupted_chance": 0.4
       },
       {
         "species": "murmuroute",

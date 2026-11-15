@@ -665,14 +665,28 @@ func stack_rows() -> PackedStringArray:
 
 # --- Bag ---------------------------------------------------------------------
 
+## Bag pages: the 4 item pockets, then QUARANTINED (corrupted Hexforged you caught, waiting for a Help Desk).
+const QUARANTINED_PAGE := 4
+
+
 func bag_screen() -> void:
 	var pocket := 0
 	var start := 0
 	while true:
+		if pocket == QUARANTINED_PAGE:
+			var q := await _show_quarantined()
+			if q["action"] == "left" or q["action"] == "right":
+				pocket = wrapi(pocket + (1 if q["action"] == "right" else -1), 0, POCKETS.size() + 1)
+				start = 0
+				continue
+			if q["action"] != "pick":
+				break
+			await _say("It's locked down until a Help Desk scans it. Have you tried turning it off and on again?")
+			continue
 		var ids := pocket_items(POCKETS[pocket])
 		var r := await _show_pocket(pocket, ids, start)
 		if r["action"] == "left" or r["action"] == "right":
-			pocket = wrapi(pocket + (1 if r["action"] == "right" else -1), 0, POCKETS.size())
+			pocket = wrapi(pocket + (1 if r["action"] == "right" else -1), 0, POCKETS.size() + 1)
 			start = 0
 			continue
 		if r["action"] != "pick":
@@ -689,6 +703,48 @@ func bag_screen() -> void:
 			1:
 				await _toss(item_id)
 	list.close()
+
+
+## Help Desk cleaning: the shared CleanEffect on a dark panel, corrupted idle -> clean idle. Awaitable.
+func clean_animation(d: DaemonInstance) -> void:
+	var panel := ColorRect.new()
+	panel.color = Color(0.03, 0.04, 0.08, 0.92)
+	panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	add_child(panel)
+	var fx := CleanEffect.new()
+	fx.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	fx.offset_bottom = -48  # clear of the text box
+	fx.time_scale = world.time_scale if world != null else 1.0
+	panel.add_child(fx)
+	var clean_tex := DaemonSprites.pose(d.species_id, "idle")
+	if clean_tex == null:
+		clean_tex = DaemonSprites.front(d.species_id)
+	AudioManager.play_sfx("error")
+	await fx.play(DaemonSprites.corrupted_pose(d.species_id, "idle"), clean_tex)
+	AudioManager.play_sfx("unlock")
+	panel.queue_free()
+
+
+## The QUARANTINED page: one row per corrupted Hexforged you're holding. They can't battle or be used.
+func quarantined_rows() -> PackedStringArray:
+	var rows := PackedStringArray()
+	for d: DaemonInstance in GameState.quarantined:
+		rows.append("%-16s Lv%d" % [d.display_name(), d.level])
+	return rows
+
+
+func _show_quarantined() -> Dictionary:
+	var rows := quarantined_rows()
+	var enabled: Array = []
+	if rows.is_empty():
+		rows.append("(empty)")
+		enabled = [false]
+	list.allow_lr = true
+	list.describe = func(_i: int) -> String: return "Corrupted. Can't battle. Any Help Desk can clean it."
+	var r := await list.choose("QUARANTINED", rows, enabled, 0)
+	list.allow_lr = false
+	list.describe = Callable()
+	return r
 
 
 func pocket_items(pocket: String) -> Array[String]:

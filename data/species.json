@@ -1,5 +1,5 @@
 [
-  { "id": "pyrewall", "number": 0, "name": "Pyrewall", "types": ["security", "hardware"], "legendary": true,
+  { "id": "pyrewall", "number": 0, "name": "Pyrewall", "types": ["security", "hardware"], "legendary": true, "corrupted": { "sprite_front": "assets/sprites/hexforged/corrupted/pyrewall_front.png", "name_prefix": "ERR::", "add_type": "Malware", "stat_mods": { "throughput": 1.10, "encryption": 0.90 } },
     "base_stats": { "uptime": 95, "throughput": 90, "hardening": 100, "compute": 110, "encryption": 115, "bandwidth": 70 },
     "growth_rate": "slow", "catch_rate": 3, "base_exp": 270, "log_yield": { "encryption": 3 },
     "learnset": [
@@ -132,7 +132,7 @@
     ],
     "evolutions": [],
     "cmdb": { "category": "Pigeon / Botnet", "entry": "One pigeon, ten thousand followers. When it coos, every inbox in the valley fills at once." } },
-  { "id": "cablesnake", "number": 14, "name": "Cablesnake", "types": ["network"], "art": { "flip_back": true },
+  { "id": "cablesnake", "number": 14, "name": "Cablesnake", "types": ["network"], "art": { "flip_back": true }, "corrupted": { "sprite_front": "assets/sprites/hexforged/corrupted/cablesnake_front.png", "name_prefix": "ERR::", "add_type": "Malware", "stat_mods": { "throughput": 1.10, "encryption": 0.90 } },
     "base_stats": { "uptime": 45, "throughput": 60, "hardening": 45, "compute": 40, "encryption": 45, "bandwidth": 65 },
     "growth_rate": "slow", "catch_rate": 190, "base_exp": 58, "log_yield": { "bandwidth": 1 },
     "learnset": [
@@ -150,7 +150,7 @@
     ],
     "evolutions": [],
     "cmdb": { "category": "Viper / Patch Panel", "entry": "Coils around patch panels and decides which ports get to talk. Strikes at unlabeled cables." } },
-  { "id": "floppit", "number": 16, "name": "Floppit", "types": ["legacy"],
+  { "id": "floppit", "number": 16, "name": "Floppit", "types": ["legacy"], "corrupted": { "sprite_front": "assets/sprites/hexforged/corrupted/floppit_front.png", "name_prefix": "ERR::", "add_type": "Malware", "stat_mods": { "throughput": 1.10, "encryption": 0.90 } },
     "base_stats": { "uptime": 45, "throughput": 40, "hardening": 55, "compute": 45, "encryption": 55, "bandwidth": 60 },
     "growth_rate": "fluctuating", "catch_rate": 190, "base_exp": 60, "log_yield": { "encryption": 1 },
     "learnset": [
@@ -177,7 +177,7 @@
     ],
     "evolutions": [],
     "cmdb": { "category": "Hare / Optical Disc", "entry": "Its disc ears shimmer like a rainbow. Scratch them and it skips mid-sentence. Collectors pay a fortune." } },
-  { "id": "dustbunny", "number": 19, "name": "Dustbunny", "types": ["peripheral"],
+  { "id": "dustbunny", "number": 19, "name": "Dustbunny", "types": ["peripheral"], "corrupted": { "sprite_front": "assets/sprites/hexforged/corrupted/dustbunny_front.png", "name_prefix": "ERR::", "add_type": "Malware", "stat_mods": { "throughput": 1.10, "encryption": 0.90 } },
     "base_stats": { "uptime": 40, "throughput": 45, "hardening": 35, "compute": 30, "encryption": 35, "bandwidth": 70 },
     "growth_rate": "medium_fast", "catch_rate": 255, "base_exp": 50, "log_yield": { "bandwidth": 1 },
     "learnset": [
@@ -186,7 +186,7 @@
     ],
     "evolutions": [],
     "cmdb": { "category": "Rabbit / Lint Trap", "entry": "Collects behind desktop towers. Scrappy, sneezy, and impossible to get rid of." } },
-  { "id": "fanbat", "number": 20, "name": "Fanbat", "types": ["hardware", "power"],
+  { "id": "fanbat", "number": 20, "name": "Fanbat", "types": ["hardware", "power"], "corrupted": { "sprite_front": "assets/sprites/hexforged/corrupted/fanbat_front.png", "name_prefix": "ERR::", "add_type": "Malware", "stat_mods": { "throughput": 1.10, "encryption": 0.90 } },
     "base_stats": { "uptime": 55, "throughput": 65, "hardening": 50, "compute": 60, "encryption": 50, "bandwidth": 95 },
     "growth_rate": "medium_fast", "catch_rate": 120, "base_exp": 110, "log_yield": { "bandwidth": 2 },
     "learnset": [
@@ -195,7 +195,7 @@
     ],
     "evolutions": [],
     "cmdb": { "category": "Bat / Case Fan", "entry": "Its wings are 120 mm case fans. Swarms hang from server room ceilings, humming at night." } },
-  { "id": "ramster", "number": 21, "name": "Ramster", "types": ["hardware"],
+  { "id": "ramster", "number": 21, "name": "Ramster", "types": ["hardware"], "corrupted": { "sprite_front": "assets/sprites/hexforged/corrupted/ramster_front.png", "name_prefix": "ERR::", "add_type": "Malware", "stat_mods": { "throughput": 1.10, "encryption": 0.90 } },
     "base_stats": { "uptime": 50, "throughput": 70, "hardening": 55, "compute": 40, "encryption": 45, "bandwidth": 75 },
     "growth_rate": "medium_fast", "catch_rate": 120, "base_exp": 92, "log_yield": { "bandwidth": 1 },
     "learnset": [
@@ -204,7 +204,7 @@
     ],
     "evolutions": [],
     "cmdb": { "category": "Hamster / Memory Module", "entry": "Runs on its wheel to keep its memory refreshed. Unplug it and it forgets everything, including you." } },
-  { "id": "servurtle", "number": 22, "name": "Servurtle", "types": ["hardware"],
+  { "id": "servurtle", "number": 22, "name": "Servurtle", "types": ["hardware"], "corrupted": { "sprite_front": "assets/sprites/hexforged/corrupted/servurtle_front.png", "name_prefix": "ERR::", "add_type": "Malware", "stat_mods": { "throughput": 1.10, "encryption": 0.90 } },
     "base_stats": { "uptime": 72, "throughput": 60, "hardening": 92, "compute": 50, "encryption": 70, "bandwidth": 28 },
     "growth_rate": "slow", "catch_rate": 60, "base_exp": 130, "log_yield": { "hardening": 2 },
     "learnset": [

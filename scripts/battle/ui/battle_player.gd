@@ -12,6 +12,7 @@ var upgrades: Array[Dictionary] = []
 
 var _active: Array[int] = [-1, -1]
 var _species: Array[String] = ["", ""]
+var _corrupted: Array[bool] = [false, false]  # this side's active Hexforged is an ERR:: version (foe only)
 var _held: Array[bool] = [false, false]  # a pose is showing; the idle loop leaves it alone
 var _trainer_up: Array[bool] = [false, false]  # a trainer figure is on screen for that side
 var _breath := 0.0
@@ -64,7 +65,12 @@ func _play_event(e: Dictionary) -> void:
 				info["status"], exp_fraction(_active[side]) if side == BattleState.PLAYER else 0.0)
 			_panel(side).visible = false
 			_species[side] = d.species_id
+			_corrupted[side] = d.is_corrupted
 			_sprite(side).texture = DaemonSprites.back(d.species_id) if side == BattleState.PLAYER else DaemonSprites.front(d.species_id)
+			if d.is_corrupted:
+				var err := DaemonSprites.corrupted_pose(d.species_id, "idle")
+				if err != null:
+					_sprite(side).texture = err
 			_sprite(side).flip_h = side == BattleState.PLAYER and DaemonSprites.flip_back(d.species_id)
 			await _anim_enter(side)
 			_rest(side)
@@ -218,6 +224,9 @@ func _set_pose(side: int, pose_name: String) -> bool:
 	if side == BattleState.PLAYER:
 		pose_name = BACK_POSES.get(pose_name, "back")
 	var tex := DaemonSprites.pose(_species[side], pose_name)
+	if _corrupted[side]:  # corrupted art has front frames only; other poses keep its idle
+		var err_pose := pose_name if DaemonSprites.CORRUPTED_FRAMES.has(pose_name) else "idle"
+		tex = DaemonSprites.corrupted_pose(_species[side], err_pose)
 	if tex == null:
 		return false
 	_sprite(side).texture = tex

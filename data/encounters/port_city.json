@@ -18,7 +18,8 @@
         "species": "cablesnake",
         "min": 12,
         "max": 14,
-        "weight": 20
+        "weight": 20,
+        "corrupted_chance": 0.35
       },
       {
         "species": "spinode",

@@ -38,6 +38,7 @@ const DIALOGUE_COMMANDS := {
 	"send_player": ["spawn"],
 	"end_demo": [],
 	"sfx": ["id"],
+	"clean_quarantined": [],
 }
 const EVENT_TYPES := {
 	"warp": ["to_map", "to_spawn"],
@@ -649,6 +650,12 @@ func _validate_encounters(raw: Variant) -> void:
 				if _int(slot, "min", sw, 1, 100) and _int(slot, "max", sw, 1, 100) and slot["min"] > slot["max"]:
 					_err(sw, "'min' can't be above 'max'")
 				_int(slot, "weight", sw, 1, 1000)
+				if slot.has("corrupted_chance"):
+					var cc: Variant = slot["corrupted_chance"]
+					if not (typeof(cc) == TYPE_FLOAT or typeof(cc) == TYPE_INT) or float(cc) < 0.0 or float(cc) > 1.0:
+						_err(sw, "'corrupted_chance' must be 0.0 to 1.0")
+					elif float(cc) > 0.0 and not species.get(slot.get("species"), {}).has("corrupted"):
+						_err(sw, "'%s' has no corrupted block, so it can't roll corrupted" % str(slot.get("species")))
 
 
 # --- config profiles ---------------------------------------------------------
@@ -772,8 +779,37 @@ func _validate_item(it: Dictionary, where: String) -> void:
 
 # --- species -----------------------------------------------------------------
 
+## Optional "corrupted" block (2026-11-15): how this species looks and fights while corrupted. Malware lines are
+## Ransom's own builds and can never be corrupted.
+func _validate_corrupted(s: Dictionary, where: String) -> void:
+	var c: Variant = s["corrupted"]
+	if typeof(c) != TYPE_DICTIONARY:
+		_err(where, "must be an object")
+		return
+	if "malware" in s.get("types", []):
+		_err(where, "Malware lines can't be corrupted (Ransom built them)")
+	_string(c, "name_prefix", where)
+	var add := String(c.get("add_type", "")).to_lower()
+	if not types.has(add):
+		_err(where, "'add_type' must be a type (e.g. Malware)")
+	if c.has("sprite_front") and typeof(c["sprite_front"]) != TYPE_STRING:
+		_err(where, "'sprite_front' must be a path")
+	var mods: Variant = c.get("stat_mods", {})
+	if typeof(mods) != TYPE_DICTIONARY:
+		_err(where, "'stat_mods' must be an object of stat -> multiplier")
+	else:
+		for stat: Variant in mods:
+			var v: Variant = mods[stat]
+			if not stat in STATS or stat == "uptime":
+				_err(where, "can't modify stat '%s'" % str(stat))
+			elif not (typeof(v) == TYPE_FLOAT or typeof(v) == TYPE_INT) or float(v) < 0.5 or float(v) > 2.0:
+				_err(where, "'%s' multiplier must be 0.5 to 2.0" % str(stat))
+
+
 func _validate_species(s: Dictionary, where: String) -> void:
 	_string(s, "name", where)
+	if s.has("corrupted"):
+		_validate_corrupted(s, where + " › corrupted")
 	_one_of(s, "growth_rate", where, GROWTH_RATES)
 	_int(s, "catch_rate", where, 1, 255)
 	_int(s, "base_exp", where, 1, 400)

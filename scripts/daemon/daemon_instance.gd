@@ -28,6 +28,11 @@ var build_quality: Dictionary = {}        # stat -> 0..15, hidden per-Daemon var
 var experience_logs: Dictionary = {}      # stat -> 0..64, total <= 192
 var config_profile: String = "balanced"   # id from data/config_profiles.json
 var original_trainer_id: int = 0
+## Corrupted (2026-11-15): the same species in a glitched, hostile state, from Ransom's code pushed through the
+## broken Hexforge. Only species with a "corrupted" block in species.json can be; never Malware lines. While
+## corrupted it gains Malware as its second type, its stats shift by the block's stat_mods, and it's named
+## "ERR::NAME". A Help Desk cleans it (GameState.clean).
+var is_corrupted: bool = false
 
 
 ## Makes a fresh Daemon at a level: random Build Quality and Config Profile from rng,
@@ -57,7 +62,24 @@ func species_data() -> Dictionary:
 
 
 func display_name() -> String:
+	if is_corrupted:
+		return clean_name().to_upper().insert(0, String(corrupted_data().get("name_prefix", "ERR::")))
+	return clean_name()
+
+
+## The name without the ERR:: prefix (nickname, else species name).
+func clean_name() -> String:
 	return nickname if not nickname.is_empty() else String(species_data().get("name", species_id))
+
+
+## The species' corrupted block ({} if this species can't be corrupted).
+func corrupted_data() -> Dictionary:
+	return species_data().get("corrupted", {})
+
+
+static func can_be_corrupted(p_species_id: String) -> bool:
+	var sp := DataRegistry.get_species(p_species_id)
+	return sp.has("corrupted") and not "malware" in sp.get("types", [])
 
 
 func growth_rate() -> String:
@@ -65,7 +87,11 @@ func growth_rate() -> String:
 
 
 func types() -> Array:
-	return species_data().get("types", [])
+	var base: Array = species_data().get("types", [])
+	if not is_corrupted:
+		return base
+	var added := String(corrupted_data().get("add_type", "malware")).to_lower()
+	return [base[0], added] if base[0] != added else [added]  # Malware becomes its second type
 
 
 # --- stats -------------------------------------------------------------------
@@ -82,7 +108,10 @@ func get_stat(stat: String) -> int:
 	var core := (2 * base + 2 * bq + logs / 2) * level / 100
 	if stat == "uptime":  # flat bonus from balance.json: big share of early Uptime, small share late
 		return core + level + int(DataRegistry.balance.get("uptime_bonus", 12))
-	return (core + 6) * profile_percent(stat) / 100
+	var value := (core + 6) * profile_percent(stat) / 100
+	if is_corrupted:
+		value = floori(value * float(corrupted_data().get("stat_mods", {}).get(stat, 1.0)))
+	return value
 
 
 ## 110 if the Config Profile boosts this stat, 95 if it lowers it, else 100.
@@ -296,6 +325,7 @@ func to_dict() -> Dictionary:
 		"experience_logs": experience_logs.duplicate(),
 		"config_profile": config_profile,
 		"ot_id": original_trainer_id,
+		"corrupted": is_corrupted,
 	}
 
 
@@ -320,6 +350,7 @@ static func from_dict(d: Dictionary) -> DaemonInstance:
 	var profile := String(d.get("config_profile", "balanced"))
 	out.config_profile = profile if DataRegistry.config_profiles.has(profile) else "balanced"
 	out.original_trainer_id = int(d.get("ot_id", 0))
+	out.is_corrupted = bool(d.get("corrupted", false)) and can_be_corrupted(species_id_value)
 	for slot: Dictionary in d.get("moves", []):
 		var move_id := String(slot.get("id", ""))
 		if not DataRegistry.get_move(move_id).is_empty() and out.moves.size() < MAX_MOVES:
