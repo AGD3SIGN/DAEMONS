@@ -15,6 +15,9 @@ const POCKETS: PackedStringArray = ["items", "keys", "scripts", "key_items"]
 const MULTIPLIERS: Array[float] = [0.0, 0.5, 2.0]
 const TILE_BEHAVIORS: PackedStringArray = ["none", "hot_zone", "ledge_down", "water", "door", "counter",
 	"slide_up", "slide_down", "slide_left", "slide_right"]
+## GDD: corruption is a slow reveal. Areas before the Power Plant (Act 4) may never roll corrupted Hexforged.
+const PRE_POWER_PLANT_AREAS: PackedStringArray = ["onboarding_town", "route_1", "patch_town", "route_2",
+	"wifi_dead_zone", "port_city", "route_3", "the_basement", "devops_heights", "route_4"]
 const COMPARE_OPS: PackedStringArray = ["==", "!=", "<", "<=", ">", ">="]
 const FACINGS: PackedStringArray = ["up", "down", "left", "right"]
 const DIALOGUE_COMMANDS := {
@@ -654,6 +657,8 @@ func _validate_encounters(raw: Variant) -> void:
 					var cc: Variant = slot["corrupted_chance"]
 					if not (typeof(cc) == TYPE_FLOAT or typeof(cc) == TYPE_INT) or float(cc) < 0.0 or float(cc) > 1.0:
 						_err(sw, "'corrupted_chance' must be 0.0 to 1.0")
+					elif float(cc) > 0.0 and map_id in PRE_POWER_PLANT_AREAS:
+						_err(sw, "no corrupted Hexforged before the Power Plant (GDD: the reveal is Act 4)")
 					elif float(cc) > 0.0 and not species.get(slot.get("species"), {}).has("corrupted"):
 						_err(sw, "'%s' has no corrupted block, so it can't roll corrupted" % str(slot.get("species")))
 

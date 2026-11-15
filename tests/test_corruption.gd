@@ -7,6 +7,7 @@ var world: Overworld
 
 func before_each() -> void:
 	GameState.reset()
+	GameState.flags["corruption_revealed"] = true  # most tests here are about after the Power Plant reveal
 
 
 func after_each() -> void:
@@ -105,14 +106,14 @@ func test_validator_rejects_corrupted_malware_and_bad_chances() -> void:
 	for s: Dictionary in raw["species"]:
 		if s["id"] == "wormby":
 			s["corrupted"] = {"name_prefix": "ERR::", "add_type": "Malware", "stat_mods": {}}
-	for slot: Dictionary in raw["encounters"]["route_1"]["zones"]["cable_tangle"]:
-		if slot["species"] == "spigeon":
+	for slot: Dictionary in raw["encounters"]["power_plant"]["zones"]["cable_tangle"]:  # after the reveal
+		if slot["species"] == "transistant":
 			slot["corrupted_chance"] = 0.5
-		if slot["species"] == "dustbunny":
+		if slot["species"] == "fanbat":
 			slot["corrupted_chance"] = 1.5
 	var errors := "\n".join(DataValidator.new().validate(raw))
 	assert_string_contains(errors, "Malware lines can't be corrupted")
-	assert_string_contains(errors, "'spigeon' has no corrupted block")
+	assert_string_contains(errors, "'transistant' has no corrupted block")
 	assert_string_contains(errors, "'corrupted_chance' must be 0.0 to 1.0")
 
 
@@ -197,3 +198,37 @@ func test_old_daemons_user_data_is_copied_once() -> void:
 		DirAccess.remove_absolute(target)
 	DirAccess.remove_absolute(base.path_join("settings.cfg"))
 	DirAccess.remove_absolute(base)
+
+
+
+# --- the GDD's slow reveal (2026-11-15) ------------------------------------------------------------------------------
+
+func test_nothing_corrupted_before_the_power_plant_reveal() -> void:
+	GameState.flags.erase("corruption_revealed")
+	DataRegistry.encounters["zz_test"] = {"rate": 1.0, "zones": {"cable_tangle": [
+		{"species": "cablesnake", "min": 5, "max": 5, "weight": 1, "corrupted_chance": 1.0}]}}
+	var rng := RandomNumberGenerator.new()
+	assert_false(Encounters.roll("zz_test", "cable_tangle", rng, 1, false)["corrupted"], "no ERR:: before the reveal")
+	DataRegistry.encounters.erase("zz_test")
+	GameState.cmdb_compromised["cablesnake"] = true
+	assert_eq(CmdbPanel.status_line("cablesnake"), "", "CMDB status hidden")
+	var menus := FieldMenus.new()
+	assert_eq(menus._bag_pages(), FieldMenus.POCKETS.size(), "no QUARANTINED page")
+	GameState.flags["corruption_revealed"] = true
+	assert_eq(menus._bag_pages(), FieldMenus.POCKETS.size() + 1, "the page appears after the reveal")
+	menus.free()
+
+
+func test_the_power_plant_reveals_corruption() -> void:
+	var steps: Array = DataRegistry.get_dialogue("power_plant_arrival")
+	assert_true(steps.any(func(st: Dictionary) -> bool: return st.get("flag", "") == "corruption_revealed"))
+
+
+func test_validation_rejects_corruption_before_the_power_plant() -> void:
+	for map_id in DataValidator.PRE_POWER_PLANT_AREAS:
+		for zone: Array in DataRegistry.encounters.get(map_id, {}).get("zones", {}).values():
+			for slot: Dictionary in zone:
+				assert_eq(float(slot.get("corrupted_chance", 0.0)), 0.0, "%s %s" % [map_id, slot["species"]])
+	var raw := DataRegistry.read_raw(PackedStringArray())
+	raw["encounters"]["route_2"]["zones"]["cable_tangle"][1]["corrupted_chance"] = 0.3
+	assert_string_contains("\n".join(DataValidator.new().validate(raw)), "no corrupted Hexforged before the Power Plant")

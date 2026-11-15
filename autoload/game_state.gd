@@ -85,6 +85,12 @@ func add_daemon(d: DaemonInstance) -> String:
 	return "rack" if rack_add(d) >= 0 else "full"
 
 
+## GDD: corruption is a slow reveal. Until the Power Plant event sets this flag, no ERR:: Hexforged spawn and the
+## Quarantined pocket, Help Desk cleaning and CMDB COMPROMISED status stay hidden.
+func corruption_revealed() -> bool:
+	return bool(flags.get("corruption_revealed", false))
+
+
 ## Help Desk scan ("Have you tried turning it off and on again?"): cleans the quarantined Hexforged at `index`
 ## and adds it like a new catch. Returns where it went ("stack", "rack", "full") or "" if there's nothing there.
 func clean_quarantined(index: int) -> String:

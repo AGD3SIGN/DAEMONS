@@ -5,6 +5,10 @@
     },
     {
       "text": "Every flicker comes with a faint electronic whine... like something running very hard, very close."
+    },
+    {
+      "cmd": "set_flag",
+      "flag": "corruption_revealed"
     }
   ],
   "power_plant_town_sign": [

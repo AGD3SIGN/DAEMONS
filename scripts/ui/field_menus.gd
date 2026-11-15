@@ -676,7 +676,7 @@ func bag_screen() -> void:
 		if pocket == QUARANTINED_PAGE:
 			var q := await _show_quarantined()
 			if q["action"] == "left" or q["action"] == "right":
-				pocket = wrapi(pocket + (1 if q["action"] == "right" else -1), 0, POCKETS.size() + 1)
+				pocket = wrapi(pocket + (1 if q["action"] == "right" else -1), 0, _bag_pages())
 				start = 0
 				continue
 			if q["action"] != "pick":
@@ -686,7 +686,7 @@ func bag_screen() -> void:
 		var ids := pocket_items(POCKETS[pocket])
 		var r := await _show_pocket(pocket, ids, start)
 		if r["action"] == "left" or r["action"] == "right":
-			pocket = wrapi(pocket + (1 if r["action"] == "right" else -1), 0, POCKETS.size() + 1)
+			pocket = wrapi(pocket + (1 if r["action"] == "right" else -1), 0, _bag_pages())
 			start = 0
 			continue
 		if r["action"] != "pick":
@@ -723,6 +723,11 @@ func clean_animation(d: DaemonInstance) -> void:
 	await fx.play(DaemonSprites.corrupted_pose(d.species_id, "idle"), clean_tex)
 	AudioManager.play_sfx("unlock")
 	panel.queue_free()
+
+
+## 4 item pockets, plus QUARANTINED once the story has revealed corruption (Power Plant).
+func _bag_pages() -> int:
+	return POCKETS.size() + (1 if GameState.corruption_revealed() else 0)
 
 
 ## The QUARANTINED page: one row per corrupted Hexforged you're holding. They can't battle or be used.

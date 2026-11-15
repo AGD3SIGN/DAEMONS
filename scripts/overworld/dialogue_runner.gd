@@ -171,7 +171,7 @@ func _command(step: Dictionary) -> void:
 ## The Help Desk scan for corrupted Hexforged in the Quarantined pocket (nothing if it's empty).
 func _clean_quarantined(speaker: String) -> void:
 	var count := GameState.quarantined.size()
-	if count == 0:
+	if count == 0 or not GameState.corruption_revealed():
 		return
 	await world.say("Your Quarantined pocket has %d corrupted Hexforged in it. Unauthorized code, the works." % count, speaker)
 	if not await world.ask("Run a scan and clean %s?" % ("it" if count == 1 else "them"), speaker):

@@ -6,7 +6,8 @@ extends RefCounted
 
 
 ## Returns {"species": id, "level": n, "corrupted": bool} or {} for no encounter. A slot's "corrupted_chance"
-## (0..1, default 0) is rolled only for species that can be corrupted, so Malware lines never are.
+## (0..1, default 0) is rolled only for species that can be corrupted (never Malware lines), and only once the story
+## has revealed corruption (GameState.corruption_revealed(), set at the Power Plant).
 ## rate_override >= 0 replaces the table's rate.
 static func roll(map_id: String, tile_name: String, rng: RandomNumberGenerator, lead_level: int, repel_active: bool, rate_override: float = -1.0) -> Dictionary:
 	var table: Dictionary = DataRegistry.encounters.get(map_id, {})
@@ -21,7 +22,8 @@ static func roll(map_id: String, tile_name: String, rng: RandomNumberGenerator, 
 	if repel_active and level < lead_level:
 		return {}
 	var chance := float(slot.get("corrupted_chance", 0.0))
-	var corrupted := chance > 0.0 and DaemonInstance.can_be_corrupted(slot["species"]) and rng.randf() < chance
+	var corrupted := chance > 0.0 and GameState.corruption_revealed() and DaemonInstance.can_be_corrupted(slot["species"]) \
+		and rng.randf() < chance
 	return {"species": slot["species"], "level": level, "corrupted": corrupted}
 
 

@@ -55,6 +55,8 @@ func open(species_id: String) -> void:
 ## Corruption status on the record (2026-11-15): COMPROMISED once you've seen a corrupted one, Recovered once a
 ## Help Desk has cleaned one of yours. "" for species you've only met clean.
 static func status_line(species_id: String) -> String:
+	if not GameState.corruption_revealed():
+		return ""  # hidden until the Power Plant reveal (GDD)
 	if GameState.cmdb_recovered.get(species_id, false):
 		return "Status: Recovered"
 	if GameState.cmdb_compromised.get(species_id, false):
