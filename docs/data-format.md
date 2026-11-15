@@ -13,7 +13,7 @@ Ids are `lower_snake_case` and unique within a file. Lists, not objects, so dupl
 ```
 `chart[attacker][defender]` is 0, 0.5 or 2. Anything missing = 1.
 Optional `"status_immunities": ["overheated"]` on a type: Hexforged of that type can't get those statuses.
-Current: Hardware can't Overheat, Power can't be Throttled, Malware can't be Corrupted.
+Current: Hardware can't Overheat, Power can't be Throttled, Malware can't be Infected.
 Dual types multiply: `DataRegistry.type_multiplier("network", ["hardware", "power"])`.
 
 ## moves.json
@@ -31,7 +31,7 @@ Move effects:
 | id | params |
 |---|---|
 | `none` | — |
-| `status_chance` | `status` (throttled, corrupted, overheated, standby, hung, looping), `chance` 1–100 |
+| `status_chance` | `status` (throttled, infected, overheated, standby, hung, looping), `chance` 1–100 |
 | `stat_change` | `target` self/foe, `changes` `{stat: ±1..6}`, `chance` 1–100. Stats: throughput, hardening, compute, encryption, bandwidth, accuracy, evasion |
 | `drain` | `fraction` of damage dealt healed |
 | `recoil` | `fraction` of damage dealt taken back |

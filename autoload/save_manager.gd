@@ -5,7 +5,7 @@ extends Node
 ##
 ## File shape: {"version": 1, "save_count": 7, "saved_at": unix, "checksum": sha256, "data": {...}}
 
-const SAVE_VERSION := 3
+const SAVE_VERSION := 4
 ## v2 (2026-11-08): evolution lines redesigned so each keeps the same animal; old species ids renamed.
 const V2_SPECIES_RENAMES := {
 	"motherboar": "munkboard", "mainframe": "mainmunk", "routeroo": "pengwan", "meshkraken": "emperoute",
@@ -142,7 +142,28 @@ func migrate(data: Dictionary, from_version: int) -> Dictionary:
 		out = _rename_species(out)
 	if from_version < 3:
 		out = _rescale_daemons(out)
+	if from_version < 4:
+		out = _rename_status(out, "corrupted", "infected")
 	return out
+
+
+## v3 -> v4 (2026-11-15): the poison-style status "corrupted" is now "infected" (corrupted Hexforged are a
+## different thing now). Rewrites the status of every saved Hexforged, wherever it sits.
+static func _rename_status(value: Variant, old: String, new: String) -> Variant:
+	match typeof(value):
+		TYPE_ARRAY:
+			var arr: Array = []
+			for v: Variant in value:
+				arr.append(_rename_status(v, old, new))
+			return arr
+		TYPE_DICTIONARY:
+			var dict: Dictionary = {}
+			for k: Variant in value:
+				dict[k] = _rename_status(value[k], old, new)
+			if dict.has("species") and dict.get("status", "") == old:
+				dict["status"] = new
+			return dict
+	return value
 
 
 ## v2 -> v3: our own stat scale. Build Quality 0..31 -> 0..15 (halved), Experience Logs 252/510 caps ->

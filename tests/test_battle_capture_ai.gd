@@ -43,7 +43,7 @@ func test_capture_chance_formula() -> void:
 	assert_almost_eq(BattleSim.capture_chance(bunny, 1.0), 0.25, 0.001, "full Uptime: 1 - 0.75")
 	bunny.status = "standby"
 	assert_almost_eq(BattleSim.capture_chance(bunny, 1.0), 0.45, 0.001, "x1.8")
-	bunny.status = "corrupted"
+	bunny.status = "infected"
 	assert_almost_eq(BattleSim.capture_chance(bunny, 1.0), 0.35, 0.001, "x1.4")
 	bunny.status = ""
 	bunny.current_uptime = 1

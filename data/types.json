@@ -7,7 +7,7 @@
     { "id": "cloud",      "name": "Cloud",      "color": "#9fc8ec" },
     { "id": "data",       "name": "Data",       "color": "#8b6fd6" },
     { "id": "security",   "name": "Security",   "color": "#5a6f8c" },
-    { "id": "malware",    "name": "Malware",    "color": "#b23a6b", "status_immunities": ["corrupted"] },
+    { "id": "malware",    "name": "Malware",    "color": "#b23a6b", "status_immunities": ["infected"] },
     { "id": "legacy",     "name": "Legacy",     "color": "#a8916a" },
     { "id": "mobile",     "name": "Mobile",     "color": "#46c2b8" },
     { "id": "ai",         "name": "AI",         "color": "#e070c8" },

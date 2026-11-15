@@ -4,14 +4,14 @@ extends Control
 ## (the back view has no status poses). Player report 2026-11-15: an Overheated Pingo only showed the OVH tag.
 ##   overheated: embers rising off it and a heat shimmer at its feet (orange)
 ##   throttled:  a loading spinner over its head (yellow)
-##   corrupted:  glitch blocks flickering across it (purple)
+##   infected:   glitch blocks flickering across it (purple)
 ##   standby:    z's drifting up
 ## Drawn in the sprite's own space: one "unit" is one pixel of the 64x64 Daemon art.
 
 const COLORS := {
 	"overheated": [Color("ff7a3d"), Color("ffd23f")],
 	"throttled": [Color("f2c63a"), Color("fff4a0")],
-	"corrupted": [Color("b070e0"), Color("ff40c0")],
+	"infected": [Color("b070e0"), Color("ff40c0")],
 	"standby": [Color("8fa8cf"), Color("f4f4ff")],
 }
 
@@ -50,7 +50,7 @@ func _draw() -> void:
 			_embers(u, c)
 		"throttled":
 			_spinner(u, c)
-		"corrupted":
+		"infected":
 			_glitch(u, c)
 		"standby":
 			_zs(u, c)

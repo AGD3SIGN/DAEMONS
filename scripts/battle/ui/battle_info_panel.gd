@@ -7,7 +7,7 @@ extends Control
 ## The UP bar empties one segment at a time (about 40 ms each) when damage lands.
 
 const STATUS_TAGS := {
-	"throttled": ["THR", Color("d8a820")], "corrupted": ["COR", Color("b070e0")],
+	"throttled": ["THR", Color("d8a820")], "infected": ["INF", Color("b070e0")],
 	"overheated": ["OVH", Color("ff7a3d")], "standby": ["SBY", Color("8fa8cf")],
 	"hung": ["HNG", Color("4ab0f0")],
 }

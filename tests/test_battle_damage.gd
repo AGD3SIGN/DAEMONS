@@ -193,8 +193,8 @@ func _try_status(species: String, status: String) -> bool:
 func test_status_immunities() -> void:
 	assert_false(_try_status("fanbat", "throttled"), "Power can't be Throttled")
 	assert_false(_try_status("chipmunk", "overheated"), "Hardware can't Overheat")
-	assert_false(_try_status("wormby", "corrupted"), "Malware can't be Corrupted")
-	assert_true(_try_status("dustbunny", "corrupted"))
+	assert_false(_try_status("wormby", "infected"), "Malware can't be Infected")
+	assert_true(_try_status("dustbunny", "infected"))
 
 
 func test_status_move_sticks_once() -> void:
@@ -213,10 +213,10 @@ func test_status_move_sticks_once() -> void:
 	assert_true(not _of(again, "status_failed").is_empty() or not _of(again, "move_missed").is_empty())
 
 
-func test_corrupted_and_overheated_residual_damage() -> void:
+func test_infected_and_overheated_residual_damage() -> void:
 	var chipmunk := _daemon("chipmunk", 20)  # Uptime 63 -> 7 per turn
 	var pingo := _daemon("pingo", 20)        # Uptime 65 -> 4 per turn
-	chipmunk.status = "corrupted"
+	chipmunk.status = "infected"
 	pingo.status = "overheated"
 	var events := BattleSim.run_turn(_battle([chipmunk], [pingo]), _fight(chipmunk, "chassis_guard"), _fight(pingo, "bandwidth_hog"))
 	var hurt := _of(events, "status_damage")

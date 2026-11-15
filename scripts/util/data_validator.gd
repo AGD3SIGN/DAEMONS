@@ -8,7 +8,7 @@ extends RefCounted
 const STATS: PackedStringArray = ["uptime", "throughput", "hardening", "compute", "encryption", "bandwidth"]
 ## Stats that can be raised/lowered in battle (Uptime can't; accuracy/evasion can).
 const STAGE_STATS: PackedStringArray = ["throughput", "hardening", "compute", "encryption", "bandwidth", "accuracy", "evasion"]
-const STATUSES: PackedStringArray = ["throttled", "corrupted", "overheated", "standby", "hung", "looping"]
+const STATUSES: PackedStringArray = ["throttled", "infected", "overheated", "standby", "hung", "looping"]
 const CATEGORIES: PackedStringArray = ["physical", "special", "status"]
 const GROWTH_RATES: PackedStringArray = ["fast", "medium_fast", "medium_slow", "slow", "erratic", "fluctuating"]
 const POCKETS: PackedStringArray = ["items", "keys", "scripts", "key_items"]

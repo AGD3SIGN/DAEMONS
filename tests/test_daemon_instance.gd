@@ -198,7 +198,7 @@ func test_evolve_keeps_damage_taken() -> void:
 func test_save_round_trip_through_json() -> void:
 	var d := DaemonInstance.create("pingo", 20, _rng(), 4242)
 	d.nickname = "Packets"
-	d.status = "corrupted"
+	d.status = "infected"
 	d.current_uptime -= 5
 	d.moves[0]["pp"] -= 3
 	d.add_experience_logs({"hardening": 12})

@@ -71,7 +71,7 @@ const LOOPING_SELF_HIT_CHANCE := 1.0 / 3.0
 const LOOPING_SELF_HIT_POWER := 40
 const STANDBY_TURNS := Vector2i(1, 3)
 const LOOPING_TURNS := Vector2i(2, 5)
-const CORRUPTED_FRACTION := 8     # loses 1/8 max Uptime per turn
+const INFECTED_FRACTION := 8      # loses 1/8 max Uptime per turn (the status was "Corrupted" until 2026-11-15)
 const OVERHEATED_FRACTION := 16   # loses 1/16 max Uptime per turn
 const CAPTURE_CHECKS := 3
 
@@ -617,7 +617,7 @@ static func _fx_heal(ctx: Dictionary) -> void:
 
 ## Quarantine odds (our own formula), 0..1:
 ##   catch_rate/255 x key bonus x status bonus x (1 - 0.75 x Uptime/Max)
-## Status bonus: 1.8 for Standby/Hung, 1.4 for Throttled/Corrupted/Overheated. 1 or more always works.
+## Status bonus: 1.8 for Standby/Hung, 1.4 for Throttled/Infected/Overheated. 1 or more always works.
 static func capture_chance(foe: DaemonInstance, key_bonus: float) -> float:
 	var max_up := float(maxi(1, foe.max_uptime()))
 	var catch_rate := float(foe.species_data()["catch_rate"])
@@ -625,7 +625,7 @@ static func capture_chance(foe: DaemonInstance, key_bonus: float) -> float:
 	match foe.status:
 		"standby", "hung":
 			chance *= 1.8
-		"throttled", "corrupted", "overheated":
+		"throttled", "infected", "overheated":
 			chance *= 1.4
 	return clampf(chance, 0.0, 1.0)
 
@@ -661,8 +661,8 @@ static func _end_of_turn(state: BattleState, events: Array[Dictionary]) -> void:
 			continue
 		var fraction := 0
 		match d.status:
-			"corrupted":
-				fraction = CORRUPTED_FRACTION
+			"infected":
+				fraction = INFECTED_FRACTION
 			"overheated":
 				fraction = OVERHEATED_FRACTION
 		if fraction == 0:

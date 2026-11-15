@@ -335,7 +335,7 @@ func test_lasting_statuses_show_an_effect_on_both_sides() -> void:
 	var aura := StatusAura.new()
 	add_child_autofree(aura)
 	assert_false(aura.visible, "nothing to show")
-	for status in ["overheated", "throttled", "corrupted", "standby"]:
+	for status in ["overheated", "throttled", "infected", "standby"]:
 		aura.status = status
 		assert_true(aura.visible, "%s has an effect" % status)
 	aura.status = "looping"

@@ -82,7 +82,7 @@ static func describe(e: Dictionary, is_wild: bool, foe_trainer: String = "") -> 
 		"looping_ended":
 			return "%s broke out of the loop!" % _name(e, is_wild)
 		"status_damage":
-			return ("%s is hurt by corrupted data!" if e["status"] == "corrupted" else "%s is hurt by the heat!") % _name(e, is_wild)
+			return ("%s is hurt by the infection!" if e["status"] == "infected" else "%s is hurt by the heat!") % _name(e, is_wild)
 		"fainted":
 			return "%s crashed!" % _name(e, is_wild)
 		"exp_gained":
@@ -124,8 +124,8 @@ static func _status_applied(name: String, status: String) -> String:
 	match status:
 		"throttled":
 			return "%s is Throttled! It may not respond!" % name
-		"corrupted":
-			return "%s's data got Corrupted!" % name
+		"infected":
+			return "%s got Infected!" % name
 		"overheated":
 			return "%s Overheated!" % name
 		"standby":

@@ -57,7 +57,7 @@ Every Hexforged also has hidden **Build Quality** (0–15 per stat, random when 
 Our formulas (see `scripts/daemon/daemon_instance.gd` and `scripts/battle/sim/battle_sim.gd`):
 - Stats: core = (2×Base + 2×BQ + Logs/2) × Level/100; Uptime = core + Level + 12; others = (core + 6) × profile.
 - Damage: Power × Atk × (Level + 10) / (Def × 120) + 2, then ×1.5 on a critical hit (1 in 20), ×0.88–1.00 random, ×1.35 when the move matches one of the user's types, × type effectiveness.
-- Quarantine: chance = catch rate/255 × key bonus × status bonus (1.8 Standby/Hung, 1.4 Throttled/Corrupted/Overheated) × (1 − 0.75 × Uptime/Max). The transfer runs three stages (Scanning, Isolating, Encrypting); each passes with chance^(1/3).
+- Quarantine: chance = catch rate/255 × key bonus × status bonus (1.8 Standby/Hung, 1.4 Throttled/Infected/Overheated) × (1 − 0.75 × Uptime/Max). The transfer runs three stages (Scanning, Isolating, Encrypting); each passes with chance^(1/3).
 
 ### Types (12)
 Hardware, Network, Software, Power, Cloud, Data, Security, Malware, Legacy, Mobile, AI, Peripheral.
@@ -87,7 +87,7 @@ Draft type chart (attacker → defender; 2 = super effective, ½ = resisted, 0 =
 | Status | Effect |
 |---|---|
 | **Throttled** | Bandwidth halved, 25% chance to skip its turn |
-| **Corrupted** | loses 1/8 Uptime each turn |
+| **Infected** | loses 1/8 Uptime each turn (called Corrupted until 2026-11-15) |
 | **Overheated** | loses 1/16 Uptime per turn, Throughput halved |
 | **Standby** | can't act for 1–3 turns |
 | **Hung** | can't act; 20% chance per turn to recover |
@@ -258,7 +258,7 @@ Each phase: **Goal → Prompt → Done when.** Big phases are split into sub-ste
 > Build the headless battle sim in scripts/battle/sim/. BattleState holds two sides (each an active Hexforged + the rest of the stack), field effects, turn counter, and a seeded RNG. Each turn takes one action per side: fight(move_slot), switch(index), item(item_id, target), run. Turn order: switches first, then items, then moves by priority, then bandwidth (with throttled modifier), with random speed ties. Output a list of BattleEvent dictionaries. No nodes, no UI.
 
 **2b prompt:**
-> Add damage and effects. Damage: our formula from the Stats section above (crit 1.5 at 1 in 20, random 0.88–1.00, native-type bonus 1.35, type effectiveness). Physical uses throughput/hardening, special uses compute/encryption. Accuracy checks with accuracy/evasion stages. Stat stages −6..+6 with the standard multipliers. Status effects from docs/design.md (Throttled, Corrupted, Overheated, Standby, Hung, Looping). Move effects as a registry of small handler functions keyed by effect id (e.g. "status_chance", "stat_change", "drain", "multi_hit", "recoil"). Fainting, forced switch, battle end, EXP + experience-log gain, level ups during battle, evolution flagged for after battle.
+> Add damage and effects. Damage: our formula from the Stats section above (crit 1.5 at 1 in 20, random 0.88–1.00, native-type bonus 1.35, type effectiveness). Physical uses throughput/hardening, special uses compute/encryption. Accuracy checks with accuracy/evasion stages. Stat stages −6..+6 with the standard multipliers. Status effects from docs/design.md (Throttled, Infected, Overheated, Standby, Hung, Looping). Move effects as a registry of small handler functions keyed by effect id (e.g. "status_chance", "stat_change", "drain", "multi_hit", "recoil"). Fainting, forced switch, battle end, EXP + experience-log gain, level ups during battle, evolution flagged for after battle.
 
 **2c prompt:**
 > Add wild battles and capture. Run chance based on bandwidth. Quarantine: our formula from the Stats section above, run as three stages (scan, isolate, encrypt). Emit capture_shake events. Add simple trainer AI tiers: "random" (picks any move), "basic" (prefers super-effective, avoids immune), "smart" (also uses status moves early and switches out of bad matchups). Write a debug scene that runs a text-only battle in the console, and GUT tests for turn order, damage range, type immunities, capture math with a fixed seed.

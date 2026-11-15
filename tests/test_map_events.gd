@@ -97,7 +97,7 @@ func test_route_1_and_back() -> void:
 func test_help_desk_heals_across_the_counter() -> void:
 	var chipmunk: DaemonInstance = GameState.active_stack[0]
 	chipmunk.current_uptime = 1
-	chipmunk.status = "corrupted"
+	chipmunk.status = "infected"
 	GameState.flags["got_starter"] = true  # skip the starter cutscene (Kevin would stand in the way)
 	_open("onboarding_town", "from_help_desk")
 	await world.player.try_step(Vector2i.UP)  # through the door

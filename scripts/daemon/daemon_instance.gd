@@ -21,7 +21,7 @@ var nickname: String = ""                 # "" = show the species name
 var level: int = 1
 var total_exp: int = 0                    # total exp earned, not exp into the current level
 var current_uptime: int = 0
-var status: String = ""                   # "" = healthy, else a status id (e.g. "corrupted")
+var status: String = ""                   # "" = healthy, else a status id (e.g. "infected")
 var status_turns: int = 0                 # Standby: turns left before it wakes
 var moves: Array[Dictionary] = []         # up to 4 of {"id": "ping", "pp": 35}
 var build_quality: Dictionary = {}        # stat -> 0..15, hidden per-Daemon variance

@@ -173,7 +173,7 @@ func test_coffee_heals_and_is_used_up() -> void:
 func test_pizza_friday_clears_status() -> void:
 	var pingo := _daemon("pingo", 20)
 	pingo.current_uptime = 1
-	pingo.status = "corrupted"
+	pingo.status = "infected"
 	var state := _battle([pingo], [_daemon("dustbunny", 20)], true, {"pizza_friday": 3})
 	var events := BattleSim.run_turn(state, BattleAction.item("pizza_friday", 0), BattleAction.fight(0))
 	assert_true("status_cured" in _types(events))
