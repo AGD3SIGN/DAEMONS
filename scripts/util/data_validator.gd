@@ -37,6 +37,7 @@ const DIALOGUE_COMMANDS := {
 	"clear_flags": ["flags"],
 	"send_player": ["spawn"],
 	"end_demo": [],
+	"sfx": ["id"],
 }
 const EVENT_TYPES := {
 	"warp": ["to_map", "to_spawn"],

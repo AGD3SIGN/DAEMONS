@@ -121,6 +121,8 @@ func _ride_lanes() -> void:
 		if dir == Vector2i.ZERO or not map.is_walkable(cell + dir) or ridden.has(cell + dir):
 			break
 		ridden[cell + dir] = true
+		if not sliding:
+			AudioManager.play_sfx("lane")
 		sliding = true
 		facing = dir
 		await _walk(cell + dir, SLIDE_TIME)

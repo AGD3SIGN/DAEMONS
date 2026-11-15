@@ -189,6 +189,10 @@
               "label": "REINSTALL OS",
               "then": [
                 {
+                  "cmd": "sfx",
+                  "id": "error"
+                },
+                {
                   "text": "You did that. It's still roaring, and now Ari's files are gone. Ari's Dustbunny is FURIOUS."
                 },
                 {
@@ -207,6 +211,10 @@
               "label": "CLEAN DUST",
               "then": [
                 {
+                  "cmd": "sfx",
+                  "id": "confirm"
+                },
+                {
                   "text": "You open the case. A decade of dust comes out in one gray brick. The fans go quiet. TICKET CLOSED."
                 },
                 {
@@ -222,6 +230,10 @@
             {
               "label": "ADD RAM",
               "then": [
+                {
+                  "cmd": "sfx",
+                  "id": "error"
+                },
                 {
                   "text": "You did that. It's still roaring, and now Ari's files are gone. Ari's Dustbunny is FURIOUS."
                 },
@@ -240,6 +252,10 @@
             {
               "label": "CALL KEVIN",
               "then": [
+                {
+                  "cmd": "sfx",
+                  "id": "error"
+                },
                 {
                   "text": "You did that. It's still roaring, and now Ari's files are gone. Ari's Dustbunny is FURIOUS."
                 },
@@ -287,6 +303,10 @@
               "label": "NEW PC",
               "then": [
                 {
+                  "cmd": "sfx",
+                  "id": "error"
+                },
+                {
                   "text": "That didn't help. The screen's still black, and Bea's Pixelsier takes it personally."
                 },
                 {
@@ -304,6 +324,10 @@
             {
               "label": "NEW DRIVERS",
               "then": [
+                {
+                  "cmd": "sfx",
+                  "id": "error"
+                },
                 {
                   "text": "That didn't help. The screen's still black, and Bea's Pixelsier takes it personally."
                 },
@@ -323,6 +347,10 @@
               "label": "CHECK CABLE",
               "then": [
                 {
+                  "cmd": "sfx",
+                  "id": "confirm"
+                },
+                {
                   "text": "The video cable was hanging by a thread. You push it in. The desktop appears. TICKET CLOSED."
                 },
                 {
@@ -338,6 +366,10 @@
             {
               "label": "SMACK IT",
               "then": [
+                {
+                  "cmd": "sfx",
+                  "id": "error"
+                },
                 {
                   "text": "That didn't help. The screen's still black, and Bea's Pixelsier takes it personally."
                 },
@@ -385,6 +417,10 @@
               "label": "NEW BATTERY",
               "then": [
                 {
+                  "cmd": "sfx",
+                  "id": "error"
+                },
+                {
                   "text": "Nothing changes. 1% battery. Cal's Fanbat has had ENOUGH of this."
                 },
                 {
@@ -402,6 +438,10 @@
             {
               "label": "WIPE IT",
               "then": [
+                {
+                  "cmd": "sfx",
+                  "id": "error"
+                },
                 {
                   "text": "Nothing changes. 1% battery. Cal's Fanbat has had ENOUGH of this."
                 },
@@ -421,6 +461,10 @@
               "label": "REINSTALL OS",
               "then": [
                 {
+                  "cmd": "sfx",
+                  "id": "error"
+                },
+                {
                   "text": "Nothing changes. 1% battery. Cal's Fanbat has had ENOUGH of this."
                 },
                 {
@@ -438,6 +482,10 @@
             {
               "label": "SWAP CHARGER",
               "then": [
+                {
+                  "cmd": "sfx",
+                  "id": "confirm"
+                },
                 {
                   "text": "The outlet works, so it's the charger. You swap it. The light turns orange. TICKET CLOSED."
                 },

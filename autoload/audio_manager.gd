@@ -11,11 +11,18 @@ const SFX_DIR := "res://assets/audio/sfx/"
 const MUSIC_DIR := "res://assets/audio/music/"
 const JINGLE_DIR := "res://assets/audio/jingles/"
 const MIX_RATE := 22050
-## id -> [start Hz, end Hz, seconds, volume 0..1]
+## id -> [start Hz, end Hz, seconds, volume 0..1], or a list of those played back to back.
 const PLACEHOLDER_SFX := {
 	"bump": [110.0, 70.0, 0.08, 0.5],
 	"select": [880.0, 880.0, 0.04, 0.35],
 	"confirm": [660.0, 990.0, 0.08, 0.35],
+	# Department challenges (2026-11-15)
+	"unlock": [[523.0, 523.0, 0.07, 0.35], [659.0, 659.0, 0.07, 0.35], [784.0, 784.0, 0.14, 0.35]],
+	"error": [[220.0, 190.0, 0.12, 0.45], [170.0, 130.0, 0.2, 0.45]],
+	"alarm": [[880.0, 880.0, 0.11, 0.4], [620.0, 620.0, 0.11, 0.4], [880.0, 880.0, 0.11, 0.4], [620.0, 620.0, 0.14, 0.4]],
+	"trip": [[160.0, 40.0, 0.28, 0.6]],
+	"lane": [[300.0, 1100.0, 0.12, 0.22]],
+	"click": [[1300.0, 1300.0, 0.025, 0.25]],
 }
 
 var music_volume: float = 1.0
@@ -104,17 +111,18 @@ func _sfx_stream(sfx_id: String) -> AudioStream:
 
 
 static func _square_blip(spec: Array) -> AudioStreamWAV:
-	var samples := int(MIX_RATE * float(spec[2]))
+	var segments: Array = spec if typeof(spec[0]) == TYPE_ARRAY else [spec]
 	var data := PackedByteArray()
-	data.resize(samples)
 	var phase := 0.0
-	for i in samples:
-		var t := float(i) / samples
-		var freq := lerpf(spec[0], spec[1], t)
-		phase = fmod(phase + freq / MIX_RATE, 1.0)
-		var amp := float(spec[3]) * (1.0 - t)  # fade out
-		var value := int((1 if phase < 0.5 else -1) * amp * 100.0)
-		data[i] = value & 0xFF  # signed 8-bit
+	for seg: Array in segments:
+		var samples := int(MIX_RATE * float(seg[2]))
+		for i in samples:
+			var t := float(i) / samples
+			var freq := lerpf(seg[0], seg[1], t)
+			phase = fmod(phase + freq / MIX_RATE, 1.0)
+			var amp := float(seg[3]) * (1.0 - t * 0.85)  # fade out (not to silence, so tones join up)
+			var value := int((1 if phase < 0.5 else -1) * amp * 100.0)
+			data.append(value & 0xFF)  # signed 8-bit
 	var wav := AudioStreamWAV.new()
 	wav.format = AudioStreamWAV.FORMAT_8_BITS
 	wav.mix_rate = MIX_RATE

@@ -276,3 +276,10 @@ func test_cameras_send_you_back_and_the_console_wants_the_right_account() -> voi
 	for e in world.events:
 		if e is CameraEvent:
 			assert_false(e.is_on(), "cameras power down once it's solved")
+
+
+func test_challenge_sounds_exist() -> void:
+	for id in ["unlock", "error", "alarm", "trip", "lane", "click"]:
+		var stream: AudioStream = AudioManager._sfx_stream(id)
+		assert_not_null(stream, id)
+		assert_gt(stream.get_length(), 0.0, "%s has sound in it" % id)

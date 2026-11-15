@@ -414,6 +414,10 @@
           "text": "You push it. It is Friday at 4:59. Every alarm in DevOps Heights goes off at once."
         },
         {
+          "cmd": "sfx",
+          "id": "error"
+        },
+        {
           "cmd": "set_var",
           "var": "pipeline",
           "value": 0
@@ -491,6 +495,10 @@
                   "value": 0,
                   "then": [
                     {
+                      "cmd": "sfx",
+                      "id": "click"
+                    },
+                    {
                       "cmd": "set_var",
                       "var": "pipeline",
                       "value": 1
@@ -504,148 +512,8 @@
                       "text": "LINT: FAILED. Lint found 2,000 warnings it already reported."
                     },
                     {
-                      "cmd": "set_var",
-                      "var": "pipeline",
-                      "value": 0
-                    },
-                    {
-                      "text": "PIPELINE RED. Rolling back to the start. Something crawls out of the failed build..."
-                    },
-                    {
-                      "cmd": "start_battle",
-                      "foe": [
-                        [
-                          "wormby",
-                          23
-                        ],
-                        [
-                          "pasteslug",
-                          22
-                        ]
-                      ],
-                      "trainer_name": "Regression Bug"
-                    }
-                  ]
-                }
-              ],
-              "no": []
-            }
-          ]
-        }
-      ]
-    }
-  ],
-  "pipe_build": [
-    {
-      "if_flag": "pipeline_green",
-      "then": [
-        {
-          "text": "BUILD: PASSED. The whole pipeline is green."
-        }
-      ],
-      "else": [
-        {
-          "if_var": "pipeline",
-          "op": ">=",
-          "value": 2,
-          "then": [
-            {
-              "text": "BUILD: already passed."
-            }
-          ],
-          "else": [
-            {
-              "choice": "Run BUILD?",
-              "yes": [
-                {
-                  "if_var": "pipeline",
-                  "op": "==",
-                  "value": 1,
-                  "then": [
-                    {
-                      "cmd": "set_var",
-                      "var": "pipeline",
-                      "value": 2
-                    },
-                    {
-                      "text": "BUILD: PASSED. (2/6)"
-                    }
-                  ],
-                  "else": [
-                    {
-                      "text": "BUILD: FAILED. There's nothing linted to build. Messy code in, broken build out."
-                    },
-                    {
-                      "cmd": "set_var",
-                      "var": "pipeline",
-                      "value": 0
-                    },
-                    {
-                      "text": "PIPELINE RED. Rolling back to the start. Something crawls out of the failed build..."
-                    },
-                    {
-                      "cmd": "start_battle",
-                      "foe": [
-                        [
-                          "wormby",
-                          23
-                        ],
-                        [
-                          "pasteslug",
-                          22
-                        ]
-                      ],
-                      "trainer_name": "Regression Bug"
-                    }
-                  ]
-                }
-              ],
-              "no": []
-            }
-          ]
-        }
-      ]
-    }
-  ],
-  "pipe_test": [
-    {
-      "if_flag": "pipeline_green",
-      "then": [
-        {
-          "text": "TEST: PASSED. The whole pipeline is green."
-        }
-      ],
-      "else": [
-        {
-          "if_var": "pipeline",
-          "op": ">=",
-          "value": 3,
-          "then": [
-            {
-              "text": "TEST: already passed."
-            }
-          ],
-          "else": [
-            {
-              "choice": "Run TEST?",
-              "yes": [
-                {
-                  "if_var": "pipeline",
-                  "op": "==",
-                  "value": 2,
-                  "then": [
-                    {
-                      "cmd": "set_var",
-                      "var": "pipeline",
-                      "value": 3
-                    },
-                    {
-                      "text": "TEST: PASSED. (3/6)"
-                    }
-                  ],
-                  "else": [
-                    {
-                      "text": "TEST: FAILED. There's no build to test. The test runner is testing... air."
+                      "cmd": "sfx",
+                      "id": "error"
                     },
                     {
                       "cmd": "set_var",
@@ -707,6 +575,10 @@
                   "value": 3,
                   "then": [
                     {
+                      "cmd": "sfx",
+                      "id": "click"
+                    },
+                    {
                       "cmd": "set_var",
                       "var": "pipeline",
                       "value": 4
@@ -718,6 +590,10 @@
                   "else": [
                     {
                       "text": "SCAN: FAILED. The scanner refuses to scan code nobody tested."
+                    },
+                    {
+                      "cmd": "sfx",
+                      "id": "error"
                     },
                     {
                       "cmd": "set_var",
@@ -779,6 +655,10 @@
                   "value": 4,
                   "then": [
                     {
+                      "cmd": "sfx",
+                      "id": "click"
+                    },
+                    {
                       "cmd": "set_var",
                       "var": "pipeline",
                       "value": 5
@@ -790,6 +670,10 @@
                   "else": [
                     {
                       "text": "STAGING: FAILED. Staging only accepts builds that passed the security scan."
+                    },
+                    {
+                      "cmd": "sfx",
+                      "id": "error"
                     },
                     {
                       "cmd": "set_var",
@@ -851,6 +735,10 @@
                   "value": 5,
                   "then": [
                     {
+                      "cmd": "sfx",
+                      "id": "click"
+                    },
+                    {
                       "cmd": "set_var",
                       "var": "pipeline",
                       "value": 6
@@ -869,6 +757,170 @@
                   "else": [
                     {
                       "text": "DEPLOY: FAILED. Deploying something that never touched staging. Production catches fire."
+                    },
+                    {
+                      "cmd": "sfx",
+                      "id": "error"
+                    },
+                    {
+                      "cmd": "set_var",
+                      "var": "pipeline",
+                      "value": 0
+                    },
+                    {
+                      "text": "PIPELINE RED. Rolling back to the start. Something crawls out of the failed build..."
+                    },
+                    {
+                      "cmd": "start_battle",
+                      "foe": [
+                        [
+                          "wormby",
+                          23
+                        ],
+                        [
+                          "pasteslug",
+                          22
+                        ]
+                      ],
+                      "trainer_name": "Regression Bug"
+                    }
+                  ]
+                }
+              ],
+              "no": []
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "pipe_build": [
+    {
+      "if_flag": "pipeline_green",
+      "then": [
+        {
+          "text": "BUILD: PASSED. The whole pipeline is green."
+        }
+      ],
+      "else": [
+        {
+          "if_var": "pipeline",
+          "op": ">=",
+          "value": 2,
+          "then": [
+            {
+              "text": "BUILD: already passed."
+            }
+          ],
+          "else": [
+            {
+              "choice": "Run BUILD?",
+              "yes": [
+                {
+                  "if_var": "pipeline",
+                  "op": "==",
+                  "value": 1,
+                  "then": [
+                    {
+                      "cmd": "sfx",
+                      "id": "click"
+                    },
+                    {
+                      "cmd": "set_var",
+                      "var": "pipeline",
+                      "value": 2
+                    },
+                    {
+                      "text": "BUILD: PASSED. (2/6)"
+                    }
+                  ],
+                  "else": [
+                    {
+                      "text": "BUILD: FAILED. There's nothing linted to build. Messy code in, broken build out."
+                    },
+                    {
+                      "cmd": "sfx",
+                      "id": "error"
+                    },
+                    {
+                      "cmd": "set_var",
+                      "var": "pipeline",
+                      "value": 0
+                    },
+                    {
+                      "text": "PIPELINE RED. Rolling back to the start. Something crawls out of the failed build..."
+                    },
+                    {
+                      "cmd": "start_battle",
+                      "foe": [
+                        [
+                          "wormby",
+                          23
+                        ],
+                        [
+                          "pasteslug",
+                          22
+                        ]
+                      ],
+                      "trainer_name": "Regression Bug"
+                    }
+                  ]
+                }
+              ],
+              "no": []
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "pipe_test": [
+    {
+      "if_flag": "pipeline_green",
+      "then": [
+        {
+          "text": "TEST: PASSED. The whole pipeline is green."
+        }
+      ],
+      "else": [
+        {
+          "if_var": "pipeline",
+          "op": ">=",
+          "value": 3,
+          "then": [
+            {
+              "text": "TEST: already passed."
+            }
+          ],
+          "else": [
+            {
+              "choice": "Run TEST?",
+              "yes": [
+                {
+                  "if_var": "pipeline",
+                  "op": "==",
+                  "value": 2,
+                  "then": [
+                    {
+                      "cmd": "sfx",
+                      "id": "click"
+                    },
+                    {
+                      "cmd": "set_var",
+                      "var": "pipeline",
+                      "value": 3
+                    },
+                    {
+                      "text": "TEST: PASSED. (3/6)"
+                    }
+                  ],
+                  "else": [
+                    {
+                      "text": "TEST: FAILED. There's no build to test. The test runner is testing... air."
+                    },
+                    {
+                      "cmd": "sfx",
+                      "id": "error"
                     },
                     {
                       "cmd": "set_var",

@@ -504,6 +504,10 @@
               "value": false
             },
             {
+              "cmd": "sfx",
+              "id": "trip"
+            },
+            {
               "text": "Every screen in the building goes black. Somewhere upstairs, Rolf screams."
             },
             {
@@ -547,6 +551,10 @@
           "choice": "It's OFF. Switch it ON?",
           "yes": [
             {
+              "cmd": "sfx",
+              "id": "click"
+            },
+            {
               "cmd": "set_flag",
               "flag": "brk_servers"
             },
@@ -560,6 +568,10 @@
               "op": ">",
               "value": 12,
               "then": [
+                {
+                  "cmd": "sfx",
+                  "id": "trip"
+                },
                 {
                   "text": "BANG! The main breaker trips. Everything snaps back to how Ransom left it."
                 },
@@ -626,6 +638,10 @@
           "choice": "It's ON. Switch it OFF?",
           "yes": [
             {
+              "cmd": "sfx",
+              "id": "click"
+            },
+            {
               "cmd": "set_flag",
               "flag": "brk_coffee",
               "value": false
@@ -647,6 +663,10 @@
           "choice": "It's OFF. Switch it ON?",
           "yes": [
             {
+              "cmd": "sfx",
+              "id": "click"
+            },
+            {
               "cmd": "set_flag",
               "flag": "brk_coffee"
             },
@@ -660,6 +680,10 @@
               "op": ">",
               "value": 12,
               "then": [
+                {
+                  "cmd": "sfx",
+                  "id": "trip"
+                },
                 {
                   "text": "BANG! The main breaker trips. Everything snaps back to how Ransom left it."
                 },
@@ -726,6 +750,10 @@
           "choice": "It's ON. Switch it OFF?",
           "yes": [
             {
+              "cmd": "sfx",
+              "id": "click"
+            },
+            {
               "cmd": "set_flag",
               "flag": "brk_cooling",
               "value": false
@@ -747,6 +775,10 @@
           "choice": "It's OFF. Switch it ON?",
           "yes": [
             {
+              "cmd": "sfx",
+              "id": "click"
+            },
+            {
               "cmd": "set_flag",
               "flag": "brk_cooling"
             },
@@ -760,6 +792,10 @@
               "op": ">",
               "value": 12,
               "then": [
+                {
+                  "cmd": "sfx",
+                  "id": "trip"
+                },
                 {
                   "text": "BANG! The main breaker trips. Everything snaps back to how Ransom left it."
                 },
@@ -826,6 +862,10 @@
           "choice": "It's ON. Switch it OFF?",
           "yes": [
             {
+              "cmd": "sfx",
+              "id": "click"
+            },
+            {
               "cmd": "set_flag",
               "flag": "brk_rig",
               "value": false
@@ -847,6 +887,10 @@
           "choice": "It's OFF. Switch it ON?",
           "yes": [
             {
+              "cmd": "sfx",
+              "id": "click"
+            },
+            {
               "cmd": "set_flag",
               "flag": "brk_rig"
             },
@@ -860,6 +904,10 @@
               "op": ">",
               "value": 12,
               "then": [
+                {
+                  "cmd": "sfx",
+                  "id": "trip"
+                },
                 {
                   "text": "BANG! The main breaker trips. Everything snaps back to how Ransom left it."
                 },
@@ -926,6 +974,10 @@
           "choice": "It's ON. Switch it OFF?",
           "yes": [
             {
+              "cmd": "sfx",
+              "id": "click"
+            },
+            {
               "cmd": "set_flag",
               "flag": "brk_door",
               "value": false
@@ -947,6 +999,10 @@
           "choice": "It's OFF. Switch it ON?",
           "yes": [
             {
+              "cmd": "sfx",
+              "id": "click"
+            },
+            {
               "cmd": "set_flag",
               "flag": "brk_door"
             },
@@ -960,6 +1016,10 @@
               "op": ">",
               "value": 12,
               "then": [
+                {
+                  "cmd": "sfx",
+                  "id": "trip"
+                },
                 {
                   "text": "BANG! The main breaker trips. Everything snaps back to how Ransom left it."
                 },
@@ -1026,6 +1086,10 @@
           "choice": "It's ON. Switch it OFF?",
           "yes": [
             {
+              "cmd": "sfx",
+              "id": "click"
+            },
+            {
               "cmd": "set_flag",
               "flag": "brk_heater",
               "value": false
@@ -1047,6 +1111,10 @@
           "choice": "It's OFF. Switch it ON?",
           "yes": [
             {
+              "cmd": "sfx",
+              "id": "click"
+            },
+            {
               "cmd": "set_flag",
               "flag": "brk_heater"
             },
@@ -1060,6 +1128,10 @@
               "op": ">",
               "value": 12,
               "then": [
+                {
+                  "cmd": "sfx",
+                  "id": "trip"
+                },
                 {
                   "text": "BANG! The main breaker trips. Everything snaps back to how Ransom left it."
                 },
@@ -1116,6 +1188,10 @@
           "choice": "It's ON. Switch it OFF?",
           "yes": [
             {
+              "cmd": "sfx",
+              "id": "click"
+            },
+            {
               "cmd": "set_flag",
               "flag": "brk_lights",
               "value": false
@@ -1137,6 +1213,10 @@
           "choice": "It's OFF. Switch it ON?",
           "yes": [
             {
+              "cmd": "sfx",
+              "id": "click"
+            },
+            {
               "cmd": "set_flag",
               "flag": "brk_lights"
             },
@@ -1150,6 +1230,10 @@
               "op": ">",
               "value": 12,
               "then": [
+                {
+                  "cmd": "sfx",
+                  "id": "trip"
+                },
                 {
                   "text": "BANG! The main breaker trips. Everything snaps back to how Ransom left it."
                 },
@@ -1265,6 +1349,10 @@
                           "label": "kevin.r",
                           "then": [
                             {
+                              "cmd": "sfx",
+                              "id": "error"
+                            },
+                            {
                               "text": "ACCESS DENIED. kevin.r is clean. The logs prove it."
                             },
                             {
@@ -1287,6 +1375,10 @@
                         {
                           "label": "j.doe",
                           "then": [
+                            {
+                              "cmd": "sfx",
+                              "id": "error"
+                            },
                             {
                               "text": "ACCESS DENIED. j.doe is clean. The logs prove it."
                             },
@@ -1325,6 +1417,10 @@
                         {
                           "label": "m.kalb",
                           "then": [
+                            {
+                              "cmd": "sfx",
+                              "id": "error"
+                            },
                             {
                               "text": "ACCESS DENIED. m.kalb is clean. The logs prove it."
                             },

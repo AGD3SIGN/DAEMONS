@@ -50,7 +50,7 @@ func refresh(announce: bool = true) -> bool:
 	else:
 		world.map.occupied[cell] = self
 	if announce and _is_open and not was_open:
-		AudioManager.play_sfx("confirm")
+		AudioManager.play_sfx("unlock")
 	return _is_open and not was_open
 
 

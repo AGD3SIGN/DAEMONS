@@ -248,6 +248,7 @@ func _check_cameras() -> bool:
 		return false
 	_busy = true
 	player.input_enabled = false
+	AudioManager.play_sfx("alarm")
 	await spotter.flash()
 	text_box.visible = true
 	if spotter.dialogue_id.is_empty():

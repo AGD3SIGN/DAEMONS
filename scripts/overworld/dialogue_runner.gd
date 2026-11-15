@@ -17,6 +17,7 @@ extends RefCounted
 ##   {"cmd": "add_var", "var": "load", "value": -4}  /  {"cmd": "set_var", "var": "stage", "value": 0}
 ##   {"cmd": "clear_flags", "flags": ["brk_a", "brk_b"]}
 ##   {"cmd": "send_player", "spawn": "entrance"}     fade out and back in at a spawn point on this map
+##   {"cmd": "sfx", "id": "error"}                 play a sound effect (AudioManager ids)
 ##   {"cmd": "end_demo"}                              sets demo_complete, saves, rolls the end card + credits
 ##   {"cmd": "move_npc", "npc": "kid", "path": ["left", "right"]}   npc "self" = whoever is talking
 ##   {"cmd": "open_shop", "stock": ["coffee", "thumb_drive"]}   Supply Closet buy/sell
@@ -82,6 +83,8 @@ func _command(step: Dictionary) -> void:
 		"clear_flags":
 			for flag: String in step["flags"]:
 				GameState.flags.erase(flag)
+		"sfx":
+			AudioManager.play_sfx(step["id"])
 		"end_demo":
 			stopped = true
 			world.end_demo()
