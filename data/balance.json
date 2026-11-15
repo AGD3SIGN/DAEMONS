@@ -1,4 +1,5 @@
 {
+  "starting_credits": 3000,
   "exp_divisor": 6,
   "trainer_exp_bonus": 1.5,
   "loss_penalty": {

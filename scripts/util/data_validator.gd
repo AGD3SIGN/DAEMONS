@@ -938,6 +938,7 @@ func _validate_balance(raw: Variant) -> void:
 		_err("balance", "must be an object")
 		return
 	balance = raw
+	_int(raw, "starting_credits", "balance", 0, 999999)
 	for field: String in ["exp_divisor", "trainer_exp_bonus"]:
 		var v: Variant = raw.get(field)
 		if not (typeof(v) == TYPE_INT or typeof(v) == TYPE_FLOAT) or float(v) < 1.0 or float(v) > 20.0:

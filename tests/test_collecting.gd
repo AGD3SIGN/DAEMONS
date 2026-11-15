@@ -152,15 +152,15 @@ func test_legacy_driver_upgrades_floppit() -> void:
 
 
 func test_shop_buy_and_sell() -> void:
-	GameState.credits = 1000
+	GameState.credits = 1000  # Coffee is 150 CR
 	assert_eq(Shop.buy("coffee", 3), "")
-	assert_eq(GameState.credits, 400)
+	assert_eq(GameState.credits, 550)
 	assert_eq(GameState.bag["coffee"], 3)
-	assert_eq(Shop.max_buyable("coffee"), 2)
-	assert_eq(Shop.buy("coffee", 3), "You can't afford that.")
+	assert_eq(Shop.max_buyable("coffee"), 3)
+	assert_eq(Shop.buy("coffee", 4), "You can't afford that.")
 	assert_eq(Shop.buy("root_key", 1), "That's not for sale.")
 	assert_eq(Shop.sell("coffee", 2), "")
-	assert_eq(GameState.credits, 600, "sold at half price")
+	assert_eq(GameState.credits, 700, "sold at half price (75 each)")
 	assert_eq(GameState.bag["coffee"], 1)
 	assert_eq(Shop.sell("coffee", 5), "You don't have that many.")
 	GameState.bag["root_key"] = 1
@@ -240,7 +240,7 @@ func test_buy_through_the_supply_closet() -> void:
 	await wait_until(func() -> bool: return world.field_menus.side.is_choosing(), 5.0)
 	await _press("ui_cancel")  # leave the shop
 	await wait_until(func() -> bool: return done[0], 5.0)
-	assert_eq(GameState.credits, 300)
+	assert_eq(GameState.credits, 350, "one Coffee at 150 CR")
 	assert_eq(GameState.bag.get("coffee", 0), 1)
 
 
@@ -294,3 +294,17 @@ func test_catch_store_heal_and_cmdb() -> void:
 	# It's in the CMDB as seen and quarantined.
 	assert_true(GameState.cmdb_seen.has("wormby"))
 	assert_true(GameState.cmdb_caught.has("wormby"))
+
+
+## Player feedback (2026-11-14): shop items had no visible description. Every item has one that
+## fits the menu's two-line description area, and the clerk's box is closed while you browse.
+func test_every_item_description_fits_the_menu() -> void:
+	var font: Font = UiTheme.get_theme().default_font
+	var size := UiTheme.get_theme().default_font_size
+	for id: String in DataRegistry.items:
+		var desc: String = DataRegistry.items[id].get("description", "")
+		assert_false(desc.is_empty(), "%s has a description" % id)
+		var width := font.get_multiline_string_size(desc, HORIZONTAL_ALIGNMENT_LEFT, 292, size, -1, TextServer.BREAK_MANDATORY | TextServer.BREAK_WORD_BOUND)
+		assert_lte(width.y, font.get_height(size) * 2.0 + 4.0, "%s fits in two lines: %s" % [id, desc])
+	var source := FileAccess.get_file_as_string("res://scripts/ui/field_menus.gd")
+	assert_string_contains(source, "_hide_talk()\n\t\tvar r := await list.choose(\"BUY")

@@ -826,6 +826,7 @@ func shop(stock: Array) -> void:
 	var options := PackedStringArray(["BUY", "SELL", "QUIT"])
 	var start := 0
 	while true:
+		_hide_talk()
 		var r := await side.choose("SUPPLY CLOSET", options, [], start)
 		if r["action"] != "pick" or r["index"] == 2:
 			break
@@ -848,6 +849,7 @@ func _buy(stock: Array) -> void:
 		for item_id: String in stock:
 			rows.append("%-15s %5d CR" % [DataRegistry.get_item(item_id)["name"], Shop.price(item_id)])
 		list.describe = func(i: int) -> String: return DataRegistry.get_item(stock[i])["description"]
+		_hide_talk()
 		var r := await list.choose("BUY      You have %d CR" % GameState.credits, rows, [], start)
 		list.describe = Callable()
 		if r["action"] != "pick":
@@ -873,6 +875,7 @@ func _sell() -> void:
 	var start := 0
 	while true:
 		var ids := pocket_items(POCKETS[pocket])
+		_hide_talk()
 		var r := await _show_pocket(pocket, ids, start, "  SELL  %d CR" % GameState.credits)
 		if r["action"] == "left" or r["action"] == "right":
 			pocket = wrapi(pocket + (1 if r["action"] == "right" else -1), 0, POCKETS.size())
@@ -892,6 +895,13 @@ func _sell() -> void:
 			var reason := Shop.sell(item_id, qty)
 			AudioManager.play_sfx("confirm")
 			await _say(reason if not reason.is_empty() else "Turned over the item and received %d CR." % (qty * Shop.sell_price(item_id)))
+
+
+## The clerk's speech box sits over the list's description line; close it while browsing
+## (player feedback, 2026-11-14: "no description, hard to know what they are buying").
+func _hide_talk() -> void:
+	if world != null:
+		world.text_box.visible = false
 
 
 # --- quantity chooser --------------------------------------------------------

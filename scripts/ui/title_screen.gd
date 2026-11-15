@@ -558,4 +558,4 @@ func open_options() -> void:
 static func new_game() -> void:
 	GameState.reset()
 	GameState.trainer_id = randi_range(10000, 99999)
-	GameState.credits = 3000
+	GameState.credits = int(DataRegistry.balance.get("starting_credits", 3000))
