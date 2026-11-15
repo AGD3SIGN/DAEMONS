@@ -104,9 +104,17 @@ async function confirmPage(id, env) {
     <p>Here's what you're sending. One click to prove you're a person, and it goes straight to the DAEMONS team.</p>
     <div class="card"><div class="tag">${escapeHtml(draft.category.toUpperCase())}</div><pre>${escapeHtml(draft.message)}</pre></div>
     <form method="POST">
-      <div class="cf-turnstile" data-sitekey="${escapeHtml(env.TURNSTILE_SITE_KEY || "")}" data-theme="dark"></div>
-      <button type="submit">Send feedback</button>
+      <div class="cf-turnstile" data-sitekey="${escapeHtml(env.TURNSTILE_SITE_KEY || "")}" data-theme="dark"
+        data-callback="humanOk" data-expired-callback="humanReset" data-error-callback="humanFail"></div>
+      <button id="send" type="submit" disabled>Send feedback</button>
+      <p id="hint" class="hint" hidden>The check couldn't run in this browser. Copy this page's address into Safari, Chrome, Edge or Firefox and try there.</p>
     </form>
+    <script>
+      const send = document.getElementById("send"), hint = document.getElementById("hint");
+      function humanOk() { send.disabled = false; hint.hidden = true; }
+      function humanReset() { send.disabled = true; }
+      function humanFail() { send.disabled = true; hint.hidden = false; }
+    </script>
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>`;
   return page("Send your feedback", body);
 }
@@ -221,6 +229,8 @@ function page(title, body, status = 200) {
   .tag { display: inline-block; background: #3ee6ff; color: #031318; font-weight: 700; font-size: 12px; padding: 2px 8px; }
   pre { white-space: pre-wrap; word-break: break-word; font: 15px/1.4 ui-monospace, monospace; color: #d9fbe6; }
   button { margin-top: 16px; background: #3ee6ff; color: #031318; border: 0; font-weight: 700; font-size: 16px; padding: 12px 20px; min-height: 44px; cursor: pointer; }
+  button:disabled { opacity: .45; cursor: not-allowed; }
+  .hint { color: #ffcf5a; }
   a { color: #3ee6ff; }
 </style></head><body><main><h1>${escapeHtml(title)}</h1>${body}</main></body></html>`;
   return new Response(html, { status, headers: { "content-type": "text/html; charset=utf-8" } });

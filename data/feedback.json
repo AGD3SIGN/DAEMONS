@@ -1,5 +1,5 @@
 {
-  "endpoint": "",
+  "endpoint": "https://daemons-feedback.brandonjtorres.workers.dev",
   "min_message": 10,
   "max_message": 2000,
   "categories": ["bug", "idea", "other"]
