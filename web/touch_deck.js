@@ -1,6 +1,7 @@
 // DAEMONS web: phone control deck.
-// On a touch device held upright, the game becomes a 4:3 screen at the top of the page and a handheld-
-// style deck (d-pad, A, B, MENU, RUN) fills the space below, so the controls never cover the game.
+// On a touch device held upright, the game takes the top of the page and a compact handheld-style deck
+// (d-pad, A, B, MENU, RUN) sits along the bottom, so the controls never cover the game. 2026-11-15: the deck
+// used to take everything below a 4:3 game; it's now ~38% of the height, so the game view is much bigger.
 // Landscape and desktop: the game fills the window as usual and the game's own touch overlay is used.
 //
 // The export uses canvas resize policy 0 ("None"), so Godot follows the canvas size set here.
@@ -17,8 +18,8 @@
       padding-bottom: env(safe-area-inset-bottom); box-sizing: border-box; }
     #daemons-deck .row { position: absolute; left: 0; right: 0; display: flex; align-items: center;
       justify-content: space-between; padding: 0 7vw; box-sizing: border-box; }
-    #daemons-deck .main { top: 12%; }
-    #daemons-deck .pills { bottom: calc(10% + env(safe-area-inset-bottom)); justify-content: center; gap: 9vw; }
+    #daemons-deck .main { top: 7%; }
+    #daemons-deck .pills { bottom: calc(5% + env(safe-area-inset-bottom)); justify-content: center; gap: 9vw; }
     #daemons-deck .dpad { position: relative; width: var(--pad); height: var(--pad); }
     #daemons-deck .dpad svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
     #daemons-deck .dpad .press { fill: #000; opacity: 0; }
@@ -63,7 +64,8 @@
     const portrait = isTouch() && window.innerHeight > window.innerWidth;
     const w = window.innerWidth;
     let h = window.innerHeight;
-    if (portrait) h = Math.min(Math.round(w * 3 / 4), Math.round(window.innerHeight * 0.6));
+    // Deck: about 38% of the height, but never under 250 px (thumb room) or over 360 px (wasted space).
+    if (portrait) h = window.innerHeight - Math.round(Math.min(360, Math.max(250, window.innerHeight * 0.38)));
     const dpr = window.devicePixelRatio || 1;
     canvas.style.width = w + "px";
     canvas.style.height = h + "px";
@@ -71,8 +73,8 @@
     canvas.height = Math.floor(h * dpr);
     deck.style.top = h + "px";
     const room = window.innerHeight - h;
-    deck.style.setProperty("--pad", Math.min(w * 0.4, room * 0.55) + "px");
-    deck.style.setProperty("--btn", Math.min(w * 0.17, room * 0.24) + "px");
+    deck.style.setProperty("--pad", Math.min(w * 0.38, room * 0.6) + "px");
+    deck.style.setProperty("--btn", Math.min(w * 0.16, room * 0.25) + "px");
     deck.style.display = portrait ? "block" : "none";
     if (portrait !== shown) {
       shown = portrait;
