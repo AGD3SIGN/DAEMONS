@@ -19,6 +19,7 @@ extends RefCounted
 ##   {"cmd": "send_player", "spawn": "entrance"}     fade out and back in at a spawn point on this map
 ##   {"cmd": "clean_quarantined"}                   Help Desk: offer to clean every corrupted Hexforged you caught
 ##   {"cmd": "sfx", "id": "error"}                 play a sound effect (AudioManager ids)
+##   {"cmd": "demo_teaser"}                          the Port City teaser battle (glitched, uncatchable, flees)
 ##   {"cmd": "end_demo"}                              sets demo_complete, saves, rolls the end card + credits
 ##   {"cmd": "move_npc", "npc": "kid", "path": ["left", "right"]}   npc "self" = whoever is talking
 ##   {"cmd": "open_shop", "stock": ["coffee", "thumb_drive"]}   Supply Closet buy/sell
@@ -88,6 +89,9 @@ func _command(step: Dictionary) -> void:
 			AudioManager.play_sfx(step["id"])
 		"clean_quarantined":
 			await _clean_quarantined(step.get("speaker", "Help Desk"))
+		"demo_teaser":
+			stopped = true
+			world.start_battle(Demo.teaser_battle_config())
 		"end_demo":
 			stopped = true
 			world.end_demo()

@@ -149,8 +149,13 @@ func setup(cfg: Dictionary) -> void:
 			var foe := DaemonInstance.create(entry[0], int(entry[1]), rng, 0 if wild else 2)
 			foe.is_corrupted = entry.size() > 2 and bool(entry[2]) and DaemonInstance.can_be_corrupted(entry[0])
 			foe_stack.append(foe)
+	if cfg.get("teaser", false):  # the demo teaser: a glitched "???" you can't catch, gone after 2 turns
+		for foe in foe_stack:
+			foe.nickname = "???"
 	state = BattleState.new(BattleSide.new("You", player_stack, items),
 		BattleSide.new(trainer_name if not trainer_name.is_empty() else "Wild", foe_stack), rng, wild)
+	state.uncatchable = bool(cfg.get("teaser", false))
+	state.foe_flees_after = 2 if cfg.get("teaser", false) else 0
 	if is_inside_tree() and not _started:
 		_start()
 
@@ -176,6 +181,8 @@ func host_label() -> String:
 	if not trainer_name.is_empty():
 		return trainer_name.to_upper()
 	var foe := state.sides[BattleState.FOE].active()
+	if config.get("teaser", false):
+		return "???"
 	if foe != null and foe.is_corrupted:
 		return foe.display_name()  # ERR::CABLESNAKE: its broken name tag is all it shows
 	if foe != null and GameState.cmdb_seen.get(foe.species_id, false):
@@ -331,6 +338,10 @@ func prompt_move_replace(e: Dictionary) -> void:
 
 
 func _after_battle() -> void:
+	if config.get("teaser", false):
+		GameState.flags["demo_teaser_seen"] = true  # never corruption_revealed: that's the Power Plant
+		for d in state.sides[BattleState.FOE].stack:
+			GameState.cmdb_unknown[d.species_id] = true
 	for e in _player.upgrades:
 		var d := state.sides[BattleState.PLAYER].stack[int(e["index"])]
 		if not d.is_fainted():

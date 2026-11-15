@@ -65,9 +65,9 @@ func _play_event(e: Dictionary) -> void:
 				info["status"], exp_fraction(_active[side]) if side == BattleState.PLAYER else 0.0)
 			_panel(side).visible = false
 			_species[side] = d.species_id
-			_corrupted[side] = d.is_corrupted
+			_corrupted[side] = d.is_corrupted or (side == BattleState.FOE and bool(view.config.get("teaser", false)))
 			_sprite(side).texture = DaemonSprites.back(d.species_id) if side == BattleState.PLAYER else DaemonSprites.front(d.species_id)
-			if d.is_corrupted:
+			if _corrupted[side]:
 				var err := DaemonSprites.corrupted_pose(d.species_id, "idle")
 				if err != null:
 					_sprite(side).texture = err

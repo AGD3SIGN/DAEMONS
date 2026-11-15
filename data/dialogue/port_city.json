@@ -338,5 +338,19 @@
         }
       ]
     }
+  ],
+  "demo_teaser_scene": [
+    {
+      "text": "Your phone buzzes: Cert 2 is on file. Before you can put it away, every light on the street flickers at once."
+    },
+    {
+      "text": "Something drops out of the cable tray overhead. It looks like a Cablesnake... with the colors drained out of it, and red where its eyes should be."
+    },
+    {
+      "text": "Its outline jitters, like a video call on bad Wi-Fi."
+    },
+    {
+      "cmd": "demo_teaser"
+    }
   ]
 }

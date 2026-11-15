@@ -42,6 +42,7 @@ const DIALOGUE_COMMANDS := {
 	"end_demo": [],
 	"sfx": ["id"],
 	"clean_quarantined": [],
+	"demo_teaser": [],
 }
 const EVENT_TYPES := {
 	"warp": ["to_map", "to_spawn"],

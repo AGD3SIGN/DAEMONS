@@ -56,7 +56,8 @@ func open(species_id: String) -> void:
 ## Help Desk has cleaned one of yours. "" for species you've only met clean.
 static func status_line(species_id: String) -> String:
 	if not GameState.corruption_revealed():
-		return ""  # hidden until the Power Plant reveal (GDD)
+		# Before the Power Plant reveal only the demo teaser's glitched sighting shows anything.
+		return "Status: UNKNOWN" if GameState.cmdb_unknown.get(species_id, false) else ""
 	if GameState.cmdb_recovered.get(species_id, false):
 		return "Status: Recovered"
 	if GameState.cmdb_compromised.get(species_id, false):

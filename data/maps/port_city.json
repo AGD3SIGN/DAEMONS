@@ -270,6 +270,14 @@
       "y": 27,
       "item": "encrypted_key",
       "flag": "hidden_port_key"
+    },
+    {
+      "type": "trigger",
+      "x": 25,
+      "y": 14,
+      "dialogue": "demo_teaser_scene",
+      "once_flag": "demo_teaser_started",
+      "requires_flag": "trainer_ping_okoro"
     }
   ]
 }

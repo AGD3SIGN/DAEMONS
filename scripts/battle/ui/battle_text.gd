@@ -97,6 +97,8 @@ static func describe(e: Dictionary, is_wild: bool, foe_trainer: String = "") -> 
 			return "Choose a Hexforged to deploy." if e["side"] == BattleState.PLAYER else ""
 		"fled":
 			return "You disconnected safely!"
+		"foe_fled":
+			return "%s's signal drops out... and it's gone." % e["daemon"]
 		"run_failed":
 			return "Couldn't disconnect!"
 		"capture_shake":

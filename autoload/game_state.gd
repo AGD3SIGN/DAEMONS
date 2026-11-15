@@ -23,7 +23,8 @@ var counters: Dictionary = {}       # story/puzzle numbers (power load, pipeline
 var visited: Dictionary = {}
 var quarantined: Array = []         # corrupted Hexforged you caught, waiting for a Help Desk clean (can't battle)
 var cmdb_compromised: Dictionary = {}  # species_id -> true once you've seen a corrupted one
-var cmdb_recovered: Dictionary = {}    # species_id -> true once a Help Desk cleaned one of yours        # region-map place id -> true (the phone's Maps app)
+var cmdb_recovered: Dictionary = {}    # species_id -> true once a Help Desk cleaned one of yours
+var cmdb_unknown: Dictionary = {}      # species_id -> true after the demo teaser (CMDB "Status: UNKNOWN")        # region-map place id -> true (the phone's Maps app)
 var repel_steps: int = 0            # Firewall Rule steps left
 var trainer_id: int = 0             # shown on the trainer card; stamped on caught Daemons
 var last_help_desk: Dictionary = {} # where you wake up after a black-out
@@ -59,6 +60,7 @@ func reset() -> void:
 	quarantined.clear()
 	cmdb_compromised.clear()
 	cmdb_recovered.clear()
+	cmdb_unknown.clear()
 	counters.clear()
 	repel_steps = 0
 	trainer_id = 0
@@ -224,6 +226,7 @@ func to_dict() -> Dictionary:
 		"quarantined": quarantined.map(func(d: DaemonInstance) -> Dictionary: return d.to_dict()),
 		"cmdb_compromised": cmdb_compromised.keys(),
 		"cmdb_recovered": cmdb_recovered.keys(),
+		"cmdb_unknown": cmdb_unknown.keys(),
 		"counters": counters.duplicate(),
 		"last_help_desk": last_help_desk.duplicate(),
 		"repel_steps": repel_steps,
@@ -266,6 +269,8 @@ func from_dict(d: Dictionary) -> void:
 		cmdb_compromised[species_id] = true
 	for species_id: String in d.get("cmdb_recovered", []):
 		cmdb_recovered[species_id] = true
+	for species_id: String in d.get("cmdb_unknown", []):
+		cmdb_unknown[species_id] = true
 	for name: String in d.get("counters", {}):
 		counters[name] = int(d["counters"][name])
 	for place: String in d.get("visited", []):

@@ -42,6 +42,7 @@ extends RefCounted
 ##   level_up / move_learned / move_learn_pending  (from DaemonInstance, plus side, index, daemon)
 ##   switch_needed     {side}
 ##   fled              {side}                                  run_failed {side}
+##   foe_fled          {daemon}   (a scripted foe leaves on its own; outcome "foe_fled")
 ##   capture_shake     {n}                                     1..3, one per passed stage (scan, isolate, encrypt)
 ##   captured          {side, daemon, species}                 outcome becomes "caught"
 ##   capture_failed    {shakes}                                0..2 stages passed before it broke free
@@ -115,6 +116,10 @@ static func run_turn(state: BattleState, player_action: BattleAction, foe_action
 		_end_of_turn(state, events)
 		_handle_faints(state, events)
 		_check_end(state, events)
+	if not state.is_over() and state.foe_flees_after > 0 and state.turn >= state.foe_flees_after:
+		var foe := state.sides[BattleState.FOE].active()
+		state.outcome = "foe_fled"
+		events.append(_ev("foe_fled", {"daemon": foe.display_name() if foe != null else ""}))
 	if not state.is_over():
 		events.append(_ev("turn_end", {"turn": state.turn}))
 	return events
@@ -773,6 +778,8 @@ static func _validate_item(state: BattleState, side: int, action: BattleAction) 
 		var foe := state.sides[BattleState.opponent(side)].active()
 		if foe == null or foe.is_fainted():
 			return "there's nothing to Quarantine"
+		if state.uncatchable:
+			return "the Quarantine Key can't get a lock on it. Its signal keeps jumping"
 		return ""
 	if not effect in BATTLE_ITEM_EFFECTS:
 		return "that can't be used in battle"

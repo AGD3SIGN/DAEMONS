@@ -1,14 +1,43 @@
 {
-  "card": ["END OF THE DEMO", "HEXFORGED", "Act 4: Escalation", "Coming soon."],
+  "card": [
+    "END OF THE DEMO",
+    "HEXFORGED",
+    "Act 3: Legacy",
+    "Coming in the full game."
+  ],
   "credits": [
-    ["A game by", "AGD3SIGN"],
-    ["Design, story and art direction", "AGD3SIGN"],
-    ["Built with", "Godot Engine 4"],
-    ["Tests", "GUT (Godot Unit Test)"],
-    ["Pixel art cleanup", "Aseprite"],
-    ["Fonts (SIL Open Font License)", "Press Start 2P, Silkscreen, VT323, Pixelify Sans"],
-    ["Playtesters", "Everyone who sent feedback from the phone"],
-    ["Special thanks", "Every help desk tech who ever asked \"have you tried turning it off and on again?\""]
+    [
+      "A game by",
+      "AGD3SIGN"
+    ],
+    [
+      "Design, story and art direction",
+      "AGD3SIGN"
+    ],
+    [
+      "Built with",
+      "Godot Engine 4"
+    ],
+    [
+      "Tests",
+      "GUT (Godot Unit Test)"
+    ],
+    [
+      "Pixel art cleanup",
+      "Aseprite"
+    ],
+    [
+      "Fonts (SIL Open Font License)",
+      "Press Start 2P, Silkscreen, VT323, Pixelify Sans"
+    ],
+    [
+      "Playtesters",
+      "Everyone who sent feedback from the phone"
+    ],
+    [
+      "Special thanks",
+      "Every help desk tech who ever asked \"have you tried turning it off and on again?\""
+    ]
   ],
   "thanks": "Thanks for playing! Your save is kept for the full release."
 }

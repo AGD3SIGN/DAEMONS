@@ -314,16 +314,6 @@
     {
       "speaker": "Sentry",
       "text": "This road's locked until Major Kalb says otherwise. Ransom's everywhere out there."
-    },
-    {
-      "if_flag": "demo_complete",
-      "then": [
-        {
-          "speaker": "Sentry",
-          "text": "(Act 4 is coming in the full release. Thanks for playing the demo!)"
-        }
-      ],
-      "else": []
     }
   ],
   "secops_analyst": [
@@ -458,19 +448,6 @@
         {
           "cmd": "set_flag",
           "flag": "hq_traced"
-        },
-        {
-          "if_flag": "demo_complete",
-          "then": [],
-          "else": [
-            {
-              "speaker": "Kalb",
-              "text": "Go get some sleep, {player}. Tomorrow's Friday. Something tells me it's going to be a long one."
-            },
-            {
-              "cmd": "end_demo"
-            }
-          ]
         }
       ],
       "else": [
