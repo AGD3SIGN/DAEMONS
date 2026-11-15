@@ -65,17 +65,17 @@
       "then": [
         {
           "speaker": "Kevin",
-          "text": "You beat Dana?! I'm drafting an email to complain. To who? Everyone."
+          "text": "You beat Dana?! Did you try turning her off and on again first? Classic exploit. I'm emailing everyone about it."
         }
       ],
       "else": [
         {
           "speaker": "Kevin",
-          "text": "I tried the Department already. Dana's Servurtle took ZERO damage."
+          "text": "I tried the Department already. Dana's Servurtle took ZERO damage. The game's obviously bugged. I filed a ticket. Severity: critical."
         },
         {
           "speaker": "Kevin",
-          "text": "Hardware hates Network moves and Software moves both... wait, no. Read the type chart, {player}."
+          "text": "Pro tip: Hardware is weak to... um. Stuff. Read the type chart, {player}. I don't need to. I go on instinct."
         }
       ]
     }
@@ -227,7 +227,7 @@
     },
     {
       "speaker": "Kevin (Reply All)",
-      "text": "Who is R?? Also whoever took my yogurt from the break room, I KNOW it was you."
+      "text": "Who is R?? Is this a virus?? I forwarded it to everyone to be safe. Also whoever took my yogurt from the break room, I KNOW it was you."
     },
     {
       "text": "BZZT. BZZT. BZZT. Forty-one people reply-all asking to be taken off the list."

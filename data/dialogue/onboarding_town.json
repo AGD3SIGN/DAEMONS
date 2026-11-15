@@ -93,22 +93,22 @@
   ],
   "home_pc": [
     {
-      "text": "It's your PC. 214 unread emails. All from Kevin."
+      "text": "It's your PC. 214 unread emails. All from Kevin. Latest subject: \"FYI: how computers work (long)\"."
     }
   ],
   "kevins_mom": [
     {
       "speaker": "Kevin's Mom",
-      "text": "Kevin replied-all to the whole town again. I've changed the router password."
+      "text": "Kevin told the whole town he \"fixed\" our router. He unplugged it and plugged it back in. Then he replied-all about it."
     },
     {
       "speaker": "Kevin's Mom",
-      "text": "Don't tell him it's \"password2\"."
+      "text": "I changed the password so he'd stop. Don't tell him it's \"password2\"."
     }
   ],
   "kevin_servers": [
     {
-      "text": "Kevin's home lab. It's mostly blinking lights and one very warm Fanbat."
+      "text": "Kevin's \"home data center\". It's a power strip, a lot of blinking lights and one very warm Fanbat. A sticky note says \"DO NOT TUCH. -SENIOR ENGINEER\"."
     }
   ],
   "help_desk_tech": [
@@ -242,21 +242,21 @@
   "kevin_town_pre": [
     {
       "speaker": "Kevin",
-      "text": "Oh hey, new hire! The manager's handing out Daemons at the Help Desk today."
+      "text": "Oh, hey. New hire? Kevin. Senior Help Desk. Well, starting today. But senior in spirit."
     },
     {
       "speaker": "Kevin",
-      "text": "I'm getting the best one. I already sent a calendar invite about it."
+      "text": "The manager's handing out Daemons at the Help Desk. I'm getting the best one. I sent a calendar invite about it. To everyone. Marked URGENT."
     }
   ],
   "town_exit_block": [
     {
       "speaker": "Kevin",
-      "text": "Hey! Don't go into the cable tangles without a Daemon!"
+      "text": "Whoa, whoa, whoa. Cable tangles without a Daemon? That's IT 101. I took IT 101. I passed most of it."
     },
     {
       "speaker": "Kevin",
-      "text": "Wild ones bite. The manager's handing them out at the Help Desk. Blue roof!"
+      "text": "Wild ones bite. Go get a Daemon at the Help Desk. Blue roof. You're welcome, by the way."
     },
     {
       "cmd": "move_player",
@@ -311,14 +311,14 @@
     },
     {
       "speaker": "Kevin",
-      "text": "WAIT! I'm a new hire too! I replied-all to the onboarding email!"
+      "text": "WAIT! I'm a new hire too! I replied-all to the onboarding email, so technically I'm MORE onboarded!"
     },
     {
       "if_flag": "starter_chipmunk",
       "then": [
         {
           "speaker": "Kevin",
-          "text": "I'll take Pingo! Network beats Hardware. It's in the manual. I read the manual."
+          "text": "I'll take Pingo! Network beats Hardware, because Wi-Fi goes through walls, and walls are hardware. That's just science."
         },
         {
           "cmd": "start_battle",
@@ -331,7 +331,7 @@
           "then": [
             {
               "speaker": "Kevin",
-              "text": "I'll take Glowbit! Software reroutes Network. Checkmate."
+              "text": "I'll take Glowbit! Software beats Network. Apps work in airplane mode, so they clearly don't need the internet. Checkmate."
             },
             {
               "cmd": "start_battle",
@@ -341,7 +341,7 @@
           "else": [
             {
               "speaker": "Kevin",
-              "text": "I'll take Chipmunk! You can't patch bad RAM. Ha!"
+              "text": "I'll take Chipmunk! Hardware beats Software. You can't hack a hammer. RAM stands for Really Awesome Memory, look it up."
             },
             {
               "cmd": "start_battle",
@@ -408,7 +408,7 @@
   "kevin_helpdesk": [
     {
       "speaker": "Kevin",
-      "text": "Hurry up! I've got a calendar invite for this battle."
+      "text": "Hurry up! I've got a calendar invite for this battle. I set it to repeat daily. Forever."
     }
   ]
 }

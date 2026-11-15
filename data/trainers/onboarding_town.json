@@ -11,9 +11,9 @@
     "ai": "basic",
     "prize": 200,
     "story": true,
-    "intro": "Reply-all!",
-    "defeat": "I'm escalating this to my manager. Wait, it's the same manager.",
-    "after": "Next time I'm CC'ing my lawyer."
+    "intro": "Watch and learn. I've been in IT for almost a whole day.",
+    "defeat": "That doesn't count. My Daemon needed an update. I'm escalating this to the manager. ...Wait. Same manager.",
+    "after": "Next time I'm CC'ing my lawyer. And my mom."
   },
   "kevin_rival_1_glowbit": {
     "name": "Kevin",
@@ -27,9 +27,9 @@
     "ai": "basic",
     "prize": 200,
     "story": true,
-    "intro": "Reply-all!",
-    "defeat": "I'm escalating this to my manager. Wait, it's the same manager.",
-    "after": "Next time I'm CC'ing my lawyer."
+    "intro": "Watch and learn. I've been in IT for almost a whole day.",
+    "defeat": "That doesn't count. My Daemon needed an update. I'm escalating this to the manager. ...Wait. Same manager.",
+    "after": "Next time I'm CC'ing my lawyer. And my mom."
   },
   "kevin_rival_1_chipmunk": {
     "name": "Kevin",
@@ -43,8 +43,8 @@
     "ai": "basic",
     "prize": 200,
     "story": true,
-    "intro": "Reply-all!",
-    "defeat": "I'm escalating this to my manager. Wait, it's the same manager.",
-    "after": "Next time I'm CC'ing my lawyer."
+    "intro": "Watch and learn. I've been in IT for almost a whole day.",
+    "defeat": "That doesn't count. My Daemon needed an update. I'm escalating this to the manager. ...Wait. Same manager.",
+    "after": "Next time I'm CC'ing my lawyer. And my mom."
   }
 }

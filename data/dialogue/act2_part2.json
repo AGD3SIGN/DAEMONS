@@ -108,7 +108,7 @@
     },
     {
       "speaker": "Kevin",
-      "text": "{player}. Before you go in there... battle me. I need to hit something that isn't my keyboard."
+      "text": "{player}. Battle me before you go in. I'm basically DevOps now. I watched four videos. At double speed."
     },
     {
       "if_flag": "starter_chipmunk",
@@ -140,19 +140,19 @@
   "kevin_devops_after": [
     {
       "speaker": "Kevin",
-      "text": "...I have to tell you something. Remember the \"verify your password\" email? I clicked it."
+      "text": "OK, so. Devi says Ransom got into DevOps with MY password. Which is impossible. It has my birthday AND my dog's name in it."
     },
     {
       "speaker": "Kevin",
-      "text": "Ransom got into DevOps with MY password. Devi showed me the logs. My name. Everywhere."
+      "text": "Fine. I MAY have clicked a \"verify your mailbox\" email. It had a logo, {player}. A LOGO. Who fakes a logo?"
     },
     {
       "speaker": "Kevin",
-      "text": "So I turned on MFA. For everything. My email. My bank. My toaster has MFA now, {player}."
+      "text": "So I turned on MFA. Multi-Factor... Awesomeness. For everything. My email. My bank. My toaster asks me for a code now."
     },
     {
       "speaker": "Kevin",
-      "text": "Ransom's been coming and going from the old data center up north. Go. I'll... stay here and change all my passwords again."
+      "text": "Ransom's been using the old data center up north. You go. I'll stay here and change all my passwords. To something nobody would guess. Like \"password3\"."
     }
   ],
   "help_desk_devops_tech": [

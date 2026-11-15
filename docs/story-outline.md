@@ -24,7 +24,7 @@ patching, labeling cables) does.
 | Who | Role | Notes |
 |---|---|---|
 | **You** | New help-desk hire | Named at the start. Silent, competent, slightly overworked. |
-| **Kevin** | Rival, always replies-all | Loud, competitive, secretly scared of failing. Arc in section 4. |
+| **Kevin** | Rival, always replies-all | An obnoxious know-it-all (rewritten 2026-11-15): "Senior Help Desk" on day one, buzzwords, confidently wrong about how tech works ("RAM stands for Really Awesome Memory"), CCs everyone, blames the game when he loses. He still lands the right counter-pick, for the wrong reasons. Under it, scared of failing; he never fully admits a mistake, but his actions change (MFA after he's phished, holding the summit trail). Arc in section 4. |
 | **Marge**, the Manager | Your boss at Onboarding Town | Calm, dry humor. Quietly runs a backup restore drill every Friday and bribes the team with pizza. This is the ending's payoff (see Act 5). |
 | **Mom** | At home | Calls you about her printer. Heals your team in the post-game. |
 

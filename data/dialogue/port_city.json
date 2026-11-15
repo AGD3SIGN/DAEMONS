@@ -45,15 +45,15 @@
     },
     {
       "speaker": "Kevin",
-      "text": "{player}! Did you get R's email? I replied-all with a strongly worded GIF."
+      "text": "{player}! You got R's email, right? I replied-all with a GIF that explains encryption. It's a padlock. Spinning."
     },
     {
       "speaker": "Kevin",
-      "text": "Then everyone replied-all to MY reply. My inbox is a crime scene."
+      "text": "Then everyone replied-all to MY reply. Four hundred people. They clearly needed my expertise."
     },
     {
       "speaker": "Kevin",
-      "text": "Whatever. I'm here for the Networking Cert. And to beat you. Mostly to beat you."
+      "text": "Anyway. I'm here for the Networking Cert. I know networking. I have a router at home. It has, like, nine lights."
     },
     {
       "if_flag": "starter_chipmunk",
@@ -88,17 +88,17 @@
       "then": [
         {
           "speaker": "Kevin",
-          "text": "...The beacon just went out. I watched it. That guy didn't even look stressed."
+          "text": "...The beacon just went out. Just like that. That guy didn't even look stressed."
         },
         {
           "speaker": "Kevin",
-          "text": "I'm not replying-all to this one. It doesn't feel funny anymore."
+          "text": "For the record, I could've stopped him. I was just... letting it play out. Strategically. I'm not replying-all to this one."
         }
       ],
       "else": [
         {
           "speaker": "Kevin",
-          "text": "Something's going on at Port 443. Those gray hoodies are all over Dock 443."
+          "text": "Those gray hoodies are all over Dock 443. Probably a fashion thing. ...It's not a fashion thing, is it."
         }
       ]
     }

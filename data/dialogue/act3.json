@@ -167,19 +167,19 @@
     },
     {
       "speaker": "Kevin",
-      "text": "{player}! Wait. I'm not here to battle. I'm here to help."
+      "text": "{player}! Relax. I'm not here to battle. I'm here to help. You're welcome in advance."
     },
     {
       "speaker": "Kevin",
-      "text": "Ransom's crew went up the summit an hour ago. They're after the off-site copy. I heard them say \"delete\"."
+      "text": "Ransom's crew went up an hour ago. I heard \"delete the off-site copy\". Amateurs. I keep MY backup on a USB stick. In my car. In the sun."
     },
     {
       "speaker": "Kevin",
-      "text": "I've got MFA on everything now, including my Daemons' feeding schedule."
+      "text": "I've got MFA on everything now. I'm basically a human firewall. A firehuman."
     },
     {
       "speaker": "Kevin",
-      "text": "I'll hold this trail so nobody sneaks up behind you. Go!"
+      "text": "I'll hold this trail so nobody sneaks up behind you. That's called zero trust. I trust nobody. Except you. Slightly. Go!"
     }
   ],
   "kevin_summit_after": [
@@ -188,13 +188,13 @@
       "then": [
         {
           "speaker": "Kevin",
-          "text": "I heard wings up there. Huge ones. Whatever it was, it got away. Good."
+          "text": "Huge wings went by up there. Probably a drone. I'd know. I'm drone-certified. Online. It was free."
         }
       ],
       "else": [
         {
           "speaker": "Kevin",
-          "text": "Nobody gets past me. I've got two-factor AND a strongly worded email drafted."
+          "text": "Nobody gets past me. I've got two-factor AND I cleared my cookies this morning."
         }
       ]
     }

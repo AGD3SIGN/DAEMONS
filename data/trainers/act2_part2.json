@@ -19,9 +19,9 @@
     "ai": "basic",
     "prize": 920,
     "story": true,
-    "intro": "No reply-all this time. Just a battle.",
-    "defeat": "...Yeah. That tracks with my week.",
-    "after": "Talk to me. I need to tell you something."
+    "intro": "I'm muting this whole thread. Just battle me.",
+    "defeat": "Lag. That was lag. My Wi-Fi runs on Bluetooth.",
+    "after": "Hey. Come here. I need to tell you something. It's not a big deal. It's kind of a big deal."
   },
   "kevin_rival_3_glowbit": {
     "name": "Kevin",
@@ -43,9 +43,9 @@
     "ai": "basic",
     "prize": 920,
     "story": true,
-    "intro": "No reply-all this time. Just a battle.",
-    "defeat": "...Yeah. That tracks with my week.",
-    "after": "Talk to me. I need to tell you something."
+    "intro": "I'm muting this whole thread. Just battle me.",
+    "defeat": "Lag. That was lag. My Wi-Fi runs on Bluetooth.",
+    "after": "Hey. Come here. I need to tell you something. It's not a big deal. It's kind of a big deal."
   },
   "kevin_rival_3_chipmunk": {
     "name": "Kevin",
@@ -67,9 +67,9 @@
     "ai": "basic",
     "prize": 920,
     "story": true,
-    "intro": "No reply-all this time. Just a battle.",
-    "defeat": "...Yeah. That tracks with my week.",
-    "after": "Talk to me. I need to tell you something."
+    "intro": "I'm muting this whole thread. Just battle me.",
+    "defeat": "Lag. That was lag. My Wi-Fi runs on Bluetooth.",
+    "after": "Hey. Come here. I need to tell you something. It's not a big deal. It's kind of a big deal."
   },
   "phisher_phoebe": {
     "name": "Phisher Phoebe",

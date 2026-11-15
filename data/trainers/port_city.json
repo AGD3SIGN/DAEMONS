@@ -19,9 +19,9 @@
     "ai": "basic",
     "prize": 640,
     "story": true,
-    "intro": "Reply-all, round two!",
-    "defeat": "How?! I even read the type chart this time. The summary, anyway.",
-    "after": "Fine. You win this thread."
+    "intro": "Round two! I read the entire type chart this time. Well. The thumbnail.",
+    "defeat": "How?! I literally searched \"how to win Daemon battle\" on the way here!",
+    "after": "Fine. You win this thread. I'm starting a new thread. About how you got lucky."
   },
   "kevin_rival_2_glowbit": {
     "name": "Kevin",
@@ -43,9 +43,9 @@
     "ai": "basic",
     "prize": 640,
     "story": true,
-    "intro": "Reply-all, round two!",
-    "defeat": "How?! I even read the type chart this time. The summary, anyway.",
-    "after": "Fine. You win this thread."
+    "intro": "Round two! I read the entire type chart this time. Well. The thumbnail.",
+    "defeat": "How?! I literally searched \"how to win Daemon battle\" on the way here!",
+    "after": "Fine. You win this thread. I'm starting a new thread. About how you got lucky."
   },
   "kevin_rival_2_chipmunk": {
     "name": "Kevin",
@@ -67,9 +67,9 @@
     "ai": "basic",
     "prize": 640,
     "story": true,
-    "intro": "Reply-all, round two!",
-    "defeat": "How?! I even read the type chart this time. The summary, anyway.",
-    "after": "Fine. You win this thread."
+    "intro": "Round two! I read the entire type chart this time. Well. The thumbnail.",
+    "defeat": "How?! I literally searched \"how to win Daemon battle\" on the way here!",
+    "after": "Fine. You win this thread. I'm starting a new thread. About how you got lucky."
   },
   "phisher_phil": {
     "name": "Phisher Phil",

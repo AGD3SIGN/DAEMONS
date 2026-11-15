@@ -40,6 +40,11 @@ through it on purpose. The habit that saves the valley is exactly what made her 
   valley off and on again?").
 - **Nobody dies.** The danger is losing data, losing trust, and losing your job, which in IT is plenty.
 
+## 2b. Kevin's voice (rewritten in game 2026-11-15)
+An obnoxious know-it-all who clearly isn't IT savvy: confident, loud, wrong. Every choice and evidence beat
+involving him should keep that voice. When he's caught out (phished in Act 2) he deflects first ("It had a LOGO"),
+then quietly fixes it (MFA on everything, done badly: "Multi-Factor Awesomeness"). He never says sorry outright.
+
 ## 3. The four new threads
 
 ### 3a. The countdown (Friday 5:00 PM)
