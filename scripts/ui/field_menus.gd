@@ -1,7 +1,8 @@
 class_name FieldMenus
 extends Control
 ## Menus used outside battle, all as awaitable flows:
-##   open_pause()        CMDB / STACK / BAG / CARD / SAVE / OPTIONS (+ DEBUG in debug builds)
+##   open_pause()        CMDB / STACK / BAG / CARD / SAVE / OPTIONS / FEEDBACK (+ DEBUG in debug builds)
+##   feedback_screen()   send a bug report or idea to the team (see FeedbackClient)
 ##   stack_screen()      summary, swap order, use an item on a Daemon
 ##   bag_screen()        4 pockets (left/right), use / toss
 ##   cmdb_screen()       every Daemon, seen/caught, entries
@@ -39,7 +40,7 @@ func _ready() -> void:
 	list.setup(Vector4(0, 0, 1, 1), Vector4(6, 6, -6, -6), 11, 2)
 	add_child(list)
 	side = MenuList.new()
-	side.setup(Vector4(1, 0, 1, 0), Vector4(-112, 6, -6, 6 + 17 + 8 * MenuList.ROW_H + 6), 8)
+	side.setup(Vector4(1, 0, 1, 0), Vector4(-112, 6, -6, 6 + 17 + 9 * MenuList.ROW_H + 6), 9)
 	add_child(side)
 	sub = MenuList.new()
 	sub.setup(Vector4(1, 1, 1, 1), Vector4(-112, -6 - (17 + 4 * MenuList.ROW_H + 6), -6, -6), 4)
@@ -70,7 +71,7 @@ func _ready() -> void:
 # --- pause -------------------------------------------------------------------
 
 func open_pause() -> void:
-	var options := PackedStringArray(["CMDB", "STACK", "BAG", "CARD", "SAVE", "OPTIONS"])
+	var options := PackedStringArray(["CMDB", "STACK", "BAG", "CARD", "SAVE", "OPTIONS", "FEEDBACK"])
 	if OS.is_debug_build():
 		options.append("DEBUG")
 	options.append("CLOSE")
@@ -94,10 +95,148 @@ func open_pause() -> void:
 				await save_flow()
 			"OPTIONS":
 				await options_screen()
+			"FEEDBACK":
+				await feedback_screen()
 			"DEBUG":
 				SceneRouter.goto(DEBUG_MENU)
 				return
 	side.close()
+
+
+# --- feedback ----------------------------------------------------------------
+
+const FEEDBACK_KEY_ROWS: PackedStringArray = ["ABCDEFGHIJ", "KLMNOPQRST", "UVWXYZ0123", "456789.,!?", "'-:()/"]
+const FEEDBACK_PANEL := Vector2(304, 168)
+
+## Feedback client used by feedback_screen (tests swap in a fake transport).
+var feedback: FeedbackClient
+## How the confirm page is opened (tests replace it).
+var open_url: Callable = FeedbackClient.open_confirm
+
+
+## Pause > FEEDBACK: pick a kind, write it, confirm, send. The relay answers with a confirm page that opens in
+## the browser ("I'm human" captcha); only then does it become an issue in the private feedback repo.
+func feedback_screen() -> void:
+	if not FeedbackClient.is_configured():
+		await world.show_message("Feedback isn't set up in this build yet. Thanks for wanting to help!")
+		return
+	if feedback == null:
+		feedback = FeedbackClient.new()
+		add_child(feedback)
+	var saved := FeedbackClient.load_outbox()
+	if not saved.is_empty() and await world.ask("You have feedback that didn't send last time. Send it now?"):
+		FeedbackClient.save_outbox(saved.slice(1))
+		await _send_feedback(saved[0])
+		return
+	var kinds := PackedStringArray(["BUG", "IDEA", "OTHER"])
+	var r := await side.choose("FEEDBACK", kinds)
+	side.close()
+	if r["action"] != "pick":
+		return
+	var category := kinds[r["index"]].to_lower()
+	var message := await _write_feedback(kinds[r["index"]])
+	if message.is_empty():
+		return
+	var problem := FeedbackClient.check_message(message)
+	if not problem.is_empty():
+		await world.show_message(problem)
+		return
+	await world.show_message("We'll send your message plus the game version, platform and where you are. No save data or personal info.")
+	if not await world.ask("Send it? Your browser will open so you can confirm you're a person."):
+		return
+	await _send_feedback(FeedbackClient.payload(category, message))
+
+
+func _send_feedback(data: Dictionary) -> void:
+	world.text_box.visible = true
+	world.text_box.show_now("Sending...")
+	var result := await feedback.send(data)
+	if result.get("ok", false):
+		open_url.call(String(result["confirm_url"]))
+		await world.show_message("Your browser opened. Click \"Send feedback\" there to finish. Thank you!")
+	elif result.get("offline", false):
+		FeedbackClient.queue(data)
+		await world.show_message("Couldn't reach the feedback server. It's saved; open FEEDBACK again when you're online.")
+	else:
+		await world.show_message(String(result.get("error", "Something went wrong. Please try again later.")))
+
+
+## The writing box: a multi-line field (keyboard / on-screen keyboard on phones) plus a letter grid for gamepads.
+## Returns the text, or "" if the player backed out.
+func _write_feedback(kind: String) -> String:
+	var panel := Panel.new()
+	panel.name = "FeedbackEntry"
+	panel.anchor_left = 0.5
+	panel.anchor_right = 0.5
+	panel.anchor_top = 0.5
+	panel.anchor_bottom = 0.5
+	panel.offset_left = -FEEDBACK_PANEL.x / 2.0
+	panel.offset_right = FEEDBACK_PANEL.x / 2.0
+	panel.offset_top = -FEEDBACK_PANEL.y / 2.0
+	panel.offset_bottom = FEEDBACK_PANEL.y / 2.0
+	add_child(panel)
+	var label := Label.new()
+	label.name = "Prompt"
+	label.text = "FEEDBACK: %s" % kind
+	label.position = Vector2(8, 6)
+	panel.add_child(label)
+	var max_len := int(FeedbackClient.config().get("max_message", 2000))
+	var edit := TextEdit.new()
+	edit.name = "Edit"
+	edit.wrap_mode = TextEdit.LINE_WRAPPING_BOUNDARY
+	edit.placeholder_text = "What happened? What would make it better?"
+	edit.position = Vector2(8, 18)
+	edit.size = Vector2(FEEDBACK_PANEL.x - 16, 56)
+	panel.add_child(edit)
+	var result := FeedbackResult.new()
+	panel.add_child(result)
+	var finish := func() -> void: result.done.emit(edit.text)
+	var cancel := func() -> void: result.done.emit("")
+	var keys := _letter_keys(FEEDBACK_KEY_ROWS, max_len, edit, "SEND", finish)
+	keys.name = "Keys"
+	keys.position = Vector2(8, 78)
+	panel.add_child(keys)
+	var hint := Label.new()
+	hint.name = "Hint"
+	hint.text = feedback_hint()
+	hint.add_theme_color_override("font_color", Color("505068"))
+	hint.position = Vector2(8, FEEDBACK_PANEL.y - 16)
+	panel.add_child(hint)
+	edit.text_changed.connect(func() -> void:
+		if edit.text.length() > max_len:
+			edit.text = edit.text.left(max_len))
+	edit.gui_input.connect(func(e: InputEvent) -> void:
+		if e is InputEventKey and e.pressed:
+			var key := e as InputEventKey
+			if key.keycode == KEY_ESCAPE:
+				edit.accept_event()
+				cancel.call()
+			elif key.keycode in [KEY_ENTER, KEY_KP_ENTER] and (key.ctrl_pressed or key.meta_pressed):
+				edit.accept_event()
+				finish.call())
+	var back := NameEntryBack.new()
+	back.cancelled.connect(cancel)
+	panel.add_child(back)
+	if InputPrompts.scheme in ["xbox", "playstation", "nintendo"]:
+		keys.get_child(0).get_child(0).grab_focus()
+	else:
+		edit.grab_focus()
+	var text: String = await result.done
+	panel.queue_free()
+	return text.strip_edges()
+
+
+static func feedback_hint() -> String:
+	match InputPrompts.scheme:
+		"touch":
+			return "Tap SEND when you're done."
+		"keyboard":
+			return "Ctrl+Enter or SEND: done   Esc: back"
+	return "%s: type / SEND   %s: back" % [InputPrompts.label("ui_accept"), InputPrompts.label("ui_cancel")]
+
+
+class FeedbackResult extends Node:
+	signal done(text: String)
 
 
 # --- story pickers -----------------------------------------------------------
@@ -187,6 +326,12 @@ const NAME_KEY_ROWS: PackedStringArray = ["ABCDEFGHIJ", "KLMNOPQRST", "UVWXYZ012
 ## On-screen letter grid for the name box, so a gamepad (or mouse/touch) can enter a name without a
 ## keyboard. Letters append, SPC adds a space, DEL removes the last letter, OK submits.
 func _name_keys(edit: LineEdit) -> VBoxContainer:
+	return _letter_keys(NAME_KEY_ROWS, NAME_MAX, edit, "OK", func() -> void: edit.text_submitted.emit(edit.text))
+
+
+## A letter grid that types into `target` (LineEdit or TextEdit), at most `max_len` characters. The last row
+## gets SPC / DEL / the `done_label` key, which calls `on_done`.
+func _letter_keys(rows: PackedStringArray, max_len: int, target: Control, done_label: String, on_done: Callable) -> VBoxContainer:
 	var box := VBoxContainer.new()
 	box.add_theme_constant_override("separation", 1)
 	var focus := StyleBoxFlat.new()
@@ -202,23 +347,30 @@ func _name_keys(edit: LineEdit) -> VBoxContainer:
 		b.mouse_entered.connect(b.grab_focus)
 		b.pressed.connect(action)
 		row.add_child(b)
-	for letters in NAME_KEY_ROWS:
+	var type_text := func(s: String) -> void:
+		var current: String = target.get("text")
+		if current.length() + s.length() > max_len:
+			return
+		target.set("text", current + s)
+		if target is LineEdit:
+			(target as LineEdit).caret_column = (target as LineEdit).text.length()
+		elif target is TextEdit:
+			var te := target as TextEdit
+			te.set_caret_line(te.get_line_count() - 1)
+			te.set_caret_column(te.get_line(te.get_line_count() - 1).length())
+	for letters in rows:
 		var row := HBoxContainer.new()
 		row.add_theme_constant_override("separation", 0)
 		box.add_child(row)
 		for ch in letters:
-			add_key.call(row, ch, 18.0, func() -> void:
-				if edit.text.length() < NAME_MAX:
-					edit.text += ch
-					edit.caret_column = edit.text.length())
-		if letters.length() < 10:
+			add_key.call(row, ch, 18.0, func() -> void: type_text.call(ch))
+		if letters == rows[rows.size() - 1]:
 			add_key.call(row, "SPC", 26.0, func() -> void:
-				if edit.text.length() < NAME_MAX and not edit.text.is_empty():
-					edit.text += " ")
+				if not String(target.get("text")).is_empty():
+					type_text.call(" "))
 			add_key.call(row, "DEL", 26.0, func() -> void:
-				edit.text = edit.text.left(-1))
-			add_key.call(row, "OK", 22.0, func() -> void:
-				edit.text_submitted.emit(edit.text))
+				target.set("text", String(target.get("text")).left(-1)))
+			add_key.call(row, done_label, 8.0 * done_label.length() + 6.0, on_done)
 	return box
 
 

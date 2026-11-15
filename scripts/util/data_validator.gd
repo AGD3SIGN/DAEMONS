@@ -79,6 +79,7 @@ var encounters: Dictionary = {}  # map id -> {rate, zones: {tile name: [slots]}}
 var trainers: Dictionary = {}    # trainer id -> {name, team, ai, prize, sight, intro, defeat, after, cert}
 var certifications: Dictionary = {}  # cert id -> {id, name, department, type, order}
 var title_screen: Dictionary = {}  # tagline, prompt, boot_log, featured legendaries (data/title_screen.json)
+var feedback: Dictionary = {}      # Feedback form config (data/feedback.json)
 
 
 ## raw = {"types": ..., "moves": ..., "species": ..., "items": ..., "config_profiles": ...}
@@ -108,6 +109,7 @@ func validate(raw: Dictionary) -> PackedStringArray:
 	_validate_dialogue_files(raw.get("dialogue", {}))
 	_validate_encounters(raw.get("encounters", {}))
 	_validate_title_screen(raw.get("title_screen"))
+	_validate_feedback(raw.get("feedback"))
 	return errors
 
 
@@ -904,3 +906,22 @@ static func _is_int(v: Variant) -> bool:
 
 func _err(where: String, msg: String) -> void:
 	errors.append("%s: %s" % [where, msg])
+
+
+# --- feedback ----------------------------------------------------------------
+
+## data/feedback.json: the relay endpoint ("" = not set up yet; otherwise https://...), message limits, categories.
+func _validate_feedback(raw: Variant) -> void:
+	if typeof(raw) != TYPE_DICTIONARY:
+		_err("feedback", "must be an object")
+		return
+	feedback = raw
+	var endpoint: Variant = raw.get("endpoint")
+	if typeof(endpoint) != TYPE_STRING or not (String(endpoint).is_empty() or String(endpoint).begins_with("https://")):
+		_err("feedback", "'endpoint' must be \"\" (not set up) or an https:// URL")
+	if _int(raw, "min_message", "feedback", 1, 100) and _int(raw, "max_message", "feedback", 100, 5000):
+		if int(raw["min_message"]) >= int(raw["max_message"]):
+			_err("feedback", "'min_message' must be less than 'max_message'")
+	var categories: Variant = raw.get("categories")
+	if typeof(categories) != TYPE_ARRAY or categories.is_empty():
+		_err("feedback", "'categories' must be a non-empty list")

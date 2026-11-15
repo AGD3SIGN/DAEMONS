@@ -56,7 +56,8 @@ godot --headless --path . res://scenes/debug/console_battle.tscn
 | `assets/sprites/daemons/` | One battle sheet per Daemon: `<id>_sheet.png`, 4x4 poses of 64x64 |
 | `assets/sprites/characters/` | Overworld walking sheets: `<id>.png`, 3 frames x 4 directions of 20x28 |
 | `art_src/daemons/`, `art_src/characters/` | Source art (ChatGPT sheets). Not shipped in builds |
-| `tools/` | Art importer and polish script, art-prompt generator, iOS export and Simulator scripts |
+| `services/feedback-worker/` | Cloudflare Worker that files in-game feedback as private GitHub issues ([setup](services/feedback-worker/README.md)) |
+| `tools/` | Feedback report, art importer and polish script, art-prompt generator, iOS export and Simulator scripts |
 | `docs/` | [Design doc](docs/design.md), [phase log](docs/phase-log.md), [data formats](docs/data-format.md), [builds](docs/build.md), [art prompts](docs/art-prompts/README.md) |
 
 ## Art

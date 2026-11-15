@@ -4,6 +4,27 @@ Newest entries at the top. Each entry: what's done, decisions, what's next.
 
 ---
 
+## 2026-11-14 — In-game Feedback (private issues, captcha)
+
+- **Pause menu → FEEDBACK:** pick BUG / IDEA / OTHER, write up to 2000 characters (keyboard, or the on-screen
+  letter grid with a gamepad/touch; Ctrl/Cmd+Enter or SEND to finish, Esc backs out), see what's attached, send.
+- **Relay, not a token in the game:** `services/feedback-worker/` (Cloudflare Worker). The game posts a draft;
+  the player's browser opens a confirm page with a Cloudflare Turnstile check; only then is an issue filed in the
+  **private** repo `AGD3SIGN/daemons-feedback` (labels: feedback, the category, platform:X). 5 drafts/hour per IP,
+  unconfirmed drafts expire after an hour. Message is fenced on the issue so links/@mentions can't render.
+- **Attached context (nothing personal):** version, build, platform, map + x/y, play minutes, certs, Daemon count,
+  language. The game only ever opens its own relay's `/confirm/` links.
+- **Offline:** the report is kept in `user://feedback_outbox.json` (last 5) and offered again next time.
+- **Claude Code:** `.claude/settings.json` SessionStart hook runs `tools/feedback/feedback_report.sh`, which lists
+  open reports from the private repo at the start of every session.
+- Config in `data/feedback.json` (`endpoint` stays empty until the Worker is deployed; the menu then says it
+  isn't set up). One-time account setup: `services/feedback-worker/README.md`.
+- Tests: `tests/test_feedback.gd` (12) and `services/feedback-worker/test/` (8, `npm test`). Suite 303/303.
+
+**Next:** deploy the Worker (your Cloudflare/GitHub steps), set the endpoint, then the player-feedback fixes.
+
+---
+
 ## 2026-11-13 — Act 3: Power Plant, Cloud Summit, SecOps Fortress
 
 - **DevOps Heights → Power Plant:** Facilities lets you east once you have the Software Cert.

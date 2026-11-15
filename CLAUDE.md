@@ -44,6 +44,11 @@ Architecture/System-Notes.md. Append; don't overwrite.
 7. Input goes through named actions (ui_accept, ui_cancel, move_up, etc.) so keyboard, gamepad,
    and touch controls all map to the same thing.
 
+## Player feedback
+Open reports from the private AGD3SIGN/daemons-feedback repo are listed at session start. When fixing one,
+mention it in the commit and close it with `gh issue close <n> -R AGD3SIGN/daemons-feedback -c "Fixed in <sha>"`.
+Never put the GitHub token in the game or in git; it lives only as a Worker secret.
+
 ## Conventions
 - snake_case files, PascalCase class_name, typed GDScript everywhere.
 - One feature per branch/commit. Run tests before saying a phase is done.
@@ -62,4 +67,5 @@ res://
   tests/
   docs/            design.md, phase-log.md, data-format.md, build.md, art-prompts/
   art_src/         source art (ChatGPT sheets) per evolution line; gdignored, excluded from exports
-  tools/           art_import/ (import_sheet.gd, import_character.gd, polish_sheet.py), art_prompts/, export_ios.sh, run_ios_simulator.sh
+  services/        feedback-worker/ (Cloudflare Worker: in-game feedback -> private AGD3SIGN/daemons-feedback issues)
+  tools/           feedback/ (feedback_report.sh, run by the SessionStart hook), art_import/ (import_sheet.gd, import_character.gd, polish_sheet.py), art_prompts/, export_ios.sh, run_ios_simulator.sh

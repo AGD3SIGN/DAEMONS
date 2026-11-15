@@ -204,6 +204,11 @@ layout/color/timing value lives in `scripts/ui/title/title_style.gd`).
 `data/build_info.json` (`{"build": n}`) is the build number on the title's version tag; the web deploy writes
 its run number there before exporting.
 
+## feedback.json (in-game Feedback)
+`{"endpoint": "https://daemons-feedback.<you>.workers.dev", "min_message": 10, "max_message": 2000, "categories": ["bug", "idea", "other"]}`.
+`endpoint` must be `""` (feature off) or an `https://` URL of the relay in `services/feedback-worker/`. The limits must
+match the Worker's `LIMITS`. Offline reports wait in `user://feedback_outbox.json`.
+
 ## Save files (user://save_a.json, save_b.json)
 `{"version", "save_count", "saved_at", "checksum" (sha256 of the data), "data": GameState.to_dict()}`.
 Saves alternate between the two files; loading picks the newest one whose checksum matches.

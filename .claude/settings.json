@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/tools/feedback/feedback_report.sh 2>/dev/null || true",
+            "timeout": 20,
+            "statusMessage": "Checking player feedback"
+          }
+        ]
+      }
+    ]
+  }
+}
