@@ -80,6 +80,7 @@ var trainers: Dictionary = {}    # trainer id -> {name, team, ai, prize, sight, 
 var certifications: Dictionary = {}  # cert id -> {id, name, department, type, order}
 var title_screen: Dictionary = {}  # tagline, prompt, boot_log, featured legendaries (data/title_screen.json)
 var feedback: Dictionary = {}      # Feedback form config (data/feedback.json)
+var balance: Dictionary = {}       # EXP rate and blackout penalty (data/balance.json)
 
 
 ## raw = {"types": ..., "moves": ..., "species": ..., "items": ..., "config_profiles": ...}
@@ -110,6 +111,7 @@ func validate(raw: Dictionary) -> PackedStringArray:
 	_validate_encounters(raw.get("encounters", {}))
 	_validate_title_screen(raw.get("title_screen"))
 	_validate_feedback(raw.get("feedback"))
+	_validate_balance(raw.get("balance"))
 	return errors
 
 
@@ -925,3 +927,25 @@ func _validate_feedback(raw: Variant) -> void:
 	var categories: Variant = raw.get("categories")
 	if typeof(categories) != TYPE_ARRAY or categories.is_empty():
 		_err("feedback", "'categories' must be a non-empty list")
+
+
+# --- balance -----------------------------------------------------------------
+
+## data/balance.json: EXP = base_exp * foe level / exp_divisor (x trainer_exp_bonus vs trainers);
+## blacking out loses percent% of your credits, at most cap_base + cap_per_cert * certs earned.
+func _validate_balance(raw: Variant) -> void:
+	if typeof(raw) != TYPE_DICTIONARY:
+		_err("balance", "must be an object")
+		return
+	balance = raw
+	for field: String in ["exp_divisor", "trainer_exp_bonus"]:
+		var v: Variant = raw.get(field)
+		if not (typeof(v) == TYPE_INT or typeof(v) == TYPE_FLOAT) or float(v) < 1.0 or float(v) > 20.0:
+			_err("balance", "'%s' must be a number from 1 to 20" % field)
+	var loss: Variant = raw.get("loss_penalty")
+	if typeof(loss) != TYPE_DICTIONARY:
+		_err("balance", "'loss_penalty' must be an object")
+		return
+	_int(loss, "percent", "balance › loss_penalty", 0, 50)
+	_int(loss, "cap_base", "balance › loss_penalty", 0, 100000)
+	_int(loss, "cap_per_cert", "balance › loss_penalty", 0, 100000)

@@ -360,9 +360,9 @@ func _story_loss() -> void:
 	await text_box.show_text("Your Daemons got patched up.")
 
 
-## Lose half your credits, heal up, wake at the last Help Desk.
+## Lose a slice of your credits (GameState.blackout_loss), heal up, wake at the last Help Desk.
 func _black_out() -> void:
-	var lost := GameState.credits / 2
+	var lost := GameState.blackout_loss()
 	GameState.credits -= lost
 	GameState.heal_stack()
 	GameState.location = GameState.last_help_desk.duplicate()

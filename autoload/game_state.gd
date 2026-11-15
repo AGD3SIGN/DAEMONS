@@ -92,6 +92,15 @@ func swap_stack(a: int, b: int) -> void:
 	active_stack[b] = temp
 
 
+## Credits lost when you black out: percent% of what you carry (data/balance.json), never more than
+## cap_base + cap_per_cert for each cert you hold, so a late-game wallet isn't wiped by one bad fight.
+func blackout_loss() -> int:
+	var rule: Dictionary = DataRegistry.balance.get("loss_penalty", {})
+	var by_percent := floori(credits * int(rule.get("percent", 10)) / 100.0)
+	var cap := int(rule.get("cap_base", 300)) + int(rule.get("cap_per_cert", 300)) * certifications.size()
+	return clampi(by_percent, 0, cap)
+
+
 func heal_stack() -> void:
 	for d: DaemonInstance in active_stack:
 		d.heal_full()

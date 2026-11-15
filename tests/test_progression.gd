@@ -172,11 +172,24 @@ func test_black_out() -> void:
 	config["items"] = {}
 	var scene := await _battle(config)
 	assert_eq(scene.result["outcome"], "player_lost")
-	assert_eq(GameState.credits, 501, "lost half (rounded down)")
+	assert_eq(GameState.credits, 901, "lost 10% (rounded down)")
 	assert_eq(weak.current_uptime, weak.max_uptime(), "healed")
 	assert_eq(GameState.location, GameState.last_help_desk, "back at the Help Desk")
 	assert_eq(GameState.repel_steps, 0)
 	assert_false(GameState.flags.get("trainer_sysadmin_sam", false))
+
+
+func test_black_out_loss_is_a_capped_percentage() -> void:
+	GameState.credits = 0
+	assert_eq(GameState.blackout_loss(), 0, "nothing to lose")
+	GameState.credits = 99
+	assert_eq(GameState.blackout_loss(), 9, "10%, rounded down")
+	GameState.credits = 50000
+	assert_eq(GameState.blackout_loss(), 300, "capped at 300 with no certs")
+	GameState.certifications = PackedStringArray(["desktop_support", "networking"])
+	assert_eq(GameState.blackout_loss(), 900, "cap grows 300 per cert")
+	GameState.credits = 4000
+	assert_eq(GameState.blackout_loss(), 400, "under the cap it's just 10%")
 
 
 func test_healing_sets_the_black_out_point() -> void:

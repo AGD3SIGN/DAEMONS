@@ -73,7 +73,6 @@ const STANDBY_TURNS := Vector2i(1, 3)
 const LOOPING_TURNS := Vector2i(2, 5)
 const CORRUPTED_FRACTION := 8     # loses 1/8 max Uptime per turn
 const OVERHEATED_FRACTION := 16   # loses 1/16 max Uptime per turn
-const TRAINER_EXP_BONUS := 1.5
 const CAPTURE_CHECKS := 3
 
 static var _effect_handlers: Dictionary = {}
@@ -689,14 +688,16 @@ static func _handle_faints(state: BattleState, events: Array[Dictionary]) -> voi
 			events.append(_ev("switch_needed", {"side": side}))
 
 
-## EXP = floor(base_exp * foe level / 7), x1.5 in trainer battles, split between the
+## EXP = floor(base_exp * foe level / exp_divisor), x trainer_exp_bonus in trainer battles (both from
+## data/balance.json), split between the
 ## participants still standing. Each of them also gets the foe's full Experience Logs.
 @warning_ignore("integer_division")
 static func _award_exp(state: BattleState, events: Array[Dictionary]) -> void:
 	var foe := state.sides[BattleState.FOE].active()
-	var total := int(foe.species_data()["base_exp"]) * foe.level / 7
+	var tuning := DataRegistry.balance
+	var total := floori(int(foe.species_data()["base_exp"]) * foe.level / float(tuning.get("exp_divisor", 7)))
 	if not state.is_wild:
-		total = floori(total * TRAINER_EXP_BONUS)
+		total = floori(total * float(tuning.get("trainer_exp_bonus", 1.5)))
 	var player := state.sides[BattleState.PLAYER]
 	var receivers: Array[int] = []
 	for i in state.participants:

@@ -14,6 +14,7 @@ const FILES := {
 	"certifications": "certifications.json",
 	"title_screen": "title_screen.json",
 	"feedback": "feedback.json",
+	"balance": "balance.json",
 }
 const MAPS_DIR := "res://data/maps/"
 const DIALOGUE_DIR := "res://data/dialogue/"
@@ -33,6 +34,7 @@ var trainers: Dictionary = {}         # trainer id -> trainer (every data/traine
 var certifications: Dictionary = {}   # cert id -> {id, name, department, type, order}
 var title_screen: Dictionary = {}     # title screen copy + featured legendaries (data/title_screen.json)
 var feedback: Dictionary = {}         # in-game Feedback form: relay endpoint and limits (data/feedback.json)
+var balance: Dictionary = {}          # EXP rate and the blackout credit penalty (data/balance.json)
 
 var _validator: DataValidator
 var _maps: Dictionary = {}            # map id -> validated map data (loaded on first use)
@@ -127,6 +129,7 @@ func load_from(raw: Dictionary, report: bool = true) -> bool:
 	certifications = validator.certifications
 	title_screen = validator.title_screen
 	feedback = validator.feedback
+	balance = validator.balance
 	if report:
 		_report()
 	return errors.is_empty()

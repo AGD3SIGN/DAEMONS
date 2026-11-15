@@ -1,0 +1,9 @@
+{
+  "exp_divisor": 6,
+  "trainer_exp_bonus": 1.5,
+  "loss_penalty": {
+    "percent": 10,
+    "cap_base": 300,
+    "cap_per_cert": 300
+  }
+}

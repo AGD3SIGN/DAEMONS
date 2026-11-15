@@ -5,11 +5,11 @@
     "team": [
       [
         "dustbunny",
-        4
+        3
       ],
       [
         "wormby",
-        5
+        4
       ]
     ],
     "ai": "basic",
@@ -24,12 +24,12 @@
     "sprite": "sysadmin_sam",
     "team": [
       [
-        "cablesnake",
-        6
+        "dustbunny",
+        4
       ],
       [
-        "dustbunny",
-        5
+        "cablesnake",
+        4
       ]
     ],
     "ai": "basic",
@@ -45,7 +45,11 @@
     "team": [
       [
         "ramster",
-        6
+        4
+      ],
+      [
+        "dustbunny",
+        4
       ]
     ],
     "ai": "basic",

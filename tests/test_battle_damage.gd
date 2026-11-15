@@ -324,7 +324,7 @@ func test_wild_win_gives_exp_and_logs() -> void:
 	var state := _battle([pingo], [bunny])
 	var events := BattleSim.run_turn(state, _fight(pingo, "fast_ethernet"), BattleAction.fight(0))
 	assert_eq(_types(events).slice(-4), ["damage", "fainted", "exp_gained", "battle_end"])
-	assert_eq(_of(events, "exp_gained")[0]["amount"], 35, "floor(50 * 5 / 7)")
+	assert_eq(_of(events, "exp_gained")[0]["amount"], 41, "floor(50 * 5 / 6), divisor from data/balance.json")
 	assert_eq(state.outcome, "player_won")
 	assert_eq(pingo.experience_logs["bandwidth"], 1)
 	assert_eq(_of(events, "move_used").size(), 1, "the crashed foe doesn't act")
@@ -336,7 +336,7 @@ func test_trainer_battle_forced_switch_and_bonus_exp() -> void:
 	bunny.current_uptime = 1
 	var state := _battle([pingo], [bunny, _daemon("wormby", 5)], false)
 	var events := BattleSim.run_turn(state, _fight(pingo, "fast_ethernet"), BattleAction.fight(0))
-	assert_eq(_of(events, "exp_gained")[0]["amount"], 52, "trainer bonus x1.5")
+	assert_eq(_of(events, "exp_gained")[0]["amount"], 61, "floor(41 * 1.5) trainer bonus")
 	assert_eq(_of(events, "switch_needed")[0]["side"], 1)
 	assert_eq(state.outcome, "")
 	var blocked := BattleSim.run_turn(state, BattleAction.fight(0), BattleAction.fight(0))
@@ -360,7 +360,7 @@ func test_exp_is_split_between_participants() -> void:
 		var events := BattleSim.run_turn(state, _fight(glowbit, "code_injection"), _fight(bunny, "bump"))
 		assert_eq(state.outcome, "player_won")
 		var gains := _of(events, "exp_gained").map(func(e: Dictionary) -> int: return e["amount"])
-		assert_eq(gains, [35] if pingo_crashed else [17, 17])
+		assert_eq(gains, [41] if pingo_crashed else [20, 20])
 
 
 func test_level_up_mid_battle_then_upgrade_after() -> void:

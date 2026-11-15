@@ -123,15 +123,15 @@ func test_create_fills_everything_in_range() -> void:
 # --- levelling & moves -------------------------------------------------------
 
 func test_gain_exp_levels_up_and_learns_move() -> void:
-	var d := _make("chipmunk", 5)
+	var d := _make("chipmunk", 8)
 	var hp_before := d.current_uptime
-	var events := d.gain_exp(GrowthRate.exp_for_level("medium_slow", 7) - d.total_exp)
+	var events := d.gain_exp(GrowthRate.exp_for_level("medium_slow", 10) - d.total_exp)
 	var types := events.map(func(e: Dictionary) -> String: return e["type"])
 	assert_eq(types, ["level_up", "level_up", "move_learned"])
-	assert_eq(events[1]["level"], 7)
-	assert_eq(events[2]["move"], "heatsink_slam")
-	assert_eq(d.level, 7)
-	assert_true(d.knows_move("heatsink_slam"))
+	assert_eq(events[1]["level"], 10)
+	assert_eq(events[2]["move"], "chassis_guard")
+	assert_eq(d.level, 10)
+	assert_true(d.knows_move("chassis_guard"))
 	assert_gt(d.current_uptime, hp_before, "Uptime grows with the level")
 	assert_eq(d.current_uptime, d.max_uptime())
 
@@ -220,3 +220,9 @@ func test_config_profiles_data() -> void:
 			neutral += 1
 	assert_eq(neutral, 1, "only Balanced")
 	assert_eq(DataRegistry.config_profiles["power_saver"]["down"], "bandwidth")
+
+
+func test_starters_know_a_move_of_their_own_type_from_the_start() -> void:
+	for pair: Array in [["chipmunk", "heatsink_slam"], ["pingo", "ping"], ["glowbit", "code_injection"]]:
+		var d := _make(pair[0], 5)
+		assert_true(d.knows_move(pair[1]), "%s starts with %s (player feedback: early fights were too hard)" % pair)
