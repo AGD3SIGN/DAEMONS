@@ -1,5 +1,6 @@
 {
-  "tagline": "CATCH · FUSE · COMPILE",
+  "tagline": "CATCH · CLEAN · RESTORE",
+  "tagline_note": "PENDING_APPROVAL: placeholder from the GDD (FUSE is cut). The only place the tagline lives.",
   "prompt": "PRESS START",
   "boot_log": ["> mounting /dev/hexforge … OK", "> 179 entities indexed"],
   "featured": [

@@ -19,7 +19,7 @@ func after_each() -> void:
 
 func test_featured_legendary_comes_from_data() -> void:
 	var data: Dictionary = DataRegistry.title_screen
-	assert_eq(data["tagline"], "CATCH · FUSE · COMPILE")
+	assert_eq(data["tagline"], "CATCH · CLEAN · RESTORE", "GDD placeholder (PENDING_APPROVAL)")
 	var pyrewall: Dictionary = data["featured"][0]
 	assert_eq(pyrewall["name"], "PYREWALL")
 	assert_eq(pyrewall["fusion"], "Pheasant × Firewall")

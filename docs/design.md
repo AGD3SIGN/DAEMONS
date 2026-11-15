@@ -128,88 +128,37 @@ CMDB numbers come from the master roster (179 Hexforged, Nos. 000–178; `number
 
 Target roster: **40–60 Hexforged** for v1 (about 18 evolution lines + singles + 2–3 legendaries). Design rule: every Hexforged is a real animal/creature fused with a real piece of tech, and its name is a pun. No silhouettes, names or palettes borrowed from any existing monster franchise.
 
-### Region: Root Valley (one compact region, 8–15 hours of play)
-1. **Onboarding Town**: home + Help Desk HQ (start)
-2. **Route 1: Cable Run**
-3. **Patch Town**: Department 1, *Desktop Support* (Hardware cert)
-4. **Wi-Fi Dead Zone** (dark woods; Network Hexforged)
-5. **Port City**: Department 2, *Networking* (Network cert)
-6. **The Basement**: Legacy dungeon full of old servers
-7. **DevOps Heights**: Department 3, *Software* cert
-8. **Abandoned Data Center**: Ransom hideout (mid-game story)
-9. **Power Plant**: *Facilities* cert (Power)
-10. **Cloud Summit** (mountain)
-11. **SecOps Fortress**: Security cert
-12. Further Departments: Data/Analytics, Mobile, AI Lab
-13. **HQ Tower**: the C-Suite + The Board
+### Region: Root Valley (main path, per docs/gdd.md §5)
+Routes sit between every town; at least one optional side area per act (`[TBD]`).
+1. **Onboarding Town**: home + Help Desk HQ (start) — Act 1
+2. **Route 1: Cable Run** — Act 1
+3. **Patch Town**: Desktop Support (Cert 1, Hardware) — Act 1
+4. **Route 2** — Act 2
+5. **Wi-Fi Dead Zone** (dark woods) — Act 2
+6. **Port City**: Networking (Cert 2, Network) — Act 2, **end of the demo**
+7. **Route 3** — Act 3 (not built)
+8. **The Basement**: Legacy dungeon, Restorephant's tape vault — Act 3
+9. **DevOps Heights**: Software (Cert 3) — Act 3
+10. **Route 4** — Act 4 (not built)
+11. **Power Plant**: Facilities (Cert 4, Power); **first real ERR:: Hexforged (halfway point)** — Act 4
+12. **Abandoned Data Center**: the Hexforge, ERR::PYREWALL — Act 5 (now after the Power Plant)
+13. **Cloud Summit**: Clondor — Act 5
+14. **Data/Analytics Dept** (Cert 5) — Act 5 (not built)
+15. **SecOps Fortress** (Cert 6) — Act 6
+16. **Mobile Dept** (Cert 7), **AI Lab** (Cert 8) — Act 6 (not built)
+17. **Final route → HQ Tower**: the C-Suite, The Board, `[RANSOM_LEADER]` — Act 7 (not built)
 
-### Story (HEXFORGED, 2026-11-15; replaces the DAEMONS story)
-Tone: light, funny, IT-culture humor. Root Valley, the help desk job, 8 Certifications, Kevin (replies-all to
-everything), the C-Suite and The Board all stay. `[PLACEHOLDER]` and `PENDING_APPROVAL` items are undecided.
+### Story
+The source of truth is **docs/gdd.md §4** (lore rules, backstory, villain, the sysadmin, the backup trio, 7-act pacing,
+post-game). Short version: the laid-off sysadmin `[SYSADMIN_NAME]` built the Hexforge; his untested last build left a
+backdoor at Port 443. `[RANSOM_LEADER]`, who runs the cloud vendor `[VENDOR_NAME]`, uses it to corrupt the valley's
+Hexforged and sell a fake "recovery service", helped by `[INSIDER]` in the C-Suite. The sysadmin is never on screen
+(notes, commits, tape labels; some fresh) and is not the villain. Kevin is a red herring, cleared in Act 4.
+Corruption is a slow reveal: Acts 1–3 only hint; the first real ERR:: Hexforged appears at the Power Plant (Act 4).
+The backup trio (Restorephant, Clondor, Sudofox) runs the restore in Act 7. The demo is Acts 1–2 and ends in Port City
+after Cert 2 with a glitched creature that flees.
 
-**Lore rules (everywhere)**
-1. **Hexforged are built, never born.** No breeding, eggs, nests, parents or babies. A line's stages are upgrades
-   (new versions), not growing up.
-2. **Every Hexforged was compiled by the Hexforge** for a job and lives inside the system it runs (Cablesnakes in
-   cable runs, Fanbats in server rooms, Pingos in routers). A "wild" Hexforged is one running loose in its system
-   with no handler. Catching one assigns it to you.
-3. **Corruption is a broken computer, not a demon.** Corrupted creatures look glitched and damaged, never hellish.
-
-**Backstory.** Years ago Root Valley had one sysadmin, `[SYSADMIN_NAME]`, who held everything together. Tired of
-doing it alone, he wrote the **Hexforge**: a compiler that turns code into living creatures. A router config becomes
-Pingo; a firewall ruleset became **Pyrewall (No. 000)**, the first and finest thing the forge built, set to guard
-**Port 443**, the gate the forge talks through. The valley ran smoothly for years.
-
-**The malfunction.** The valley "moved to the cloud" and the sysadmin was laid off. On his last night, access ending
-at midnight, he pushed one final untested build, `encrypt_for_safekeeping()`. His access was cut mid-compile. The
-half-finished build left the Hexforge glitched, with an **open backdoor through Port 443**.
-
-**The corruption (inciting incident).** `[RANSOM_LEADER]` found the backdoor and used it on purpose. Through the broken
-forge, Ransom (1) **corrupts good Hexforged**, so creatures built to run the valley turn on their own systems, and
-(2) **compiles new malware creatures** (the **Hashling → Cryptodile → Extortodile** ransomware line and the other
-Malware lines). Ransom's first wave through Port 443 **corrupted Pyrewall** and knocked it offline; with the
-guardian down, corruption spreads town to town. The demand: pay up, or every system gets encrypted.
-Player-facing mystery: *why are the valley's own creatures turning on it, and where are the malware creatures
-coming from?*
-
-**Act 1 — Onboarding (Onboarding Town → Route 1 → Patch Town).** Day 1. A starter from the e-waste bin (Chipmunk,
-Pingo or Glowbit), unplugged before Ransom showed up, so it's clean. Kevin picks the counter and replies-all about
-it. First tickets (a printer that won't stop printing, a router that keeps dropping) each hide a corrupted Hexforged:
-you catch one and the Help Desk cleans it (cleaning tutorial). First Phisher; a Patch Town building is encrypted while
-you watch. `PENDING_APPROVAL`: a ticket mentions "the 3-2-1 rule" as an old in-joke. Desktop Support (Hardware) cert.
-
-**Act 2 — Following the spread (Wi-Fi Dead Zone → Port City → The Basement).** Every infected system has corrupted
-Hexforged in it; more Hashlings the further you go. Port City: Networking cert; the dockmaster's logs show every
-infection came through Port 443. The Basement: the sysadmin's old desk, his handwriting on tape labels, the Hexforge
-manual. Reveal: these creatures were built, not born, and something is rewriting them. `PENDING_APPROVAL`:
-Restorephant guards the on-site backup and recognizes the sysadmin's handwriting.
-
-**Act 3 — The forge (DevOps Heights → Abandoned Data Center).** Software cert. The Hexforge's commit history: the
-sysadmin's last commit, 11:59 PM, `temp fix, will clean up later`; every commit after is from an unknown account.
-The Abandoned Data Center is Ransom's hideout: the Hexforge inside, fed malicious code, pumping out Hashlings.
-**ERR::PYREWALL** is chained behind an encrypted gate. `PENDING_APPROVAL`: Ransom stole Sudofox's root key.
-Mid-game reveal: who `[RANSOM_LEADER]` is.
-
-**Act 4 — Gathering what you need (Power Plant → Cloud Summit → SecOps Fortress).** Facilities (Power) cert: the
-forge needs a clean power cycle to stop safely. `PENDING_APPROVAL`: Clondor tests you at Cloud Summit and hands over
-the off-site backup. SecOps: Security cert, and the patch that closes the Port 443 backdoor and strips corruption,
-but pushing it needs root access.
-
-**Act 5 — The restore (remaining Departments → HQ Tower).** The C-Suite, then The Board, then `[RANSOM_LEADER]`.
-Ending: (1) restore from backups (`PENDING_APPROVAL`: Restorephant, Clondor and Sudofox run it together; "The backups
-were tested. A miracle."), (2) patch the forge (Port 443 closes), (3) clean the valley: Pyrewall first, back online at
-Port 443, then every corrupted Hexforged returns to its job. Epilogue (if the sysadmin is involved): rehired as a
-contractor at three times his old salary; Kevin replies-all. Ransom's malware lines stay as normal catchable species
-that can't corrupt anything anymore.
-
-**Post-game.** Clean Pyrewall becomes catchable `[PLACEHOLDER: timing]`. Hallucinaut and Uptimus stay as post-game
-legendaries; hook: someone is still sending code to the forge from outside the valley.
-
-**Corrupted Hexforged** (system rules in docs/data-format.md): the same species in a glitched, hostile state, shown as
-`ERR::NAME`. Catch it, clean it at a Help Desk, and it's the normal version. Malware lines can't be corrupted.
-
-Superseded: docs/story-outline.md (the DAEMONS story with Cron, Marge's Pizza Friday) and docs/story-demo-draft.md.
-The game's built Acts 1–3 still play the old story until the new dialogue replaces it (stubs in data/dialogue/hx_*).
+Superseded: docs/story-outline.md and docs/story-demo-draft.md (the DAEMONS story).
 
 ### Legal guardrails (from the research; not legal advice)
 - 100% original names, creature designs, UI, text, formulas and music. Never use another franchise's assets, names, fonts, sounds or code.
