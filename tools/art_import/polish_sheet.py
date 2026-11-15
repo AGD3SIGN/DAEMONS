@@ -12,7 +12,7 @@ Aseprite in batch mode):
 Run with the Aseprite MCP's Python environment (it has Pillow and the MCP package):
 
     cd /path/to/aseprite-mcp
-    uv run python /path/to/Pokemon_Style_Game/tools/art_import/polish_sheet.py <sheet.png> [<sheet.png> ...]
+    uv run python /path/to/Daemons/tools/art_import/polish_sheet.py <sheet.png> [<sheet.png> ...]
         [--out-dir DIR] [--colors 15]
 
 Writes the polished PNG next to the input (or into --out-dir) and prints colors before/after.
