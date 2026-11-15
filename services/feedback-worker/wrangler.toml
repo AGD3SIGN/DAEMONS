@@ -12,5 +12,5 @@ ALLOWED_ORIGINS = "https://agd3sign.github.io,http://localhost:8060"
 
 [[kv_namespaces]]
 binding = "FEEDBACK_KV"
-# Replace with the id printed by: npx wrangler kv namespace create FEEDBACK_KV
-id = "REPLACE_WITH_KV_NAMESPACE_ID"
+# Created with: npx wrangler kv namespace create FEEDBACK_KV (2026-11-14)
+id = "3c48b84340bc4d6f8926d6f930b2ee15"
