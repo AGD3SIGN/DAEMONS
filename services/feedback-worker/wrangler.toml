@@ -5,8 +5,8 @@ compatibility_date = "2026-11-01"
 
 [vars]
 GITHUB_REPO = "AGD3SIGN/daemons-feedback"
-# Public site key from Cloudflare dashboard > Turnstile (replace after creating the widget).
-TURNSTILE_SITE_KEY = "REPLACE_WITH_TURNSTILE_SITE_KEY"
+# Public site key from Cloudflare dashboard > Turnstile (widget "DAEMONS feedback").
+TURNSTILE_SITE_KEY = "0x4AAAAAAGBZeNw0rv5Y6aS_"
 # Browser origins allowed to send drafts (the web build and local testing). Native apps don't send an Origin.
 ALLOWED_ORIGINS = "https://agd3sign.github.io,http://localhost:8060"
 
