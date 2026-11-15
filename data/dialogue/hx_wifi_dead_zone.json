@@ -1,7 +1,13 @@
 {
-  "hx_dead_zone_spread": [
+  "hx_a2_dead_zone_signal": [
     {
-      "text": "TODO: Corruption is spreading outward; more corrupted Hexforged and the first Hashlings."
+      "text": "TODO: No bars. The creatures here bite harder than usual. Still 'just bad signal.'"
+    }
+  ],
+  "hx_a2_kevin_trouble_1": [
+    {
+      "text": "TODO: Kevin is already standing where the trouble is. 'I just got here.' (red herring)",
+      "speaker": "Kevin"
     }
   ]
 }

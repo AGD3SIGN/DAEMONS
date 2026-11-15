@@ -1,18 +1,12 @@
 {
-  "hx_first_phisher": [
+  "hx_a1_ticket_router": [
     {
-      "text": "TODO: First Phisher grunt shows up.",
-      "speaker": "Phisher"
+      "text": "TODO: Ticket: a router that drops every 20 minutes. Plain fix (overheating closet); odd detail: its logs show a login nobody recognizes."
     }
   ],
-  "hx_building_encrypted": [
+  "hx_a1_cert1": [
     {
-      "text": "TODO: A Patch Town building's systems get encrypted while you watch."
-    }
-  ],
-  "hx_desktop_cert": [
-    {
-      "text": "TODO: Dana awards the Desktop Support (Hardware) cert.",
+      "text": "TODO: Dana awards Cert 1 (Hardware).",
       "speaker": "Dana"
     }
   ]

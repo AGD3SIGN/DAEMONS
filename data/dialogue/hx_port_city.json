@@ -1,14 +1,24 @@
 {
-  "hx_dockmaster_logs": [
+  "hx_a2_port_443_traffic": [
     {
-      "text": "TODO: Dockmaster's logs: every infection came in through Port 443.",
-      "speaker": "Dockmaster"
+      "text": "TODO: Weird traffic at Port 443: the beacon flickers. Harbor IT blames bad signal."
     }
   ],
-  "hx_networking_cert": [
+  "hx_a2_kevin_trouble_2": [
     {
-      "text": "TODO: Ping Okoro awards the Networking cert.",
+      "text": "TODO: Kevin turns up at the dock right after the flicker. Suspicious, but he's just annoying.",
+      "speaker": "Kevin"
+    }
+  ],
+  "hx_a2_cert2": [
+    {
+      "text": "TODO: Ping Okoro awards Cert 2 (Network).",
       "speaker": "Ping"
+    }
+  ],
+  "hx_a2_demo_teaser": [
+    {
+      "text": "TODO: Demo teaser: a glitched Hexforged appears, CMDB Status: UNKNOWN, flees before you can catch it. (Built: demo_teaser.)"
     }
   ]
 }

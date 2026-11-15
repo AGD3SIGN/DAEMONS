@@ -1,17 +1,18 @@
 {
-  "hx_sysadmin_desk": [
+  "hx_a3_hexforge_manual": [
     {
-      "text": "TODO: [SYSADMIN_NAME]'s old desk; his handwriting on the tape labels."
+      "text": "TODO: The Hexforge manual: Hexforged were built, not born. 'Compile responsibly.'"
     }
   ],
-  "hx_hexforge_manual": [
+  "hx_a3_restorephant": [
     {
-      "text": "TODO: The Hexforge manual. Reveal: these creatures were built, not born, and something is rewriting them."
+      "text": "TODO: Restorephant guards the tape vault and recognizes [SYSADMIN_NAME]'s handwriting; he set it up."
     }
   ],
-  "hx_restorephant": [
+  "hx_a3_kevin_trouble_3": [
     {
-      "text": "TODO PENDING_APPROVAL: Restorephant guards the on-site backup and recognizes the sysadmin's handwriting."
+      "text": "TODO: Kevin is in the Basement 'looking for the bathroom.'",
+      "speaker": "Kevin"
     }
   ]
 }

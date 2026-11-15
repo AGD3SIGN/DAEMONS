@@ -1,35 +1,35 @@
 {
-  "hx_intro_ewaste": [
+  "hx_a1_ewaste_starter": [
     {
-      "text": "TODO: Manager hands you a starter from the e-waste bin: unplugged before Ransom showed up, so it's clean.",
+      "text": "TODO: Manager offers a starter from the e-waste bin: Chipmunk, Pingo or Glowbit.",
       "speaker": "Manager"
     }
   ],
-  "hx_kevin_counterpick": [
+  "hx_a1_kevin_counter": [
     {
-      "text": "TODO: Kevin picks the starter that beats yours and replies-all to announce it (keep his know-it-all voice).",
+      "text": "TODO: Kevin picks the counter starter and replies-all to announce it.",
       "speaker": "Kevin"
     }
   ],
-  "hx_ticket_printer": [
+  "hx_a1_onboarding_tickets": [
     {
-      "text": "TODO: Ticket: a printer that won't stop printing. A corrupted Hexforged is inside it; catch it."
+      "text": "TODO: HR-style onboarding tickets teach catching, battling and items. Offer 'Skip training - I've done this before'.",
+      "speaker": "HR"
     }
   ],
-  "hx_ticket_router": [
+  "hx_a1_ticket_printer": [
     {
-      "text": "TODO: Ticket: a router that keeps dropping. A corrupted Hexforged is inside; catch it."
+      "text": "TODO: Ticket: the printer prints a blank page every morning at 6:00. Plain fix; small odd detail: it's always exactly 6:00:00."
     }
   ],
-  "hx_cleaning_tutorial": [
+  "hx_a1_ticket_321": [
     {
-      "text": "TODO: Help Desk tech explains cleaning: 'Have you tried turning it off and on again?'",
-      "speaker": "Help Desk Tech"
+      "text": "TODO: Ticket from accounting: 'what's the 3-2-1 rule? It's on a sticky note on the old server.' Nobody remembers. Office in-joke."
     }
   ],
-  "hx_321_joke": [
+  "hx_a1_first_tape_label": [
     {
-      "text": "TODO PENDING_APPROVAL: A ticket mentions 'the 3-2-1 rule' as an old in-joke nobody understands."
+      "text": "TODO: First old tape label in the Help Desk storeroom, in [SYSADMIN_NAME]'s handwriting: 'BACKUP - DO NOT REUSE. Tested Fridays.'"
     }
   ]
 }

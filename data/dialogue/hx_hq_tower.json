@@ -1,27 +1,34 @@
 {
-  "hx_board": [
+  "hx_a7_csuite": [
     {
-      "text": "TODO: The C-Suite, then The Board, then [RANSOM_LEADER]."
+      "text": "TODO: The C-Suite; [INSIDER] unmasked during the climb.",
+      "speaker": "[INSIDER]"
     }
   ],
-  "hx_restore": [
+  "hx_a7_board": [
     {
-      "text": "TODO PENDING_APPROVAL: Restore from backups: Restorephant, Clondor and Sudofox run it together. 'The backups were tested. A miracle.'"
+      "text": "TODO: The Board, then [RANSOM_LEADER].",
+      "speaker": "[RANSOM_LEADER]"
     }
   ],
-  "hx_patch_forge": [
+  "hx_a7_free_sudofox": [
     {
-      "text": "TODO: Patch the forge: the Port 443 backdoor closes; the forge stops taking Ransom's code."
+      "text": "TODO: Free Sudofox."
     }
   ],
-  "hx_clean_valley": [
+  "hx_a7_restore": [
     {
-      "text": "TODO: Clean the valley: Pyrewall first, back online at Port 443; every corrupted Hexforged returns to its job."
+      "text": "TODO: The trio runs the restore: 'The backups were tested. A miracle.'"
     }
   ],
-  "hx_epilogue": [
+  "hx_a7_patch_forge": [
     {
-      "text": "TODO: If the sysadmin is involved: rehired as a contractor at 3x his old salary. Kevin replies-all.",
+      "text": "TODO: Patch the forge; Pyrewall cleaned first and back online at Port 443; the valley returns to normal."
+    }
+  ],
+  "hx_a7_epilogue": [
+    {
+      "text": "TODO: [SYSADMIN_NAME] rehired as a contractor at 3x his old salary. Kevin replies-all to the announcement.",
       "speaker": "Kevin"
     }
   ]

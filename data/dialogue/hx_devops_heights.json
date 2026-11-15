@@ -1,12 +1,22 @@
 {
-  "hx_commit_history": [
+  "hx_a3_commit_history": [
     {
-      "text": "TODO: Hexforge commit history: last sysadmin commit 11:59 PM 'temp fix, will clean up later'; every later commit is from an unknown account."
+      "text": "TODO: Hexforge commit history: [SYSADMIN_NAME]'s last commit, 11:59 PM, 'temp fix, will clean up later'; every commit after is from an unknown account."
     }
   ],
-  "hx_software_cert": [
+  "hx_a3_first_fresh_note": [
     {
-      "text": "TODO: Devi Shah awards the Software cert.",
+      "text": "TODO: First fresh note in [SYSADMIN_NAME]'s handwriting, dated this week. The player had assumed every note was old."
+    }
+  ],
+  "hx_a3_glitch_flees": [
+    {
+      "text": "TODO: A creature glitches mid-battle and flees."
+    }
+  ],
+  "hx_a3_cert3": [
+    {
+      "text": "TODO: Devi Shah awards Cert 3 (Software).",
       "speaker": "Devi"
     }
   ]

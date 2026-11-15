@@ -45,7 +45,7 @@
     },
     {
       "speaker": "Kevin",
-      "text": "{player}! You got R's email, right? I replied-all with a GIF that explains encryption. It's a padlock. Spinning."
+      "text": "{player}! You got that 'mailbox full' email, right? I replied-all with a GIF that explains phishing. It's a fish. Spinning."
     },
     {
       "speaker": "Kevin",
@@ -84,31 +84,31 @@
   ],
   "kevin_docks_after": [
     {
-      "if_flag": "pyrewall_offline",
+      "if_flag": "port443_flicker",
       "then": [
         {
-          "speaker": "Kevin",
-          "text": "...The beacon just went out. Just like that. That guy didn't even look stressed."
+          "text": "You saw the beacon glitch, right? Classic bad signal. I've seen it a hundred times. On YouTube.",
+          "speaker": "Kevin"
         },
         {
-          "speaker": "Kevin",
-          "text": "For the record, I could've stopped him. I was just... letting it play out. Strategically. I'm not replying-all to this one."
+          "text": "Why does everyone keep looking at me like that? I just got here. Again.",
+          "speaker": "Kevin"
         }
       ],
       "else": [
         {
-          "speaker": "Kevin",
-          "text": "Those gray hoodies are all over Dock 443. Probably a fashion thing. ...It's not a fashion thing, is it."
+          "text": "Those gray hoodies are all over Dock 443. Probably a fashion thing. ...It's not a fashion thing, is it.",
+          "speaker": "Kevin"
         }
       ]
     }
   ],
   "port443_sign": [
     {
-      "if_flag": "pyrewall_offline",
+      "if_flag": "port443_flicker",
       "then": [
         {
-          "text": "PORT 443 - SECURE DOCK. The sign's lights are dead. Someone has spray-painted a small \"R\" on it."
+          "text": "PORT 443 - SECURE DOCK. Guarded by Pyrewall. The sign's lights stutter every few seconds."
         }
       ],
       "else": [
@@ -120,54 +120,43 @@
   ],
   "port443_breach": [
     {
-      "cmd": "show_npc",
-      "npc": "zed",
-      "facing": "down"
+      "text": "Out over the water, the beacon over Port 443 stutters. Orange, white, orange..."
     },
     {
-      "speaker": "???",
-      "text": "Huh. A help-desk kid. Cute."
+      "text": "For a second the dock gate hums like something big just walked through it. Nobody's there."
     },
     {
-      "speaker": "Zed",
-      "text": "Name's Zed. I find the door nobody's patched, and I walk through it. Today it was this one."
+      "text": "The beacon steadies. The harbor lights blink back on, one by one."
     },
     {
-      "text": "Zed taps something on a phone. Out over the water, the great firewall-beacon of Pyrewall flares white..."
+      "text": "Third time this week. Harbor IT says it's just bad signal.",
+      "speaker": "Dockworker"
     },
     {
-      "text": "...and goes dark. Its wings fold. The flames inside the brick go cold."
-    },
-    {
-      "text": "Every light in the harbor blinks out at once."
-    },
-    {
-      "speaker": "Zed",
-      "text": "Port 443's closed. Permanently. Tell your manager R says hi."
-    },
-    {
-      "cmd": "hide_npc",
-      "npc": "zed"
-    },
-    {
-      "text": "Zed drops off the end of the dock into a waiting boat and is gone."
+      "if_flag": "kevin_docks_met",
+      "then": [
+        {
+          "text": "I was NOT standing right next to the gate when that happened. I was standing near it. Nearby. Adjacent.",
+          "speaker": "Kevin"
+        },
+        {
+          "text": "Anyway, it's obviously the router. I'd reboot the whole harbor, personally.",
+          "speaker": "Kevin"
+        }
+      ],
+      "else": []
     },
     {
       "cmd": "set_flag",
-      "flag": "pyrewall_offline"
-    }
-  ],
-  "zed_gone": [
-    {
-      "text": "Nobody's here anymore."
+      "flag": "port443_flicker"
     }
   ],
   "port_help_desk_locked": [
     {
-      "text": "The Help Desk doors won't open. A red screen behind the glass reads: \"YOUR FILES HAVE BEEN QUARANTINED. -R\""
+      "text": "The Help Desk doors are taped shut. A sign: \"CLOSED FOR REWIRING. Somebody ran the new cables through the coffee machine.\""
     },
     {
-      "text": "A hand-written note is taped below it: \"Pop-up Help Desk in the shipping container next door. We're still open!\""
+      "text": "A hand-written note below it: \"Pop-up Help Desk in the shipping container next door. We're still open!\""
     },
     {
       "cmd": "move_player",
@@ -203,7 +192,7 @@
         },
         {
           "speaker": "Help Desk",
-          "text": "...All fixed. Our real building got encrypted, but our hands still work."
+          "text": "...All fixed. Our real office is getting rewired, but our hands still work."
         }
       ],
       "no": [
@@ -234,21 +223,21 @@
   ],
   "dockworker": [
     {
-      "if_flag": "pyrewall_offline",
+      "if_flag": "port443_flicker",
       "then": [
         {
-          "speaker": "Dockworker",
-          "text": "Pyrewall's been guarding Port 443 since before I was born. Now it's just... cold brick."
+          "text": "Pyrewall's been guarding Port 443 since before I was born. Lately it flickers.",
+          "speaker": "Dockworker"
         },
         {
-          "speaker": "Dockworker",
-          "text": "Without it, anything can sail into the valley's network. That's how this R gets in everywhere."
+          "text": "Harbor IT says it's bad signal. Bad signal doesn't usually come in through a locked gate.",
+          "speaker": "Dockworker"
         }
       ],
       "else": [
         {
-          "speaker": "Dockworker",
-          "text": "See the orange beacon on Dock 443? That's Pyrewall. Nothing gets in without a valid certificate."
+          "text": "See the orange beacon on Dock 443? That's Pyrewall. Nothing gets in without a valid certificate.",
+          "speaker": "Dockworker"
         }
       ]
     }

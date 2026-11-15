@@ -1,7 +1,24 @@
 {
-  "hx_power_cycle": [
+  "hx_a4_first_err": [
     {
-      "text": "TODO: Facilities (Power) cert; the forge needs a clean power cycle to stop safely.",
+      "text": "TODO: First real ERR:: Hexforged (halfway point). Corruption gets a name. Sets corruption_revealed."
+    }
+  ],
+  "hx_a4_cleaning_tutorial": [
+    {
+      "text": "TODO: Help Desk cleaning tutorial: 'Have you tried turning it off and on again?'",
+      "speaker": "Help Desk"
+    }
+  ],
+  "hx_a4_kevin_cleared": [
+    {
+      "text": "TODO: Kevin cleared: he was just very annoying.",
+      "speaker": "Kevin"
+    }
+  ],
+  "hx_a4_cert4": [
+    {
+      "text": "TODO: Rolf awards Cert 4 (Power).",
       "speaker": "Rolf"
     }
   ]

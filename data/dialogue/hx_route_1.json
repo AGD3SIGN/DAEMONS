@@ -1,7 +1,8 @@
 {
-  "hx_route_1_corruption_hint": [
+  "hx_a1_route_1_phisher": [
     {
-      "text": "TODO: Something's off with the wild Hexforged out here (corruption is still rare this early)."
+      "text": "TODO: A Phisher grunt tries a petty scam (fake 'IT survey'). Phishers are small-time scammers in Act 1.",
+      "speaker": "Phisher"
     }
   ]
 }

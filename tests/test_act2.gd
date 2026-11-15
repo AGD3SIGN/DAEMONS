@@ -1,6 +1,7 @@
 extends GutTest
 ## Act 2 part 1 (story outline, approved 2026-11-13): the "-R" email leaving Patch Town, Route 2, Port City
-## (encrypted Help Desk, Kevin's second battle, Pyrewall going dark at Port 443) and the Networking Department.
+## (Help Desk closed for rewiring, Kevin's second battle, Port 443's beacon flickering) and the Networking Department.
+## 2026-11-15: realigned to the GDD (Act 2 only hints; nothing is encrypted and Pyrewall stays up).
 
 var world: Overworld
 
@@ -48,7 +49,7 @@ func test_leaving_patch_town_brings_the_ransom_email_then_route_2() -> void:
 	await _open("patch_town")
 	world.player.setup(world.map, Vector2i(14, 2), Vector2i.UP)
 	await _step(Vector2i.UP)
-	assert_true(_logged("YOUR FILES HAVE BEEN QUARANTINED"), "every phone buzzes")
+	assert_true(_logged("Your mailbox is FULL"), "every phone buzzes with a petty phishing email (Act 1: Phishers are scammers)")
 	assert_true(_logged("yogurt"), "and Kevin replies-all")
 	assert_true(GameState.flags.get("ransom_email_seen", false))
 	await _step(Vector2i.UP)
@@ -63,12 +64,12 @@ func test_arriving_in_port_city() -> void:
 	assert_true(_logged("Port 443"))
 
 
-func test_the_port_city_help_desk_is_encrypted_but_the_container_heals() -> void:
+func test_the_port_city_help_desk_is_being_rewired_but_the_container_heals() -> void:
 	GameState.flags["port_city_arrived"] = true
 	await _open("port_city")
 	world.player.setup(world.map, Vector2i(6, 13), Vector2i.UP)
 	await _step(Vector2i.UP)
-	assert_true(_logged("QUARANTINED"), "the real Help Desk is locked")
+	assert_true(_logged("CLOSED FOR REWIRING"), "the real Help Desk is closed (not encrypted: that comes much later)")
 	assert_eq(world.player.cell, Vector2i(6, 13), "and you step back out")
 	GameState.active_stack[0].current_uptime = 1
 	world.player.setup(world.map, Vector2i(10, 14), Vector2i.UP)
@@ -91,19 +92,19 @@ func test_kevin_meets_you_on_the_docks_with_the_starter_that_beats_yours() -> vo
 	assert_true(world.find_npc("kevin_docks").visible)
 
 
-func test_zed_takes_pyrewall_offline_at_port_443() -> void:
+func test_port_443_flickers_but_pyrewall_stays_up() -> void:
 	GameState.flags["port_city_arrived"] = true
 	GameState.flags["kevin_docks_met"] = true
 	await _open("port_city")
 	world.player.setup(world.map, Vector2i(27, 4), Vector2i.UP)
 	await _step(Vector2i.UP)
-	assert_true(GameState.flags.get("pyrewall_offline", false))
-	assert_true(_logged("goes dark"))
-	assert_false(world.find_npc("zed").visible, "Zed is gone")
+	assert_true(GameState.flags.get("port443_flicker", false))
+	assert_true(_logged("bad signal"), "the harbor shrugs it off")
+	assert_true(_logged("I was NOT standing right next to the gate"), "Kevin keeps turning up at trouble spots")
+	assert_false(GameState.flags.get("pyrewall_offline", false), "nothing goes dark in Act 2")
 	world.player.setup(world.map, Vector2i(28, 6), Vector2i.UP)
 	await world.interact()
-	assert_true(_logged("spray-painted"), "the Port 443 sign changes")
-
+	assert_true(_logged("stutter"), "the Port 443 sign flickers")
 
 func test_ping_awards_the_networking_cert() -> void:
 	var rng := RandomNumberGenerator.new()

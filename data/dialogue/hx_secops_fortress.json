@@ -1,7 +1,13 @@
 {
-  "hx_secops_patch": [
+  "hx_a6_patch": [
     {
-      "text": "TODO: Security cert; SecOps gives you the patch that closes Port 443 and strips corruption, but you need root access to push it.",
+      "text": "TODO: SecOps gives the patch that closes Port 443 and strips corruption, but pushing it needs root.",
+      "speaker": "Kalb"
+    }
+  ],
+  "hx_a6_cert6": [
+    {
+      "text": "TODO: Major Kalb awards Cert 6 (Security).",
       "speaker": "Kalb"
     }
   ]
