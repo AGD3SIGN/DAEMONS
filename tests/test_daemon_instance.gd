@@ -72,9 +72,9 @@ func test_level_for_exp() -> void:
 
 func test_stats_at_level_50() -> void:
 	# Chipmunk base 44/58/48/60/48/52, BQ 15, no logs, neutral profile. Worked by hand:
-	# Uptime = floor((88 + 30) * 50 / 100) + 50 + 12 = 121; Throughput = floor((116 + 30) * 50 / 100) + 6 = 79
+	# Uptime = floor((88 + 30) * 50 / 100) + 50 + 20 = 129 (flat bonus: balance.json uptime_bonus); Throughput = floor((116 + 30) * 50 / 100) + 6 = 79
 	var d := _make("chipmunk", 50)
-	assert_eq(d.stats(), {"uptime": 121, "throughput": 79, "hardening": 69, "compute": 81, "encryption": 69, "bandwidth": 73})
+	assert_eq(d.stats(), {"uptime": 129, "throughput": 79, "hardening": 69, "compute": 81, "encryption": 69, "bandwidth": 73})
 
 
 func test_config_profile_modifiers() -> void:
@@ -83,19 +83,19 @@ func test_config_profile_modifiers() -> void:
 	assert_eq(d.get_stat("throughput"), 86)  # floor(79 * 1.10)
 	assert_eq(d.get_stat("hardening"), 65)   # floor(69 * 0.95)
 	assert_eq(d.get_stat("compute"), 81)     # unchanged
-	assert_eq(d.get_stat("uptime"), 121)     # profiles never touch Uptime
+	assert_eq(d.get_stat("uptime"), 129)     # profiles never touch Uptime
 
 
 func test_experience_logs_count_half() -> void:
 	var d := _make("chipmunk", 100)
 	d.experience_logs["uptime"] = 64
-	# floor((88 + 30 + 32) * 100 / 100) + 100 + 12
-	assert_eq(d.max_uptime(), 262)
+	# floor((88 + 30 + 32) * 100 / 100) + 100 + 20
+	assert_eq(d.max_uptime(), 270)
 
 
 func test_level_1_minimum() -> void:
 	var d := _make("chipmunk", 1, 0)
-	assert_eq(d.max_uptime(), 13)           # 0 + 1 + 12
+	assert_eq(d.max_uptime(), 21)           # 0 + 1 + 20
 	assert_eq(d.get_stat("throughput"), 7)  # floor(116 * 1 / 100) + 6
 
 

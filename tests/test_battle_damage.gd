@@ -54,24 +54,25 @@ func _types(events: Array[Dictionary]) -> Array:
 # --- damage formula ----------------------------------------------------------
 
 func test_damage_formula_exact() -> void:
-	# floor(40 * 32 * 30 / (31 * 120)) + 2 = 12 -> roll -> native type 1.35 -> Network vs Hardware 2x
+	# floor(40 * 32 * (20 + 4) / (31 * 108)) + 2 = 11 -> roll -> native type 1.35 -> Network vs Hardware 2x
+	# (level offset 4 and divisor 108 come from data/balance.json "damage")
 	var state := _battle([_daemon("pingo", 20)], [_daemon("chipmunk", 20)])
 	var ping := DataRegistry.get_move("ping")
-	assert_eq(BattleSim.calc_damage(state, 0, ping, false, 100), 32)
-	assert_eq(BattleSim.calc_damage(state, 0, ping, false, 88), 26)
-	assert_eq(BattleSim.calc_damage(state, 0, ping, true, 100), 48, "crit: 12 -> 18 -> 24 -> 48")
+	assert_eq(BattleSim.calc_damage(state, 0, ping, false, 100), 28)
+	assert_eq(BattleSim.calc_damage(state, 0, ping, false, 88), 24)
+	assert_eq(BattleSim.calc_damage(state, 0, ping, true, 100), 42, "crit: 11 -> 16 -> 21 -> 42")
 
 
 func test_stat_stages_change_damage_and_crits_ignore_bad_ones() -> void:
 	var state := _battle([_daemon("pingo", 20)], [_daemon("chipmunk", 20)])
 	var ping := DataRegistry.get_move("ping")
 	state.sides[0].stages["compute"] = 2  # 32 -> 64
-	assert_eq(BattleSim.calc_damage(state, 0, ping, false, 100), 58)
+	assert_eq(BattleSim.calc_damage(state, 0, ping, false, 100), 54)
 	state.sides[0].stages["compute"] = -2
-	assert_eq(BattleSim.calc_damage(state, 0, ping, true, 100), 48, "crit ignores the attacker's drop")
+	assert_eq(BattleSim.calc_damage(state, 0, ping, true, 100), 42, "crit ignores the attacker's drop")
 	state.sides[0].stages["compute"] = 0
 	state.sides[1].stages["encryption"] = 2
-	assert_eq(BattleSim.calc_damage(state, 0, ping, true, 100), 48, "crit ignores the defender's boost")
+	assert_eq(BattleSim.calc_damage(state, 0, ping, true, 100), 42, "crit ignores the defender's boost")
 
 
 func test_overheated_halves_physical_only() -> void:
@@ -93,7 +94,7 @@ func test_damage_lands_in_range() -> void:
 		var state := _battle([pingo], [chipmunk], true, seed_value)
 		var events := BattleSim.run_turn(state, _fight(pingo, "ping"), _fight(chipmunk, "chassis_guard"))
 		var hit: Dictionary = _of(events, "damage")[0]
-		assert_between(int(hit["amount"]), 26, 48)
+		assert_between(int(hit["amount"]), 24, 42)
 		assert_eq(chipmunk.current_uptime, chipmunk.max_uptime() - int(hit["amount"]))
 
 
@@ -213,16 +214,16 @@ func test_status_move_sticks_once() -> void:
 
 
 func test_corrupted_and_overheated_residual_damage() -> void:
-	var chipmunk := _daemon("chipmunk", 20)  # Uptime 55 -> 6 per turn
-	var pingo := _daemon("pingo", 20)        # Uptime 57 -> 3 per turn
+	var chipmunk := _daemon("chipmunk", 20)  # Uptime 63 -> 7 per turn
+	var pingo := _daemon("pingo", 20)        # Uptime 65 -> 4 per turn
 	chipmunk.status = "corrupted"
 	pingo.status = "overheated"
 	var events := BattleSim.run_turn(_battle([chipmunk], [pingo]), _fight(chipmunk, "chassis_guard"), _fight(pingo, "bandwidth_hog"))
 	var hurt := _of(events, "status_damage")
 	assert_eq(hurt.size(), 2)
-	assert_eq(hurt[0]["amount"], 6)
-	assert_eq(hurt[1]["amount"], 3)
-	assert_eq(chipmunk.current_uptime, 49)
+	assert_eq(hurt[0]["amount"], 7)
+	assert_eq(hurt[1]["amount"], 4)
+	assert_eq(chipmunk.current_uptime, 56)
 
 
 func test_standby_blocks_then_wakes() -> void:
@@ -324,7 +325,7 @@ func test_wild_win_gives_exp_and_logs() -> void:
 	var state := _battle([pingo], [bunny])
 	var events := BattleSim.run_turn(state, _fight(pingo, "fast_ethernet"), BattleAction.fight(0))
 	assert_eq(_types(events).slice(-4), ["damage", "fainted", "exp_gained", "battle_end"])
-	assert_eq(_of(events, "exp_gained")[0]["amount"], 41, "floor(50 * 5 / 6), divisor from data/balance.json")
+	assert_eq(_of(events, "exp_gained")[0]["amount"], 35, "floor(50 * 5 / 7), divisor from data/balance.json")
 	assert_eq(state.outcome, "player_won")
 	assert_eq(pingo.experience_logs["bandwidth"], 1)
 	assert_eq(_of(events, "move_used").size(), 1, "the crashed foe doesn't act")
@@ -336,7 +337,7 @@ func test_trainer_battle_forced_switch_and_bonus_exp() -> void:
 	bunny.current_uptime = 1
 	var state := _battle([pingo], [bunny, _daemon("wormby", 5)], false)
 	var events := BattleSim.run_turn(state, _fight(pingo, "fast_ethernet"), BattleAction.fight(0))
-	assert_eq(_of(events, "exp_gained")[0]["amount"], 61, "floor(41 * 1.5) trainer bonus")
+	assert_eq(_of(events, "exp_gained")[0]["amount"], 52, "floor(35 * 1.5) trainer bonus")
 	assert_eq(_of(events, "switch_needed")[0]["side"], 1)
 	assert_eq(state.outcome, "")
 	var blocked := BattleSim.run_turn(state, BattleAction.fight(0), BattleAction.fight(0))
@@ -360,7 +361,7 @@ func test_exp_is_split_between_participants() -> void:
 		var events := BattleSim.run_turn(state, _fight(glowbit, "code_injection"), _fight(bunny, "bump"))
 		assert_eq(state.outcome, "player_won")
 		var gains := _of(events, "exp_gained").map(func(e: Dictionary) -> int: return e["amount"])
-		assert_eq(gains, [41] if pingo_crashed else [20, 20])
+		assert_eq(gains, [35] if pingo_crashed else [17, 17])
 
 
 func test_level_up_mid_battle_then_upgrade_after() -> void:

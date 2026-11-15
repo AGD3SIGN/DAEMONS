@@ -5,11 +5,11 @@
     "team": [
       [
         "dustbunny",
-        3
+        4
       ],
       [
         "wormby",
-        4
+        5
       ]
     ],
     "ai": "basic",
@@ -29,7 +29,7 @@
       ],
       [
         "cablesnake",
-        4
+        5
       ]
     ],
     "ai": "basic",
@@ -45,11 +45,7 @@
     "team": [
       [
         "ramster",
-        4
-      ],
-      [
-        "dustbunny",
-        4
+        6
       ]
     ],
     "ai": "basic",

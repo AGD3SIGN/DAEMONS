@@ -214,9 +214,10 @@ static func accuracy_multiplier(stage: int) -> float:
 
 
 ## Damage for one hit, with the crit and random roll (88..100) passed in so it's testable.
-## DAEMONS formula (our own): floor(Power * Atk * (L + 10) / (Def * 120)) + 2,
+## DAEMONS formula (our own): floor(Power * Atk * (L + offset) / (Def * divisor)) + 2,
 ## then x crit 1.5, x roll/100, x native-type bonus 1.35, x type effectiveness.
-## Tuned 2026-11-13 so the Department 1 balance test matches the old numbers.
+## offset/divisor come from data/balance.json "damage" (4 / 108 since 2026-11-15; was 10 / 120, which made
+## low-level hits a third harder than high-level ones and let early super-effective moves one-shot).
 @warning_ignore("integer_division")
 static func calc_damage(state: BattleState, side: int, move: Dictionary, critical: bool, roll: int) -> int:
 	var atk_side := state.sides[side]
@@ -235,7 +236,10 @@ static func calc_damage(state: BattleState, side: int, move: Dictionary, critica
 	var def := maxi(1, floori(defender.get_stat(def_stat) * stage_multiplier(def_stage)))
 	if physical and attacker.status == "overheated":
 		atk = atk / 2
-	var damage := int(move["power"]) * atk * (attacker.level + 10) / (def * 120) + 2
+	var curve: Dictionary = DataRegistry.balance.get("damage", {})
+	var offset := int(curve.get("level_offset", 10))
+	var divisor := int(curve.get("divisor", 120))
+	var damage := int(move["power"]) * atk * (attacker.level + offset) / (def * divisor) + 2
 	if critical:
 		damage = floori(damage * CRIT_MULTIPLIER)
 	damage = damage * roll / 100

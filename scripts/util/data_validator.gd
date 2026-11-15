@@ -943,6 +943,13 @@ func _validate_balance(raw: Variant) -> void:
 		var v: Variant = raw.get(field)
 		if not (typeof(v) == TYPE_INT or typeof(v) == TYPE_FLOAT) or float(v) < 1.0 or float(v) > 20.0:
 			_err("balance", "'%s' must be a number from 1 to 20" % field)
+	_int(raw, "uptime_bonus", "balance", 0, 100)
+	var curve: Variant = raw.get("damage")
+	if typeof(curve) != TYPE_DICTIONARY:
+		_err("balance", "'damage' must be an object with level_offset and divisor")
+	else:
+		_int(curve, "level_offset", "balance › damage", 0, 50)
+		_int(curve, "divisor", "balance › damage", 20, 500)
 	var loss: Variant = raw.get("loss_penalty")
 	if typeof(loss) != TYPE_DICTIONARY:
 		_err("balance", "'loss_penalty' must be an object")

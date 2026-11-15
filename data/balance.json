@@ -1,7 +1,12 @@
 {
   "starting_credits": 3000,
-  "exp_divisor": 6,
+  "exp_divisor": 7,
   "trainer_exp_bonus": 1.5,
+  "uptime_bonus": 20,
+  "damage": {
+    "level_offset": 4,
+    "divisor": 108
+  },
   "loss_penalty": {
     "percent": 10,
     "cap_base": 300,

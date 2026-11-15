@@ -80,8 +80,8 @@ func get_stat(stat: String) -> int:
 	var bq := int(build_quality.get(stat, 0))
 	var logs := int(experience_logs.get(stat, 0))
 	var core := (2 * base + 2 * bq + logs / 2) * level / 100
-	if stat == "uptime":
-		return core + level + 12
+	if stat == "uptime":  # flat bonus from balance.json: big share of early Uptime, small share late
+		return core + level + int(DataRegistry.balance.get("uptime_bonus", 12))
 	return (core + 6) * profile_percent(stat) / 100
 
 

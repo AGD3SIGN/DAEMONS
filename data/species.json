@@ -319,8 +319,8 @@
     "base_stats": { "uptime": 45, "throughput": 40, "hardening": 40, "compute": 95, "encryption": 60, "bandwidth": 90 },
     "growth_rate": "medium_fast", "catch_rate": 75, "base_exp": 110, "log_yield": { "compute": 2 },
     "learnset": [
-      { "level": 1, "move": "bump" }, { "level": 1, "move": "screen_glare" }, { "level": 8, "move": "render" },
-      { "level": 12, "move": "double_click" }, { "level": 16, "move": "overclock" }, { "level": 24, "move": "thermal_runaway" }
+      { "level": 1, "move": "bump" }, { "level": 1, "move": "screen_glare" }, { "level": 9, "move": "double_click" },
+      { "level": 12, "move": "render" }, { "level": 16, "move": "overclock" }, { "level": 24, "move": "thermal_runaway" }
     ],
     "evolutions": [],
     "cmdb": { "category": "Tarsier / Graphics Card", "entry": "Its huge eyes render everything they see, one pixel at a time. The fans on its back spin up when it gets excited." } },
