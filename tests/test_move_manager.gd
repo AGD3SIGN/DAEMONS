@@ -66,10 +66,10 @@ func test_swap_moves_keeps_cycles_with_their_move() -> void:
 
 
 func test_replaced_moves_can_be_reinstalled() -> void:
-	var d := _make("chipmunk", 15)  # knows the last 4 of: bump, screen_glare, heatsink_slam, chassis_guard, double_click
+	var d := _make("chipmunk", 15)  # knows the last 4 of: bump, heatsink_slam, screen_glare, chassis_guard, double_click
 	assert_eq(d.relearnable_moves(), PackedStringArray(["bump"]))
 	d.learn_move("bump", 0)
-	assert_eq(d.relearnable_moves(), PackedStringArray(["screen_glare"]), "the replaced move is still available")
+	assert_eq(d.relearnable_moves(), PackedStringArray(["heatsink_slam"]), "the replaced move is still available")
 
 
 # --- prompts start on NO -----------------------------------------------------

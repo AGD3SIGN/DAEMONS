@@ -114,10 +114,10 @@ func test_create_fills_everything_in_range() -> void:
 	assert_true(DataRegistry.config_profiles.has(d.config_profile))
 	for stat in DaemonInstance.STATS:
 		assert_between(int(d.build_quality[stat]), 0, 15, stat)
-	# Learned by 15: bump, screen_glare, heatsink_slam, chassis_guard, double_click -> keeps the last 4.
+	# Learned by 15: bump, heatsink_slam, screen_glare, chassis_guard, double_click -> keeps the last 4.
 	var ids := d.moves.map(func(m: Dictionary) -> String: return m["id"])
-	assert_eq(ids, ["screen_glare", "heatsink_slam", "chassis_guard", "double_click"])
-	assert_eq(d.moves[1]["pp"], 25)
+	assert_eq(ids, ["heatsink_slam", "screen_glare", "chassis_guard", "double_click"])
+	assert_eq(d.moves[1]["pp"], 20, "screen_glare, full Cycles")
 
 
 # --- levelling & moves -------------------------------------------------------
@@ -222,7 +222,11 @@ func test_config_profiles_data() -> void:
 	assert_eq(DataRegistry.config_profiles["power_saver"]["down"], "bandwidth")
 
 
-func test_starters_know_a_move_of_their_own_type_from_the_start() -> void:
+func test_starters_begin_with_bump_and_a_move_of_their_own_type() -> void:
 	for pair: Array in [["chipmunk", "heatsink_slam"], ["pingo", "ping"], ["glowbit", "code_injection"]]:
 		var d := _make(pair[0], 5)
-		assert_true(d.knows_move(pair[1]), "%s starts with %s (player feedback: early fights were too hard)" % pair)
+		var ids := d.moves.map(func(m: Dictionary) -> String: return m["id"])
+		assert_eq(ids, ["bump", pair[1]], "%s: Bump + its typed move (player feedback: early fights were too hard)" % pair[0])
+		if pair[0] != "glowbit":  # Glowbit has Infinite Loop instead (keeps Code Injection at higher levels)
+			var events := d.level_up()
+			assert_eq(events[-1], {"type": "move_learned", "move": "screen_glare"}, "Screen Glare comes at Lv6")

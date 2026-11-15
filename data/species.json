@@ -13,7 +13,7 @@
     "base_stats": { "uptime": 44, "throughput": 58, "hardening": 48, "compute": 60, "encryption": 48, "bandwidth": 52 },
     "growth_rate": "medium_slow", "catch_rate": 45, "base_exp": 62, "log_yield": { "compute": 1 },
     "learnset": [
-      { "level": 1, "move": "bump" }, { "level": 1, "move": "screen_glare" }, { "level": 5, "move": "heatsink_slam" },
+      { "level": 1, "move": "bump" }, { "level": 5, "move": "heatsink_slam" }, { "level": 6, "move": "screen_glare" },
       { "level": 10, "move": "chassis_guard" }, { "level": 13, "move": "double_click" }
     ],
     "evolutions": [ { "to": "munkboard", "trigger": "level", "level": 16 } ],
@@ -42,7 +42,7 @@
     "base_stats": { "uptime": 48, "throughput": 50, "hardening": 58, "compute": 52, "encryption": 56, "bandwidth": 46 },
     "growth_rate": "medium_slow", "catch_rate": 45, "base_exp": 63, "log_yield": { "hardening": 1 },
     "learnset": [
-      { "level": 1, "move": "bump" }, { "level": 1, "move": "screen_glare" }, { "level": 5, "move": "ping" },
+      { "level": 1, "move": "bump" }, { "level": 5, "move": "ping" }, { "level": 6, "move": "screen_glare" },
       { "level": 10, "move": "fast_ethernet" }, { "level": 13, "move": "bandwidth_hog" }
     ],
     "evolutions": [ { "to": "pengwan", "trigger": "level", "level": 16 } ],
@@ -71,7 +71,7 @@
     "base_stats": { "uptime": 45, "throughput": 48, "hardening": 46, "compute": 62, "encryption": 55, "bandwidth": 54 },
     "growth_rate": "medium_slow", "catch_rate": 45, "base_exp": 64, "log_yield": { "compute": 1 },
     "learnset": [
-      { "level": 1, "move": "bump" }, { "level": 1, "move": "screen_glare" }, { "level": 5, "move": "code_injection" },
+      { "level": 1, "move": "bump" }, { "level": 5, "move": "code_injection" },
       { "level": 10, "move": "infinite_loop" }, { "level": 12, "move": "data_dump" }, { "level": 13, "move": "patch_up" }
     ],
     "evolutions": [ { "to": "scriptfly", "trigger": "level", "level": 16 } ],
