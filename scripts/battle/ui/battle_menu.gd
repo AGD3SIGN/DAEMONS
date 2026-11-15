@@ -77,6 +77,7 @@ func choose_move(d: DaemonInstance, needs_pp: bool = false) -> int:
 		else:
 			button.label_text = "-"
 			button.set_enabled(false)
+	TermButton.share_size(_move_buttons)
 	_move_panel.visible = true
 	_move_back.visible = true
 	var first := 0
@@ -226,6 +227,7 @@ func _build_command_panel() -> void:
 		_command_panel.add_child(button)
 		_command_buttons.append(button)
 	_link_grid(_command_buttons)
+	TermButton.share_size(_command_buttons)
 
 
 func _build_move_panel() -> void:
@@ -233,7 +235,7 @@ func _build_move_panel() -> void:
 	var cells := _grid(_move_panel, 4)
 	for i in 4:
 		var button := TermButton.new("-", "[%d]" % (i + 1))
-		button.font_size = 18
+		button.font_size = 16
 		button.position = cells[i].position
 		button.size = cells[i].size
 		button.pressed.connect(func() -> void: _pick(i))
@@ -243,7 +245,7 @@ func _build_move_panel() -> void:
 	_link_grid(_move_buttons)
 	_move_back = TermButton.new("BACK")
 	_move_back.hint_action = "ui_cancel"
-	_move_back.font_size = 18
+	_move_back.font_size = 16
 	_move_back.position = layout.back_rect.position
 	_move_back.size = layout.back_rect.size
 	_move_back.custom_minimum_size = Vector2(0, layout.back_rect.size.y)

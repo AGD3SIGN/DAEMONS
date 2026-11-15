@@ -49,8 +49,10 @@ borders, solid 6 px black drop shadows, no rounded corners, no soft gradients.
 | zone tag text | SERVER FLOOR | COOLANT LOOP | OVERHEAT |
 
 ### Fonts (bundled, OFL)
-- **Pixelify Sans** 500/700: Forgelings names, levels, command labels.
-- **VT323**: terminal text, the > prompt, HP numbers, percentages.
+- **Press Start 2P** (2026-11-15, replaced Pixelify Sans on the battle cards and buttons for readability: Pixelify's
+  2/8 and C/O looked alike at card size): Forgeling names, levels, HP numbers, percentages, command and move labels.
+  Long names shrink to fit; each button panel shares one size, and long move names wrap to two lines.
+- **VT323**: terminal text, the > prompt.
 - **Silkscreen**: small-caps labels (tags, the UP label, title bar, zone tag, key hints).
 
 ## Screen layout (back to front; x, y, w×h)
@@ -89,12 +91,12 @@ bottom edge of the wild pad slightly, on purpose.
 - **Socket pads:** ellipse, 3 px border in the side color, 10–12% fill, ~30 px outer glow at 35–45%, and a 2 px
   dashed inner ring (inset 10×26 on the wild pad, 14×38 on the player pad).
 - **Wild status card:** panel fill, 3 px wild border, 6 px shadow; padding 12/16/14, 6 px row gaps.
-  Row 1: WILD tag (filled) + UNVERIFIED tag (outline), Lv right-aligned (Pixelify 22 bold).
-  Row 2: name (Pixelify 36 bold, white). Row 3: "UP" (Silkscreen 14), the UP bar, percentage (VT323 22, 46 wide).
+  Row 1: WILD tag (filled) + UNVERIFIED tag (outline), Lv right-aligned (Press Start 18).
+  Row 2: name (Press Start 26, white, shrinks to 16 to fit). Row 3: "UP" (Silkscreen 14), the UP bar, percentage (Press Start 14, 56 wide).
   UP bar: 20 segments, 2 px gaps, in a console track with a 2 px barEdge border and 3 px padding; 12 px segments;
   filled = round(UP% / 5).
 - **Player status card (menu only):** same build, host border, padding 10/16/12. Row 1: HOST tag, name
-  (Pixelify 26 bold), level (Pixelify 20). Row 2: UP, 20-segment bar (10 px segments), HP/MAX (VT323 20).
+  (Press Start 18, shrinks to fit), level (Press Start 16). Row 2: UP, 20-segment bar (10 px segments), HP/MAX (Press Start 14).
 - **Zone tag:** panel fill, 2 px trim border, padding 6×12, Silkscreen 12 #cfe3ff "ZONE // <NAME>", then a signal
   meter of four 4 px bars (5/8/11/14 px tall, 2 px gaps; three trim, the fourth barEdge).
 - **Console:** console body, 3 px host border, 6 px shadow. Title bar 26 px (consoleHeader, 2 px #1c2a44 rule),
@@ -103,7 +105,7 @@ bottom edge of the wild pad slightly, on purpose.
   (22×14, host) 22 px from the right and 16 px from the bottom. Menu: "> What will you run?" at 42 px, then
   "man <command> — <description>" at 26 px in textMuted with "man <command>" in host.
 - **Command panel:** panel fill, 3 px host border, 6 px shadow, 12 px padding, 2×2 grid with 10 px gaps. Buttons
-  ≥ 52 px tall: a 14 px caret slot, the label (Pixelify 22 bold), a key hint [1]–[4] (Silkscreen 11).
+  ≥ 52 px tall: a 14 px caret slot, the label (Press Start 18 commands / 16 moves, one shared size per panel), a key hint [1]–[4] (Silkscreen 11).
   Unselected: #08111f fill, 2 px barEdge border, #e8f1ff text (DISCONNECT in #ff9a6b). Selected: host fill and
   border, #031318 text, a > caret, #0b3a44 key hint.
 

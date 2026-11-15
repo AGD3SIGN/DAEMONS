@@ -48,9 +48,10 @@ const DEFAULT_ZONE := "server_floor"
 static var _pixelify: Dictionary = {}  # weight -> FontVariation
 static var _silkscreen: Font
 static var _vt323: Font
+static var _press_start: Font
 
 
-## Pixelify Sans (Daemon names, levels, command labels). weight 500 or 700.
+## Pixelify Sans (headings outside the battle cards). weight 500 or 700.
 static func pixelify(weight: int = 700) -> Font:
 	if not _pixelify.has(weight):
 		var v := FontVariation.new()
@@ -65,6 +66,24 @@ static func silkscreen() -> Font:
 	if _silkscreen == null:
 		_silkscreen = load("res://assets/fonts/Silkscreen-Regular.ttf")
 	return _silkscreen
+
+
+## Press Start 2P: Forgeling names, levels, UP numbers and command buttons (2026-11-15, Brandon: "make the font
+## more readable"). Every glyph is a distinct 8x8 block, so "Lv12" can't pass for "Lv18" and C can't pass for O
+## (both happened with Pixelify Sans Bold at card size). It's wide (1 em per character), so callers fit long text
+## with fit_size().
+static func press_start() -> Font:
+	if _press_start == null:
+		_press_start = load("res://assets/fonts/PressStart2P-Regular.ttf")
+	return _press_start
+
+
+## The biggest size from `wanted` down to `smallest` (even steps) that fits `text` in `width`; `smallest` if none.
+static func fit_size(font: Font, text: String, width: float, wanted: int, smallest: int) -> int:
+	var s := wanted
+	while s > smallest and font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, s).x > width:
+		s -= 2
+	return s
 
 
 ## VT323 (terminal text, the > prompt, HP numbers, percentages).

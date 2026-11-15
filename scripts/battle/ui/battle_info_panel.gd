@@ -121,16 +121,17 @@ func _draw_wild() -> void:
 	else:
 		x += BattleStyle.draw_tag(self, Vector2(x, y + 2), "HOSTILE", BattleStyle.WILD, true, BattleStyle.ON_WILD) + 6
 	_status_tag(x, y + 2)
-	var bold := BattleStyle.pixelify(700)
-	draw_string(bold, Vector2(pad_x, y + bold.get_ascent(22)), "Lv%d" % level, HORIZONTAL_ALIGNMENT_RIGHT,
-		size.x - pad_x * 2, 22, BattleStyle.TEXT_PRIMARY)
+	var num := BattleStyle.press_start()
+	draw_string(num, Vector2(pad_x, y + 3 + num.get_ascent(18)), "Lv%d" % level, HORIZONTAL_ALIGNMENT_RIGHT,
+		size.x - pad_x * 2, 18, BattleStyle.TEXT_PRIMARY)
 	# Row 2: the name.
 	y += 24 + 6
-	draw_string(bold, Vector2(pad_x, y + bold.get_ascent(36)), display_name, HORIZONTAL_ALIGNMENT_LEFT,
-		size.x - pad_x * 2, 36, Color.WHITE)
+	var name_size := BattleStyle.fit_size(num, display_name, size.x - pad_x * 2, 26, 16)
+	draw_string(num, Vector2(pad_x, y + (38 + num.get_ascent(name_size)) / 2.0 - 2), display_name,
+		HORIZONTAL_ALIGNMENT_LEFT, size.x - pad_x * 2, name_size, Color.WHITE)
 	# Row 3: UP label, bar, percentage.
 	y += 38 + 6
-	_draw_up_row(Vector2(pad_x, y), size.x - pad_x * 2, 22, 12, "%d%%" % roundi(fraction() * 100.0), 46, 22)
+	_draw_up_row(Vector2(pad_x, y), size.x - pad_x * 2, 22, 12, "%d%%" % roundi(fraction() * 100.0), 56, 14)
 
 
 func _draw_player() -> void:
@@ -138,27 +139,29 @@ func _draw_player() -> void:
 	var y := 10.0
 	var x := pad_x
 	x += BattleStyle.draw_tag(self, Vector2(x, y + 4), "HOST", BattleStyle.HOST, true, BattleStyle.ON_HOST) + 8
-	var bold := BattleStyle.pixelify(700)
 	var lv := "Lv%d" % level
-	var lv_w := bold.get_string_size(lv, HORIZONTAL_ALIGNMENT_LEFT, -1, 20).x
+	var num := BattleStyle.press_start()
+	var lv_w := num.get_string_size(lv, HORIZONTAL_ALIGNMENT_LEFT, -1, 16).x
 	var tag_w := 0.0
 	if STATUS_TAGS.has(status):
 		tag_w = BattleStyle.silkscreen().get_string_size(STATUS_TAGS[status][0], HORIZONTAL_ALIGNMENT_LEFT, -1, 12).x + 18
 		_status_tag(size.x - pad_x - lv_w - tag_w, y + 4)
-	draw_string(bold, Vector2(x, y + bold.get_ascent(26)), display_name, HORIZONTAL_ALIGNMENT_LEFT,
-		size.x - pad_x - x - lv_w - tag_w - 8, 26, Color.WHITE)
-	draw_string(bold, Vector2(pad_x, y + 2 + bold.get_ascent(20)), lv, HORIZONTAL_ALIGNMENT_RIGHT,
-		size.x - pad_x * 2, 20, BattleStyle.TEXT_PRIMARY)
+	var name_w := size.x - pad_x - x - lv_w - tag_w - 8
+	var name_size := BattleStyle.fit_size(num, display_name, name_w, 18, 12)
+	draw_string(num, Vector2(x, y + (28 + num.get_ascent(name_size)) / 2.0), display_name, HORIZONTAL_ALIGNMENT_LEFT,
+		name_w, name_size, Color.WHITE)
+	draw_string(num, Vector2(pad_x, y + 6 + num.get_ascent(16)), lv, HORIZONTAL_ALIGNMENT_RIGHT,
+		size.x - pad_x * 2, 16, BattleStyle.TEXT_PRIMARY)
 	y += 28 + 6
 	var numbers := "%d/%d" % [roundi(shown_uptime), max_uptime]
-	_draw_up_row(Vector2(pad_x, y), size.x - pad_x * 2, 20, 10, numbers, 84, 20)
+	_draw_up_row(Vector2(pad_x, y), size.x - pad_x * 2, 20, 10, numbers, 98, 14)
 	# Our addition (not in the spec): a thin EXP strip so level progress stays visible.
 	var strip := Rect2(pad_x, size.y - 12 - 4, size.x - pad_x * 2, 4)
 	draw_rect(strip, BattleStyle.SEG_EMPTY)
 	draw_rect(Rect2(strip.position, Vector2(roundf(strip.size.x * exp_ratio), strip.size.y)), BattleStyle.EXP)
 
 
-## "UP" label, the segmented bar, then right-aligned VT323 text (percentage or HP/MAX).
+## "UP" label, the segmented bar, then right-aligned numbers (percentage or HP/MAX) in the numbers font.
 func _draw_up_row(at: Vector2, width: float, bar_h: float, seg_h: int, right_text: String, right_w: float,
 		right_size: int) -> void:
 	var label_font := BattleStyle.silkscreen()
@@ -167,6 +170,6 @@ func _draw_up_row(at: Vector2, width: float, bar_h: float, seg_h: int, right_tex
 		HORIZONTAL_ALIGNMENT_LEFT, -1, 14, BattleStyle.LABEL)
 	var bar := Rect2(at.x + label_w + 8, at.y, width - label_w - 8 - right_w - 8, bar_h)
 	BattleStyle.draw_up_bar(self, bar, fraction(), seg_h)
-	var vt := BattleStyle.vt323()
-	draw_string(vt, Vector2(at.x + width - right_w, at.y + (bar_h + vt.get_ascent(right_size)) / 2.0 - 2), right_text,
+	var vt := BattleStyle.press_start()
+	draw_string(vt, Vector2(at.x + width - right_w, at.y + (bar_h + vt.get_ascent(right_size)) / 2.0), right_text,
 		HORIZONTAL_ALIGNMENT_RIGHT, right_w, right_size, BattleStyle.TEXT_PRIMARY)
