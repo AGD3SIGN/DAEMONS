@@ -86,7 +86,7 @@
     },
     {
       "speaker": "Help Desk",
-      "choice": "Want me to restore your Daemons?",
+      "choice": "Want me to restore your Hexforged?",
       "yes": [
         {
           "speaker": "Help Desk",

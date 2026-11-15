@@ -87,7 +87,7 @@ func test_import_all_finds_sheets_in_character_folders() -> void:
 	var ids := found.map(func(pair: Array) -> String: return pair[1])
 	for species_id in ["chipmunk", "munkboard", "mainmunk", "pingo", "pengwan", "emperoute"]:
 		assert_has(ids, species_id)
-		assert_true(DataRegistry.species.has(species_id), species_id + " is a real Daemon")
+		assert_true(DataRegistry.species.has(species_id), species_id + " is a real Hexforged")
 		assert_true(DaemonSprites.has_sheet(species_id), species_id + " is in the game")
 
 

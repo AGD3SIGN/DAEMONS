@@ -15,7 +15,7 @@ The importer makes the 20x28 walking sheet and the 48x72 battle figure from the 
 
 ```
 STYLE RULES (follow exactly):
-- Original character for an indie game called DAEMONS, set in a small town where IT and everyday life mix.
+- Original character for an indie game called HEXFORGED, set in a small town where IT and everyday life mix.
 - Pixel art in the style of early-2000s handheld RPG overworld sprites (Game Boy Advance era): crisp
   hard-edged pixels, no anti-aliasing, no blur, no gradients, no glow.
 - Chibi human, head about 40% of the body height, big readable face, clear silhouette.

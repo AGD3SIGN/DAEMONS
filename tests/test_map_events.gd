@@ -149,7 +149,7 @@ func test_town_exit_is_blocked_until_you_have_a_starter() -> void:
 	_place(Vector2i(14, 5), Vector2i.UP)
 	await world.player.try_step(Vector2i.UP)
 	await _wait_idle()
-	assert_true(_logged("Cable tangles without a Daemon?"))
+	assert_true(_logged("Cable tangles without a Hexforged?"))
 	assert_eq(world.player.cell, Vector2i(14, 5), "walked back down")
 	GameState.flags["got_starter"] = true
 	var lines := world.dialogue_log.size()

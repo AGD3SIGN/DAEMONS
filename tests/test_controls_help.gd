@@ -93,7 +93,7 @@ func test_battle_names_who_you_face() -> void:
 	var wild := {"foe": [["dustbunny", 3]], "player_stack": team, "items": {}, "auto": true, "time_scale": 0.0}
 	scene = load(BattleScene.SCENE).instantiate()
 	scene.setup(wild)
-	assert_eq(scene.host_label(), "UNKNOWN HOST", "a Daemon you've never seen")
+	assert_eq(scene.host_label(), "UNKNOWN HOST", "a Hexforged you've never seen")
 	GameState.cmdb_seen["dustbunny"] = true
 	assert_eq(scene.host_label(), "DUSTBUNNY", "named once it's in your CMDB")
 	scene.free()

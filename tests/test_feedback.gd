@@ -81,7 +81,7 @@ func test_send_success_returns_the_confirm_page() -> void:
 	client.transport = func(url: String, body: String) -> Dictionary:
 		sent.append([url, JSON.parse_string(body)])
 		return {"code": 200, "body": JSON.stringify({"id": "x", "confirm_url": "https://feedback.example.workers.dev/confirm/abc"})}
-	var result := await client.send(FeedbackClient.payload("idea", "Let me rename Daemons in the rack."))
+	var result := await client.send(FeedbackClient.payload("idea", "Let me rename Hexforged in the rack."))
 	assert_true(result["ok"])
 	assert_eq(result["confirm_url"], "https://feedback.example.workers.dev/confirm/abc")
 	assert_eq(sent[0][0], "https://feedback.example.workers.dev/drafts")

@@ -161,7 +161,7 @@ func _build() -> void:
 
 func _make_logo(c: Color) -> TitleLogo:
 	var l := TitleLogo.new()
-	l.text = "DAEMONS"
+	l.text = "HEXFORGED"
 	l.font = _logo_font
 	l.font_size = S.LOGO_SIZE
 	l.line_height = S.LOGO_LINE

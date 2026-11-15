@@ -132,7 +132,7 @@ func rack_total() -> int:
 ## Stack -> rack. Refuses to leave you without a Daemon that can fight. Returns "" or a reason.
 func deposit(stack_index: int, rack_index: int) -> String:
 	if stack_index < 0 or stack_index >= active_stack.size():
-		return "There's no Daemon there."
+		return "There's no Hexforged there."
 	if racks[rack_index].size() >= RACK_SLOTS:
 		return "That rack is full."
 	var d: DaemonInstance = active_stack[stack_index]
@@ -141,7 +141,7 @@ func deposit(stack_index: int, rack_index: int) -> String:
 		if i != stack_index and not active_stack[i].is_fainted():
 			others_can_fight = true
 	if not others_can_fight:
-		return "You need at least one Daemon that can fight."
+		return "You need at least one Hexforged that can fight."
 	active_stack.remove_at(stack_index)
 	racks[rack_index].append(d)
 	return ""
@@ -152,7 +152,7 @@ func withdraw(rack_index: int, slot: int) -> String:
 	if active_stack.size() >= MAX_STACK:
 		return "Your Active Stack is full."
 	if slot < 0 or slot >= racks[rack_index].size():
-		return "There's no Daemon there."
+		return "There's no Hexforged there."
 	active_stack.append(racks[rack_index][slot])
 	racks[rack_index].remove_at(slot)
 	return ""
@@ -165,7 +165,7 @@ func move_between_racks(from_rack: int, slot: int, to_rack: int) -> String:
 	if racks[to_rack].size() >= RACK_SLOTS:
 		return "That rack is full."
 	if slot < 0 or slot >= racks[from_rack].size():
-		return "There's no Daemon there."
+		return "There's no Hexforged there."
 	racks[to_rack].append(racks[from_rack][slot])
 	racks[from_rack].remove_at(slot)
 	return ""

@@ -94,7 +94,7 @@ static func describe(e: Dictionary, is_wild: bool, foe_trainer: String = "") -> 
 		"move_learn_pending":
 			return "%s wants to install %s, but all 4 slots are full." % [e["daemon"], _move_name(e["move"])]
 		"switch_needed":
-			return "Choose a Daemon to deploy." if e["side"] == BattleState.PLAYER else ""
+			return "Choose a Hexforged to deploy." if e["side"] == BattleState.PLAYER else ""
 		"fled":
 			return "You disconnected safely!"
 		"run_failed":
@@ -111,7 +111,7 @@ static func describe(e: Dictionary, is_wild: bool, foe_trainer: String = "") -> 
 				"player_won":
 					return "" if is_wild else "You closed %s's ticket!" % (foe_trainer if foe_trainer else "the foe")
 				"player_lost":
-					return "All your Daemons crashed... System failure!"
+					return "All your Hexforged crashed... System failure!"
 			return ""
 		"upgrade_ready":
 			return "Your %s is upgrading!" % e["daemon"]

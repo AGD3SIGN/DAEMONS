@@ -50,7 +50,7 @@ func _ready() -> void:
 		["Watch: AI plays you vs Kevin", _kevin_auto],
 		["Heal team + restock bag", _heal],
 		["Touch controls (try with mouse)", _toggle_touch],
-		["Daemon Lab", func() -> void: SceneRouter.goto(LAB_SCENE)],
+		["Hexforged Lab", func() -> void: SceneRouter.goto(LAB_SCENE)],
 		["Title screen", func() -> void: SceneRouter.goto(TITLE_SCENE)],
 	]:
 		var button := CursorButton.new(entry[0])

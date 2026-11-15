@@ -125,7 +125,7 @@ func test_boot_log_types_one_line_after_the_other() -> void:
 	assert_eq(T.typed("> 22 entities indexed", 1, 1.0), "", "line 2 waits for line 1")
 	assert_eq(T.typed("> 22 entities indexed", 1, 3.2), "> 22 entities indexed")
 	var title := _title()
-	assert_eq(title._boot_lines[1], "> %d entities indexed" % DataRegistry.species.size(), "the real roster count")
+	assert_eq(title._boot_lines[1], "> 179 entities indexed", "the full roster (Nos. 000-178), HEXFORGED boot text")
 
 
 func test_reduced_motion_stops_the_big_animations() -> void:

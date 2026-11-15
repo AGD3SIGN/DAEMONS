@@ -10,7 +10,7 @@
         "amount": 20
       }
     },
-    "description": "Restores 20 Uptime to one Daemon. Office brew, still somehow warm."
+    "description": "Restores 20 Uptime. Office brew, still somehow warm."
   },
   {
     "id": "energy_drink",
@@ -23,7 +23,7 @@
         "amount": 60
       }
     },
-    "description": "Restores 60 Uptime to one Daemon. Not recommended after 4 PM."
+    "description": "Restores 60 Uptime. Not recommended after 4 PM."
   },
   {
     "id": "pizza_friday",
@@ -34,7 +34,7 @@
       "id": "full_restore",
       "params": {}
     },
-    "description": "Fully restores one Daemon's Uptime and cures its status. Morale +100."
+    "description": "Fully restores Uptime and cures any status. Morale +100."
   },
   {
     "id": "hard_reboot",
@@ -47,7 +47,7 @@
         "fraction": 0.5
       }
     },
-    "description": "Revives a crashed Daemon with half its Uptime. Off, then on."
+    "description": "Revives a crashed Hexforged with half its Uptime. Off, then on."
   },
   {
     "id": "firewall_rule",
@@ -60,7 +60,7 @@
         "steps": 100
       }
     },
-    "description": "For 100 steps, wild Daemons weaker than your lead stay away."
+    "description": "For 100 steps, wild Hexforged weaker than your lead stay away."
   },
   {
     "id": "ctrl_z",
@@ -84,7 +84,7 @@
         "bonus": 1.0
       }
     },
-    "description": "Quarantine Key: use in battle to catch a wild Daemon. Basic odds."
+    "description": "Quarantine Key: use in battle to catch a wild Hexforged. Basic odds."
   },
   {
     "id": "encrypted_key",
@@ -97,7 +97,7 @@
         "bonus": 1.5
       }
     },
-    "description": "Quarantine Key with better odds (x1.5) of catching a wild Daemon."
+    "description": "Quarantine Key with better odds (x1.5) of catching a wild Hexforged."
   },
   {
     "id": "hardware_token",
@@ -110,7 +110,7 @@
         "bonus": 2.0
       }
     },
-    "description": "Quarantine Key with high odds (x2) of catching a wild Daemon."
+    "description": "Quarantine Key with high odds (x2) of catching a wild Hexforged."
   },
   {
     "id": "root_key",
@@ -123,7 +123,7 @@
         "bonus": 255.0
       }
     },
-    "description": "Full admin access. Quarantines any Daemon, guaranteed."
+    "description": "Full admin access. Quarantines any Hexforged, guaranteed."
   },
   {
     "id": "overclock_chip",
@@ -134,7 +134,7 @@
       "id": "level_up",
       "params": {}
     },
-    "description": "Raises one Daemon's level by 1. It may learn a move or upgrade."
+    "description": "Raises one Hexforged's level by 1. It may learn a move or upgrade."
   },
   {
     "id": "legacy_driver",
@@ -145,6 +145,6 @@
       "id": "evolve",
       "params": {}
     },
-    "description": "Upgrades certain Legacy Daemons. A driver for long-gone hardware."
+    "description": "Upgrades certain Legacy Hexforged. A driver for long-gone hardware."
   }
 ]

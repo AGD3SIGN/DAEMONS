@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="Daemons"
+config/name="HEXFORGED"
 config/description="GBA-style IT-themed monster tamer."
 config/version="0.1.0"
 run/main_scene="res://scenes/ui/title_screen.tscn"

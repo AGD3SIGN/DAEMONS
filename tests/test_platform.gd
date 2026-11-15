@@ -377,7 +377,7 @@ func test_battle_menu_works_with_a_gamepad() -> void:
 			Input.parse_input_event(e)
 			await get_tree().process_frame
 	drive.call_deferred()
-	assert_eq(await menu.choose_command(), "stack", "D-pad right then A picks DAEMONS")
+	assert_eq(await menu.choose_command(), "stack", "D-pad right then A picks HEXFORGED")
 	await wait_process_frames(1)
 
 

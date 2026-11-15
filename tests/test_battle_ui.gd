@@ -127,7 +127,7 @@ func test_trainers_show_then_step_out_before_daemons() -> void:
 	await wait_until(func() -> bool: return scene.foe_trainer.visible and scene.player_trainer.visible, 5.0)
 	assert_true(scene.player_trainer.visible, "you, from behind")
 	assert_true(scene.foe_trainer.visible, "and Kevin, both on screen at the start")
-	assert_false(scene.player_sprite.visible or scene.foe_sprite.visible, "before any Daemon is out")
+	assert_false(scene.player_sprite.visible or scene.foe_sprite.visible, "before any Hexforged is out")
 	assert_not_null(scene.foe_trainer.texture)
 	await wait_until(func() -> bool: return scene.foe_sprite.visible and scene.player_sprite.visible, 10.0)
 	assert_false(scene.player_trainer.visible, "trainers stepped out of frame")
@@ -186,7 +186,7 @@ func test_menus_follow_the_battle_spec_layout() -> void:
 	for panel: Panel in [menu._command_panel, menu._move_panel, menu._list_panel, menu._confirm_panel]:
 		assert_true(frame.encloses(panel.get_rect()), "%s is inside the frame: %s" % [panel, panel.get_rect()])
 	var labels := menu._command_buttons.map(func(b: TermButton) -> String: return b.label_text)
-	assert_eq(labels, ["EXECUTE", "DAEMONS", "INVENTORY", "DISCONNECT"])
+	assert_eq(labels, ["EXECUTE", "STACK", "INVENTORY", "DISCONNECT"])
 	for b: TermButton in menu._command_buttons:
 		assert_gte(b.size.y, 52.0, "buttons are at least 52 px tall")
 	assert_true(menu._command_buttons[3].danger, "DISCONNECT stands out")
@@ -354,4 +354,4 @@ func test_lasting_statuses_show_an_effect_on_both_sides() -> void:
 				and scene.player_sprite.get_meta("aura").status == "overheated":
 			seen[0] = true
 		return seen[0], 15.0)
-	assert_true(seen[0], "your own Daemon, seen from behind, shows it too")
+	assert_true(seen[0], "your own Hexforged, seen from behind, shows it too")

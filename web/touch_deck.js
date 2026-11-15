@@ -1,4 +1,4 @@
-// DAEMONS web: phone control deck.
+// HEXFORGED web: phone control deck.
 // On a touch device held upright, the game takes the top of the page and a compact handheld-style deck
 // (d-pad, A, B, MENU, RUN) sits along the bottom, so the controls never cover the game. 2026-11-15: the deck
 // used to take everything below a 4:3 game; it's now ~38% of the height, so the game view is much bigger.

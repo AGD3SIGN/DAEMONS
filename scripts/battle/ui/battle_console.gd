@@ -90,8 +90,8 @@ func _draw() -> void:
 	draw_rect(Rect2(bar.position.x, bar.end.y - 2, bar.size.x, 2), BattleStyle.TITLE_RULE)
 	var sk := BattleStyle.silkscreen()
 	var base := bar.position.y + (TITLE_H + sk.get_ascent(11)) / 2.0 - 1
-	draw_string(sk, Vector2(bar.position.x + 10, base), "daemon@field", HORIZONTAL_ALIGNMENT_LEFT, -1, 11, BattleStyle.HOST)
-	var user_w := sk.get_string_size("daemon@field", HORIZONTAL_ALIGNMENT_LEFT, -1, 11).x
+	draw_string(sk, Vector2(bar.position.x + 10, base), "hexforge@field", HORIZONTAL_ALIGNMENT_LEFT, -1, 11, BattleStyle.HOST)
+	var user_w := sk.get_string_size("hexforge@field", HORIZONTAL_ALIGNMENT_LEFT, -1, 11).x
 	draw_string(sk, Vector2(bar.position.x + 10 + user_w + 8, base), "~/encounter.log", HORIZONTAL_ALIGNMENT_LEFT, -1, 11,
 		BattleStyle.TEXT_MUTED)
 	draw_string(sk, Vector2(bar.position.x, base), "TTY1", HORIZONTAL_ALIGNMENT_RIGHT, bar.size.x - 10, 11,

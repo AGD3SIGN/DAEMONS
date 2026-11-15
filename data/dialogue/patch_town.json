@@ -4,7 +4,7 @@
       "text": "WI-FI DEAD ZONE"
     },
     {
-      "text": "No signal beyond this point. Daemons get restless without it."
+      "text": "No signal beyond this point. Hexforged get restless without it."
     }
   ],
   "patch_town_sign": [
@@ -95,7 +95,7 @@
   "patch_patron": [
     {
       "speaker": "Patron",
-      "text": "Dana's Department uses lots of Hardware Daemons. Network moves hit them hard."
+      "text": "Dana's Department uses lots of Hardware Hexforged. Network moves hit them hard."
     }
   ],
   "supply_closet_patch": [
@@ -126,7 +126,7 @@
       "speaker": "Receptionist"
     },
     {
-      "text": "Pick the wrong fix and... well. People get attached to their Daemons. And their files.",
+      "text": "Pick the wrong fix and... well. People get attached to their Hexforged. And their files.",
       "speaker": "Receptionist"
     }
   ],

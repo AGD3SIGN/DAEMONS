@@ -5,7 +5,7 @@ Paste one stage per image. Generate and approve each stage before the next.
 ## Cablesnake (Stage 1 of 2)
 
 ````
-Create ONE image: a pixel-art battle sprite sheet for ONE creature from my original indie game DAEMONS
+Create ONE image: a pixel-art battle sprite sheet for ONE creature from my original indie game HEXFORGED
 (a monster-collecting RPG where technology comes alive: every creature is a real animal fused with
 real IT hardware).
 
@@ -84,7 +84,7 @@ Row 4 - SPECIAL (front view):
 Attach the approved Cablesnake sheet(s) first.
 
 ````
-Create ONE image: a pixel-art battle sprite sheet for ONE creature from my original indie game DAEMONS
+Create ONE image: a pixel-art battle sprite sheet for ONE creature from my original indie game HEXFORGED
 (a monster-collecting RPG where technology comes alive: every creature is a real animal fused with
 real IT hardware).
 

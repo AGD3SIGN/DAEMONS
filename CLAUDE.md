@@ -1,9 +1,17 @@
-# DAEMONS — project rules for Claude Code
+# HEXFORGED — project rules for Claude Code
 
 ## What this is
 An early-2000s handheld-style, top-down, turn-based creature-collecting RPG with an IT theme.
-Creatures are "Daemons". Capture device is a "Quarantine Key". Healing is the "Help Desk".
+Creatures are "Hexforged". Capture device is a "Quarantine Key". Healing is the "Help Desk".
 The full design doc lives in docs/design.md — read it before adding content.
+
+## Name and lore (2026-11-15)
+- The game was called DAEMONS; players read it as "demons". It's now **HEXFORGED**, and the creatures are
+  **Hexforged** (same word for one or many). Code identifiers, class names, file names, species ids and
+  `DMN-###` CMDB ids still say Daemon/DMN until Brandon decides on a code rename; player-facing text says Hexforged.
+- Hexforged are **built, never born**: compiled by the Hexforge for a job, living inside the system they run.
+  No breeding, eggs, nests, parents or babies anywhere; a line's stages are upgrades (new versions).
+- Corruption is a broken computer, never a demon: glitched and damaged, no hellish or occult imagery.
 Progress lives in docs/phase-log.md.
 
 ## Documentation

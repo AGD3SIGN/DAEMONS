@@ -847,7 +847,7 @@ func _validate_species(s: Dictionary, where: String) -> void:
 		if not species.has(target):
 			_err(ew, "unknown target species '%s'" % str(target))
 		elif target == s.get("id"):
-			_err(ew, "a Daemon can't upgrade into itself")
+			_err(ew, "a Hexforged can't upgrade into itself")
 		if not _one_of(evo, "trigger", ew, EVOLUTION_TRIGGERS.keys()):
 			continue
 		match evo["trigger"]:

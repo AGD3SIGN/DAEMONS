@@ -1,11 +1,11 @@
-# Single-stage Daemons
+# Single-stage Hexforged
 
 Paste one stage per image. Generate and approve each stage before the next.
 
 ## Dustbunny
 
 ````
-Create ONE image: a pixel-art battle sprite sheet for ONE creature from my original indie game DAEMONS
+Create ONE image: a pixel-art battle sprite sheet for ONE creature from my original indie game HEXFORGED
 (a monster-collecting RPG where technology comes alive: every creature is a real animal fused with
 real IT hardware).
 
@@ -82,7 +82,7 @@ Row 4 - SPECIAL (front view):
 ## Fanbat
 
 ````
-Create ONE image: a pixel-art battle sprite sheet for ONE creature from my original indie game DAEMONS
+Create ONE image: a pixel-art battle sprite sheet for ONE creature from my original indie game HEXFORGED
 (a monster-collecting RPG where technology comes alive: every creature is a real animal fused with
 real IT hardware).
 
@@ -159,7 +159,7 @@ Row 4 - SPECIAL (front view):
 ## Ramster
 
 ````
-Create ONE image: a pixel-art battle sprite sheet for ONE creature from my original indie game DAEMONS
+Create ONE image: a pixel-art battle sprite sheet for ONE creature from my original indie game HEXFORGED
 (a monster-collecting RPG where technology comes alive: every creature is a real animal fused with
 real IT hardware).
 
@@ -236,7 +236,7 @@ Row 4 - SPECIAL (front view):
 ## Servurtle
 
 ````
-Create ONE image: a pixel-art battle sprite sheet for ONE creature from my original indie game DAEMONS
+Create ONE image: a pixel-art battle sprite sheet for ONE creature from my original indie game HEXFORGED
 (a monster-collecting RPG where technology comes alive: every creature is a real animal fused with
 real IT hardware).
 

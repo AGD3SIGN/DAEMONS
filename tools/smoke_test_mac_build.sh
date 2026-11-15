@@ -12,7 +12,8 @@ if [[ ! -d "$APP" ]]; then
   [[ -f build/macos/Daemons.zip ]] || { echo "No Mac build. Export it first (docs/build.md)." >&2; exit 1; }
   (cd build/macos && unzip -q -o Daemons.zip)
 fi
-OUT="$("$APP/Contents/MacOS/Daemons" --headless --quit-after 240 -- --check-data 2>&1)"
+BIN="$(ls "$APP"/Contents/MacOS/* | head -1)"  # named after the game (HEXFORGED since 2026-11-15)
+OUT="$("$BIN" --headless --quit-after 240 -- --check-data 2>&1)"
 echo "$OUT" | grep -E "DataRegistry:" || true
 ERRORS="$(echo "$OUT" | grep -E "ERROR|SCRIPT ERROR|Parse Error" || true)"
 if [[ -n "$ERRORS" ]]; then

@@ -206,7 +206,7 @@ func test_invalid_actions_are_rejected_without_playing_the_turn() -> void:
 	var state := _battle([pingo, crashed], [_daemon("dustbunny", 20)], true, {"coffee": 1, "firewall_rule": 1, "thumb_drive": 5, "hard_reboot": 1})
 	_assert_invalid(state, BattleAction.switch_to(0), "already in battle")
 	_assert_invalid(state, BattleAction.switch_to(1), "crashed")
-	_assert_invalid(state, BattleAction.switch_to(5), "no Daemon")
+	_assert_invalid(state, BattleAction.switch_to(5), "no Hexforged")
 	_assert_invalid(state, BattleAction.fight(7), "no move")
 	_assert_invalid(state, BattleAction.item("energy_drink", 0), "don't have")
 	_assert_invalid(state, BattleAction.item("coffee", 0), "won't have any effect")

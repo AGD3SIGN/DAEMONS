@@ -73,7 +73,7 @@ static func run(opts: Dictionary) -> Dictionary:
 	var state := BattleState.new(BattleSide.new("You", player_stack, PLAYER_ITEMS.duplicate()),
 		BattleSide.new(foe_name if trainer else "Wild", foe_stack), rng, not trainer)
 	var all_events: Array[Dictionary] = []
-	_say(out, echo, "=== DAEMONS console battle (seed %d, foe AI: %s) ===" % [int(opts.get("seed", 1)), foe_tier])
+	_say(out, echo, "=== HEXFORGED console battle (seed %d, foe AI: %s) ===" % [int(opts.get("seed", 1)), foe_tier])
 	_show(out, echo, state, BattleSim.start(state), foe_name, all_events)
 
 	while not state.is_over() and state.turn < MAX_TURNS:
@@ -219,7 +219,7 @@ static func _ask_item(out: Array[String], echo: bool, state: BattleState) -> Bat
 
 
 static func _ask_replacement(out: Array[String], echo: bool, state: BattleState) -> int:
-	_say(out, echo, "Choose a Daemon to deploy:")
+	_say(out, echo, "Choose a Hexforged to deploy:")
 	while true:
 		var index := _pick_from_stack(out, echo, state, false)
 		if index == -2:

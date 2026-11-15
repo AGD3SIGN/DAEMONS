@@ -1,15 +1,15 @@
 # Battle Scene Implementation Spec ("Server Floor")
 
-Brandon's spec, 2026-11-13 (source: "Daemon — Battle Scene Implementation Spec.pdf"). Implemented 2026-11-13;
+Brandon's spec, 2026-11-13 (source: "Hexforged — Battle Scene Implementation Spec.pdf"). Implemented 2026-11-13;
 see "How it's built" at the end for where each part lives and what differs.
 
 ## Overview
-Replace the grass-field battle scene with a **"Server Floor"** arena that fits Daemon's world: creatures fused
+Replace the grass-field battle scene with a **"Server Floor"** arena that fits Hexforged's world: creatures fused
 with IT hardware. Two screen states: the wild **encounter** intro and the **command menu**. Keep the existing
-tamer and Daemon sprites as they are.
+tamer and Hexforged sprites as they are.
 
 Rules:
-- Daemon is not "demon". No demonic, occult or hellfire imagery anywhere.
+- Hexforged is not "demon". No demonic, occult or hellfire imagery anywhere.
 - It reads as a data center or terminal, not a field. No grass, sky or nature ground.
 - Internal resolution 960×640 (3:2), scaled by whole numbers with nearest-neighbor filtering. Every coordinate
   below is in that space, origin top-left.
@@ -49,7 +49,7 @@ borders, solid 6 px black drop shadows, no rounded corners, no soft gradients.
 | zone tag text | SERVER FLOOR | COOLANT LOOP | OVERHEAT |
 
 ### Fonts (bundled, OFL)
-- **Pixelify Sans** 500/700: Daemon names, levels, command labels.
+- **Pixelify Sans** 500/700: Hexforged names, levels, command labels.
 - **VT323**: terminal text, the > prompt, HP numbers, percentages.
 - **Silkscreen**: small-caps labels (tags, the UP label, title bar, zone tag, key hints).
 
@@ -62,7 +62,7 @@ borders, solid 6 px black drop shadows, no rounded corners, no soft gradients.
 | 4 | horizon trim | 0,298 960×4 | yes | yes |
 | 5 | wild socket pad | 590,318 290×64 | yes | yes |
 | 6 | "UNKNOWN HOST" label | 590,388, 290 wide, centered | yes | no |
-| 7 | wild Daemon sprite | on the wild pad (spec: 627,186 217×161) | yes | yes |
+| 7 | wild Hexforged sprite | on the wild pad (spec: 627,186 217×161) | yes | yes |
 | 8 | player socket pad | 40,420 400×92 | yes | yes |
 | 9 | tamer sprite (back) | on the player pad (spec: 147,202 186×264) | yes | yes |
 | 10 | wild status card | 28,28, 430 wide (~116 tall) | yes | yes |
@@ -98,7 +98,7 @@ bottom edge of the wild pad slightly, on purpose.
 - **Zone tag:** panel fill, 2 px trim border, padding 6×12, Silkscreen 12 #cfe3ff "ZONE // <NAME>", then a signal
   meter of four 4 px bars (5/8/11/14 px tall, 2 px gaps; three trim, the fourth barEdge).
 - **Console:** console body, 3 px host border, 6 px shadow. Title bar 26 px (consoleHeader, 2 px #1c2a44 rule),
-  Silkscreen 11: "daemon@field" in host, "~/encounter.log", "TTY1" right-aligned. Body: VT323 "> " prompt in host,
+  Silkscreen 11: "hexforge@field" in host, "~/encounter.log", "TTY1" right-aligned. Body: VT323 "> " prompt in host,
   the message in textConsole, a blinking block cursor. Encounter: 46 px text, 18×36 cursor, a pixel down-arrow
   (22×14, host) 22 px from the right and 16 px from the bottom. Menu: "> What will you run?" at 42 px, then
   "man <command> — <description>" at 26 px in textMuted with "man <command>" in host.
@@ -109,8 +109,8 @@ bottom edge of the wild pad slightly, on purpose.
 
 | Key | Command | man line |
 |---|---|---|
-| 1 | EXECUTE | run one of your Daemon's moves. |
-| 2 | DAEMONS | swap in another Daemon. |
+| 1 | EXECUTE | run one of your Hexforged's moves. |
+| 2 | HEXFORGED | swap in another Hexforged. |
 | 3 | INVENTORY | open your gear and patches. |
 | 4 | DISCONNECT | drop the connection and flee. |
 
@@ -118,15 +118,15 @@ bottom edge of the wild pad slightly, on purpose.
 | Element | Motion | Timing |
 |---|---|---|
 | Rack LEDs | drop to 15% for a brief stepped flicker | 2.6 s loop; LED 1 offset (k × 0.37) mod 2.6 s, LED 2 (k × 0.61 + 0.4) mod 2.6 s |
-| Wild Daemon | bobs up 6 px and back | 2.4 s ease-in-out loop |
+| Wild Hexforged | bobs up 6 px and back | 2.4 s ease-in-out loop |
 | Pad dashed rings | opacity 55% → 100% | 2 s ease-in-out loop |
 | Console cursor | hard on/off blink | 1 s, 50% duty |
 | Continue arrow | drops 4 px and back, stepped | 1 s, 2 steps |
 | Scanlines | 1 px black line at 16% every 3 px, static | off in settings for accessibility |
 
-**Encounter flow:** the arena draws, the wild Daemon materializes on its pad, the wild card slides in; the console
+**Encounter flow:** the arena draws, the wild Hexforged materializes on its pad, the wild card slides in; the console
 types "> A wild <Name> spawned!", then the cursor and continue arrow show. Confirm moves on; the tamer stays on the
-player pad until a Daemon is sent out, then the Daemon's back sprite replaces the tamer and the player card appears.
+player pad until a Hexforged is sent out, then the Hexforged's back sprite replaces the tamer and the player card appears.
 
 **Command menu input:** arrows / D-pad / stick move around the 2×2 grid; number keys 1–4 jump to a command; mouse or
 touch selects on tap. Every selection change updates the man line. Confirm runs the command; Back does nothing on
@@ -143,14 +143,14 @@ each. Color follows the current percentage (green > 50, amber 21–50, red ≤ 2
 - [x] Sprites crisp at whole-number scales with nearest-neighbor filtering
 - [x] Wild card: WILD and UNVERIFIED tags, name, level, 20-segment UP bar with the color thresholds
 - [x] Console: title bar, > prompt, blinking cursor, continue arrow
-- [x] Command menu EXECUTE / DAEMONS / INVENTORY / DISCONNECT with arrow-key, 1–4 and pointer input
+- [x] Command menu EXECUTE / HEXFORGED / INVENTORY / DISCONNECT with arrow-key, 1–4 and pointer input
 - [x] The man line updates on every selection change
 - [x] All three zone palettes switch with no layout change
 - [x] Scanlines can be turned off (Options > CRT EFFECTS)
 - [x] The scene scales by whole numbers from 960×640 without blurring (screens of at least 960×640)
 
 ## Open items from the spec, and what we decided
-- Player Daemon name, level, HP and back sprite: real data from the battle.
+- Player Hexforged name, level, HP and back sprite: real data from the battle.
 - Pyrewall's level: comes from encounter data (the mockup hard-coded 50).
 - "UNVERIFIED" / "UNKNOWN HOST": kept as flavor text for now; confirm or replace.
 - Zone per area (Brandon, 2026-11-13): Server Floor = Onboarding Town, Route 1, Patch Town; Coolant Loop = Wi-Fi Dead
@@ -164,12 +164,12 @@ each. Color follows the current percentage (green > 50, amber 21–50, red ≤ 2
 - `scripts/battle/ui/battle_arena.gd`: wall, racks + LEDs, floor grid, trim, pads, UNKNOWN HOST, zone tag.
 - `scripts/battle/ui/battle_info_panel.gd`: the process cards. `battle_console.gd`: the terminal (extends TextBox).
   `battle_menu.gd` + `term_button.gd`: command, move, list and confirm menus.
-- Sprite sizes: our Daemon art is 64×64 frames, so the wild Daemon is ×3 (192 px) and the player's Daemon and the
+- Sprite sizes: our Hexforged art is 64×64 frames, so the wild Hexforged is ×3 (192 px) and the player's Hexforged and the
   tamer are ×4, close to the spec's ×7 / ×6 boxes for the 31×23 / 31×44 mockup sprites.
 - Differences from the spec, on purpose:
   - Trainer battles show a HOSTILE tag instead of WILD + UNVERIFIED.
   - The player card has a thin EXP strip along the bottom.
   - The move menu reuses the command panel (2×2, keys 1–4); its man line shows type, power and Cycles, and a BACK
-    button sits in the console's lower right. Lists (DAEMONS, INVENTORY) open as a large terminal window.
-  - A wild Daemon materializes with a few white flickers; a trainer's Daemon still slides in.
+    button sits in the console's lower right. Lists (HEXFORGED, INVENTORY) open as a large terminal window.
+  - A wild Hexforged materializes with a few white flickers; a trainer's Hexforged still slides in.
   - Reduced motion (Options > LESS MOTION) stops the LED flicker, pad pulse and bob.

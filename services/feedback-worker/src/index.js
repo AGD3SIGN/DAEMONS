@@ -1,4 +1,4 @@
-// DAEMONS feedback relay (Cloudflare Worker).
+// HEXFORGED (formerly DAEMONS) feedback relay (Cloudflare Worker).
 //
 // The game never talks to GitHub directly (a token inside a game build can be pulled out by anyone).
 // Instead:
@@ -34,7 +34,7 @@ export default {
       const match = url.pathname.match(/^\/confirm\/([0-9a-f-]{36})$/);
       if (match && request.method === "GET") return await confirmPage(match[1], env);
       if (match && request.method === "POST") return await confirmSubmit(match[1], request, env);
-      if (url.pathname === "/") return new Response("DAEMONS feedback relay", { headers: { "content-type": "text/plain" } });
+      if (url.pathname === "/") return new Response("HEXFORGED feedback relay", { headers: { "content-type": "text/plain" } });
       return new Response("Not found", { status: 404 });
     } catch (err) {
       console.error(err);
@@ -101,7 +101,7 @@ async function confirmPage(id, env) {
   const draft = await getDraft(env, id);
   if (!draft) return page("Link expired", "<p>This feedback link has expired. Please send it again from the game.</p>", 404);
   const body = `
-    <p>Here's what you're sending. One click to prove you're a person, and it goes straight to the DAEMONS team.</p>
+    <p>Here's what you're sending. One click to prove you're a person, and it goes straight to the HEXFORGED team.</p>
     <div class="card"><div class="tag">${escapeHtml(draft.category.toUpperCase())}</div><pre>${escapeHtml(draft.message)}</pre></div>
     <form method="POST">
       <div class="cf-turnstile" data-sitekey="${escapeHtml(env.TURNSTILE_SITE_KEY || "")}" data-theme="dark"
@@ -149,7 +149,7 @@ async function confirmSubmit(id, request, env) {
   }
   const created = await response.json();
   await env.FEEDBACK_KV.delete(`draft:${id}`);
-  return page("Thanks!", `<p>Feedback #${Number(created.number) || ""} sent. Thanks for helping make DAEMONS better.</p><p>You can close this tab and go back to the game.</p>`);
+  return page("Thanks!", `<p>Feedback #${Number(created.number) || ""} sent. Thanks for helping make HEXFORGED better.</p><p>You can close this tab and go back to the game.</p>`);
 }
 
 export async function verifyTurnstile(token, ip, env) {
@@ -219,7 +219,7 @@ export function escapeHtml(text) {
 
 function page(title, body, status = 200) {
   const html = `<!doctype html><html lang="en"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1"><title>DAEMONS · ${escapeHtml(title)}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>HEXFORGED · ${escapeHtml(title)}</title>
 <style>
   :root { color-scheme: dark; }
   body { margin: 0; background: #0a1120; color: #e8f1ff; font: 16px/1.5 system-ui, sans-serif; }

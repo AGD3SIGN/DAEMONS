@@ -1,7 +1,7 @@
 {
   "tagline": "CATCH · FUSE · COMPILE",
   "prompt": "PRESS START",
-  "boot_log": ["> mounting /dev/daemons … OK", "> {count} entities indexed"],
+  "boot_log": ["> mounting /dev/hexforge … OK", "> 179 entities indexed"],
   "featured": [
     {
       "id": "pyrewall",

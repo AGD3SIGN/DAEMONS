@@ -18,6 +18,35 @@ const SLOT_PATHS: PackedStringArray = ["user://save_a.json", "user://save_b.json
 var slot_paths: PackedStringArray = SLOT_PATHS
 
 
+## The game was called "Daemons" until 2026-11-15. Desktop builds keep user data in a folder named after the
+## game, so the first run as HEXFORGED copies saves and settings over from the old folder (once; nothing is
+## deleted). Web saves (browser storage) and phone saves (app sandbox) don't move, so this only acts on desktop.
+const OLD_USER_DIR_NAME := "Daemons"
+const CARRY_OVER: PackedStringArray = ["save_a.json", "save_b.json", "settings.cfg"]
+
+
+func _ready() -> void:
+	carry_over_old_user_data()
+
+
+func carry_over_old_user_data(old_dir: String = "") -> PackedStringArray:
+	var copied := PackedStringArray()
+	if OS.has_feature("web"):
+		return copied
+	var new_dir := ProjectSettings.globalize_path("user://").trim_suffix("/")
+	if old_dir.is_empty():
+		old_dir = new_dir.get_base_dir().path_join(OLD_USER_DIR_NAME)
+	if old_dir == new_dir or not DirAccess.dir_exists_absolute(old_dir):
+		return copied
+	for file in CARRY_OVER:
+		var from := old_dir.path_join(file)
+		var to := new_dir.path_join(file)
+		if FileAccess.file_exists(from) and not FileAccess.file_exists(to):
+			if DirAccess.copy_absolute(from, to) == OK:
+				copied.append(file)
+	return copied
+
+
 func has_save() -> bool:
 	return not _newest_valid().is_empty()
 

@@ -717,7 +717,7 @@ func _show_pocket(pocket: int, ids: Array[String], start: int, title_suffix: Str
 
 func _use_item(item_id: String) -> void:
 	if ItemUse.needs_target(item_id):
-		var r := await list.choose("Use on which Daemon?", stack_rows())
+		var r := await list.choose("Use on which Hexforged?", stack_rows())
 		if r["action"] == "pick":
 			await _use_on(item_id, GameState.active_stack[r["index"]])
 	else:

@@ -182,7 +182,7 @@ func test_server_rack_rules() -> void:
 	# can't leave yourself without a Daemon that can fight
 	for d: DaemonInstance in GameState.active_stack.slice(1):
 		d.current_uptime = 0
-	assert_eq(GameState.deposit(0, 0), "You need at least one Daemon that can fight.")
+	assert_eq(GameState.deposit(0, 0), "You need at least one Hexforged that can fight.")
 	for i in 30:
 		GameState.racks[5].append(_daemon("wormby", 2))
 	assert_eq(GameState.deposit(1, 5), "That rack is full.")
@@ -192,7 +192,7 @@ func test_stack_order_and_lead() -> void:
 	GameState.add_daemon(_daemon("chipmunk", 12))
 	GameState.add_daemon(_daemon("pingo", 7))
 	GameState.active_stack[0].current_uptime = 0
-	assert_eq(GameState.lead_level(), 7, "skips crashed Daemons")
+	assert_eq(GameState.lead_level(), 7, "skips crashed Hexforged")
 	GameState.swap_stack(0, 1)
 	assert_eq(GameState.active_stack[0].species_id, "pingo")
 

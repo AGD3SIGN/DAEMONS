@@ -22,8 +22,8 @@ const LIST_RECT := Rect2(16, 16, 928, 454)
 const PADDING := 12
 const GAP := 10
 const COMMANDS := [
-	["EXECUTE", "fight", "run one of your Daemon's moves."],
-	["DAEMONS", "stack", "swap in another Daemon."],
+	["EXECUTE", "fight", "run one of your Hexforged's moves."],
+	["STACK", "stack", "swap in another Hexforged."],
 	["INVENTORY", "bag", "open your gear and patches."],
 	["DISCONNECT", "run", "drop the connection and flee."],
 ]
@@ -277,8 +277,8 @@ func _build_list_panel() -> void:
 		_list_panel.draw_rect(Rect2(bar.position.x, bar.end.y - 2, bar.size.x, 2), BattleStyle.TITLE_RULE)
 		var sk := BattleStyle.silkscreen()
 		var base := bar.position.y + (bar.size.y + sk.get_ascent(11)) / 2.0 - 1
-		_list_panel.draw_string(sk, Vector2(13, base), "daemon@field", HORIZONTAL_ALIGNMENT_LEFT, -1, 11, BattleStyle.HOST)
-		_list_panel.draw_string(sk, Vector2(13 + sk.get_string_size("daemon@field ", HORIZONTAL_ALIGNMENT_LEFT, -1, 11).x + 6, base),
+		_list_panel.draw_string(sk, Vector2(13, base), "hexforge@field", HORIZONTAL_ALIGNMENT_LEFT, -1, 11, BattleStyle.HOST)
+		_list_panel.draw_string(sk, Vector2(13 + sk.get_string_size("hexforge@field ", HORIZONTAL_ALIGNMENT_LEFT, -1, 11).x + 6, base),
 			_list_title, HORIZONTAL_ALIGNMENT_LEFT, -1, 11, BattleStyle.TEXT_MUTED))
 	_list_box = VBoxContainer.new()
 	_list_box.position = Vector2(PADDING, 3 + BattleConsole.TITLE_H + 8)
