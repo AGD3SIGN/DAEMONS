@@ -30,6 +30,7 @@ var dialogue_log: Array[String] = []  # every line shown, in order
 
 var text_box: TextBox
 var menu: BattleMenu
+var control_hint: ControlHint
 var field_menus: FieldMenus
 var _speaker_tab: Panel
 var _speaker_label: Label
@@ -434,6 +435,10 @@ func _build_ui() -> void:
 	_banner_label = Label.new()
 	_banner_label.position = Vector2(8, 5)
 	_banner.add_child(_banner_label)
+
+	control_hint = ControlHint.new()
+	control_hint.world = self
+	root.add_child(control_hint)
 
 	field_menus = FieldMenus.new()
 	field_menus.world = self

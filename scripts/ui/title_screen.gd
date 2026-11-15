@@ -383,7 +383,7 @@ func menu_rects() -> Array[Rect2]:
 
 
 func _draw_prompt_and_menu() -> void:
-	var prompt: String = DataRegistry.title_screen.get("prompt", "PRESS START")
+	var prompt: String = InputPrompts.start_prompt(DataRegistry.title_screen.get("prompt", "PRESS START"))
 	if attract and fposmod(_time / S.T_BLINK_PROMPT, 1.0) < 0.5:
 		var w := _text_w(_display, prompt, S.PROMPT_SIZE)
 		var at := Vector2((S.FRAME.x - w) / 2.0, S.PROMPT_TOP + _display.get_ascent(S.PROMPT_SIZE))

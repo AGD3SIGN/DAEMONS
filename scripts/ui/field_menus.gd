@@ -71,7 +71,7 @@ func _ready() -> void:
 # --- pause -------------------------------------------------------------------
 
 func open_pause() -> void:
-	var options := PackedStringArray(["CMDB", "STACK", "BAG", "CARD", "SAVE", "OPTIONS", "FEEDBACK"])
+	var options := PackedStringArray(["CMDB", "STACK", "BAG", "CARD", "SAVE", "CONTROLS", "OPTIONS", "FEEDBACK"])
 	if OS.is_debug_build():
 		options.append("DEBUG")
 	options.append("CLOSE")
@@ -93,6 +93,8 @@ func open_pause() -> void:
 				await card.open()
 			"SAVE":
 				await save_flow()
+			"CONTROLS":
+				await controls_screen()
 			"OPTIONS":
 				await options_screen()
 			"FEEDBACK":
@@ -449,6 +451,21 @@ func save_flow() -> void:
 	await _say(error if not error.is_empty() else "Saved. Play time %s." % TrainerCardPanel.format_time(GameState.play_time_sec))
 
 
+## Pause > CONTROLS: every button for what you're holding right now (keyboard, pad brand or touch).
+func controls_screen() -> void:
+	var rows := PackedStringArray()
+	for row: Array in InputPrompts.controls():
+		rows.append("%-10s %s" % row)
+	rows.append("DONE")
+	var names := {"keyboard": "KEYBOARD", "xbox": "XBOX PAD", "playstation": "PLAYSTATION PAD",
+		"nintendo": "SWITCH PAD", "touch": "TOUCH"}
+	list.describe = func(_i: int) -> String:
+		return "Follows what you use: keys, pad or touch."
+	await list.choose("CONTROLS  (%s)" % names.get(InputPrompts.scheme, "KEYBOARD"), rows, [], rows.size() - 1)
+	list.describe = Callable()
+	list.close()
+
+
 func options_screen() -> void:
 	var cursor := 0
 	while true:
@@ -461,18 +478,20 @@ func options_screen() -> void:
 			"AUTOSAVE      < %s >" % ("ON" if Settings.autosave_on_suspend else "OFF"),
 			"CRT EFFECTS   < %s >" % ("ON" if Settings.crt_effects else "OFF"),
 			"LESS MOTION   < %s >" % ("ON" if Settings.reduced_motion else "OFF"),
+			"CONTROL HINTS < %s >" % ("ON" if Settings.control_hints else "OFF"),
 			"DONE",
 		])
 		list.allow_lr = true
 		list.describe = func(i: int) -> String: return ["How fast text types out.", "Background music (coming with the soundtrack).",
 			"Sound effects.", "Turn off to skip battle animations.",
 			"Phones/tablets: save when the app goes to the background.",
-			"Title screen scanlines and scan bar.", "Stops the title screen's bigger animations.", "Save and close."][i]
+			"Title screen scanlines and scan bar.", "Stops the title screen's bigger animations.",
+			"Shows which buttons open the menu and talk, in the top corner.", "Save and close."][i]
 		var r := await list.choose("OPTIONS   (left/right to change)", rows, [], cursor)
 		list.allow_lr = false
 		list.describe = Callable()
 		cursor = r["index"]
-		if r["action"] == "cancel" or (r["action"] == "pick" and cursor == 7):
+		if r["action"] == "cancel" or (r["action"] == "pick" and cursor == 8):
 			break
 		var step := -1 if r["action"] == "left" else 1
 		match cursor:
@@ -493,6 +512,8 @@ func options_screen() -> void:
 				Settings.crt_effects = not Settings.crt_effects
 			6:
 				Settings.reduced_motion = not Settings.reduced_motion
+			7:
+				Settings.control_hints = not Settings.control_hints
 	Settings.apply()
 	Settings.save_settings()
 	list.close()

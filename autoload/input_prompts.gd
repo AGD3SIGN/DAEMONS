@@ -62,3 +62,27 @@ func label(action: String, for_scheme: String = "") -> String:
 ## "press Z" / "press A" / "tap the check button" style verb + button.
 func press(action: String) -> String:
 	return ("tap " if scheme == "touch" else "press ") + label(action)
+
+
+## Every control for a scheme, as [what it does, which buttons] rows (pause menu > CONTROLS).
+func controls(for_scheme: String = "") -> Array:
+	var s := for_scheme if not for_scheme.is_empty() else scheme
+	match s:
+		"keyboard":
+			return [["MOVE", "Arrows / WASD"], ["RUN", "Hold Shift"], ["TALK / OK", "Z / Enter"],
+				["BACK", "X / Esc"], ["MENU", "Space / Tab"], ["BATTLE", "1-4 pick a command"]]
+		"touch":
+			return [["MOVE", "D-pad (left)"], ["RUN", "Push the d-pad far"], ["TALK / OK", "Check button"],
+				["BACK", "Back button"], ["MENU", "Menu button"]]
+	return [["MOVE", "D-pad / Left stick"], ["RUN", "Hold " + label("run", s)], ["TALK / OK", label("ui_accept", s)],
+		["BACK", label("ui_cancel", s)], ["MENU", label("menu", s)]]
+
+
+## The title screen's "press start" line in words that match what you're holding.
+func start_prompt(fallback: String) -> String:
+	match scheme:
+		"keyboard":
+			return "PRESS ENTER"
+		"touch":
+			return "TAP TO START"
+	return "PRESS " + label("menu").to_upper()
