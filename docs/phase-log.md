@@ -4,6 +4,28 @@ Newest entries at the top. Each entry: what's done, decisions, what's next.
 
 ---
 
+## 2026-11-14 — Player feedback pass: balance, moves, shop, controls
+
+- **Early-game balance** (first real player report: ~10 min of grinding). Cause: starters only knew Bump until
+  Lv7, and the first trainer's Dustbunny resists it (Intern Ian beat a Lv6 starter 60/60). Starters now learn
+  their own-type move at Lv5. Early trainers retuned (Kevin 1: Lv4; Ian 3/4; Sam 4/4; Jo 4/4; Hal 6/7;
+  Theo 9/9; Tina 10; Dana 11/12). `tests/test_early_balance.gd` simulates every early fight on all three starter
+  paths and fails if one becomes a wall.
+- **`data/balance.json`**: `exp_divisor` 6 (was a hard-coded 7, ~17% faster levels), `trainer_exp_bonus` 1.5,
+  `starting_credits` 3000, `loss_penalty` (blacking out costs 10% of credits, capped at 300 + 300 per cert; was 50%).
+- **Moves:** learning a 5th move shows its details and a list of your 4 + KEEP MY MOVES; replacing/skipping asks
+  again with the cursor on NO (it used to open on YES and slot 1, so mashing A wiped slot 1). New
+  **STACK > MOVES**: details, reorder, and re-install anything learned before. Overclock Chip asks instead of
+  dropping the move.
+- **Shop:** item descriptions were hidden under the clerk's text box; it now closes while browsing. Descriptions
+  lead with the effect. Cheaper essentials (Coffee 150, Energy Drink 450, Hard Reboot 900, Thumb Drive 150,
+  Encrypted Key 450, Hardware Token 900, Firewall Rule 300, Ctrl+Z 400, Pizza Friday 2000).
+- **Controls help:** overworld corner tag ("Space MENU  Z TALK", per input type, off on touch, toggle in Options),
+  pause > CONTROLS page, title says PRESS ENTER on keyboard.
+- Suite 316/316.
+
+---
+
 ## 2026-11-14 — In-game Feedback (private issues, captcha)
 
 - **Pause menu → FEEDBACK:** pick BUG / IDEA / OTHER, write up to 2000 characters (keyboard, or the on-screen

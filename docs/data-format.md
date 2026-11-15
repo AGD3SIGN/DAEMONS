@@ -209,6 +209,11 @@ its run number there before exporting.
 `endpoint` must be `""` (feature off) or an `https://` URL of the relay in `services/feedback-worker/`. The limits must
 match the Worker's `LIMITS`. Offline reports wait in `user://feedback_outbox.json`.
 
+## balance.json (tuning knobs)
+`{"starting_credits": 3000, "exp_divisor": 6, "trainer_exp_bonus": 1.5, "loss_penalty": {"percent": 10, "cap_base": 300, "cap_per_cert": 300}}`.
+EXP per defeated foe = floor(base_exp x level / exp_divisor), x trainer_exp_bonus in trainer battles.
+Blacking out costs `percent`% of your credits, at most `cap_base + cap_per_cert x certs` (`GameState.blackout_loss()`).
+
 ## Save files (user://save_a.json, save_b.json)
 `{"version", "save_count", "saved_at", "checksum" (sha256 of the data), "data": GameState.to_dict()}`.
 Saves alternate between the two files; loading picks the newest one whose checksum matches.
