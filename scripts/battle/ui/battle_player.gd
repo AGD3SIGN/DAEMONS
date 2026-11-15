@@ -120,6 +120,7 @@ func _play_event(e: Dictionary) -> void:
 			await _anim_tint(side, int(e["delta"]) > 0)
 			await _say(text)
 		"fainted":
+			_aura(side).status = ""
 			_hold_pose(side, "faint")
 			await _anim_faint(side)
 			_held[side] = false
@@ -234,6 +235,7 @@ func _release_pose(side: int) -> void:
 
 ## The resting pose: idle, or a status pose (foe side only; the back view has none).
 func _rest(side: int) -> void:
+	_update_aura(side)
 	if _held[side] or _active[side] < 0:
 		return
 	var status := String(_shown[side][_active[side]].get("status", ""))
@@ -241,6 +243,25 @@ func _rest(side: int) -> void:
 		_set_pose(side, STATUS_POSES[status])
 	else:
 		_set_pose(side, "idle_b" if _breath_frame == 1 else "idle")
+
+
+## The looping status effect over a Daemon (embers for Overheated, etc.), on both sides.
+func _aura(side: int) -> StatusAura:
+	var sprite := _sprite(side)
+	if not sprite.has_meta("aura"):
+		var aura := StatusAura.new()
+		sprite.add_child(aura)
+		sprite.set_meta("aura", aura)
+	return sprite.get_meta("aura")
+
+
+func _update_aura(side: int) -> void:
+	var aura := _aura(side)
+	aura.speed = 1.0 if _ts() > 0.0 else 0.0
+	var status := ""
+	if _active[side] >= 0 and not _shown[side][_active[side]].get("fainted", false):
+		status = String(_shown[side][_active[side]].get("status", ""))
+	aura.status = status
 
 
 ## Two-frame breathing loop, called every frame by the battle scene.

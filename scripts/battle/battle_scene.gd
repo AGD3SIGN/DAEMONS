@@ -663,7 +663,8 @@ func _on_menu_hovered(kind: String, index: int) -> void:
 	else:
 		var d := state.sides[BattleState.PLAYER].active() if state != null else null
 		if d != null and index < d.moves.size():
-			console.set_man(String(d.moves[index]["id"]), menu.move_man(index))
+			var room := BattleMenu.BACK_RECT.position.x - CONSOLE_RECT.position.x - BattleConsole.BORDER - 14 - 12
+			console.set_man(String(d.moves[index]["id"]), menu.move_man(index), room)
 
 
 func _slot(at: Vector2) -> Control:

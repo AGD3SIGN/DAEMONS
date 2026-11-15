@@ -22,6 +22,7 @@ var menu_width := 496.0
 var menu_mode := false
 var man_command := ""
 var man_text := ""
+var man_width := -1.0  # > 0: wrap the hint to this width (moves: stop before the BACK button)
 var _t := 0.0
 
 
@@ -57,9 +58,10 @@ func set_menu_mode(on: bool) -> void:
 	_apply_mode()
 
 
-func set_man(command: String, text: String) -> void:
+func set_man(command: String, text: String, width: float = -1.0) -> void:
 	man_command = command
-	man_text = text
+	man_text = text.left(1).to_upper() + text.substr(1)
+	man_width = width
 	queue_redraw()
 
 
@@ -103,14 +105,13 @@ func _draw() -> void:
 	if not _typing and fmod(_t, 1.0) < 0.5:
 		var at := cursor_position()
 		draw_rect(Rect2(at, CURSOR), BattleStyle.TEXT_CONSOLE)
-	# man line (menu mode only).
-	if menu_mode and not man_command.is_empty():
+	# Hint line (menu mode only): just what the highlighted command or move does, up to two lines, kept clear of
+	# the BACK button when it's showing (man_width).
+	if menu_mode and not man_text.is_empty():
 		var y := line_top + text_size() + 12 + vt.get_ascent(MAN_SIZE)
-		var cmd := "man " + man_command
-		draw_string(vt, Vector2(BORDER + 14, y), cmd, HORIZONTAL_ALIGNMENT_LEFT, -1, MAN_SIZE, BattleStyle.HOST)
-		var cmd_w := vt.get_string_size(cmd + " ", HORIZONTAL_ALIGNMENT_LEFT, -1, MAN_SIZE).x
-		draw_string(vt, Vector2(BORDER + 14 + cmd_w, y), "— " + man_text, HORIZONTAL_ALIGNMENT_LEFT,
-			size.x - BORDER * 2 - 28 - cmd_w, MAN_SIZE, BattleStyle.TEXT_MUTED)
+		var width := man_width if man_width > 0 else size.x - BORDER * 2 - 28
+		draw_multiline_string(vt, Vector2(BORDER + 14, y), man_text, HORIZONTAL_ALIGNMENT_LEFT, width, MAN_SIZE, 2,
+			BattleStyle.TEXT_MUTED)
 	# Continue arrow: drops 4 px and back, stepped (1 s, 2 steps).
 	if _waiting:
 		var drop := 4.0 if fmod(_t, 1.0) >= 0.5 else 0.0

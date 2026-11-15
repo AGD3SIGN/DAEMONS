@@ -22,3 +22,13 @@ static func name_of(move_id: String) -> String:
 static func describe(move_id: String, pp: int = -1) -> String:
 	var desc := String(DataRegistry.get_move(move_id).get("description", ""))
 	return line(move_id, pp) + ("\n" + desc if not desc.is_empty() else "")
+
+
+## Just what the move does, in plain words, for the battle console (Brandon, 2026-11-15: the stats line there was
+## too crowded). Drops the "Tieweaver's signature." lead-in the descriptions start with.
+static func what_it_does(move_id: String) -> String:
+	var desc := String(DataRegistry.get_move(move_id).get("description", ""))
+	var lead := desc.find("'s signature. ")
+	if lead >= 0 and lead < 24:
+		desc = desc.substr(lead + "'s signature. ".length())
+	return desc

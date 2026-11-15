@@ -324,3 +324,30 @@ func test_rack_row_matches_the_spec() -> void:
 	assert_eq(BattleArena.slot_count(244), 11, "floor((244 - 20) / 20)")
 	var leds := arena.led_colors(0, 0)
 	assert_eq(leds[1], BattleStyle.BAR_EDGE, "k = 0: LED 2 is off")
+
+
+func test_lasting_statuses_show_an_effect_on_both_sides() -> void:
+	# Player report 2026-11-15: an Overheated Daemon seen from behind looked perfectly fine.
+	var aura := StatusAura.new()
+	add_child_autofree(aura)
+	assert_false(aura.visible, "nothing to show")
+	for status in ["overheated", "throttled", "corrupted", "standby"]:
+		aura.status = status
+		assert_true(aura.visible, "%s has an effect" % status)
+	aura.status = "looping"
+	assert_false(aura.visible, "Looping wears off in a few turns; the text says so")
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 2
+	var me := DaemonInstance.create("pingo", 60, rng, 1)
+	me.status = "overheated"
+	var team: Array[DaemonInstance] = [me]
+	var scene: BattleScene = load(BattleScene.SCENE).instantiate()
+	scene.setup({"foe": [["ramster", 3]], "player_stack": team, "auto": true, "time_scale": 0.0, "seed": 1})
+	add_child_autofree(scene)
+	var seen := [false]
+	await wait_until(func() -> bool:
+		if is_instance_valid(scene) and scene.player_sprite.has_meta("aura") \
+				and scene.player_sprite.get_meta("aura").status == "overheated":
+			seen[0] = true
+		return seen[0], 15.0)
+	assert_true(seen[0], "your own Daemon, seen from behind, shows it too")

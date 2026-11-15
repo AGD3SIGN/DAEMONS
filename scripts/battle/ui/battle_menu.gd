@@ -94,7 +94,7 @@ func move_man(slot: int) -> String:
 	if _shown_moves == null or slot >= _shown_moves.moves.size():
 		return ""
 	var move_slot: Dictionary = _shown_moves.moves[slot]
-	return MoveText.line(move_slot["id"], int(move_slot["pp"]))
+	return MoveText.what_it_does(move_slot["id"])
 
 
 func choose_from_list(title: String, options: PackedStringArray, enabled: Array = [], cancellable: bool = true) -> int:
