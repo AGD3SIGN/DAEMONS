@@ -37,6 +37,12 @@
         "min": 19,
         "max": 21,
         "weight": 10
+      },
+      {
+        "species": "murmuroute",
+        "min": 17,
+        "max": 20,
+        "weight": 15
       }
     ]
   }

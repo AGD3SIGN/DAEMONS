@@ -37,6 +37,18 @@
         "min": 29,
         "max": 31,
         "weight": 15
+      },
+      {
+        "species": "murmuroute",
+        "min": 28,
+        "max": 30,
+        "weight": 10
+      },
+      {
+        "species": "storkache",
+        "min": 29,
+        "max": 31,
+        "weight": 15
       }
     ]
   }

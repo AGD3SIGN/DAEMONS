@@ -398,5 +398,41 @@
       { "level": 30, "move": "packet_flood" }
     ],
     "evolutions": [],
-    "cmdb": { "category": "Ferret / VPN Tunnel", "entry": "Tunnels under everything so nobody sees where it went. Leaves decoy copies of itself behind." } }
+    "cmdb": { "category": "Ferret / VPN Tunnel", "entry": "Tunnels under everything so nobody sees where it went. Leaves decoy copies of itself behind." } },
+  { "id": "hummodem", "number": 48, "name": "Hummodem", "types": ["network"],
+    "base_stats": { "uptime": 40, "throughput": 45, "hardening": 40, "compute": 72, "encryption": 45, "bandwidth": 108 },
+    "growth_rate": "medium_fast", "catch_rate": 120, "base_exp": 95, "log_yield": { "bandwidth": 2 },
+    "learnset": [
+      { "level": 1, "move": "bump" }, { "level": 1, "move": "ping" }, { "level": 8, "move": "handshake" },
+      { "level": 13, "move": "double_click" }, { "level": 18, "move": "latency_spike" }, { "level": 26, "move": "packet_flood" }
+    ],
+    "evolutions": [],
+    "cmdb": { "category": "Hummingbird / Dial-up Modem", "entry": "Hovers in dead zones where nothing else connects. Its wings hum at exactly 56k beats a minute." } },
+  { "id": "jellyband", "number": 49, "name": "Jellyband", "types": ["network", "power"],
+    "base_stats": { "uptime": 72, "throughput": 35, "hardening": 50, "compute": 65, "encryption": 72, "bandwidth": 46 },
+    "growth_rate": "medium_slow", "catch_rate": 130, "base_exp": 100, "log_yield": { "encryption": 2 },
+    "learnset": [
+      { "level": 1, "move": "bump" }, { "level": 1, "move": "static_zap" }, { "level": 9, "move": "signal_sting" },
+      { "level": 14, "move": "latency_spike" }, { "level": 19, "move": "fiber_spout" }, { "level": 25, "move": "brownout" }
+    ],
+    "evolutions": [],
+    "cmdb": { "category": "Jellyfish / Wi-Fi Signal", "entry": "Drifts in the harbor showing its signal on its dome. Full bars when it's happy, one bar when you need it most." } },
+  { "id": "murmuroute", "number": 50, "name": "Murmuroute", "types": ["network"],
+    "base_stats": { "uptime": 55, "throughput": 75, "hardening": 50, "compute": 55, "encryption": 50, "bandwidth": 90 },
+    "growth_rate": "medium_fast", "catch_rate": 90, "base_exp": 120, "log_yield": { "throughput": 1, "bandwidth": 1 },
+    "learnset": [
+      { "level": 1, "move": "bump" }, { "level": 1, "move": "ping" }, { "level": 10, "move": "fast_ethernet" },
+      { "level": 16, "move": "murmuration" }, { "level": 22, "move": "web_mesh" }, { "level": 30, "move": "packet_flood" }
+    ],
+    "evolutions": [],
+    "cmdb": { "category": "Starling / Mesh Router", "entry": "Never travels alone. Its flock of little nodes re-routes around anything in the way, all at once." } },
+  { "id": "storkache", "number": 51, "name": "Storkache", "types": ["cloud"],
+    "base_stats": { "uptime": 75, "throughput": 80, "hardening": 60, "compute": 70, "encryption": 60, "bandwidth": 55 },
+    "growth_rate": "slow", "catch_rate": 60, "base_exp": 150, "log_yield": { "uptime": 2 },
+    "learnset": [
+      { "level": 1, "move": "bump" }, { "level": 1, "move": "ping" }, { "level": 18, "move": "fast_ethernet" },
+      { "level": 24, "move": "special_delivery" }, { "level": 30, "move": "cloud_burst" }, { "level": 36, "move": "patch_up" }
+    ],
+    "evolutions": [],
+    "cmdb": { "category": "Stork / Download Cache", "entry": "Delivers whatever you downloaded last, whether you still want it or not. Keeps a copy, just in case." } }
 ]

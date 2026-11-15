@@ -61,6 +61,12 @@
         "min": 5,
         "max": 7,
         "weight": 12
+      },
+      {
+        "species": "hummodem",
+        "min": 5,
+        "max": 7,
+        "weight": 8
       }
     ]
   }

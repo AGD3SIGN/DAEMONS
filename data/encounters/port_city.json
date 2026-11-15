@@ -31,6 +31,12 @@
         "min": 13,
         "max": 14,
         "weight": 15
+      },
+      {
+        "species": "jellyband",
+        "min": 12,
+        "max": 14,
+        "weight": 20
       }
     ]
   }

@@ -204,5 +204,21 @@
   { "id": "proxy_tunnel", "name": "Proxy Tunnel", "type": "network", "category": "physical", "power": 60, "accuracy": 100, "max_pp": 20, "priority": 0,
     "effect": { "id": "stat_change", "params": {"target": "self", "changes": {"evasion": 1}, "chance": 100} },
     "fx": [{"kind": "dim", "alpha": 0.4, "parallel": true}, {"kind": "burst", "count": 8}],
-    "description": "Proxkit's signature. Strikes from a hidden tunnel and slips away. Raises the user's evasion." }
+    "description": "Proxkit's signature. Strikes from a hidden tunnel and slips away. Raises the user's evasion." },
+  { "id": "handshake", "name": "Handshake", "type": "network", "category": "special", "power": 50, "accuracy": 100, "max_pp": 25, "priority": 0,
+    "effect": { "id": "stat_change", "params": {"target": "self", "changes": {"bandwidth": 1}, "chance": 100} },
+    "fx": [{"kind": "rings", "travel": true, "count": 4, "radius": 12, "color": "#6FE0F0"}, {"kind": "burst", "count": 6, "color": "#F2C63A"}],
+    "description": "Hummodem's signature. Screeches a dial-up handshake, then speeds up. Raises Bandwidth." },
+  { "id": "signal_sting", "name": "Signal Sting", "type": "network", "category": "special", "power": 55, "accuracy": 100, "max_pp": 20, "priority": 0,
+    "effect": { "id": "stat_change", "params": {"target": "foe", "changes": {"accuracy": -1}, "chance": 30} },
+    "fx": [{"kind": "stream", "glyph": "square", "count": 6, "color": "#5CE0F0"}, {"kind": "bolt", "color": "#E8F4FF"}],
+    "description": "Jellyband's signature. Stings with a weak signal. May lower the foe's accuracy." },
+  { "id": "murmuration", "name": "Murmuration", "type": "network", "category": "physical", "power": 20, "accuracy": 95, "max_pp": 20, "priority": 0,
+    "effect": { "id": "multi_hit", "params": { "min": 2, "max": 5 } },
+    "fx": [{"kind": "orbit", "count": 8, "radius": 18, "turns": 1.0, "color": "#2A3060"}, {"kind": "burst", "count": 8, "color": "#5CE0F0"}],
+    "description": "Murmuroute's signature. The whole flock re-routes through the foe 2 to 5 times." },
+  { "id": "special_delivery", "name": "Special Delivery", "type": "cloud", "category": "physical", "power": 75, "accuracy": 95, "max_pp": 15, "priority": 0,
+    "effect": { "id": "none", "params": {} },
+    "fx": [{"kind": "fall", "glyph": "arrow_down", "count": 4, "color": "#9FC8EC"}, {"kind": "burst", "count": 12, "color": "#E8F4FF", "radius": 20}],
+    "description": "Storkache's signature. Drops a cached bundle on the foe from very high up." }
 ]
