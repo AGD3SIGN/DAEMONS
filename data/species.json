@@ -67,7 +67,7 @@
     ],
     "evolutions": [],
     "cmdb": { "category": "Penguin / Internet Backbone", "entry": "Stands at the edge of the valley and carries everyone's traffic. A dropped packet is a personal insult." } },
-  { "id": "glowbit", "number": 7, "name": "Glowbit", "types": ["software"],
+  { "id": "glowbit", "number": 7, "name": "Glowbit", "types": ["software"], "art": { "flip_back": true },
     "base_stats": { "uptime": 45, "throughput": 48, "hardening": 46, "compute": 62, "encryption": 55, "bandwidth": 54 },
     "growth_rate": "medium_slow", "catch_rate": 45, "base_exp": 64, "log_yield": { "compute": 1 },
     "learnset": [
@@ -76,7 +76,7 @@
     ],
     "evolutions": [ { "to": "scriptfly", "trigger": "level", "level": 16 } ],
     "cmdb": { "category": "Firefly / Cursor", "entry": "Its tail blinks like a cursor waiting for input. Follows whoever types the fastest." } },
-  { "id": "scriptfly", "number": 8, "name": "Scriptfly", "types": ["software"],
+  { "id": "scriptfly", "number": 8, "name": "Scriptfly", "types": ["software"], "art": { "flip_back": true },
     "base_stats": { "uptime": 58, "throughput": 62, "hardening": 60, "compute": 82, "encryption": 72, "bandwidth": 71 },
     "growth_rate": "medium_slow", "catch_rate": 45, "base_exp": 142, "log_yield": { "compute": 2 },
     "learnset": [
@@ -86,7 +86,7 @@
     ],
     "evolutions": [ { "to": "compilume", "trigger": "level", "level": 34 } ],
     "cmdb": { "category": "Firefly / Script Runner", "entry": "Writes glowing code in the air as it flies. Mutters comments nobody will ever read." } },
-  { "id": "compilume", "number": 9, "name": "Compilume", "types": ["software"],
+  { "id": "compilume", "number": 9, "name": "Compilume", "types": ["software"], "art": { "flip_back": true },
     "base_stats": { "uptime": 78, "throughput": 82, "hardening": 80, "compute": 106, "encryption": 94, "bandwidth": 90 },
     "growth_rate": "medium_slow", "catch_rate": 45, "base_exp": 240, "log_yield": { "compute": 3 },
     "learnset": [
@@ -132,7 +132,7 @@
     ],
     "evolutions": [],
     "cmdb": { "category": "Pigeon / Botnet", "entry": "One pigeon, ten thousand followers. When it coos, every inbox in the valley fills at once." } },
-  { "id": "cablesnake", "number": 14, "name": "Cablesnake", "types": ["network"],
+  { "id": "cablesnake", "number": 14, "name": "Cablesnake", "types": ["network"], "art": { "flip_back": true },
     "base_stats": { "uptime": 45, "throughput": 60, "hardening": 45, "compute": 40, "encryption": 45, "bandwidth": 65 },
     "growth_rate": "slow", "catch_rate": 190, "base_exp": 58, "log_yield": { "bandwidth": 1 },
     "learnset": [
@@ -141,7 +141,7 @@
     ],
     "evolutions": [ { "to": "patchviper", "trigger": "level", "level": 24 } ],
     "cmdb": { "category": "Snake / Ethernet Run", "entry": "Lives in cable tangles and is often mistaken for one. Bites when unplugged." } },
-  { "id": "patchviper", "number": 15, "name": "Patchviper", "types": ["network"],
+  { "id": "patchviper", "number": 15, "name": "Patchviper", "types": ["network"], "art": { "flip_back": true },
     "base_stats": { "uptime": 70, "throughput": 90, "hardening": 70, "compute": 65, "encryption": 70, "bandwidth": 95 },
     "growth_rate": "slow", "catch_rate": 90, "base_exp": 155, "log_yield": { "throughput": 2 },
     "learnset": [

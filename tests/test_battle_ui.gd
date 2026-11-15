@@ -107,6 +107,10 @@ func test_trainer_battle_with_forced_switches() -> void:
 func test_back_view_flip_faces_the_foe() -> void:
 	# The Chipmunk line's back pose was drawn facing left; species art.flip_back mirrors it.
 	assert_true(DaemonSprites.flip_back("chipmunk"))
+	# 2026-11-15 (Brandon: "Glowbit is turned the wrong way"): every back view was checked; these also lead
+	# with their head to the left (tail / battery on the right) and are mirrored so they face the foe.
+	for id in ["glowbit", "scriptfly", "compilume", "cablesnake", "patchviper"]:
+		assert_true(DaemonSprites.flip_back(id), id)
 	assert_false(DaemonSprites.flip_back("pingo"))
 	var team: Array[DaemonInstance] = [_daemon("chipmunk", 12)]
 	var scene := await _run_battle({"foe": [["pingo", 5]], "player_stack": team, "items": {}})
