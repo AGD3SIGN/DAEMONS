@@ -211,7 +211,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		elif event.is_action_pressed("ui_cancel") or event.is_action_pressed("menu"):
 			_pick("")
 		elif event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-			_tap_home(get_local_mouse_position())
+			_tap_home(get_local_mouse_position() - view_offset())
 		else:
 			handled = false
 	else:
@@ -226,7 +226,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		elif event.is_action_pressed("ui_cancel") or event.is_action_pressed("menu") or event.is_action_pressed("map"):
 			_close_maps()
 		elif event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-			_tap_map(get_local_mouse_position())
+			_tap_map(get_local_mouse_position() - view_offset())
 		else:
 			handled = false
 	if handled:
@@ -273,7 +273,20 @@ func _process(delta: float) -> void:
 
 # --- drawing -----------------------------------------------------------------------
 
+## The phone is laid out for the 320x180 base view. Wider or taller windows show more world around it, so the
+## whole phone is shifted to stay centered (drawing and taps both use this).
+const BASE_VIEW := Vector2(320, 180)
+
+
+func view_offset() -> Vector2:
+	return ((size - BASE_VIEW) / 2.0).floor().max(Vector2.ZERO)
+
+
 func _draw() -> void:
+	if mode.is_empty():
+		return
+	draw_rect(Rect2(Vector2.ZERO, size), Color(0, 0, 0, 0.45))  # dim the whole world, however wide
+	draw_set_transform(view_offset())
 	if mode == "home":
 		_draw_home()
 	elif mode == "maps":
@@ -286,7 +299,6 @@ func _text(pos: Vector2, s: String, color: Color = SCREEN_TEXT, width: float = -
 
 
 func _draw_frame(body: Rect2, screen: Rect2) -> void:
-	draw_rect(Rect2(Vector2.ZERO, size), Color(0, 0, 0, 0.45))
 	draw_rect(body, BODY_COLOR)
 	draw_rect(body, BODY_EDGE, false, 2.0)
 	draw_rect(screen, SCREEN_BG)
