@@ -225,6 +225,13 @@ Blacking out costs `percent`% of your credits, at most `cap_base + cap_per_cert 
 A place is named once visited (`GameState.visited`), shown as ??? when it's next to a visited place, hidden otherwise;
 `show_if_flag` places appear only once the flag is set.
 
+## level_caps.json (GDD level cap)
+`{"note": "...", "caps": [14, 20, 28, 36, 42, 48, 54, 60, 100]}`: `caps[n]` is the highest level while holding n
+Certifications. **Placeholder numbers (TBD), flagged for balancing.** EXP stops at the cap and the overflow is
+discarded (battle: "MUNKBOARD needs a new certification to grow further.", once per battle); Overclock Chips are
+refused at the cap and not used up. Validated: 9 levels, 1-100, never going down. Battle config `level_cap` overrides
+(tests). Certification order follows the GDD: Data is Cert 5, Security Cert 6.
+
 ## Corrupted Hexforged (2026-11-15)
 The same species in a glitched, hostile state (Ransom's code pushed through the broken Hexforge). Not a separate
 species or CMDB entry: `DaemonInstance.is_corrupted` (saved as `"corrupted"`).

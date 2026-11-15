@@ -66,6 +66,8 @@ static func _apply(effect: String, params: Dictionary, item_id: String, d: Daemo
 		"level_up":
 			if d.level >= DaemonInstance.MAX_LEVEL:
 				return no_effect
+			if d.level >= GameState.level_cap():  # Overclock Chips can't push past the Certification cap
+				return {"ok": false, "messages": ["%s needs a new certification to grow further." % name.to_upper()]}
 			var messages: Array[String] = []
 			var pending: Array[String] = []
 			for e in d.level_up():

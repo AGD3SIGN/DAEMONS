@@ -87,6 +87,13 @@ func add_daemon(d: DaemonInstance) -> String:
 	return "rack" if rack_add(d) >= 0 else "full"
 
 
+## GDD: each Certification raises the level cap; EXP stops at the cap until the next Cert (data/level_caps.json).
+func level_cap() -> int:
+	if DataRegistry.level_caps.is_empty():
+		return DaemonInstance.MAX_LEVEL
+	return int(DataRegistry.level_caps[mini(certifications.size(), DataRegistry.level_caps.size() - 1)])
+
+
 ## GDD: corruption is a slow reveal. Until the Power Plant event sets this flag, no ERR:: Hexforged spawn and the
 ## Quarantined pocket, Help Desk cleaning and CMDB COMPROMISED status stay hidden.
 func corruption_revealed() -> bool:

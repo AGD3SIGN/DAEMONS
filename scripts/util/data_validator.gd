@@ -97,6 +97,7 @@ var feedback: Dictionary = {}      # Feedback form config (data/feedback.json)
 var balance: Dictionary = {}       # EXP rate and blackout penalty (data/balance.json)
 var region_map: Dictionary = {}    # phone Maps app layout (data/region_map.json)
 var demo_end: Dictionary = {}      # end-of-demo card and credits (data/demo_end.json)
+var level_caps: Array = []         # level cap per Certification count (data/level_caps.json)
 
 
 ## raw = {"types": ..., "moves": ..., "species": ..., "items": ..., "config_profiles": ...}
@@ -130,6 +131,7 @@ func validate(raw: Dictionary) -> PackedStringArray:
 	_validate_balance(raw.get("balance"))
 	_validate_region_map(raw.get("region_map"))
 	_validate_demo_end(raw.get("demo_end"))
+	_validate_level_caps(raw.get("level_caps"))
 	return errors
 
 
@@ -1022,6 +1024,26 @@ func _validate_feedback(raw: Variant) -> void:
 	var categories: Variant = raw.get("categories")
 	if typeof(categories) != TYPE_ARRAY or categories.is_empty():
 		_err("feedback", "'categories' must be a non-empty list")
+
+
+# --- level caps ----------------------------------------------------------------
+
+## data/level_caps.json: "caps" = 9 levels (0..8 Certifications held), each 1..100 and never going down.
+func _validate_level_caps(raw: Variant) -> void:
+	level_caps = []
+	if typeof(raw) != TYPE_DICTIONARY or typeof(raw.get("caps")) != TYPE_ARRAY or raw["caps"].size() != 9:
+		_err("level_caps", "'caps' must list 9 levels: 0 through 8 Certifications")
+		return
+	var last := 0
+	for i in 9:
+		var v: Variant = raw["caps"][i]
+		if not _is_int(v) or int(v) < 1 or int(v) > 100:
+			_err("level_caps", "caps[%d] must be a level 1-100" % i)
+			return
+		if int(v) < last:
+			_err("level_caps", "caps[%d] is lower than the one before it" % i)
+		last = int(v)
+		level_caps.append(int(v))
 
 
 # --- demo end ------------------------------------------------------------------

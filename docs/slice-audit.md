@@ -13,7 +13,6 @@
 - flag 'trainer_dana' is set but never checked (fine for bookkeeping)
 - flag 'trainer_net_admin_nia' is set but never checked (fine for bookkeeping)
 - flag 'trainer_packet_pat' is set but never checked (fine for bookkeeping)
-- flag 'trainer_ping_okoro' is set but never checked (fine for bookkeeping)
 - flag 'trainer_qa_tess' is set but never checked (fine for bookkeeping)
 - flag 'trainer_sre_raj' is set but never checked (fine for bookkeeping)
 - flag 'trainer_devi_shah' is set but never checked (fine for bookkeeping)
@@ -40,6 +39,7 @@
 - flag 'trainer_kevin_rival_3_pingo' is set but never checked (fine for bookkeeping)
 - flag 'trainer_kevin_rival_3_glowbit' is set but never checked (fine for bookkeeping)
 - flag 'trainer_kevin_rival_3_chipmunk' is set but never checked (fine for bookkeeping)
+- flag 'corruption_revealed' is set but never checked (fine for bookkeeping)
 - flag 'hq_traced' is set but never checked (fine for bookkeeping)
 - flag 'trainer_kevin_rival_1_pingo' is set but never checked (fine for bookkeeping)
 - flag 'trainer_kevin_rival_1_glowbit' is set but never checked (fine for bookkeeping)
@@ -48,36 +48,51 @@
 - flag 'trainer_kevin_rival_2_glowbit' is set but never checked (fine for bookkeeping)
 - flag 'trainer_kevin_rival_2_chipmunk' is set but never checked (fine for bookkeeping)
 - dialogue 'pipeline_notes' is never used
-- dialogue 'hx_forge_found' is never used
-- dialogue 'hx_err_pyrewall' is never used
-- dialogue 'hx_sudofox_key' is never used
-- dialogue 'hx_leader_reveal' is never used
-- dialogue 'hx_clondor_test' is never used
-- dialogue 'hx_commit_history' is never used
-- dialogue 'hx_software_cert' is never used
-- dialogue 'hx_board' is never used
-- dialogue 'hx_restore' is never used
-- dialogue 'hx_patch_forge' is never used
-- dialogue 'hx_clean_valley' is never used
-- dialogue 'hx_epilogue' is never used
-- dialogue 'hx_intro_ewaste' is never used
-- dialogue 'hx_kevin_counterpick' is never used
-- dialogue 'hx_ticket_printer' is never used
-- dialogue 'hx_ticket_router' is never used
-- dialogue 'hx_cleaning_tutorial' is never used
-- dialogue 'hx_321_joke' is never used
-- dialogue 'hx_first_phisher' is never used
-- dialogue 'hx_building_encrypted' is never used
-- dialogue 'hx_desktop_cert' is never used
-- dialogue 'hx_dockmaster_logs' is never used
-- dialogue 'hx_networking_cert' is never used
-- dialogue 'hx_power_cycle' is never used
-- dialogue 'hx_route_1_corruption_hint' is never used
-- dialogue 'hx_secops_patch' is never used
-- dialogue 'hx_sysadmin_desk' is never used
-- dialogue 'hx_hexforge_manual' is never used
-- dialogue 'hx_restorephant' is never used
-- dialogue 'hx_dead_zone_spread' is never used
+- dialogue 'hx_a5_forge' is never used
+- dialogue 'hx_a5_sudofox_stolen' is never used
+- dialogue 'hx_a5_vendor_reveal' is never used
+- dialogue 'hx_a6_cert8' is never used
+- dialogue 'hx_a5_clondor' is never used
+- dialogue 'hx_a5_cert5' is never used
+- dialogue 'hx_a3_commit_history' is never used
+- dialogue 'hx_a3_first_fresh_note' is never used
+- dialogue 'hx_a3_glitch_flees' is never used
+- dialogue 'hx_a3_cert3' is never used
+- dialogue 'hx_a7_final_route' is never used
+- dialogue 'hx_a7_csuite' is never used
+- dialogue 'hx_a7_board' is never used
+- dialogue 'hx_a7_free_sudofox' is never used
+- dialogue 'hx_a7_restore' is never used
+- dialogue 'hx_a7_patch_forge' is never used
+- dialogue 'hx_a7_epilogue' is never used
+- dialogue 'hx_a6_cert7' is never used
+- dialogue 'hx_a1_ewaste_starter' is never used
+- dialogue 'hx_a1_kevin_counter' is never used
+- dialogue 'hx_a1_onboarding_tickets' is never used
+- dialogue 'hx_a1_ticket_printer' is never used
+- dialogue 'hx_a1_ticket_321' is never used
+- dialogue 'hx_a1_first_tape_label' is never used
+- dialogue 'hx_a1_ticket_router' is never used
+- dialogue 'hx_a1_cert1' is never used
+- dialogue 'hx_a2_port_443_traffic' is never used
+- dialogue 'hx_a2_kevin_trouble_2' is never used
+- dialogue 'hx_a2_cert2' is never used
+- dialogue 'hx_a2_demo_teaser' is never used
+- dialogue 'hx_a4_first_err' is never used
+- dialogue 'hx_a4_cleaning_tutorial' is never used
+- dialogue 'hx_a4_kevin_cleared' is never used
+- dialogue 'hx_a4_cert4' is never used
+- dialogue 'hx_a1_route_1_phisher' is never used
+- dialogue 'hx_a2_aggressive' is never used
+- dialogue 'hx_a3_route_3' is never used
+- dialogue 'hx_a4_route_4' is never used
+- dialogue 'hx_a6_patch' is never used
+- dialogue 'hx_a6_cert6' is never used
+- dialogue 'hx_a3_hexforge_manual' is never used
+- dialogue 'hx_a3_restorephant' is never used
+- dialogue 'hx_a3_kevin_trouble_3' is never used
+- dialogue 'hx_a2_dead_zone_signal' is never used
+- dialogue 'hx_a2_kevin_trouble_1' is never used
 - maps reachable: 24 of 24; arrival points: 47
 - trainer kevin_rival_3_pingo: levels [23, 21, 22]
 - trainer kevin_rival_3_glowbit: levels [23, 21, 22]
@@ -123,6 +138,6 @@
 - trainer lineworker_lou: levels [11, 12]
 - trainer gamer_gabe: levels [12]
 - trainer phisher_phyllis: levels [12, 12]
-- trainer signal_hunter_hal: levels [6, 7]
-- trainer phisher_pete: levels [8, 8]
+- trainer signal_hunter_hal: levels [12, 13]
+- trainer phisher_pete: levels [13, 13]
 - Cycles: lowest total at Lv 5 is 35 (coolippo). 0-Cycles fallback (Force Quit): in place.

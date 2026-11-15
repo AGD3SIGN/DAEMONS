@@ -17,6 +17,7 @@ const FILES := {
 	"balance": "balance.json",
 	"region_map": "region_map.json",
 	"demo_end": "demo_end.json",
+	"level_caps": "level_caps.json",
 }
 const MAPS_DIR := "res://data/maps/"
 const DIALOGUE_DIR := "res://data/dialogue/"
@@ -37,6 +38,7 @@ var certifications: Dictionary = {}   # cert id -> {id, name, department, type, 
 var title_screen: Dictionary = {}     # title screen copy + featured legendaries (data/title_screen.json)
 var feedback: Dictionary = {}         # in-game Feedback form: relay endpoint and limits (data/feedback.json)
 var balance: Dictionary = {}          # EXP rate and the blackout credit penalty (data/balance.json)
+var level_caps: Array = []          # caps[n] = highest level while holding n Certifications (data/level_caps.json)
 var demo_end: Dictionary = {}         # the end-of-demo card and credits (data/demo_end.json)
 var region_map: Dictionary = {}       # the phone's Maps app: places, links, which maps belong where (data/region_map.json)
 
@@ -136,6 +138,7 @@ func load_from(raw: Dictionary, report: bool = true) -> bool:
 	balance = validator.balance
 	region_map = validator.region_map
 	demo_end = validator.demo_end
+	level_caps = validator.level_caps
 	if report:
 		_report()
 	return errors.is_empty()

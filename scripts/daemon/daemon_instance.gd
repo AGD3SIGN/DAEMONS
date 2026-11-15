@@ -157,13 +157,15 @@ func exp_to_next_level() -> int:
 
 
 ## Adds exp, levelling up as many times as it earns. Returns events (see top of file).
-func gain_exp(amount: int) -> Array[Dictionary]:
+## `cap` is the level cap from your Certifications (GDD): EXP stops there and the overflow is thrown away.
+func gain_exp(amount: int, cap: int = MAX_LEVEL) -> Array[Dictionary]:
 	var events: Array[Dictionary] = []
-	if level >= MAX_LEVEL or amount <= 0:
+	cap = mini(cap, MAX_LEVEL)
+	if level >= cap or amount <= 0:
 		return events
 	var rate := growth_rate()
-	total_exp = mini(total_exp + amount, GrowthRate.exp_for_level(rate, MAX_LEVEL))
-	while level < MAX_LEVEL and total_exp >= GrowthRate.exp_for_level(rate, level + 1):
+	total_exp = mini(total_exp + amount, GrowthRate.exp_for_level(rate, cap))
+	while level < cap and total_exp >= GrowthRate.exp_for_level(rate, level + 1):
 		events.append_array(_level_up_once())
 	return events
 

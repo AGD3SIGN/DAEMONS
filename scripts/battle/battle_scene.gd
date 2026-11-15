@@ -155,6 +155,7 @@ func setup(cfg: Dictionary) -> void:
 	state = BattleState.new(BattleSide.new("You", player_stack, items),
 		BattleSide.new(trainer_name if not trainer_name.is_empty() else "Wild", foe_stack), rng, wild)
 	state.uncatchable = bool(cfg.get("teaser", false))
+	state.level_cap = int(cfg.get("level_cap", GameState.level_cap()))
 	state.foe_flees_after = 2 if cfg.get("teaser", false) else 0
 	if is_inside_tree() and not _started:
 		_start()

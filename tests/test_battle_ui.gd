@@ -153,7 +153,7 @@ func test_level_up_then_upgrade_on_screen() -> void:
 	var foe := _daemon("dustbunny", 5)
 	foe.current_uptime = 1
 	var foe_stack: Array[DaemonInstance] = [foe]
-	var scene := await _run_battle({"foe_stack": foe_stack, "player_stack": team, "items": {}})
+	var scene := await _run_battle({"foe_stack": foe_stack, "player_stack": team, "items": {}, "level_cap": 100})
 	assert_eq(scene.result["outcome"], "player_won")
 	assert_eq(chipmunk.level, 16)
 	assert_eq(chipmunk.species_id, "munkboard", "upgraded after the battle")

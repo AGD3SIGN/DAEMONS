@@ -1,0 +1,4 @@
+{
+  "note": "TBD: placeholder numbers, flagged for balancing. caps[n] = the highest level while holding n Certifications (0-8). Picked so each Department ace is reachable at the cap.",
+  "caps": [14, 20, 28, 36, 42, 48, 54, 60, 100]
+}

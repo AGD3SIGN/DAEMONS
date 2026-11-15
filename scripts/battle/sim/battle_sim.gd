@@ -43,6 +43,7 @@ extends RefCounted
 ##   switch_needed     {side}
 ##   fled              {side}                                  run_failed {side}
 ##   foe_fled          {daemon}   (a scripted foe leaves on its own; outcome "foe_fled")
+##   level_capped      {side, index, daemon}   (EXP stopped at the Certification level cap; once per battle each)
 ##   capture_shake     {n}                                     1..3, one per passed stage (scan, isolate, encrypt)
 ##   captured          {side, daemon, species}                 outcome becomes "caught"
 ##   capture_failed    {shakes}                                0..2 stages passed before it broke free
@@ -719,10 +720,13 @@ static func _award_exp(state: BattleState, events: Array[Dictionary]) -> void:
 	for i in receivers:
 		var d := player.stack[i]
 		d.add_experience_logs(log_yield)
-		if d.level >= DaemonInstance.MAX_LEVEL:
+		if d.level >= mini(state.level_cap, DaemonInstance.MAX_LEVEL):
+			if d.level < DaemonInstance.MAX_LEVEL and not state.cap_announced.has(i):
+				state.cap_announced[i] = true
+				events.append(_ev("level_capped", {"side": BattleState.PLAYER, "index": i, "daemon": d.display_name()}))
 			continue
 		events.append(_ev("exp_gained", {"side": BattleState.PLAYER, "index": i, "daemon": d.display_name(), "amount": share}))
-		for e in d.gain_exp(share):
+		for e in d.gain_exp(share, state.level_cap):
 			e["side"] = BattleState.PLAYER
 			e["index"] = i
 			e["daemon"] = d.display_name()
