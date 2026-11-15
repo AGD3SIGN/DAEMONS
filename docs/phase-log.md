@@ -4,6 +4,42 @@ Newest entries at the top. Each entry: what's done, decisions, what's next.
 
 ---
 
+## 2026-11-15 — HEXFORGED: rename, new story, Infected status, corrupted Hexforged
+
+From Brandon's master prompt ("HEXFORGED — rename + story + corrupted creatures"). Six commits:
+- **Rename** (a8250f8): player-facing DAEMONS → HEXFORGED, creatures → Hexforged. Title logo, boot text
+  ("mounting /dev/hexforge … OK", "179 entities indexed"), battle button STACK, console bar hexforge@field, every
+  UI string, dialogue, items, credits, feedback page, app name. Desktop saves/settings copied once from the old
+  "Daemons" user folder. Code-level leftovers listed in docs/rename-leftovers.md (pending decision 6).
+- **Story** (a0d6bec): docs/design.md "Story" replaced (lore rules, backstory, Port 443 backdoor, Acts 1–5,
+  post-game). Breeding/growing-up wording removed from 6 CMDB entries (Mainmunk, Servurtle, Transistant, Siliqueen,
+  Calfiber, Orcable), the design doc's upgrade rule and concept table, and 4 art-prompt files. Dialogue stubs:
+  data/dialogue/hx_*.json (12 areas, TODO / TODO PENDING_APPROVAL), not wired to maps. Old story docs superseded.
+- **Status rename** (c079e55): Corrupted → Infected (INF tag, "got Infected!"). Save v4 migrates it.
+- **Corrupted system** (e0ffc50): is_corrupted, species `corrupted` blocks, corrupted_chance, Malware second type,
+  ×1.10 throughput / ×0.90 encryption, ERR:: names, Bag > QUARANTINED, Help Desk clean_quarantined, CMDB
+  COMPROMISED/Recovered, shared CleanEffect (scripts/ui/clean_effect.gd), placeholder corrupted sprites in code.
+- **Tests** (adcd2dc): tests/test_corruption.gd, 12 tests. Suite 347/347.
+
+**Species that need real corrupted art** (front-only, 6 frames, 384x64, assets/sprites/hexforged/corrupted/<id>_front.png):
+Pyrewall, Cablesnake, Floppit, Dustbunny, Fanbat, Ramster, Servurtle. Later, once they exist: Captchat (023),
+Cumulonimbyte (025). Starters only if decision 5 says yes. Wild species with no corrupted block yet (add a block +
+art if they should be corruptible): Antsistor, Armadrive, Calfiber, Clawptop, Coolapotamus, Coolippo, Deskclaw,
+Dillodisk, Hummodem, Jellyband, Meshpider, Murmuroute, Pasteslug, Patchviper, Pixelsier, Proxferret, Proxkit,
+Spinode, Storkache, Tieweaver, Transistant.
+
+**Balancing defaults to review:** corrupted_chance Route 2 .25, Port City .35, Basement .4, Data Center .5, Power
+Plant .5, Cloud Summit .4, SecOps .3; 0 before Patch Town. Stat mods ×1.10 / ×0.90.
+
+**Open decisions (Brandon):** 1 [RANSOM_LEADER] (the sysadmin, or a separate villain); 2 [SYSADMIN_NAME];
+3 backup trio beats; 4 when clean Pyrewall is catchable; 5 corrupted starters; 6 code/ID rename (DMN- → HXF-,
+classes, files); 7 balancing numbers; 8 trademark check on "Hexforged". Also raised: the new act list puts the Wi-Fi
+Dead Zone in Act 2 but the map has it between Route 1 and Patch Town; the demo was "Acts 1–3" (old acts, through
+SecOps) and the new Acts 1–3 end at the Abandoned Data Center; the built maps still play the old story (Cron,
+Marge, Pizza Friday) until the hx_ stubs are written and wired in.
+
+---
+
 ## 2026-11-15 — Department challenges: five different trials, harder each time; Kevin rewrite
 
 - Brandon: the department puzzles were all "flip the right two of three switches". Now each is its own mechanic:
