@@ -31,8 +31,8 @@ real IT hardware).
 
 == CREATURE BIBLE ==
 Name: Pingo. Stage 1 of 3 (basic form). Type: Network.
-Concept: a baby penguin chick fused with a home Wi-Fi router. Anxious and eager; it "pings" everything and waits nervously for a reply.
-Body: a very round chick, almost a ball; head and body are one shape. Short stubby flippers, tiny feet.
+Concept: a small, round v1 penguin build fused with a home Wi-Fi router. Anxious and eager; it "pings" everything and waits nervously for a reply.
+Body: a very round little penguin, almost a ball; head and body are one shape. Short stubby flippers, tiny feet.
 Size: body height about 55% of the cell (about 35 of the 64 art pixels), same size in every frame.
 Signature features (show in every frame where they would be visible):
 1. Two thin router antennas on top of the head, grey with rounded tips, angled slightly apart.

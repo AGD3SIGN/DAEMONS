@@ -31,7 +31,7 @@ real IT hardware).
 
 == CREATURE BIBLE ==
 Name: Floppit. Stage 1 of 3 (basic form). Type: Legacy.
-Concept: a baby bunny with 3.5-inch floppy-disk ears. Sweet and old-fashioned; it holds exactly 1.44 MB of memories.
+Concept: a small v1 bunny build with 3.5-inch floppy-disk ears. Sweet and old-fashioned; it holds exactly 1.44 MB of memories.
 Body: a small round bunny, big head, short legs, a little puff tail.
 Size: body height about 50% of the cell (about 32 of the 64 art pixels), same size in every frame.
 Signature features (show in every frame where they would be visible):
@@ -194,7 +194,7 @@ ATTACHED: the approved sprite sheet(s) for Floppit and Ziphare (the earlier stag
 
 == CREATURE BIBLE ==
 Name: Discohare. Stage 3 of 3 (final form). Type: Legacy.
-Concept: the SAME hare as a stylish elder jackrabbit, fused with optical discs. Flashy and dramatic; it skips mid-sentence if scratched.
+Concept: the SAME hare as a stylish veteran v3 jackrabbit build, fused with optical discs. Flashy and dramatic; it skips mid-sentence if scratched.
 Body: a tall, lanky jackrabbit with very long ears and a confident stance.
 Size: body height about 80% of the cell (about 51 of the 64 art pixels), same size in every frame.
 KEEP FROM PREVIOUS STAGE: the same eyes and shine, the same beige/teal/silver palette, the label sticker and the pink nose; the ears are still storage media.

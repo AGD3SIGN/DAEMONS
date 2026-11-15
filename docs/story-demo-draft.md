@@ -1,3 +1,6 @@
+> **SUPERSEDED 2026-11-15** by the HEXFORGED story in docs/design.md ("Story"). Kept for reference; the built
+> Acts 1–3 still use this story until the new dialogue replaces it.
+
 # DAEMONS Demo (Acts 1–3): Story Draft
 
 **Status:** DRAFT, written 2026-11-15 for Brandon's review. Nothing in this doc is built yet.

@@ -1,0 +1,14 @@
+{
+  "hx_dockmaster_logs": [
+    {
+      "text": "TODO: Dockmaster's logs: every infection came in through Port 443.",
+      "speaker": "Dockmaster"
+    }
+  ],
+  "hx_networking_cert": [
+    {
+      "text": "TODO: Ping Okoro awards the Networking cert.",
+      "speaker": "Ping"
+    }
+  ]
+}

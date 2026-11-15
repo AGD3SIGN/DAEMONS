@@ -1,0 +1,23 @@
+{
+  "hx_forge_found": [
+    {
+      "text": "TODO: The Hexforge, fed malicious code, pumping out Hashlings."
+    }
+  ],
+  "hx_err_pyrewall": [
+    {
+      "text": "TODO: ERR::PYREWALL chained behind an encrypted gate."
+    }
+  ],
+  "hx_sudofox_key": [
+    {
+      "text": "TODO PENDING_APPROVAL: Ransom has stolen Sudofox's root key, so nobody can restore."
+    }
+  ],
+  "hx_leader_reveal": [
+    {
+      "text": "TODO: Mid-game reveal: who [RANSOM_LEADER] is.",
+      "speaker": "[RANSOM_LEADER]"
+    }
+  ]
+}

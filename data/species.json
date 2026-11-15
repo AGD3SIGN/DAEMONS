@@ -37,7 +37,7 @@
       { "level": 31, "move": "hard_reset" }, { "level": 42, "move": "defrag" }
     ],
     "evolutions": [],
-    "cmdb": { "category": "Chipmunk / Enterprise System", "entry": "An elder chipmunk the size of a server room. Has run payroll without a reboot since before anyone can remember." } },
+    "cmdb": { "category": "Chipmunk / Enterprise System", "entry": "The enterprise build of the Chipmunk line, the size of a server room. Has run payroll without a reboot since before anyone can remember." } },
   { "id": "pingo", "number": 4, "name": "Pingo", "types": ["network"],
     "base_stats": { "uptime": 48, "throughput": 50, "hardening": 58, "compute": 52, "encryption": 56, "bandwidth": 46 },
     "growth_rate": "medium_slow", "catch_rate": 45, "base_exp": 63, "log_yield": { "hardening": 1 },
@@ -212,7 +212,7 @@
       { "level": 12, "move": "defrag" }, { "level": 15, "move": "thermal_runaway" }, { "level": 22, "move": "hard_reset" }
     ],
     "evolutions": [],
-    "cmdb": { "category": "Turtle / Rack Server", "entry": "Carries a 2U server on its shell. Has not been rebooted since it hatched, and nobody dares try." } },
+    "cmdb": { "category": "Turtle / Rack Server", "entry": "Carries a 2U server on its shell. Has not been rebooted since it was compiled, and nobody dares try." } },
   { "id": "clawptop", "number": 28, "name": "Clawptop", "types": ["hardware"],
     "base_stats": { "uptime": 50, "throughput": 60, "hardening": 65, "compute": 35, "encryption": 45, "bandwidth": 35 },
     "growth_rate": "medium_slow", "catch_rate": 120, "base_exp": 60, "log_yield": { "hardening": 1 },
@@ -259,7 +259,7 @@
       { "level": 12, "move": "heatsink_slam" }, { "level": 18, "move": "logic_gate" }, { "level": 24, "move": "overclock" }
     ],
     "evolutions": [ { "to": "siliqueen", "trigger": "level", "level": 36 } ],
-    "cmdb": { "category": "Ant / Microchip", "entry": "Soldier ants that guard the colony's circuits. They lay gold traces in perfectly straight lines and bite anything that crosses one." } },
+    "cmdb": { "category": "Ant / Microchip", "entry": "A security build of the Antsistor line that guards the fab line's circuits. Lays gold traces in perfectly straight lines and bites anything that crosses one." } },
   { "id": "siliqueen", "number": 33, "name": "Siliqueen", "types": ["hardware"],
     "base_stats": { "uptime": 80, "throughput": 90, "hardening": 80, "compute": 95, "encryption": 80, "bandwidth": 70 },
     "growth_rate": "medium_fast", "catch_rate": 35, "base_exp": 215, "log_yield": { "compute": 3 },
@@ -269,7 +269,7 @@
       { "level": 36, "move": "fab_line" }, { "level": 44, "move": "thermal_runaway" }
     ],
     "evolutions": [],
-    "cmdb": { "category": "Ant / Chip Foundry", "entry": "The colony's queen. Her abdomen is a silicon wafer, and every die on it hatches into a new worker." } },
+    "cmdb": { "category": "Ant / Chip Foundry", "entry": "Runs the whole fab line. Her abdomen is a silicon wafer covered in perfect dies, and she inspects every one before it ships." } },
   { "id": "coolippo", "number": 34, "name": "Coolippo", "types": ["hardware"],
     "base_stats": { "uptime": 70, "throughput": 55, "hardening": 55, "compute": 45, "encryption": 50, "bandwidth": 30 },
     "growth_rate": "slow", "catch_rate": 150, "base_exp": 64, "log_yield": { "uptime": 1 },
@@ -369,7 +369,7 @@
       { "level": 12, "move": "latency_spike" }, { "level": 16, "move": "fast_ethernet" }
     ],
     "evolutions": [ { "to": "orcable", "trigger": "level", "level": 30 } ],
-    "cmdb": { "category": "Orca / Fiber Optic", "entry": "A playful calf that spouts glowing light from its blowhole. Follows boats that are laying cable." } },
+    "cmdb": { "category": "Orca / Fiber Optic", "entry": "A small, playful build that spouts glowing light from its blowhole. Follows boats that are laying cable." } },
   { "id": "orcable", "number": 45, "name": "Orcable", "types": ["network"],
     "base_stats": { "uptime": 100, "throughput": 95, "hardening": 75, "compute": 85, "encryption": 75, "bandwidth": 65 },
     "growth_rate": "slow", "catch_rate": 45, "base_exp": 190, "log_yield": { "throughput": 2 },
@@ -379,7 +379,7 @@
       { "level": 36, "move": "packet_flood" }
     ],
     "evolutions": [],
-    "cmdb": { "category": "Orca / Undersea Cable", "entry": "Lays internet cable across the valley's lake floor. Pods of them keep the whole region online." } },
+    "cmdb": { "category": "Orca / Undersea Cable", "entry": "Lays internet cable across the valley's lake floor. A few of them keep the whole region online." } },
   { "id": "proxkit", "number": 46, "name": "Proxkit", "types": ["network"],
     "base_stats": { "uptime": 45, "throughput": 60, "hardening": 40, "compute": 45, "encryption": 40, "bandwidth": 75 },
     "growth_rate": "medium_fast", "catch_rate": 150, "base_exp": 60, "log_yield": { "bandwidth": 1 },

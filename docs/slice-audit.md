@@ -48,6 +48,36 @@
 - flag 'trainer_kevin_rival_2_glowbit' is set but never checked (fine for bookkeeping)
 - flag 'trainer_kevin_rival_2_chipmunk' is set but never checked (fine for bookkeeping)
 - dialogue 'pipeline_notes' is never used
+- dialogue 'hx_forge_found' is never used
+- dialogue 'hx_err_pyrewall' is never used
+- dialogue 'hx_sudofox_key' is never used
+- dialogue 'hx_leader_reveal' is never used
+- dialogue 'hx_clondor_test' is never used
+- dialogue 'hx_commit_history' is never used
+- dialogue 'hx_software_cert' is never used
+- dialogue 'hx_board' is never used
+- dialogue 'hx_restore' is never used
+- dialogue 'hx_patch_forge' is never used
+- dialogue 'hx_clean_valley' is never used
+- dialogue 'hx_epilogue' is never used
+- dialogue 'hx_intro_ewaste' is never used
+- dialogue 'hx_kevin_counterpick' is never used
+- dialogue 'hx_ticket_printer' is never used
+- dialogue 'hx_ticket_router' is never used
+- dialogue 'hx_cleaning_tutorial' is never used
+- dialogue 'hx_321_joke' is never used
+- dialogue 'hx_first_phisher' is never used
+- dialogue 'hx_building_encrypted' is never used
+- dialogue 'hx_desktop_cert' is never used
+- dialogue 'hx_dockmaster_logs' is never used
+- dialogue 'hx_networking_cert' is never used
+- dialogue 'hx_power_cycle' is never used
+- dialogue 'hx_route_1_corruption_hint' is never used
+- dialogue 'hx_secops_patch' is never used
+- dialogue 'hx_sysadmin_desk' is never used
+- dialogue 'hx_hexforge_manual' is never used
+- dialogue 'hx_restorephant' is never used
+- dialogue 'hx_dead_zone_spread' is never used
 - maps reachable: 24 of 24; arrival points: 47
 - trainer kevin_rival_3_pingo: levels [23, 21, 22]
 - trainer kevin_rival_3_glowbit: levels [23, 21, 22]

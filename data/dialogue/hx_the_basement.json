@@ -1,0 +1,17 @@
+{
+  "hx_sysadmin_desk": [
+    {
+      "text": "TODO: [SYSADMIN_NAME]'s old desk; his handwriting on the tape labels."
+    }
+  ],
+  "hx_hexforge_manual": [
+    {
+      "text": "TODO: The Hexforge manual. Reveal: these creatures were built, not born, and something is rewriting them."
+    }
+  ],
+  "hx_restorephant": [
+    {
+      "text": "TODO PENDING_APPROVAL: Restorephant guards the on-site backup and recognizes the sysadmin's handwriting."
+    }
+  ]
+}

@@ -94,16 +94,16 @@ Draft type chart (attacker → defender; 2 = super effective, ½ = resisted, 0 =
 | **Looping** | volatile; 33% chance to hit itself |
 
 ### Sample Hexforged (original designs, starting roster ideas)
-**Rule:** an evolution line keeps the SAME animal. The animal grows up (baby → adult → elder) while its tech upgrades (home → business → enterprise gear).
+**Rule:** an upgrade line keeps the SAME animal design. Hexforged are built, never born: each stage is a newer build of the same creature (v1 → v2 → v3), bigger and more capable, while its tech upgrades (home → business → enterprise gear).
 
 | Line | Type | Concept |
 |---|---|---|
-| **Chipmunk → Munkboard → Mainmunk** | Hardware (starter) | baby chipmunk + CPU heatsink (heatsink cheeks, fan tail) → adult chipmunk + motherboard (copper-trace stripes, RAM-stick cheek pouches) → huge elder chipmunk + mainframe (server-cabinet chest, cable mane, twin-fan tail) |
-| **Pingo → Pengwan → Emperoute** | Network (starter) | penguin chick + home router (2 antennas, belly LEDs) → adult penguin + office switch (antenna crown, port-panel belly) → emperor penguin + internet backbone (satellite-dish crest, fiber-optic cape) |
-| **Glowbit → Scriptfly → Compilume** | Software (starter) | baby firefly whose tail blinks like a cursor (`>_` face) → adult firefly with code-window wings that writes script in the air → giant firefly whose abdomen is a build-progress bar |
+| **Chipmunk → Munkboard → Mainmunk** | Hardware (starter) | small chipmunk build + CPU heatsink (heatsink cheeks, fan tail) → full-size chipmunk + motherboard (copper-trace stripes, RAM-stick cheek pouches) → huge enterprise chipmunk + mainframe (server-cabinet chest, cable mane, twin-fan tail) |
+| **Pingo → Pengwan → Emperoute** | Network (starter) | small round penguin + home router (2 antennas, belly LEDs) → full-size penguin + office switch (antenna crown, port-panel belly) → emperor penguin + internet backbone (satellite-dish crest, fiber-optic cape) |
+| **Glowbit → Scriptfly → Compilume** | Software (starter) | small firefly whose tail blinks like a cursor (`>_` face) → full-size firefly with code-window wings that writes script in the air → giant firefly whose abdomen is a build-progress bar |
 | **Wormby → Wormhole** | Malware | worm that tunnels through cables → space-warping worm |
 | **Spigeon → Botgeon** | Malware | scruffy pigeon with envelope wings, stuffed with junk mail → huge pigeon commanding a botnet (dish feathers, "!!!" crest) |
-| **Floppit → Ziphare → Discohare** | Legacy | bunny with 3.5" floppy ears → grown hare + zip disk (via a Legacy item) → elder hare + rainbow CD ears (via sync) |
+| **Floppit → Ziphare → Discohare** | Legacy | bunny with 3.5" floppy ears → full-size hare + zip disk (via a Legacy item) → veteran hare + rainbow CD ears (via sync) |
 | **Fanbat** | Hardware/Power | bat with case-fan wings; swarms server rooms |
 | **Dustbunny** | Peripheral | early-route common; scrappy and cute |
 | **Captchat** | Security | cat that only lets "humans" pass; confusion moves |
@@ -143,12 +143,73 @@ Target roster: **40–60 Hexforged** for v1 (about 18 evolution lines + singles 
 12. Further Departments: Data/Analytics, Mobile, AI Lab
 13. **HQ Tower**: the C-Suite + The Board
 
-### Story beats (light, funny, IT-culture humor)
-- Day 1 on the help desk; your manager gives you a starter "from the e-waste bin".
-- Ransom is encrypting towns one by one; each Department boss helps you after you earn their cert.
-- Twist: Ransom's leader is the valley's old sysadmin, who was laid off when everything "moved to the cloud".
-- Ending: restore from backups (the backups were tested, a miracle).
-- Full act-by-act outline (approved 2026-11-13): docs/story-outline.md. Ransom's leader is **Cron**; the Manager is **Marge**; Pyrewall falls at Port 443 in the story and is caught post-game; the 3-2-1 trio (Restorephant, Clondor, Sudofox) is in; the finale is Cron, then the C-Suite and The Board as your Annual Performance Review.
+### Story (HEXFORGED, 2026-11-15; replaces the DAEMONS story)
+Tone: light, funny, IT-culture humor. Root Valley, the help desk job, 8 Certifications, Kevin (replies-all to
+everything), the C-Suite and The Board all stay. `[PLACEHOLDER]` and `PENDING_APPROVAL` items are undecided.
+
+**Lore rules (everywhere)**
+1. **Hexforged are built, never born.** No breeding, eggs, nests, parents or babies. A line's stages are upgrades
+   (new versions), not growing up.
+2. **Every Hexforged was compiled by the Hexforge** for a job and lives inside the system it runs (Cablesnakes in
+   cable runs, Fanbats in server rooms, Pingos in routers). A "wild" Hexforged is one running loose in its system
+   with no handler. Catching one assigns it to you.
+3. **Corruption is a broken computer, not a demon.** Corrupted creatures look glitched and damaged, never hellish.
+
+**Backstory.** Years ago Root Valley had one sysadmin, `[SYSADMIN_NAME]`, who held everything together. Tired of
+doing it alone, he wrote the **Hexforge**: a compiler that turns code into living creatures. A router config becomes
+Pingo; a firewall ruleset became **Pyrewall (No. 000)**, the first and finest thing the forge built, set to guard
+**Port 443**, the gate the forge talks through. The valley ran smoothly for years.
+
+**The malfunction.** The valley "moved to the cloud" and the sysadmin was laid off. On his last night, access ending
+at midnight, he pushed one final untested build, `encrypt_for_safekeeping()`. His access was cut mid-compile. The
+half-finished build left the Hexforge glitched, with an **open backdoor through Port 443**.
+
+**The corruption (inciting incident).** `[RANSOM_LEADER]` found the backdoor and used it on purpose. Through the broken
+forge, Ransom (1) **corrupts good Hexforged**, so creatures built to run the valley turn on their own systems, and
+(2) **compiles new malware creatures** (the **Hashling → Cryptodile → Extortodile** ransomware line and the other
+Malware lines). Ransom's first wave through Port 443 **corrupted Pyrewall** and knocked it offline; with the
+guardian down, corruption spreads town to town. The demand: pay up, or every system gets encrypted.
+Player-facing mystery: *why are the valley's own creatures turning on it, and where are the malware creatures
+coming from?*
+
+**Act 1 — Onboarding (Onboarding Town → Route 1 → Patch Town).** Day 1. A starter from the e-waste bin (Chipmunk,
+Pingo or Glowbit), unplugged before Ransom showed up, so it's clean. Kevin picks the counter and replies-all about
+it. First tickets (a printer that won't stop printing, a router that keeps dropping) each hide a corrupted Hexforged:
+you catch one and the Help Desk cleans it (cleaning tutorial). First Phisher; a Patch Town building is encrypted while
+you watch. `PENDING_APPROVAL`: a ticket mentions "the 3-2-1 rule" as an old in-joke. Desktop Support (Hardware) cert.
+
+**Act 2 — Following the spread (Wi-Fi Dead Zone → Port City → The Basement).** Every infected system has corrupted
+Hexforged in it; more Hashlings the further you go. Port City: Networking cert; the dockmaster's logs show every
+infection came through Port 443. The Basement: the sysadmin's old desk, his handwriting on tape labels, the Hexforge
+manual. Reveal: these creatures were built, not born, and something is rewriting them. `PENDING_APPROVAL`:
+Restorephant guards the on-site backup and recognizes the sysadmin's handwriting.
+
+**Act 3 — The forge (DevOps Heights → Abandoned Data Center).** Software cert. The Hexforge's commit history: the
+sysadmin's last commit, 11:59 PM, `temp fix, will clean up later`; every commit after is from an unknown account.
+The Abandoned Data Center is Ransom's hideout: the Hexforge inside, fed malicious code, pumping out Hashlings.
+**ERR::PYREWALL** is chained behind an encrypted gate. `PENDING_APPROVAL`: Ransom stole Sudofox's root key.
+Mid-game reveal: who `[RANSOM_LEADER]` is.
+
+**Act 4 — Gathering what you need (Power Plant → Cloud Summit → SecOps Fortress).** Facilities (Power) cert: the
+forge needs a clean power cycle to stop safely. `PENDING_APPROVAL`: Clondor tests you at Cloud Summit and hands over
+the off-site backup. SecOps: Security cert, and the patch that closes the Port 443 backdoor and strips corruption,
+but pushing it needs root access.
+
+**Act 5 — The restore (remaining Departments → HQ Tower).** The C-Suite, then The Board, then `[RANSOM_LEADER]`.
+Ending: (1) restore from backups (`PENDING_APPROVAL`: Restorephant, Clondor and Sudofox run it together; "The backups
+were tested. A miracle."), (2) patch the forge (Port 443 closes), (3) clean the valley: Pyrewall first, back online at
+Port 443, then every corrupted Hexforged returns to its job. Epilogue (if the sysadmin is involved): rehired as a
+contractor at three times his old salary; Kevin replies-all. Ransom's malware lines stay as normal catchable species
+that can't corrupt anything anymore.
+
+**Post-game.** Clean Pyrewall becomes catchable `[PLACEHOLDER: timing]`. Hallucinaut and Uptimus stay as post-game
+legendaries; hook: someone is still sending code to the forge from outside the valley.
+
+**Corrupted Hexforged** (system rules in docs/data-format.md): the same species in a glitched, hostile state, shown as
+`ERR::NAME`. Catch it, clean it at a Help Desk, and it's the normal version. Malware lines can't be corrupted.
+
+Superseded: docs/story-outline.md (the DAEMONS story with Cron, Marge's Pizza Friday) and docs/story-demo-draft.md.
+The game's built Acts 1–3 still play the old story until the new dialogue replaces it (stubs in data/dialogue/hx_*).
 
 ### Legal guardrails (from the research; not legal advice)
 - 100% original names, creature designs, UI, text, formulas and music. Never use another franchise's assets, names, fonts, sounds or code.

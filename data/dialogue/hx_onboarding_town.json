@@ -1,0 +1,35 @@
+{
+  "hx_intro_ewaste": [
+    {
+      "text": "TODO: Manager hands you a starter from the e-waste bin: unplugged before Ransom showed up, so it's clean.",
+      "speaker": "Manager"
+    }
+  ],
+  "hx_kevin_counterpick": [
+    {
+      "text": "TODO: Kevin picks the starter that beats yours and replies-all to announce it (keep his know-it-all voice).",
+      "speaker": "Kevin"
+    }
+  ],
+  "hx_ticket_printer": [
+    {
+      "text": "TODO: Ticket: a printer that won't stop printing. A corrupted Hexforged is inside it; catch it."
+    }
+  ],
+  "hx_ticket_router": [
+    {
+      "text": "TODO: Ticket: a router that keeps dropping. A corrupted Hexforged is inside; catch it."
+    }
+  ],
+  "hx_cleaning_tutorial": [
+    {
+      "text": "TODO: Help Desk tech explains cleaning: 'Have you tried turning it off and on again?'",
+      "speaker": "Help Desk Tech"
+    }
+  ],
+  "hx_321_joke": [
+    {
+      "text": "TODO PENDING_APPROVAL: A ticket mentions 'the 3-2-1 rule' as an old in-joke nobody understands."
+    }
+  ]
+}

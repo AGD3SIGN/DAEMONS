@@ -31,7 +31,7 @@ real IT hardware).
 
 == CREATURE BIBLE ==
 Name: Glowbit. Stage 1 of 3 (basic form). Type: Software.
-Concept: a baby firefly whose glowing tail blinks like a text cursor. Curious and quick; it follows whoever types the fastest.
+Concept: a small v1 firefly build whose glowing tail blinks like a text cursor. Curious and quick; it follows whoever types the fastest.
 Body: a tiny round bug with an oversized head, two little wings and a big glowing tail segment.
 Size: body height about 45% of the cell (about 29 of the 64 art pixels), same size in every frame.
 Signature features (show in every frame where they would be visible):

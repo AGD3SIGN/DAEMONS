@@ -1,0 +1,28 @@
+{
+  "hx_board": [
+    {
+      "text": "TODO: The C-Suite, then The Board, then [RANSOM_LEADER]."
+    }
+  ],
+  "hx_restore": [
+    {
+      "text": "TODO PENDING_APPROVAL: Restore from backups: Restorephant, Clondor and Sudofox run it together. 'The backups were tested. A miracle.'"
+    }
+  ],
+  "hx_patch_forge": [
+    {
+      "text": "TODO: Patch the forge: the Port 443 backdoor closes; the forge stops taking Ransom's code."
+    }
+  ],
+  "hx_clean_valley": [
+    {
+      "text": "TODO: Clean the valley: Pyrewall first, back online at Port 443; every corrupted Hexforged returns to its job."
+    }
+  ],
+  "hx_epilogue": [
+    {
+      "text": "TODO: If the sysadmin is involved: rehired as a contractor at 3x his old salary. Kevin replies-all.",
+      "speaker": "Kevin"
+    }
+  ]
+}

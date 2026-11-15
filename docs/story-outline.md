@@ -1,3 +1,6 @@
+> **SUPERSEDED 2026-11-15** by the HEXFORGED story in docs/design.md ("Story"). Kept for reference; the built
+> Acts 1–3 still use this story until the new dialogue replaces it.
+
 # DAEMONS — Story Outline (APPROVED 2026-11-13)
 
 Drafted and approved 2026-11-13: Brandon accepted every recommendation in section 7. Nothing here is built yet

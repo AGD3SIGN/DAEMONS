@@ -1,0 +1,8 @@
+{
+  "hx_secops_patch": [
+    {
+      "text": "TODO: Security cert; SecOps gives you the patch that closes Port 443 and strips corruption, but you need root access to push it.",
+      "speaker": "Kalb"
+    }
+  ]
+}

@@ -31,7 +31,7 @@ real IT hardware).
 
 == CREATURE BIBLE ==
 Name: Chipmunk. Stage 1 of 3 (basic form). Type: Hardware.
-Concept: a baby chipmunk fused with a CPU heatsink. Warm, eager and a little smug; it stores waste heat in its cheeks.
+Concept: a small v1 chipmunk build fused with a CPU heatsink. Warm, eager and a little smug; it stores waste heat in its cheeks.
 Body: small and round, big head, puffy cheeks, short legs, a long curled tail.
 Size: body height about 55% of the cell (about 35 of the 64 art pixels), same size in every frame.
 Signature features (show in every frame where they would be visible):
@@ -194,7 +194,7 @@ ATTACHED: the approved sprite sheet(s) for Chipmunk and Munkboard (the earlier s
 
 == CREATURE BIBLE ==
 Name: Mainmunk. Stage 3 of 3 (final form). Type: Hardware.
-Concept: the SAME chipmunk as a huge, wise elder, fused with a room-sized mainframe. Calm, ancient and unshakable; it has never once rebooted.
+Concept: the SAME chipmunk as a huge, veteran v3 build, fused with a room-sized mainframe. Calm, ancient and unshakable; it has never once rebooted.
 Body: massive and heavy-set, sitting-upright bulk, thick arms, a huge plume tail.
 Size: body height about 85% of the cell (about 54 of the 64 art pixels), same size in every frame.
 KEEP FROM PREVIOUS STAGE: the same face, eye shape and shine, the same orange/cream/metal palette, heatsink cheeks (now larger), the trace stripes and the fan tail.
@@ -203,7 +203,7 @@ Signature features (show in every frame where they would be visible):
 2. A mane of bundled cables around its neck and shoulders, ending in small plugs.
 3. A plume tail with TWO fans stacked along it.
 4. Large heatsink cheeks and copper trace stripes down its back.
-5. Big round dark eyes with a white shine pixel, with heavier brows (elder look).
+5. Big round dark eyes with a white shine pixel, with heavier brows (veteran look).
 Palette (exact hex):
 #2A1E1A outline | #E0703C fur | #B04E28 fur shadow | #F4A070 fur highlight |
 #F8E8C8 cream belly | #D8BC94 belly shadow | #9EA4B0 heatsink metal | #6A6E78 metal shadow |
