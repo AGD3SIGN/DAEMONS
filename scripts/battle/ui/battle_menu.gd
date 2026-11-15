@@ -94,10 +94,7 @@ func move_man(slot: int) -> String:
 	if _shown_moves == null or slot >= _shown_moves.moves.size():
 		return ""
 	var move_slot: Dictionary = _shown_moves.moves[slot]
-	var move := DataRegistry.get_move(move_slot["id"])
-	var type_name := String(DataRegistry.types[move["type"]]["name"]).to_upper()
-	var power := "PWR %d" % int(move["power"]) if int(move["power"]) > 0 else "STATUS"
-	return "%s · %s · CYC %d/%d" % [type_name, power, int(move_slot["pp"]), int(move["max_pp"])]
+	return MoveText.line(move_slot["id"], int(move_slot["pp"]))
 
 
 func choose_from_list(title: String, options: PackedStringArray, enabled: Array = [], cancellable: bool = true) -> int:
@@ -129,10 +126,11 @@ func choose_from_list(title: String, options: PackedStringArray, enabled: Array 
 	return int(result)
 
 
-func confirm() -> bool:
+## default_yes = false puts the cursor on NO, for choices that throw something away.
+func confirm(default_yes: bool = true) -> bool:
 	_hide_all()
 	_confirm_panel.visible = true
-	_confirm_buttons[0].grab_focus()
+	_confirm_buttons[0 if default_yes else 1].grab_focus()
 	var result: Variant = await _await_pick(false)
 	_hide_all()
 	return bool(result)

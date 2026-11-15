@@ -218,6 +218,27 @@ func learn_move(move_id: String, slot: int = -1) -> bool:
 	return true
 
 
+## Swaps two move slots (the order moves show in battle). Cycles stay with their move.
+func swap_moves(a: int, b: int) -> bool:
+	if a < 0 or b < 0 or a >= moves.size() or b >= moves.size() or a == b:
+		return false
+	var temp: Dictionary = moves[a]
+	moves[a] = moves[b]
+	moves[b] = temp
+	return true
+
+
+## Moves this Daemon has learned by its level (from its learnset) but doesn't have installed right
+## now. Nothing is ever lost: a move you replace can be re-installed later from STACK > MOVES.
+func relearnable_moves() -> PackedStringArray:
+	var out := PackedStringArray()
+	for entry: Dictionary in species_data().get("learnset", []):
+		var id: String = entry["move"]
+		if int(entry["level"]) <= level and not knows_move(id) and not id in out:
+			out.append(id)
+	return out
+
+
 func _try_learn(move_id: String) -> Dictionary:
 	if knows_move(move_id):
 		return {}

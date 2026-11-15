@@ -67,6 +67,7 @@ static func _apply(effect: String, params: Dictionary, item_id: String, d: Daemo
 			if d.level >= DaemonInstance.MAX_LEVEL:
 				return no_effect
 			var messages: Array[String] = []
+			var pending: Array[String] = []
 			for e in d.level_up():
 				match e["type"]:
 					"level_up":
@@ -74,14 +75,16 @@ static func _apply(effect: String, params: Dictionary, item_id: String, d: Daemo
 					"move_learned":
 						messages.append("%s installed %s!" % [name, DataRegistry.get_move(e["move"])["name"]])
 					"move_learn_pending":
-						messages.append("%s wanted to install %s, but all 4 slots are full." % [name, DataRegistry.get_move(e["move"])["name"]])
+						messages.append("%s wants to install %s, but all 4 slots are full." % [name, DataRegistry.get_move(e["move"])["name"]])
+						pending.append(e["move"])
 			var target := d.check_evolution("level")
 			if not target.is_empty() and not d.is_fainted():
 				d.evolve(target)
 				GameState.cmdb_seen[target] = true
 				GameState.cmdb_caught[target] = true
 				messages.append("%s upgraded into %s!" % [name, d.display_name()])
-			return {"ok": true, "messages": messages}
+			# pending_moves: the field menu asks which move to replace for each (FieldMenus.offer_move).
+			return {"ok": true, "messages": messages, "pending_moves": pending}
 		"evolve":
 			var into := d.check_evolution("item", item_id)
 			if into.is_empty():

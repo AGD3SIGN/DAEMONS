@@ -343,7 +343,8 @@ func show_message(text: String) -> void:
 
 
 ## Yes/No question. Returns true for yes.
-func ask(question: String, speaker: String = "") -> bool:
+## default_yes = false starts the cursor on NO (for choices that throw something away).
+func ask(question: String, speaker: String = "", default_yes: bool = true) -> bool:
 	dialogue_log.append(question)
 	_set_speaker(speaker)
 	text_box.visible = true
@@ -353,7 +354,7 @@ func ask(question: String, speaker: String = "") -> bool:
 		if auto_choice is Array:  # tests: answers in order (e.g. a quiz), then "no"
 			return bool(auto_choice.pop_front()) if not auto_choice.is_empty() else false
 		return bool(auto_choice)
-	return await menu.confirm()
+	return await menu.confirm(default_yes)
 
 
 ## Walks the player along a path during a cutscene (no warps, triggers or encounters).

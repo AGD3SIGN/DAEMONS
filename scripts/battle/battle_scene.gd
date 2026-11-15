@@ -279,20 +279,36 @@ func _choose_item() -> BattleAction:
 	return BattleAction.item(ids[pick], target) if target >= 0 else null
 
 
-## Called by BattlePlayer when a Daemon wants a 5th move.
+## Called by BattlePlayer when a Daemon wants a 5th move. The player picks which move goes (or keeps
+## them all); every choice that throws a move away asks again with the cursor on NO, so mashing
+## A through the text can't wipe a move (player feedback, 2026-11-14).
 func prompt_move_replace(e: Dictionary) -> void:
 	var d := state.sides[BattleState.PLAYER].stack[int(e["index"])]
-	var new_name: String = DataRegistry.get_move(e["move"])["name"]
-	if not auto:
-		text_box.show_now("Uninstall a move to make room for %s?" % new_name)
-		if await menu.confirm():
-			var slot := await menu.choose_move(d)
-			if slot >= 0:
-				var old_name: String = DataRegistry.get_move(d.moves[slot]["id"])["name"]
-				d.learn_move(e["move"], slot)
-				await text_box.show_text("%s uninstalled %s and installed %s!" % [d.display_name(), old_name, new_name])
-				return
-	await text_box.show_text("%s did not install %s." % [d.display_name(), new_name])
+	var new_id: String = e["move"]
+	var new_name := MoveText.name_of(new_id)
+	if auto:
+		await text_box.show_text("%s did not install %s." % [d.display_name(), new_name])
+		return
+	await text_box.show_text("%s: %s." % [new_name, MoveText.line(new_id)])
+	while true:
+		var rows := PackedStringArray()
+		for slot: Dictionary in d.moves:
+			rows.append("%-14s %s" % [MoveText.name_of(slot["id"]), MoveText.line(slot["id"], int(slot["pp"]))])
+		rows.append("KEEP MY MOVES")
+		var pick := await menu.choose_from_list("Replace which move with %s?" % new_name, rows, [], true)
+		if pick < 0 or pick >= d.moves.size():
+			text_box.show_now("Skip installing %s?" % new_name)
+			if await menu.confirm(false):
+				break
+			continue
+		var old_name := MoveText.name_of(d.moves[pick]["id"])
+		text_box.show_now("Forget %s and install %s?" % [old_name, new_name])
+		if await menu.confirm(false):
+			d.learn_move(new_id, pick)
+			await text_box.show_text("%s uninstalled %s and installed %s!" % [d.display_name(), old_name, new_name])
+			await text_box.show_text("(Forgotten moves can be re-installed any time from STACK > MOVES.)")
+			return
+	await text_box.show_text("%s did not install %s. (You can install it later from STACK > MOVES.)" % [d.display_name(), new_name])
 
 
 func _after_battle() -> void:

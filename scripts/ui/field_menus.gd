@@ -43,7 +43,7 @@ func _ready() -> void:
 	side.setup(Vector4(1, 0, 1, 0), Vector4(-112, 6, -6, 6 + 17 + 9 * MenuList.ROW_H + 6), 9)
 	add_child(side)
 	sub = MenuList.new()
-	sub.setup(Vector4(1, 1, 1, 1), Vector4(-112, -6 - (17 + 4 * MenuList.ROW_H + 6), -6, -6), 4)
+	sub.setup(Vector4(1, 1, 1, 1), Vector4(-112, -6 - (17 + 5 * MenuList.ROW_H + 6), -6, -6), 5)
 	add_child(sub)
 	summary = SummaryPanel.new()
 	add_child(summary)
@@ -508,7 +508,7 @@ func stack_screen() -> void:
 			break
 		start = r["index"]
 		var d: DaemonInstance = GameState.active_stack[start]
-		var choice := await sub.choose(d.display_name(), PackedStringArray(["SUMMARY", "SWAP", "ITEM", "CANCEL"]))
+		var choice := await sub.choose(d.display_name(), PackedStringArray(["SUMMARY", "MOVES", "SWAP", "ITEM", "CANCEL"]))
 		sub.close()
 		if choice["action"] != "pick":
 			continue
@@ -516,15 +516,111 @@ func stack_screen() -> void:
 			0:
 				await summary.open(GameState.active_stack, start)
 			1:
+				await moves_screen(d)
+			2:
 				var other := await list.choose("Swap %s with?" % d.display_name(), stack_rows(), [], start)
 				if other["action"] == "pick":
 					GameState.swap_stack(start, other["index"])
 					start = other["index"]
-			2:
+			3:
 				var item_id := await _pick_bag_item("Use which item?", func(id: String) -> bool: return ItemUse.needs_target(id))
 				if not item_id.is_empty():
-					await _say_all(ItemUse.use_on(item_id, d)["messages"])
+					await _use_on(item_id, d)
 	list.close()
+
+
+## Uses an item on a Daemon, then asks about any move it wants but has no room for (Overclock Chip).
+func _use_on(item_id: String, d: DaemonInstance) -> void:
+	var result := ItemUse.use_on(item_id, d)
+	await _say_all(result["messages"])
+	for move_id: String in result.get("pending_moves", []):
+		await offer_move(d, move_id)
+
+
+# --- moves -------------------------------------------------------------------
+
+## STACK > MOVES: see each move's details, change the order, and re-install moves the Daemon learned
+## before. Nothing is overwritten without asking (player feedback, 2026-11-14).
+func moves_screen(d: DaemonInstance) -> void:
+	var start := 0
+	while true:
+		var rows := PackedStringArray()
+		for slot: Dictionary in d.moves:
+			rows.append("%-15s CYC %2d/%-2d" % [MoveText.name_of(slot["id"]), int(slot["pp"]), int(DataRegistry.get_move(slot["id"])["max_pp"])])
+		var old_moves := d.relearnable_moves()
+		rows.append("RE-INSTALL A MOVE (%d)" % old_moves.size())
+		var enabled: Array = []
+		for i in d.moves.size():
+			enabled.append(true)
+		enabled.append(not old_moves.is_empty())
+		list.describe = func(i: int) -> String:
+			if i < d.moves.size():
+				return MoveText.describe(d.moves[i]["id"], int(d.moves[i]["pp"]))
+			return "Moves %s learned before. Install one again." % d.display_name()
+		var r := await list.choose("%s · MOVES   pick one to move it" % d.display_name(), rows, enabled, start)
+		list.describe = Callable()
+		if r["action"] != "pick":
+			break
+		if r["index"] >= d.moves.size():
+			var pick := await _pick_move("Re-install which move?", old_moves)
+			if not pick.is_empty():
+				await offer_move(d, pick)
+			continue
+		start = r["index"]
+		var where := await list.choose("Move %s to which slot?" % MoveText.name_of(d.moves[start]["id"]), _slot_rows(d), [], start)
+		if where["action"] == "pick" and d.swap_moves(start, where["index"]):
+			start = where["index"]
+	list.close()
+
+
+## Installs move_id: straight into a free slot, or asks which move to replace (cursor on NO when
+## confirming). Returns true if it was installed.
+func offer_move(d: DaemonInstance, move_id: String) -> bool:
+	var new_name := MoveText.name_of(move_id)
+	if d.knows_move(move_id):
+		return false
+	if d.learn_move(move_id):
+		AudioManager.play_sfx("confirm")
+		await _say("%s installed %s!" % [d.display_name(), new_name])
+		return true
+	while true:
+		list.describe = func(i: int) -> String:
+			return MoveText.describe(d.moves[i]["id"], int(d.moves[i]["pp"])) if i < d.moves.size() else MoveText.describe(move_id)
+		var rows := _slot_rows(d)
+		rows.append("KEEP MY MOVES")
+		var r := await list.choose("Replace which move with %s?" % new_name, rows)
+		list.describe = Callable()
+		if r["action"] != "pick" or r["index"] >= d.moves.size():
+			if world == null or await world.ask("Skip installing %s?" % new_name, "", false):
+				break
+			continue
+		var old_name := MoveText.name_of(d.moves[r["index"]]["id"])
+		if world == null or await world.ask("Forget %s and install %s?" % [old_name, new_name], "", false):
+			d.learn_move(move_id, r["index"])
+			AudioManager.play_sfx("confirm")
+			list.close()
+			await _say("%s uninstalled %s and installed %s!" % [d.display_name(), old_name, new_name])
+			return true
+	list.close()
+	await _say("%s kept its moves. %s can be installed later from STACK > MOVES." % [d.display_name(), new_name])
+	return false
+
+
+func _slot_rows(d: DaemonInstance) -> PackedStringArray:
+	var rows := PackedStringArray()
+	for i in d.moves.size():
+		rows.append("%d  %s" % [i + 1, MoveText.name_of(d.moves[i]["id"])])
+	return rows
+
+
+func _pick_move(title: String, ids: PackedStringArray) -> String:
+	var rows := PackedStringArray()
+	for id in ids:
+		rows.append(MoveText.name_of(id))
+	list.describe = func(i: int) -> String: return MoveText.describe(ids[i]) if i < ids.size() else ""
+	var r := await list.choose(title, rows)
+	list.describe = Callable()
+	return ids[r["index"]] if r["action"] == "pick" else ""
 
 
 func stack_rows() -> PackedStringArray:
@@ -591,7 +687,7 @@ func _use_item(item_id: String) -> void:
 	if ItemUse.needs_target(item_id):
 		var r := await list.choose("Use on which Daemon?", stack_rows())
 		if r["action"] == "pick":
-			await _say_all(ItemUse.use_on(item_id, GameState.active_stack[r["index"]])["messages"])
+			await _use_on(item_id, GameState.active_stack[r["index"]])
 	else:
 		await _say_all(ItemUse.use_in_field(item_id)["messages"])
 
