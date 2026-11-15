@@ -49,6 +49,9 @@ func test_corner_hint_names_the_buttons_for_each_scheme() -> void:
 	world.text_box.visible = true
 	assert_false(world.control_hint.should_show(), "out of the way during dialogue")
 	world.text_box.visible = false
+	world.player.moving = true
+	assert_true(world.control_hint.should_show(), "stays put while walking (it used to blink every step)")
+	world.player.moving = false
 	var rect := world.control_hint.get_global_rect()
 	assert_true(get_viewport().get_visible_rect().encloses(rect), "on screen: %s" % rect)
 
@@ -71,3 +74,22 @@ func test_title_prompt_matches_the_input() -> void:
 	assert_eq(InputPrompts.start_prompt("PRESS START"), "PRESS START")
 	InputPrompts.scheme = "touch"
 	assert_eq(InputPrompts.start_prompt("PRESS START"), "TAP TO START")
+
+
+func test_battle_names_who_you_face() -> void:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 1
+	var team: Array[DaemonInstance] = [DaemonInstance.create("chipmunk", 10, rng, 1)]
+	var cfg := BattleScene.trainer_config("intern_ian")
+	cfg.merge({"player_stack": team, "items": {}, "auto": true, "time_scale": 0.0}, true)
+	var scene: BattleScene = load(BattleScene.SCENE).instantiate()
+	scene.setup(cfg)
+	assert_eq(scene.host_label(), "INTERN IAN", "trainers are named")
+	scene.free()
+	var wild := {"foe": [["dustbunny", 3]], "player_stack": team, "items": {}, "auto": true, "time_scale": 0.0}
+	scene = load(BattleScene.SCENE).instantiate()
+	scene.setup(wild)
+	assert_eq(scene.host_label(), "UNKNOWN HOST", "a Daemon you've never seen")
+	GameState.cmdb_seen["dustbunny"] = true
+	assert_eq(scene.host_label(), "DUSTBUNNY", "named once it's in your CMDB")
+	scene.free()

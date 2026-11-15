@@ -160,6 +160,11 @@ func is_idle() -> bool:
 	return not _busy and not player.moving
 
 
+## No dialogue, menu, warp or cutscene running (walking still counts as free).
+func is_free() -> bool:
+	return not _busy
+
+
 func _event_at(cell: Vector2i) -> MapEvent:
 	for event in events:
 		if event.cell == cell and not event is WarpEvent and not event is TriggerEvent and not event is BarrierEvent:

@@ -37,6 +37,11 @@ var show_unknown_host := true:
 	set(value):
 		show_unknown_host = value
 		queue_redraw()
+## The name under the foe's pad: the trainer, a Daemon already in your CMDB, or UNKNOWN HOST.
+var host_label := "UNKNOWN HOST":
+	set(value):
+		host_label = value
+		queue_redraw()
 var animate := true
 var _time := 0.0
 
@@ -64,7 +69,7 @@ func _draw() -> void:
 	_draw_pad(WILD_PAD, BattleStyle.WILD, WILD_INSET)
 	_draw_pad(HOST_PAD, BattleStyle.HOST, HOST_INSET)
 	if show_unknown_host:
-		draw_string(BattleStyle.silkscreen(), Vector2(WILD_PAD.position.x, 388 + 14), "UNKNOWN HOST",
+		draw_string(BattleStyle.silkscreen(), Vector2(WILD_PAD.position.x, 388 + 14), host_label,
 			HORIZONTAL_ALIGNMENT_CENTER, WILD_PAD.size.x, 12, Color(BattleStyle.WILD, 0.85))
 	_draw_zone_tag()
 

@@ -120,7 +120,7 @@ func _process(delta: float) -> void:
 		foe_slot.position = _foe_rest - Vector2(0, roundf(FOE_BOB * p) / FIELD_SCALE)
 	elif foe_slot != null:
 		foe_slot.position = _foe_rest
-	# "UNKNOWN HOST" sits under the wild pad until the player's card takes that space.
+	# The foe's name tag sits under the wild pad until the player's card takes that space.
 	if arena != null and player_panel != null:
 		arena.show_unknown_host = not player_panel.visible
 
@@ -167,6 +167,17 @@ func _setup_demo() -> void:
 
 # --- battle flow -------------------------------------------------------------
 
+## Who you're facing, under their pad: the trainer's name; a wild Daemon's name once your CMDB has
+## seen it (checked before this battle records it); otherwise UNKNOWN HOST.
+func host_label() -> String:
+	if not trainer_name.is_empty():
+		return trainer_name.to_upper()
+	var foe := state.sides[BattleState.FOE].active()
+	if foe != null and GameState.cmdb_seen.get(foe.species_id, false):
+		return String(foe.species_data()["name"]).to_upper()
+	return "UNKNOWN HOST"
+
+
 func _start() -> void:
 	_started = true
 	_player = BattlePlayer.new(self)
@@ -176,6 +187,7 @@ func _start() -> void:
 	player_panel.time_scale = time_scale
 	foe_panel.wild = state.is_wild
 	arena.zone_id = String(config.get("zone", BattleStyle.DEFAULT_ZONE))
+	arena.host_label = host_label()
 	AudioManager.play_music(config.get("music", "battle_wild" if state.is_wild else "battle_trainer"))
 	_run()
 
