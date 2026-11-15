@@ -11,6 +11,12 @@ extends RefCounted
 ##   {"cmd": "start_battle", "trainer": "kevin_town"}   or  "foe": [["spigeon", 9]] (ends the dialogue)
 ##   {"cmd": "give_cert", "cert": "desktop_support"}
 ##   {"if_cert": "networking", "then": [steps], "else": [steps]}
+##   {"choose": "Which fix?", "options": [{"label": "CLEAN DUST", "then": [steps]}, ...], "cancel": [steps]}
+##        up to 8 answers in the side list (labels up to 12 characters); BACK runs "cancel"
+##   {"if_var": "load", "op": "<=", "value": 10, "then": [steps], "else": [steps]}   ops: == != < <= > >=
+##   {"cmd": "add_var", "var": "load", "value": -4}  /  {"cmd": "set_var", "var": "stage", "value": 0}
+##   {"cmd": "clear_flags", "flags": ["brk_a", "brk_b"]}
+##   {"cmd": "send_player", "spawn": "entrance"}     fade out and back in at a spawn point on this map
 ##   {"cmd": "move_npc", "npc": "kid", "path": ["left", "right"]}   npc "self" = whoever is talking
 ##   {"cmd": "open_shop", "stock": ["coffee", "thumb_drive"]}   Supply Closet buy/sell
 ##   {"cmd": "open_rack"}                                         Server Rack storage
@@ -18,7 +24,7 @@ extends RefCounted
 ##   {"cmd": "choose_starter", "options": ["chipmunk", "pingo", "glowbit"], "level": 5}
 ##        sets flags got_starter and starter_<species>
 ##   {"cmd": "move_player", "path": ["down"]}                     walk the player in a cutscene
-## Text can use {player} for the player's name.
+## Text can use {player} for the player's name and {var:load} for a counter's value.
 
 ## Until the intro asks for a name (Phase 7).
 const DEFAULT_PLAYER_NAME := "New Hire"
@@ -49,6 +55,14 @@ func _run_step(step: Dictionary) -> void:
 	elif step.has("if_flag"):
 		var flag_set: bool = GameState.flags.get(step["if_flag"], false)
 		await run(step.get("then" if flag_set else "else", []))
+	elif step.has("choose"):
+		var labels := PackedStringArray()
+		for option: Dictionary in step["options"]:
+			labels.append(_fill(option["label"]))
+		var pick := await world.choose(_fill(step["choose"]), labels, step.get("speaker", ""), step.get("title", "CHOOSE"))
+		await run(step["options"][pick].get("then", []) if pick >= 0 else step.get("cancel", []))
+	elif step.has("if_var"):
+		await run(step.get("then" if compare(int(GameState.counters.get(step["if_var"], 0)), step["op"], int(step["value"])) else "else", []))
 	elif step.has("if_cert"):
 		var has_cert: bool = step["if_cert"] in GameState.certifications
 		await run(step.get("then" if has_cert else "else", []))
@@ -60,6 +74,16 @@ func _command(step: Dictionary) -> void:
 	match step["cmd"]:
 		"set_flag":
 			GameState.flags[step["flag"]] = step.get("value", true)
+		"add_var":
+			GameState.counters[step["var"]] = int(GameState.counters.get(step["var"], 0)) + int(step["value"])
+		"set_var":
+			GameState.counters[step["var"]] = int(step["value"])
+		"clear_flags":
+			for flag: String in step["flags"]:
+				GameState.flags.erase(flag)
+		"send_player":
+			stopped = true  # the Overworld does the move once the sign / NPC / trigger is finished
+			world.pending_send = step["spawn"]
 		"give_item":
 			var count := int(step.get("count", 1))
 			GameState.bag[step["item"]] = int(GameState.bag.get(step["item"], 0)) + count
@@ -134,6 +158,31 @@ func _command(step: Dictionary) -> void:
 				gone.disappear()
 
 
+static func compare(a: int, op: String, b: int) -> bool:
+	match op:
+		"==":
+			return a == b
+		"!=":
+			return a != b
+		"<":
+			return a < b
+		"<=":
+			return a <= b
+		">":
+			return a > b
+		">=":
+			return a >= b
+	return false
+
+
 static func _fill(text: String) -> String:
 	var player_name := GameState.player_name if not GameState.player_name.is_empty() else DEFAULT_PLAYER_NAME
-	return text.replace("{player}", player_name)
+	text = text.replace("{player}", player_name)
+	while "{var:" in text:
+		var start := text.find("{var:")
+		var end := text.find("}", start)
+		if end < 0:
+			break
+		var name := text.substr(start + 5, end - start - 5)
+		text = text.substr(0, start) + str(int(GameState.counters.get(name, 0))) + text.substr(end + 1)
+	return text

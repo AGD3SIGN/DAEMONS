@@ -22,6 +22,7 @@ var cell := Vector2i.ZERO
 var facing := Vector2i.DOWN
 var moving := false
 var input_enabled := true
+var sliding := false  # riding a packet lane
 var time_scale: float = 1.0  # 0 = instant (tests)
 var camera: Camera2D
 
@@ -69,7 +70,7 @@ func setup(p_map: MapView, start_cell: Vector2i, start_facing: Vector2i) -> void
 
 func _process(delta: float) -> void:
 	_bump_cooldown = maxf(0.0, _bump_cooldown - delta)
-	if moving or not input_enabled or map == null:
+	if moving or sliding or not input_enabled or map == null:
 		return
 	var dir := _held_direction()
 	if dir == Vector2i.ZERO:
@@ -103,7 +104,27 @@ func try_step(dir: Vector2i, running: bool = false) -> String:
 		_bump(target)
 		return "bumped"
 	await _walk(target, RUN_TIME if running else WALK_TIME)
+	await _ride_lanes()
 	return "moved"
+
+
+const SLIDES := {"slide_up": Vector2i.UP, "slide_down": Vector2i.DOWN, "slide_left": Vector2i.LEFT, "slide_right": Vector2i.RIGHT}
+const SLIDE_TIME := 0.07
+
+
+## Packet lanes (Networking Department): stepping onto one carries you along its arrow, tile after tile, until
+## you land on a tile that isn't a lane (another lane can turn you) or the next tile is blocked.
+func _ride_lanes() -> void:
+	var ridden := {cell: true}  # lanes pointing at each other would bounce you forever; a ride ends instead
+	while true:
+		var dir: Vector2i = SLIDES.get(map.tile_info(cell)["behavior"], Vector2i.ZERO)
+		if dir == Vector2i.ZERO or not map.is_walkable(cell + dir) or ridden.has(cell + dir):
+			break
+		ridden[cell + dir] = true
+		sliding = true
+		facing = dir
+		await _walk(cell + dir, SLIDE_TIME)
+	sliding = false
 
 
 func _walk(target: Vector2i, duration: float) -> void:

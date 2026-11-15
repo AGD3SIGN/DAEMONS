@@ -9,11 +9,9 @@
     "M": "exit_mat",
     "k": "bookshelf",
     "c": "server_rack",
-    "b": "bed",
-    "t": "table",
     "p": "plant",
     "r": "rug",
-    "C": "counter"
+    "T": "terminal"
   },
   "rows": [
     "IIIIIIIIIIIIIII",
@@ -27,18 +25,22 @@
     "I_____________I",
     "IIIIIII_IIIIIII",
     "I_____________I",
-    "I_c___c___c___I",
+    "I_T___ccc___T_I",
+    "I_____ccc_____I",
+    "I_k____T____k_I",
     "I_____________I",
-    "I____rrrrr__k_I",
+    "Icc_T_____T_ccI",
     "I_____________I",
+    "I_k___T_T___k_I",
     "I_____________I",
+    "I_____rrr_____I",
     "I_____________I",
     "IIIIIIIMIIIIIII"
   ],
   "spawns": {
     "default": {
       "x": 7,
-      "y": 16,
+      "y": 20,
       "facing": "up"
     }
   },
@@ -46,16 +48,36 @@
     {
       "type": "warp",
       "x": 7,
-      "y": 17,
+      "y": 21,
       "to_map": "devops_heights",
       "to_spawn": "from_department"
     },
     {
       "type": "trigger",
       "x": 7,
-      "y": 16,
+      "y": 20,
       "dialogue": "department_3_welcome",
       "once_flag": "department_3_welcomed"
+    },
+    {
+      "type": "barrier",
+      "x": 7,
+      "y": 9,
+      "open_flags": [
+        "pipeline_green"
+      ]
+    },
+    {
+      "type": "sign",
+      "x": 7,
+      "y": 13,
+      "dialogue": "pipe_hotfix"
+    },
+    {
+      "type": "sign",
+      "x": 10,
+      "y": 15,
+      "dialogue": "pipe_lint"
     },
     {
       "type": "sign",
@@ -66,32 +88,50 @@
     {
       "type": "sign",
       "x": 6,
-      "y": 11,
+      "y": 17,
       "dialogue": "pipe_test"
     },
     {
       "type": "sign",
-      "x": 10,
+      "x": 8,
+      "y": 17,
+      "dialogue": "pipe_scan"
+    },
+    {
+      "type": "sign",
+      "x": 12,
       "y": 11,
-      "dialogue": "pipe_friday"
+      "dialogue": "pipe_staging"
+    },
+    {
+      "type": "sign",
+      "x": 4,
+      "y": 15,
+      "dialogue": "pipe_deploy"
     },
     {
       "type": "sign",
       "x": 12,
       "y": 13,
-      "dialogue": "pipeline_notes"
+      "dialogue": "pipe_board_1"
     },
     {
-      "type": "barrier",
-      "x": 7,
-      "y": 9,
-      "open_flags": [
-        "pipe_build",
-        "pipe_test"
-      ],
-      "closed_flags": [
-        "pipe_friday"
-      ]
+      "type": "sign",
+      "x": 2,
+      "y": 17,
+      "dialogue": "pipe_board_2"
+    },
+    {
+      "type": "sign",
+      "x": 2,
+      "y": 13,
+      "dialogue": "pipe_board_3"
+    },
+    {
+      "type": "sign",
+      "x": 12,
+      "y": 17,
+      "dialogue": "pipe_board_4"
     },
     {
       "type": "npc",

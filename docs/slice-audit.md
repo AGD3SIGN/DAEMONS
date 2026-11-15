@@ -47,6 +47,7 @@
 - flag 'trainer_kevin_rival_2_pingo' is set but never checked (fine for bookkeeping)
 - flag 'trainer_kevin_rival_2_glowbit' is set but never checked (fine for bookkeeping)
 - flag 'trainer_kevin_rival_2_chipmunk' is set but never checked (fine for bookkeeping)
+- dialogue 'pipeline_notes' is never used
 - maps reachable: 24 of 24; arrival points: 47
 - trainer kevin_rival_3_pingo: levels [23, 21, 22]
 - trainer kevin_rival_3_glowbit: levels [23, 21, 22]

@@ -110,20 +110,53 @@
   ],
   "department_4_welcome": [
     {
-      "speaker": "Receptionist",
-      "text": "Welcome to Facilities! Lights are back, thanks to you. The trial room is past the breaker door."
+      "text": "Welcome to Facilities. The town's lights are back, thanks to you. In here? Brownout.",
+      "speaker": "Receptionist"
     },
     {
-      "speaker": "Receptionist",
-      "text": "Rolf's notes are on the shelf. He labels everything. Everything."
+      "text": "Ransom rewired our breakers. Get the door to Rolf powered without going over 12 kW.",
+      "speaker": "Receptionist"
+    },
+    {
+      "text": "Over 12 and the main breaker trips. The meter's by the exit. Rolf's rules are on the rack.",
+      "speaker": "Receptionist"
+    },
+    {
+      "cmd": "clear_flags",
+      "flags": [
+        "brk_servers",
+        "brk_coffee",
+        "brk_cooling",
+        "brk_rig",
+        "brk_door",
+        "brk_heater",
+        "brk_lights"
+      ]
+    },
+    {
+      "cmd": "set_flag",
+      "flag": "brk_servers"
+    },
+    {
+      "cmd": "set_flag",
+      "flag": "brk_rig"
+    },
+    {
+      "cmd": "set_flag",
+      "flag": "brk_heater"
+    },
+    {
+      "cmd": "set_var",
+      "var": "load",
+      "value": 12
     }
   ],
   "breaker_notes": [
     {
-      "text": "BREAKER NOTES (labeled by Rolf): MAIN on. COOLING on. Always."
+      "text": "ROLF'S RULES: 1. The SERVERS stay on. Always. 2. COOLING goes on with the servers. No exceptions."
     },
     {
-      "text": "OVERCLOCK: never. \"That's how you get a crypto-miner.\" - Rolf"
+      "text": "3. The DOOR LOCK pulls 3 kW. 4. No coffee during a brownout. I mean it. 5. Anything marked $$$ is NOT OURS."
     }
   ],
   "rolf": [
@@ -376,16 +409,16 @@
   ],
   "department_5_welcome": [
     {
-      "speaker": "Receptionist",
-      "text": "SecOps. The trial room is past the access-control door. Read the notes. Then read them again."
-    }
-  ],
-  "access_notes": [
-    {
-      "text": "ACCESS CONTROL NOTES: MFA on. Audit logging on."
+      "text": "SecOps. Major Kalb is past the server floor. The cameras sweep the aisles.",
+      "speaker": "Receptionist"
     },
     {
-      "text": "Guest badges: OFF. \"Guest\" is how Ransom got into the data center. - Maj. Kalb"
+      "text": "If a camera's red beam is on you when it turns, you're back in this lobby. Watch which way they look.",
+      "speaker": "Receptionist"
+    },
+    {
+      "text": "Three log printouts are out there. Read all three, then tell the console which account Ransom used.",
+      "speaker": "Receptionist"
     }
   ],
   "kalb": [
@@ -421,146 +454,905 @@
       ]
     }
   ],
-  "brk_main": [
+  "power_meter": [
     {
-      "if_flag": "brk_main",
+      "text": "LOAD METER: {var:load} / 12 kW. Anything over 12 trips the main breaker."
+    }
+  ],
+  "breaker_servers": [
+    {
+      "if_flag": "brk_lights",
       "then": [
         {
-          "text": "MAIN: switched OFF."
-        },
-        {
-          "cmd": "set_flag",
-          "flag": "brk_main",
-          "value": false
+          "text": "BREAKER: SERVERS, 4 kW."
         }
       ],
       "else": [
         {
-          "text": "MAIN: switched ON."
-        },
+          "text": "A breaker. Too dark to read the label. A hundred tiny fans whir behind it."
+        }
+      ]
+    },
+    {
+      "if_flag": "brk_servers",
+      "then": [
         {
-          "cmd": "set_flag",
-          "flag": "brk_main"
+          "choice": "It's ON. Switch it OFF?",
+          "yes": [
+            {
+              "cmd": "set_flag",
+              "flag": "brk_servers",
+              "value": false
+            },
+            {
+              "text": "Every screen in the building goes black. Somewhere upstairs, Rolf screams."
+            },
+            {
+              "cmd": "clear_flags",
+              "flags": [
+                "brk_servers",
+                "brk_coffee",
+                "brk_cooling",
+                "brk_rig",
+                "brk_door",
+                "brk_heater",
+                "brk_lights"
+              ]
+            },
+            {
+              "cmd": "set_flag",
+              "flag": "brk_servers"
+            },
+            {
+              "cmd": "set_flag",
+              "flag": "brk_rig"
+            },
+            {
+              "cmd": "set_flag",
+              "flag": "brk_heater"
+            },
+            {
+              "cmd": "set_var",
+              "var": "load",
+              "value": 12
+            },
+            {
+              "text": "The servers reboot. Everything is back to how Ransom left it."
+            }
+          ],
+          "no": []
+        }
+      ],
+      "else": [
+        {
+          "choice": "It's OFF. Switch it ON?",
+          "yes": [
+            {
+              "cmd": "set_flag",
+              "flag": "brk_servers"
+            },
+            {
+              "cmd": "add_var",
+              "var": "load",
+              "value": 4
+            },
+            {
+              "if_var": "load",
+              "op": ">",
+              "value": 12,
+              "then": [
+                {
+                  "text": "BANG! The main breaker trips. Everything snaps back to how Ransom left it."
+                },
+                {
+                  "cmd": "clear_flags",
+                  "flags": [
+                    "brk_servers",
+                    "brk_coffee",
+                    "brk_cooling",
+                    "brk_rig",
+                    "brk_door",
+                    "brk_heater",
+                    "brk_lights"
+                  ]
+                },
+                {
+                  "cmd": "set_flag",
+                  "flag": "brk_servers"
+                },
+                {
+                  "cmd": "set_flag",
+                  "flag": "brk_rig"
+                },
+                {
+                  "cmd": "set_flag",
+                  "flag": "brk_heater"
+                },
+                {
+                  "cmd": "set_var",
+                  "var": "load",
+                  "value": 12
+                }
+              ],
+              "else": [
+                {
+                  "text": "Click. ON. The meter reads {var:load} kW."
+                }
+              ]
+            }
+          ],
+          "no": []
         }
       ]
     }
   ],
-  "brk_cooling": [
+  "breaker_coffee": [
+    {
+      "if_flag": "brk_lights",
+      "then": [
+        {
+          "text": "BREAKER: COFFEE MACHINE, 2 kW."
+        }
+      ],
+      "else": [
+        {
+          "text": "A breaker. Too dark to read the label. It smells faintly of burnt coffee."
+        }
+      ]
+    },
+    {
+      "if_flag": "brk_coffee",
+      "then": [
+        {
+          "choice": "It's ON. Switch it OFF?",
+          "yes": [
+            {
+              "cmd": "set_flag",
+              "flag": "brk_coffee",
+              "value": false
+            },
+            {
+              "cmd": "add_var",
+              "var": "load",
+              "value": -2
+            },
+            {
+              "text": "Click. OFF. The meter reads {var:load} kW."
+            }
+          ],
+          "no": []
+        }
+      ],
+      "else": [
+        {
+          "choice": "It's OFF. Switch it ON?",
+          "yes": [
+            {
+              "cmd": "set_flag",
+              "flag": "brk_coffee"
+            },
+            {
+              "cmd": "add_var",
+              "var": "load",
+              "value": 2
+            },
+            {
+              "if_var": "load",
+              "op": ">",
+              "value": 12,
+              "then": [
+                {
+                  "text": "BANG! The main breaker trips. Everything snaps back to how Ransom left it."
+                },
+                {
+                  "cmd": "clear_flags",
+                  "flags": [
+                    "brk_servers",
+                    "brk_coffee",
+                    "brk_cooling",
+                    "brk_rig",
+                    "brk_door",
+                    "brk_heater",
+                    "brk_lights"
+                  ]
+                },
+                {
+                  "cmd": "set_flag",
+                  "flag": "brk_servers"
+                },
+                {
+                  "cmd": "set_flag",
+                  "flag": "brk_rig"
+                },
+                {
+                  "cmd": "set_flag",
+                  "flag": "brk_heater"
+                },
+                {
+                  "cmd": "set_var",
+                  "var": "load",
+                  "value": 12
+                }
+              ],
+              "else": [
+                {
+                  "text": "Click. ON. The meter reads {var:load} kW."
+                }
+              ]
+            }
+          ],
+          "no": []
+        }
+      ]
+    }
+  ],
+  "breaker_cooling": [
+    {
+      "if_flag": "brk_lights",
+      "then": [
+        {
+          "text": "BREAKER: COOLING, 3 kW."
+        }
+      ],
+      "else": [
+        {
+          "text": "A breaker. Too dark to read the label. A cold draft leaks out around it."
+        }
+      ]
+    },
     {
       "if_flag": "brk_cooling",
       "then": [
         {
-          "text": "COOLING: switched OFF."
-        },
-        {
-          "cmd": "set_flag",
-          "flag": "brk_cooling",
-          "value": false
+          "choice": "It's ON. Switch it OFF?",
+          "yes": [
+            {
+              "cmd": "set_flag",
+              "flag": "brk_cooling",
+              "value": false
+            },
+            {
+              "cmd": "add_var",
+              "var": "load",
+              "value": -3
+            },
+            {
+              "text": "Click. OFF. The meter reads {var:load} kW."
+            }
+          ],
+          "no": []
         }
       ],
       "else": [
         {
-          "text": "COOLING: switched ON."
-        },
-        {
-          "cmd": "set_flag",
-          "flag": "brk_cooling"
+          "choice": "It's OFF. Switch it ON?",
+          "yes": [
+            {
+              "cmd": "set_flag",
+              "flag": "brk_cooling"
+            },
+            {
+              "cmd": "add_var",
+              "var": "load",
+              "value": 3
+            },
+            {
+              "if_var": "load",
+              "op": ">",
+              "value": 12,
+              "then": [
+                {
+                  "text": "BANG! The main breaker trips. Everything snaps back to how Ransom left it."
+                },
+                {
+                  "cmd": "clear_flags",
+                  "flags": [
+                    "brk_servers",
+                    "brk_coffee",
+                    "brk_cooling",
+                    "brk_rig",
+                    "brk_door",
+                    "brk_heater",
+                    "brk_lights"
+                  ]
+                },
+                {
+                  "cmd": "set_flag",
+                  "flag": "brk_servers"
+                },
+                {
+                  "cmd": "set_flag",
+                  "flag": "brk_rig"
+                },
+                {
+                  "cmd": "set_flag",
+                  "flag": "brk_heater"
+                },
+                {
+                  "cmd": "set_var",
+                  "var": "load",
+                  "value": 12
+                }
+              ],
+              "else": [
+                {
+                  "text": "Click. ON. The meter reads {var:load} kW."
+                }
+              ]
+            }
+          ],
+          "no": []
         }
       ]
     }
   ],
-  "brk_overclock": [
+  "breaker_rig": [
     {
-      "if_flag": "brk_overclock",
+      "if_flag": "brk_lights",
       "then": [
         {
-          "text": "OVERCLOCK: switched OFF."
-        },
-        {
-          "cmd": "set_flag",
-          "flag": "brk_overclock",
-          "value": false
+          "text": "BREAKER: $$$ (no label), 5 kW."
         }
       ],
       "else": [
         {
-          "text": "OVERCLOCK: switched ON."
-        },
+          "text": "A breaker. Too dark to read the label. It's warm. The label's been scratched off. Someone wrote \"$$$\" on it."
+        }
+      ]
+    },
+    {
+      "if_flag": "brk_rig",
+      "then": [
         {
-          "cmd": "set_flag",
-          "flag": "brk_overclock"
+          "choice": "It's ON. Switch it OFF?",
+          "yes": [
+            {
+              "cmd": "set_flag",
+              "flag": "brk_rig",
+              "value": false
+            },
+            {
+              "cmd": "add_var",
+              "var": "load",
+              "value": -5
+            },
+            {
+              "text": "Click. OFF. The meter reads {var:load} kW."
+            }
+          ],
+          "no": []
+        }
+      ],
+      "else": [
+        {
+          "choice": "It's OFF. Switch it ON?",
+          "yes": [
+            {
+              "cmd": "set_flag",
+              "flag": "brk_rig"
+            },
+            {
+              "cmd": "add_var",
+              "var": "load",
+              "value": 5
+            },
+            {
+              "if_var": "load",
+              "op": ">",
+              "value": 12,
+              "then": [
+                {
+                  "text": "BANG! The main breaker trips. Everything snaps back to how Ransom left it."
+                },
+                {
+                  "cmd": "clear_flags",
+                  "flags": [
+                    "brk_servers",
+                    "brk_coffee",
+                    "brk_cooling",
+                    "brk_rig",
+                    "brk_door",
+                    "brk_heater",
+                    "brk_lights"
+                  ]
+                },
+                {
+                  "cmd": "set_flag",
+                  "flag": "brk_servers"
+                },
+                {
+                  "cmd": "set_flag",
+                  "flag": "brk_rig"
+                },
+                {
+                  "cmd": "set_flag",
+                  "flag": "brk_heater"
+                },
+                {
+                  "cmd": "set_var",
+                  "var": "load",
+                  "value": 12
+                }
+              ],
+              "else": [
+                {
+                  "text": "Click. ON. The meter reads {var:load} kW."
+                }
+              ]
+            }
+          ],
+          "no": []
         }
       ]
     }
   ],
-  "sec_mfa": [
+  "breaker_door": [
     {
-      "if_flag": "sec_mfa",
+      "if_flag": "brk_lights",
       "then": [
         {
-          "text": "MFA: switched OFF."
-        },
-        {
-          "cmd": "set_flag",
-          "flag": "sec_mfa",
-          "value": false
+          "text": "BREAKER: DOOR LOCK, 3 kW."
         }
       ],
       "else": [
         {
-          "text": "MFA: switched ON."
-        },
+          "text": "A breaker. Too dark to read the label. A little sticker shows a padlock."
+        }
+      ]
+    },
+    {
+      "if_flag": "brk_door",
+      "then": [
         {
-          "cmd": "set_flag",
-          "flag": "sec_mfa"
+          "choice": "It's ON. Switch it OFF?",
+          "yes": [
+            {
+              "cmd": "set_flag",
+              "flag": "brk_door",
+              "value": false
+            },
+            {
+              "cmd": "add_var",
+              "var": "load",
+              "value": -3
+            },
+            {
+              "text": "Click. OFF. The meter reads {var:load} kW."
+            }
+          ],
+          "no": []
+        }
+      ],
+      "else": [
+        {
+          "choice": "It's OFF. Switch it ON?",
+          "yes": [
+            {
+              "cmd": "set_flag",
+              "flag": "brk_door"
+            },
+            {
+              "cmd": "add_var",
+              "var": "load",
+              "value": 3
+            },
+            {
+              "if_var": "load",
+              "op": ">",
+              "value": 12,
+              "then": [
+                {
+                  "text": "BANG! The main breaker trips. Everything snaps back to how Ransom left it."
+                },
+                {
+                  "cmd": "clear_flags",
+                  "flags": [
+                    "brk_servers",
+                    "brk_coffee",
+                    "brk_cooling",
+                    "brk_rig",
+                    "brk_door",
+                    "brk_heater",
+                    "brk_lights"
+                  ]
+                },
+                {
+                  "cmd": "set_flag",
+                  "flag": "brk_servers"
+                },
+                {
+                  "cmd": "set_flag",
+                  "flag": "brk_rig"
+                },
+                {
+                  "cmd": "set_flag",
+                  "flag": "brk_heater"
+                },
+                {
+                  "cmd": "set_var",
+                  "var": "load",
+                  "value": 12
+                }
+              ],
+              "else": [
+                {
+                  "text": "Click. ON. The meter reads {var:load} kW."
+                }
+              ]
+            }
+          ],
+          "no": []
         }
       ]
     }
   ],
-  "sec_logs": [
+  "breaker_heater": [
     {
-      "if_flag": "sec_logs",
+      "if_flag": "brk_lights",
       "then": [
         {
-          "text": "AUDIT LOGGING: switched OFF."
-        },
-        {
-          "cmd": "set_flag",
-          "flag": "sec_logs",
-          "value": false
+          "text": "BREAKER: SPACE HEATER, 3 kW."
         }
       ],
       "else": [
         {
-          "text": "AUDIT LOGGING: switched ON."
-        },
+          "text": "A breaker. Too dark to read the label. The air around it is uncomfortably toasty."
+        }
+      ]
+    },
+    {
+      "if_flag": "brk_heater",
+      "then": [
         {
-          "cmd": "set_flag",
-          "flag": "sec_logs"
+          "choice": "It's ON. Switch it OFF?",
+          "yes": [
+            {
+              "cmd": "set_flag",
+              "flag": "brk_heater",
+              "value": false
+            },
+            {
+              "cmd": "add_var",
+              "var": "load",
+              "value": -3
+            },
+            {
+              "text": "Click. OFF. The meter reads {var:load} kW."
+            }
+          ],
+          "no": []
+        }
+      ],
+      "else": [
+        {
+          "choice": "It's OFF. Switch it ON?",
+          "yes": [
+            {
+              "cmd": "set_flag",
+              "flag": "brk_heater"
+            },
+            {
+              "cmd": "add_var",
+              "var": "load",
+              "value": 3
+            },
+            {
+              "if_var": "load",
+              "op": ">",
+              "value": 12,
+              "then": [
+                {
+                  "text": "BANG! The main breaker trips. Everything snaps back to how Ransom left it."
+                },
+                {
+                  "cmd": "clear_flags",
+                  "flags": [
+                    "brk_servers",
+                    "brk_coffee",
+                    "brk_cooling",
+                    "brk_rig",
+                    "brk_door",
+                    "brk_heater",
+                    "brk_lights"
+                  ]
+                },
+                {
+                  "cmd": "set_flag",
+                  "flag": "brk_servers"
+                },
+                {
+                  "cmd": "set_flag",
+                  "flag": "brk_rig"
+                },
+                {
+                  "cmd": "set_flag",
+                  "flag": "brk_heater"
+                },
+                {
+                  "cmd": "set_var",
+                  "var": "load",
+                  "value": 12
+                }
+              ],
+              "else": [
+                {
+                  "text": "Click. ON. The meter reads {var:load} kW."
+                }
+              ]
+            }
+          ],
+          "no": []
         }
       ]
     }
   ],
-  "sec_guest": [
+  "breaker_lights": [
     {
-      "if_flag": "sec_guest",
+      "text": "Glow-in-the-dark tape: LIGHTS. Thanks, Rolf."
+    },
+    {
+      "if_flag": "brk_lights",
       "then": [
         {
-          "text": "GUEST BADGES: switched OFF."
-        },
-        {
-          "cmd": "set_flag",
-          "flag": "sec_guest",
-          "value": false
+          "choice": "It's ON. Switch it OFF?",
+          "yes": [
+            {
+              "cmd": "set_flag",
+              "flag": "brk_lights",
+              "value": false
+            },
+            {
+              "cmd": "add_var",
+              "var": "load",
+              "value": -2
+            },
+            {
+              "text": "Click. OFF. The meter reads {var:load} kW."
+            }
+          ],
+          "no": []
         }
       ],
       "else": [
         {
-          "text": "GUEST BADGES: switched ON."
-        },
+          "choice": "It's OFF. Switch it ON?",
+          "yes": [
+            {
+              "cmd": "set_flag",
+              "flag": "brk_lights"
+            },
+            {
+              "cmd": "add_var",
+              "var": "load",
+              "value": 2
+            },
+            {
+              "if_var": "load",
+              "op": ">",
+              "value": 12,
+              "then": [
+                {
+                  "text": "BANG! The main breaker trips. Everything snaps back to how Ransom left it."
+                },
+                {
+                  "cmd": "clear_flags",
+                  "flags": [
+                    "brk_servers",
+                    "brk_coffee",
+                    "brk_cooling",
+                    "brk_rig",
+                    "brk_door",
+                    "brk_heater",
+                    "brk_lights"
+                  ]
+                },
+                {
+                  "cmd": "set_flag",
+                  "flag": "brk_servers"
+                },
+                {
+                  "cmd": "set_flag",
+                  "flag": "brk_rig"
+                },
+                {
+                  "cmd": "set_flag",
+                  "flag": "brk_heater"
+                },
+                {
+                  "cmd": "set_var",
+                  "var": "load",
+                  "value": 12
+                }
+              ],
+              "else": [
+                {
+                  "text": "Click. ON. The meter reads {var:load} kW."
+                }
+              ]
+            }
+          ],
+          "no": []
+        }
+      ]
+    }
+  ],
+  "caught_by_camera": [
+    {
+      "text": "CAMERA: Unauthorized movement on the server floor. Escorting you back to the lobby."
+    }
+  ],
+  "log_auth": [
+    {
+      "text": "AUTH LOG, 02:13: LOGIN OK. Account: svc_backup. From: 10.0.0.1. Session: interactive console."
+    },
+    {
+      "text": "Kalb's handwriting: \"Service accounts run scheduled jobs. They do NOT log in by hand.\""
+    },
+    {
+      "cmd": "set_flag",
+      "flag": "log_auth"
+    }
+  ],
+  "log_vpn": [
+    {
+      "text": "VPN LOG: kevin.r: 214 failed logins from r00tvalley.co. 0 successful. MFA blocked every one."
+    },
+    {
+      "text": "Someone wrote \"NOT ME\" on the printout. Crossed it out. Wrote it again. Bigger."
+    },
+    {
+      "cmd": "set_flag",
+      "flag": "log_vpn"
+    }
+  ],
+  "log_badge": [
+    {
+      "text": "BADGE LOG: m.kalb at her desk 01:50 to 03:30. The door camera confirms it."
+    },
+    {
+      "text": "HELP DESK: j.doe password reset at 03:00, ticket #88, verified by phone callback."
+    },
+    {
+      "cmd": "set_flag",
+      "flag": "log_badge"
+    }
+  ],
+  "sec_console": [
+    {
+      "if_flag": "sec_found",
+      "then": [
         {
-          "cmd": "set_flag",
-          "flag": "sec_guest"
+          "text": "CONSOLE: Incident closed. Compromised account: svc_backup."
+        }
+      ],
+      "else": [
+        {
+          "if_flag": "log_auth",
+          "then": [
+            {
+              "if_flag": "log_vpn",
+              "then": [
+                {
+                  "if_flag": "log_badge",
+                  "then": [
+                    {
+                      "text": "CONSOLE: Three log printouts loaded."
+                    },
+                    {
+                      "choose": "Which account did Ransom use?",
+                      "title": "ACCOUNT",
+                      "options": [
+                        {
+                          "label": "kevin.r",
+                          "then": [
+                            {
+                              "text": "ACCESS DENIED. kevin.r is clean. The logs prove it."
+                            },
+                            {
+                              "text": "Lockout protocol: the printouts get re-shredded and you get escorted back to the lobby."
+                            },
+                            {
+                              "cmd": "clear_flags",
+                              "flags": [
+                                "log_auth",
+                                "log_vpn",
+                                "log_badge"
+                              ]
+                            },
+                            {
+                              "cmd": "send_player",
+                              "spawn": "default"
+                            }
+                          ]
+                        },
+                        {
+                          "label": "j.doe",
+                          "then": [
+                            {
+                              "text": "ACCESS DENIED. j.doe is clean. The logs prove it."
+                            },
+                            {
+                              "text": "Lockout protocol: the printouts get re-shredded and you get escorted back to the lobby."
+                            },
+                            {
+                              "cmd": "clear_flags",
+                              "flags": [
+                                "log_auth",
+                                "log_vpn",
+                                "log_badge"
+                              ]
+                            },
+                            {
+                              "cmd": "send_player",
+                              "spawn": "default"
+                            }
+                          ]
+                        },
+                        {
+                          "label": "svc_backup",
+                          "then": [
+                            {
+                              "text": "CORRECT. A service account logging in by hand at 2 AM, from inside the valley: 10.0.0.1."
+                            },
+                            {
+                              "text": "The console unlocks the door. The cameras power down. Kalb's going to want to know whose machine 10.0.0.1 is."
+                            },
+                            {
+                              "cmd": "set_flag",
+                              "flag": "sec_found"
+                            }
+                          ]
+                        },
+                        {
+                          "label": "m.kalb",
+                          "then": [
+                            {
+                              "text": "ACCESS DENIED. m.kalb is clean. The logs prove it."
+                            },
+                            {
+                              "text": "Lockout protocol: the printouts get re-shredded and you get escorted back to the lobby."
+                            },
+                            {
+                              "cmd": "clear_flags",
+                              "flags": [
+                                "log_auth",
+                                "log_vpn",
+                                "log_badge"
+                              ]
+                            },
+                            {
+                              "cmd": "send_player",
+                              "spawn": "default"
+                            }
+                          ]
+                        }
+                      ],
+                      "cancel": [
+                        {
+                          "text": "CONSOLE: Take your time. The cameras don't."
+                        }
+                      ]
+                    }
+                  ],
+                  "else": [
+                    {
+                      "text": "CONSOLE: Missing a log printout. Read all three before you accuse anyone."
+                    }
+                  ]
+                }
+              ],
+              "else": [
+                {
+                  "text": "CONSOLE: Missing a log printout. Read all three before you accuse anyone."
+                }
+              ]
+            }
+          ],
+          "else": [
+            {
+              "text": "CONSOLE: Missing a log printout. Read all three before you accuse anyone."
+            }
+          ]
         }
       ]
     }

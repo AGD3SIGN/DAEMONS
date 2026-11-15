@@ -9,11 +9,9 @@
     "M": "exit_mat",
     "k": "bookshelf",
     "c": "server_rack",
-    "b": "bed",
     "t": "table",
     "p": "plant",
-    "r": "rug",
-    "C": "counter"
+    "r": "rug"
   },
   "rows": [
     "IIIIIIIIIIIIIII",
@@ -27,11 +25,11 @@
     "I_____________I",
     "IIIIIII_IIIIIII",
     "I_____________I",
-    "I_c___c___c___I",
+    "I__t_______t__I",
     "I_____________I",
-    "I____rrrrr__k_I",
-    "I_____________I",
-    "I_____________I",
+    "I____rrrrr____I",
+    "I___________t_I",
+    "I_k___________I",
     "I_____________I",
     "IIIIIIIMIIIIIII"
   ],
@@ -60,25 +58,7 @@
     {
       "type": "sign",
       "x": 2,
-      "y": 11,
-      "dialogue": "port_1"
-    },
-    {
-      "type": "sign",
-      "x": 6,
-      "y": 11,
-      "dialogue": "port_2"
-    },
-    {
-      "type": "sign",
-      "x": 10,
-      "y": 11,
-      "dialogue": "port_3"
-    },
-    {
-      "type": "sign",
-      "x": 12,
-      "y": 13,
+      "y": 15,
       "dialogue": "patch_notes"
     },
     {
@@ -86,12 +66,49 @@
       "x": 7,
       "y": 9,
       "open_flags": [
-        "port_1",
-        "port_3"
-      ],
-      "closed_flags": [
-        "port_2"
+        "ticket_a_fixed",
+        "ticket_b_fixed",
+        "ticket_c_fixed"
       ]
+    },
+    {
+      "type": "npc",
+      "id": "ticket_a",
+      "x": 3,
+      "y": 12,
+      "facing": "down",
+      "dialogue": "ticket_a",
+      "look": {
+        "shirt": "#c06030",
+        "hair": "#402010",
+        "sprite": "courier"
+      }
+    },
+    {
+      "type": "npc",
+      "id": "ticket_b",
+      "x": 11,
+      "y": 12,
+      "facing": "down",
+      "dialogue": "ticket_b",
+      "look": {
+        "shirt": "#4060c0",
+        "hair": "#e0b040",
+        "sprite": "intern"
+      }
+    },
+    {
+      "type": "npc",
+      "id": "ticket_c",
+      "x": 12,
+      "y": 15,
+      "facing": "down",
+      "dialogue": "ticket_c",
+      "look": {
+        "shirt": "#30a070",
+        "hair": "#202020",
+        "sprite": "barista"
+      }
     },
     {
       "type": "npc",
@@ -102,8 +119,9 @@
       "trainer": "tech_theo",
       "look": {
         "shirt": "#3858c0",
-        "hair": "#202020"
-      , "sprite": "tech_theo"}
+        "hair": "#202020",
+        "sprite": "tech_theo"
+      }
     },
     {
       "type": "npc",
@@ -114,8 +132,9 @@
       "trainer": "tech_tina",
       "look": {
         "shirt": "#3858c0",
-        "hair": "#e0a040"
-      , "sprite": "tech_tina"}
+        "hair": "#e0a040",
+        "sprite": "tech_tina"
+      }
     },
     {
       "type": "npc",
@@ -127,8 +146,9 @@
       "dialogue": "dana",
       "look": {
         "shirt": "#802030",
-        "hair": "#c0c0c0"
-      , "sprite": "dana"}
+        "hair": "#c0c0c0",
+        "sprite": "dana"
+      }
     }
   ]
 }

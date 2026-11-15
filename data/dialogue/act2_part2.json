@@ -222,20 +222,21 @@
   ],
   "department_3_welcome": [
     {
-      "speaker": "Receptionist",
-      "text": "Welcome to DevOps! The trial room is past the pipeline door."
+      "text": "Welcome to DevOps! The trial room is past the pipeline door.",
+      "speaker": "Receptionist"
     },
     {
-      "speaker": "Receptionist",
-      "text": "Get the pipeline green to open it. The notes are on the shelf. And never, ever deploy on a Friday."
+      "text": "Run the six pipeline stages in the right order and the door goes green. Out of order, it rolls back.",
+      "speaker": "Receptionist"
+    },
+    {
+      "text": "And a failed build... leaves bugs. Big ones. The whiteboards should help. And never, ever deploy on a Friday.",
+      "speaker": "Receptionist"
     }
   ],
   "pipeline_notes": [
     {
-      "text": "PIPELINE NOTES: A release needs a passing BUILD and passing TESTS."
-    },
-    {
-      "text": "The FRIDAY DEPLOY switch must stay OFF. Devi says otherwise. Devi is wrong."
+      "text": "PIPELINE STATUS: stage {var:pipeline} of 6 passed."
     }
   ],
   "devi": [
@@ -326,78 +327,6 @@
       "text": "Nothing but a warm spot on the floor and the smell of burnt thermal paste."
     }
   ],
-  "pipe_build": [
-    {
-      "if_flag": "pipe_build",
-      "then": [
-        {
-          "text": "BUILD: switched OFF."
-        },
-        {
-          "cmd": "set_flag",
-          "flag": "pipe_build",
-          "value": false
-        }
-      ],
-      "else": [
-        {
-          "text": "BUILD: switched ON. The light turns green."
-        },
-        {
-          "cmd": "set_flag",
-          "flag": "pipe_build"
-        }
-      ]
-    }
-  ],
-  "pipe_test": [
-    {
-      "if_flag": "pipe_test",
-      "then": [
-        {
-          "text": "TESTS: switched OFF."
-        },
-        {
-          "cmd": "set_flag",
-          "flag": "pipe_test",
-          "value": false
-        }
-      ],
-      "else": [
-        {
-          "text": "TESTS: switched ON. The light turns green."
-        },
-        {
-          "cmd": "set_flag",
-          "flag": "pipe_test"
-        }
-      ]
-    }
-  ],
-  "pipe_friday": [
-    {
-      "if_flag": "pipe_friday",
-      "then": [
-        {
-          "text": "FRIDAY DEPLOY: switched OFF."
-        },
-        {
-          "cmd": "set_flag",
-          "flag": "pipe_friday",
-          "value": false
-        }
-      ],
-      "else": [
-        {
-          "text": "FRIDAY DEPLOY: switched ON. The light turns green."
-        },
-        {
-          "cmd": "set_flag",
-          "flag": "pipe_friday"
-        }
-      ]
-    }
-  ],
   "crac_a": [
     {
       "if_flag": "crac_a",
@@ -470,6 +399,505 @@
         {
           "speaker": "Facilities",
           "text": "Devi at the DevOps Department has to clear you first."
+        }
+      ]
+    }
+  ],
+  "pipe_hotfix": [
+    {
+      "text": "A sticky note on the terminal: FRIDAY HOTFIX: SKIP THE PIPELINE, PUSH STRAIGHT TO PROD."
+    },
+    {
+      "choice": "Push straight to production?",
+      "yes": [
+        {
+          "text": "You push it. It is Friday at 4:59. Every alarm in DevOps Heights goes off at once."
+        },
+        {
+          "cmd": "set_var",
+          "var": "pipeline",
+          "value": 0
+        },
+        {
+          "text": "PIPELINE RED. Rolling back to the start. Something crawls out of the failed build..."
+        },
+        {
+          "cmd": "start_battle",
+          "foe": [
+            [
+              "wormby",
+              23
+            ],
+            [
+              "pasteslug",
+              22
+            ]
+          ],
+          "trainer_name": "Regression Bug"
+        }
+      ],
+      "no": [
+        {
+          "text": "Good call. Nothing good has ever been hotfixed at 4:59 on a Friday."
+        }
+      ]
+    }
+  ],
+  "pipe_board_1": [
+    {
+      "text": "WHITEBOARD: \"Nobody builds messy code. LINT before anything else.\" - Devi"
+    }
+  ],
+  "pipe_board_2": [
+    {
+      "text": "WHITEBOARD: \"You can't TEST what you haven't BUILT.\" (underlined three times)"
+    }
+  ],
+  "pipe_board_3": [
+    {
+      "text": "WHITEBOARD: \"The security SCAN only looks at code the TESTS passed.\""
+    }
+  ],
+  "pipe_board_4": [
+    {
+      "text": "WHITEBOARD: \"STAGING is the last stop before DEPLOY. It only takes SCANNED builds.\""
+    }
+  ],
+  "pipe_lint": [
+    {
+      "if_flag": "pipeline_green",
+      "then": [
+        {
+          "text": "LINT: PASSED. The whole pipeline is green."
+        }
+      ],
+      "else": [
+        {
+          "if_var": "pipeline",
+          "op": ">=",
+          "value": 1,
+          "then": [
+            {
+              "text": "LINT: already passed."
+            }
+          ],
+          "else": [
+            {
+              "choice": "Run LINT?",
+              "yes": [
+                {
+                  "if_var": "pipeline",
+                  "op": "==",
+                  "value": 0,
+                  "then": [
+                    {
+                      "cmd": "set_var",
+                      "var": "pipeline",
+                      "value": 1
+                    },
+                    {
+                      "text": "LINT: PASSED. (1/6)"
+                    }
+                  ],
+                  "else": [
+                    {
+                      "text": "LINT: FAILED. Lint found 2,000 warnings it already reported."
+                    },
+                    {
+                      "cmd": "set_var",
+                      "var": "pipeline",
+                      "value": 0
+                    },
+                    {
+                      "text": "PIPELINE RED. Rolling back to the start. Something crawls out of the failed build..."
+                    },
+                    {
+                      "cmd": "start_battle",
+                      "foe": [
+                        [
+                          "wormby",
+                          23
+                        ],
+                        [
+                          "pasteslug",
+                          22
+                        ]
+                      ],
+                      "trainer_name": "Regression Bug"
+                    }
+                  ]
+                }
+              ],
+              "no": []
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "pipe_build": [
+    {
+      "if_flag": "pipeline_green",
+      "then": [
+        {
+          "text": "BUILD: PASSED. The whole pipeline is green."
+        }
+      ],
+      "else": [
+        {
+          "if_var": "pipeline",
+          "op": ">=",
+          "value": 2,
+          "then": [
+            {
+              "text": "BUILD: already passed."
+            }
+          ],
+          "else": [
+            {
+              "choice": "Run BUILD?",
+              "yes": [
+                {
+                  "if_var": "pipeline",
+                  "op": "==",
+                  "value": 1,
+                  "then": [
+                    {
+                      "cmd": "set_var",
+                      "var": "pipeline",
+                      "value": 2
+                    },
+                    {
+                      "text": "BUILD: PASSED. (2/6)"
+                    }
+                  ],
+                  "else": [
+                    {
+                      "text": "BUILD: FAILED. There's nothing linted to build. Messy code in, broken build out."
+                    },
+                    {
+                      "cmd": "set_var",
+                      "var": "pipeline",
+                      "value": 0
+                    },
+                    {
+                      "text": "PIPELINE RED. Rolling back to the start. Something crawls out of the failed build..."
+                    },
+                    {
+                      "cmd": "start_battle",
+                      "foe": [
+                        [
+                          "wormby",
+                          23
+                        ],
+                        [
+                          "pasteslug",
+                          22
+                        ]
+                      ],
+                      "trainer_name": "Regression Bug"
+                    }
+                  ]
+                }
+              ],
+              "no": []
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "pipe_test": [
+    {
+      "if_flag": "pipeline_green",
+      "then": [
+        {
+          "text": "TEST: PASSED. The whole pipeline is green."
+        }
+      ],
+      "else": [
+        {
+          "if_var": "pipeline",
+          "op": ">=",
+          "value": 3,
+          "then": [
+            {
+              "text": "TEST: already passed."
+            }
+          ],
+          "else": [
+            {
+              "choice": "Run TEST?",
+              "yes": [
+                {
+                  "if_var": "pipeline",
+                  "op": "==",
+                  "value": 2,
+                  "then": [
+                    {
+                      "cmd": "set_var",
+                      "var": "pipeline",
+                      "value": 3
+                    },
+                    {
+                      "text": "TEST: PASSED. (3/6)"
+                    }
+                  ],
+                  "else": [
+                    {
+                      "text": "TEST: FAILED. There's no build to test. The test runner is testing... air."
+                    },
+                    {
+                      "cmd": "set_var",
+                      "var": "pipeline",
+                      "value": 0
+                    },
+                    {
+                      "text": "PIPELINE RED. Rolling back to the start. Something crawls out of the failed build..."
+                    },
+                    {
+                      "cmd": "start_battle",
+                      "foe": [
+                        [
+                          "wormby",
+                          23
+                        ],
+                        [
+                          "pasteslug",
+                          22
+                        ]
+                      ],
+                      "trainer_name": "Regression Bug"
+                    }
+                  ]
+                }
+              ],
+              "no": []
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "pipe_scan": [
+    {
+      "if_flag": "pipeline_green",
+      "then": [
+        {
+          "text": "SCAN: PASSED. The whole pipeline is green."
+        }
+      ],
+      "else": [
+        {
+          "if_var": "pipeline",
+          "op": ">=",
+          "value": 4,
+          "then": [
+            {
+              "text": "SCAN: already passed."
+            }
+          ],
+          "else": [
+            {
+              "choice": "Run SCAN?",
+              "yes": [
+                {
+                  "if_var": "pipeline",
+                  "op": "==",
+                  "value": 3,
+                  "then": [
+                    {
+                      "cmd": "set_var",
+                      "var": "pipeline",
+                      "value": 4
+                    },
+                    {
+                      "text": "SCAN: PASSED. (4/6)"
+                    }
+                  ],
+                  "else": [
+                    {
+                      "text": "SCAN: FAILED. The scanner refuses to scan code nobody tested."
+                    },
+                    {
+                      "cmd": "set_var",
+                      "var": "pipeline",
+                      "value": 0
+                    },
+                    {
+                      "text": "PIPELINE RED. Rolling back to the start. Something crawls out of the failed build..."
+                    },
+                    {
+                      "cmd": "start_battle",
+                      "foe": [
+                        [
+                          "wormby",
+                          23
+                        ],
+                        [
+                          "pasteslug",
+                          22
+                        ]
+                      ],
+                      "trainer_name": "Regression Bug"
+                    }
+                  ]
+                }
+              ],
+              "no": []
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "pipe_staging": [
+    {
+      "if_flag": "pipeline_green",
+      "then": [
+        {
+          "text": "STAGING: PASSED. The whole pipeline is green."
+        }
+      ],
+      "else": [
+        {
+          "if_var": "pipeline",
+          "op": ">=",
+          "value": 5,
+          "then": [
+            {
+              "text": "STAGING: already passed."
+            }
+          ],
+          "else": [
+            {
+              "choice": "Run STAGING?",
+              "yes": [
+                {
+                  "if_var": "pipeline",
+                  "op": "==",
+                  "value": 4,
+                  "then": [
+                    {
+                      "cmd": "set_var",
+                      "var": "pipeline",
+                      "value": 5
+                    },
+                    {
+                      "text": "STAGING: PASSED. (5/6)"
+                    }
+                  ],
+                  "else": [
+                    {
+                      "text": "STAGING: FAILED. Staging only accepts builds that passed the security scan."
+                    },
+                    {
+                      "cmd": "set_var",
+                      "var": "pipeline",
+                      "value": 0
+                    },
+                    {
+                      "text": "PIPELINE RED. Rolling back to the start. Something crawls out of the failed build..."
+                    },
+                    {
+                      "cmd": "start_battle",
+                      "foe": [
+                        [
+                          "wormby",
+                          23
+                        ],
+                        [
+                          "pasteslug",
+                          22
+                        ]
+                      ],
+                      "trainer_name": "Regression Bug"
+                    }
+                  ]
+                }
+              ],
+              "no": []
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "pipe_deploy": [
+    {
+      "if_flag": "pipeline_green",
+      "then": [
+        {
+          "text": "DEPLOY: PASSED. The whole pipeline is green."
+        }
+      ],
+      "else": [
+        {
+          "if_var": "pipeline",
+          "op": ">=",
+          "value": 6,
+          "then": [
+            {
+              "text": "DEPLOY: already passed."
+            }
+          ],
+          "else": [
+            {
+              "choice": "Run DEPLOY?",
+              "yes": [
+                {
+                  "if_var": "pipeline",
+                  "op": "==",
+                  "value": 5,
+                  "then": [
+                    {
+                      "cmd": "set_var",
+                      "var": "pipeline",
+                      "value": 6
+                    },
+                    {
+                      "text": "DEPLOY: PASSED. (6/6)"
+                    },
+                    {
+                      "cmd": "set_flag",
+                      "flag": "pipeline_green"
+                    },
+                    {
+                      "text": "All six stages green. Somewhere a door unlocks with a satisfied little beep."
+                    }
+                  ],
+                  "else": [
+                    {
+                      "text": "DEPLOY: FAILED. Deploying something that never touched staging. Production catches fire."
+                    },
+                    {
+                      "cmd": "set_var",
+                      "var": "pipeline",
+                      "value": 0
+                    },
+                    {
+                      "text": "PIPELINE RED. Rolling back to the start. Something crawls out of the failed build..."
+                    },
+                    {
+                      "cmd": "start_battle",
+                      "foe": [
+                        [
+                          "wormby",
+                          23
+                        ],
+                        [
+                          "pasteslug",
+                          22
+                        ]
+                      ],
+                      "trainer_name": "Regression Bug"
+                    }
+                  ]
+                }
+              ],
+              "no": []
+            }
+          ]
         }
       ]
     }

@@ -7,12 +7,12 @@
     "_": "floor",
     "I": "interior_wall",
     "M": "exit_mat",
-    "k": "bookshelf",
     "c": "server_rack",
     "p": "plant",
-    "r": "rug",
-    "C": "counter",
-    "t": "table"
+    "^": "lane_up",
+    "v": "lane_down",
+    "<": "lane_left",
+    ">": "lane_right"
   },
   "rows": [
     "IIIIIIIIIIIIIII",
@@ -25,19 +25,23 @@
     "I_____________I",
     "I_____________I",
     "IIIIIII_IIIIIII",
-    "I_____________I",
-    "I_c___c___c___I",
-    "I_____________I",
-    "I____rrrrr__k_I",
-    "I_____________I",
-    "I_____________I",
+    "I^^<^_v__v__^<I",
+    "Ic_>v__<vc<^_>I",
+    "I^v>_>><_>__<_I",
+    "I_vv_<>__c>v__I",
+    "I><cvv_<__>_>_I",
+    "I__^_c><>_v_cvI",
+    "I>vvvc___c_<_<I",
+    "I<^^vv_v_^__v>I",
+    "Ic_>_v__vv____I",
+    "I____c__<___<cI",
     "I_____________I",
     "IIIIIIIMIIIIIII"
   ],
   "spawns": {
     "default": {
       "x": 7,
-      "y": 16,
+      "y": 20,
       "facing": "up"
     }
   },
@@ -45,52 +49,22 @@
     {
       "type": "warp",
       "x": 7,
-      "y": 17,
+      "y": 21,
       "to_map": "port_city",
       "to_spawn": "from_department"
     },
     {
       "type": "trigger",
       "x": 7,
-      "y": 16,
+      "y": 20,
       "dialogue": "department_2_welcome",
       "once_flag": "department_2_welcomed"
     },
     {
       "type": "sign",
-      "x": 2,
-      "y": 11,
-      "dialogue": "vlan_a"
-    },
-    {
-      "type": "sign",
-      "x": 6,
-      "y": 11,
-      "dialogue": "vlan_b"
-    },
-    {
-      "type": "sign",
-      "x": 10,
-      "y": 11,
-      "dialogue": "vlan_c"
-    },
-    {
-      "type": "sign",
-      "x": 12,
-      "y": 13,
+      "x": 5,
+      "y": 19,
       "dialogue": "routing_notes"
-    },
-    {
-      "type": "barrier",
-      "x": 7,
-      "y": 9,
-      "open_flags": [
-        "vlan_b",
-        "vlan_c"
-      ],
-      "closed_flags": [
-        "vlan_a"
-      ]
     },
     {
       "type": "npc",

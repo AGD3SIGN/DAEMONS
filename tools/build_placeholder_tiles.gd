@@ -1,5 +1,5 @@
 extends SceneTree
-## Draws the placeholder overworld tileset (24 tiles, 16x16 each, 8 per row) to
+## Draws the placeholder overworld tileset (30 tiles, 16x16 each, 8 per row) to
 ## res://assets/tiles/placeholder_overworld.png. Run from the repo root:
 ##   godot --headless -s res://tools/build_placeholder_tiles.gd
 ## Tile names/collision/behavior live in data/tiles.json; the order here must match its atlas coords.
@@ -31,10 +31,12 @@ var img: Image
 
 
 func _init() -> void:
-	img = Image.create(T * 8, T * 3, false, Image.FORMAT_RGBA8)
+	img = Image.create(T * 8, T * 4, false, Image.FORMAT_RGBA8)
 	var painters: Array[Callable] = [_grass, _path, _cable_tangle, _water, _tree, _fence, _flowers, _roof_red,
 		_roof_blue, _wall, _window, _door, _ledge, _sign, _floor, _counter,
-		_exit_mat, _interior_wall, _rug, _table, _bed, _server_rack, _plant, _bookshelf]
+		_exit_mat, _interior_wall, _rug, _table, _bed, _server_rack, _plant, _bookshelf,
+		_lane.bind(Vector2i.UP), _lane.bind(Vector2i.DOWN), _lane.bind(Vector2i.LEFT), _lane.bind(Vector2i.RIGHT),
+		_terminal, _breaker_panel]
 	for i in painters.size():
 		painters[i].call(Vector2i(i % 8, i / 8) * T)
 	var err := img.save_png(ProjectSettings.globalize_path(OUT))
@@ -251,3 +253,50 @@ func _bookshelf(o: Vector2i) -> void:
 		_rect(o, Rect2i(1, y + 5, 14, 1), WOOD)
 		for i in 6:
 			_rect(o, Rect2i(2 + i * 2, y, 2, 5), colors[(i + shelf) % 4])
+
+
+## Packet lane: dark floor with two glowing chevrons pointing the way it carries you.
+const CHEVRON := ["...##...", "..####..", ".##..##.", "##....##"]
+
+
+func _lane(o: Vector2i, dir: Vector2i) -> void:
+	_fill(o, Color("1c2a40"))
+	_rect(o, Rect2i(0, 0, 16, 1), Color("24364f"))
+	_rect(o, Rect2i(0, 0, 1, 16), Color("24364f"))
+	for top in [2, 9]:
+		for y in CHEVRON.size():
+			for x in 8:
+				if CHEVRON[y][x] != "#":
+					continue
+				var p := Vector2i(4 + x, top + y)  # "up" chevron; rotate for the other directions
+				match dir:
+					Vector2i.DOWN:
+						p = Vector2i(p.x, 15 - p.y)
+					Vector2i.LEFT:
+						p = Vector2i(p.y, p.x)
+					Vector2i.RIGHT:
+						p = Vector2i(15 - p.y, p.x)
+				_px(o, p.x, p.y, Color("3ee6ff"))
+
+
+## A desk terminal: monitor on a desk, green text on the screen.
+func _terminal(o: Vector2i) -> void:
+	_floor(o)
+	_rect(o, Rect2i(1, 9, 14, 6), WOOD_DARK)
+	_rect(o, Rect2i(1, 9, 14, 2), WOOD)
+	_rect(o, Rect2i(3, 1, 10, 8), Color("202830"))
+	_rect(o, Rect2i(4, 2, 8, 5), Color("0c2a1a"))
+	for y in [3, 5]:
+		_rect(o, Rect2i(5, y, 5 if y == 3 else 3, 1), Color("5ce07a"))
+	_rect(o, Rect2i(7, 9, 2, 1), Color("202830"))
+
+
+## A wall-mounted breaker panel: gray box, two rows of switches, a yellow warning stripe.
+func _breaker_panel(o: Vector2i) -> void:
+	_interior_wall(o)
+	_rect(o, Rect2i(2, 1, 12, 13), Color("8a909c"))
+	_rect(o, Rect2i(3, 2, 10, 11), Color("5a606c"))
+	for row in 2:
+		for i in 4:
+			_rect(o, Rect2i(4 + i * 2, 3 + row * 5, 1, 3), Color("e8e8e0"))
+	_rect(o, Rect2i(2, 12, 12, 1), Color("f0c040"))

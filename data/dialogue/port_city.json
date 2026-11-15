@@ -273,20 +273,24 @@
   ],
   "department_2_welcome": [
     {
-      "speaker": "Receptionist",
-      "text": "Welcome to Networking! The trial room is past the laser door."
+      "text": "Welcome to Networking! Ping's office is past the packet floor.",
+      "speaker": "Receptionist"
     },
     {
-      "speaker": "Receptionist",
-      "text": "Set the VLAN switches so only the right traffic reaches the core. The routing notes are on the shelf."
+      "text": "Step on a lane and it carries you like a packet until you land somewhere that isn't a lane.",
+      "speaker": "Receptionist"
+    },
+    {
+      "text": "Plan your hops. If you end up back down here, that's called a routing loop. We've all been there.",
+      "speaker": "Receptionist"
     }
   ],
   "routing_notes": [
     {
-      "text": "ROUTING NOTES: Trunks B and C carry staff traffic to the core."
+      "text": "ROUTING NOTES: Every lane forwards you one way. The gaps between lanes are where you choose."
     },
     {
-      "text": "Switch A is the guest Wi-Fi. NEVER bridge the guest network to the core. (Looking at you, Kevin.)"
+      "text": "Shortest path isn't always the straight one. (Looking at you, Kevin. You've been looping since Tuesday.)"
     }
   ],
   "ping": [
@@ -302,78 +306,6 @@
         {
           "speaker": "Ping",
           "text": "Every network's only as good as its weakest link. Let's find yours."
-        }
-      ]
-    }
-  ],
-  "vlan_a": [
-    {
-      "if_flag": "vlan_a",
-      "then": [
-        {
-          "text": "SWITCH A (guest): You switch it off. The port light goes dark."
-        },
-        {
-          "cmd": "set_flag",
-          "flag": "vlan_a",
-          "value": false
-        }
-      ],
-      "else": [
-        {
-          "text": "SWITCH A (guest): You switch it on. The port light blinks green."
-        },
-        {
-          "cmd": "set_flag",
-          "flag": "vlan_a"
-        }
-      ]
-    }
-  ],
-  "vlan_b": [
-    {
-      "if_flag": "vlan_b",
-      "then": [
-        {
-          "text": "SWITCH B (trunk): You switch it off. The port light goes dark."
-        },
-        {
-          "cmd": "set_flag",
-          "flag": "vlan_b",
-          "value": false
-        }
-      ],
-      "else": [
-        {
-          "text": "SWITCH B (trunk): You switch it on. The port light blinks green."
-        },
-        {
-          "cmd": "set_flag",
-          "flag": "vlan_b"
-        }
-      ]
-    }
-  ],
-  "vlan_c": [
-    {
-      "if_flag": "vlan_c",
-      "then": [
-        {
-          "text": "SWITCH C (trunk): You switch it off. The port light goes dark."
-        },
-        {
-          "cmd": "set_flag",
-          "flag": "vlan_c",
-          "value": false
-        }
-      ],
-      "else": [
-        {
-          "text": "SWITCH C (trunk): You switch it on. The port light blinks green."
-        },
-        {
-          "cmd": "set_flag",
-          "flag": "vlan_c"
         }
       ]
     }

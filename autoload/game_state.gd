@@ -19,6 +19,7 @@ var cmdb_seen: Dictionary = {}      # species_id -> true
 var cmdb_caught: Dictionary = {}    # species_id -> true
 var cmdb_found_at: Dictionary = {}  # species_id -> map name where it was first met in the wild
 var location: Dictionary = {}       # {"map": id, "x": cell x, "y": cell y, "facing": "down"}
+var counters: Dictionary = {}       # story/puzzle numbers (power load, pipeline stage), name -> int
 var visited: Dictionary = {}        # region-map place id -> true (the phone's Maps app)
 var repel_steps: int = 0            # Firewall Rule steps left
 var trainer_id: int = 0             # shown on the trainer card; stamped on caught Daemons
@@ -52,6 +53,7 @@ func reset() -> void:
 	cmdb_found_at.clear()
 	location.clear()
 	visited.clear()
+	counters.clear()
 	repel_steps = 0
 	trainer_id = 0
 	last_help_desk = DEFAULT_HELP_DESK.duplicate()
@@ -188,6 +190,7 @@ func to_dict() -> Dictionary:
 		"cmdb_found_at": cmdb_found_at.duplicate(),
 		"location": location.duplicate(),
 		"visited": visited.keys(),
+		"counters": counters.duplicate(),
 		"last_help_desk": last_help_desk.duplicate(),
 		"repel_steps": repel_steps,
 	}
@@ -221,6 +224,8 @@ func from_dict(d: Dictionary) -> void:
 		cmdb_caught[species_id] = true
 	cmdb_found_at = d.get("cmdb_found_at", {}).duplicate()
 	location = _cell_dict(d.get("location", {}))
+	for name: String in d.get("counters", {}):
+		counters[name] = int(d["counters"][name])
 	for place: String in d.get("visited", []):
 		visited[place] = true
 	if not d.has("visited"):

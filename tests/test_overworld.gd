@@ -27,7 +27,7 @@ func test_tileset_custom_data() -> void:
 	assert_eq(ts.tile_size, Vector2i(16, 16))
 	assert_eq(OverworldTiles.coords_of("tree"), Vector2i(4, 0))
 	var source: TileSetAtlasSource = ts.get_source(OverworldTiles.SOURCE_ID)
-	assert_eq(source.get_tiles_count(), 24)
+	assert_eq(source.get_tiles_count(), 30, "24 + 4 packet lanes + terminal + breaker panel")
 	var tangle := source.get_tile_data(OverworldTiles.coords_of("cable_tangle"), 0)
 	assert_eq(tangle.get_custom_data("behavior"), "hot_zone")
 	assert_true(source.get_tile_data(OverworldTiles.coords_of("tree"), 0).get_custom_data("collision"))

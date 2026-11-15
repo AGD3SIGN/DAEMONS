@@ -246,4 +246,27 @@ Options live separately in user://settings.cfg.
 | set_flag false | `{"cmd": "set_flag", "flag": "port_2", "value": false}` |
 | show_npc | `{"cmd": "show_npc", "npc": "kevin_burst", "facing": "up"}` (a `"hidden"` NPC appears on its tile) |
 | hide_npc | `{"cmd": "hide_npc", "npc": "kevin_burst"}` |
+| choose (step) | `{"choose": "What's the fix?", "title": "FIX", "options": [{"label": "CLEAN DUST", "then": [...]}, ...], "cancel": [...]}`: 2–8 answers in the side list, labels up to 12 characters |
+| if_var (step) | `{"if_var": "load", "op": ">", "value": 12, "then": [...], "else": [...]}` (ops `== != < <= > >=`) |
+| add_var / set_var | `{"cmd": "add_var", "var": "load", "value": -4}` / `{"cmd": "set_var", "var": "pipeline", "value": 0}`; counters live in `GameState.counters` (saved) |
+| clear_flags | `{"cmd": "clear_flags", "flags": ["log_auth", "log_vpn"]}` |
+| send_player | `{"cmd": "send_player", "spawn": "default"}`: after the dialogue's event finishes, fade and move to that spawn on this map |
+
+Text can show a counter: `"LOAD METER: {var:load} / 12 kW"`.
+
+**Packet lanes** (tiles `lane_up/down/left/right`, behaviors `slide_*`): stepping on one carries you along its arrow
+until you land on a tile that isn't a lane, the next tile is blocked, or the ride would revisit a tile.
+**Cameras:** `{"type": "camera", "x", "y" (a solid tile), "facing", "range", "turns": ["right", "down"], "turn_every": 2,
+"send_to": "default", "dialogue": "caught_by_camera", "off_flag": "sec_found"}`. They turn on your steps; if the
+beam covers you after a turn you're walked back to `send_to`.
+**Dark rooms:** a map's `"dark_until_flag": "brk_lights"` (+ optional `"dark_tint"`) keeps it dark until the flag is set.
+
+### Department challenges (2026-11-15)
+| Dept | Challenge | Mechanic | Door opens when |
+|---|---|---|---|
+| 1 Desktop Support | Ticket triage | 3 users, pick the fix (choose); a wrong fix starts a fight | ticket_a/b/c_fixed |
+| 2 Networking | Packet lanes | lane maze, 16+ moves, no soft-locks (tests/test_departments.gd checks it) | (no door: reach Ping) |
+| 3 DevOps | Pipeline | 6 stages in order via `pipeline` counter; out of order or the Friday hotfix rolls back + bug fight | pipeline_green |
+| 4 Facilities | Power budget | dark room, 7 breakers, `load` counter, over 12 kW trips back to Ransom's state; servers off crashes | servers + cooling + door on, rig off |
+| 5 SecOps | Stealth + forensics | turning cameras, 3 log printouts, name the account (svc_backup); wrong answer re-shreds the logs | sec_found |
 | move_npc to player | `{"cmd": "move_npc", "npc": "kevin_burst", "to": "player", "run": true}` (walks the shortest free path to a tile next to you; both turn to face each other. `"run"` doubles the speed, also works with `"path"`) |

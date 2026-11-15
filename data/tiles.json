@@ -22,5 +22,11 @@
   { "name": "bed",           "atlas": [4, 2], "collision": true,  "behavior": "none" },
   { "name": "server_rack",   "atlas": [5, 2], "collision": true,  "behavior": "none" },
   { "name": "plant",         "atlas": [6, 2], "collision": true,  "behavior": "none" },
-  { "name": "bookshelf",     "atlas": [7, 2], "collision": true,  "behavior": "none" }
+  { "name": "bookshelf",     "atlas": [7, 2], "collision": true,  "behavior": "none" },
+  { "name": "lane_up",       "atlas": [0, 3], "collision": false, "behavior": "slide_up" },
+  { "name": "lane_down",     "atlas": [1, 3], "collision": false, "behavior": "slide_down" },
+  { "name": "lane_left",     "atlas": [2, 3], "collision": false, "behavior": "slide_left" },
+  { "name": "lane_right",    "atlas": [3, 3], "collision": false, "behavior": "slide_right" },
+  { "name": "terminal",      "atlas": [4, 3], "collision": true,  "behavior": "none" },
+  { "name": "breaker_panel", "atlas": [5, 3], "collision": true,  "behavior": "none" }
 ]

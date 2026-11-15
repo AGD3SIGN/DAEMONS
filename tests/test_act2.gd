@@ -105,20 +105,6 @@ func test_zed_takes_pyrewall_offline_at_port_443() -> void:
 	assert_true(_logged("spray-painted"), "the Port 443 sign changes")
 
 
-func test_networking_department_vlan_door() -> void:
-	await _open("department_2")
-	await wait_until(func() -> bool: return world.is_idle(), 5.0)
-	assert_true(_logged("VLAN"), "the receptionist explains the puzzle")
-	assert_false(world.map.is_walkable(Vector2i(7, 9)), "laser door closed")
-	for x in [6, 10]:  # trunks B and C
-		world.player.setup(world.map, Vector2i(x, 12), Vector2i.UP)
-		await world.interact()
-	assert_true(world.map.is_walkable(Vector2i(7, 9)), "B + C on -> open")
-	world.player.setup(world.map, Vector2i(2, 12), Vector2i.UP)
-	await world.interact()  # bridge the guest network
-	assert_false(world.map.is_walkable(Vector2i(7, 9)), "guest Wi-Fi on -> closed again")
-
-
 func test_ping_awards_the_networking_cert() -> void:
 	var rng := RandomNumberGenerator.new()
 	rng.seed = 3
@@ -191,19 +177,6 @@ func test_kevin_admits_he_got_phished_in_devops_heights() -> void:
 	assert_true(_logged("MFA"), "he turned on MFA for everything")
 
 
-func test_devops_pipeline_door() -> void:
-	await _open("department_3")
-	await wait_until(func() -> bool: return world.is_idle(), 5.0)
-	assert_false(world.map.is_walkable(Vector2i(7, 9)))
-	for x in [2, 6]:  # BUILD and TESTS
-		world.player.setup(world.map, Vector2i(x, 12), Vector2i.UP)
-		await world.interact()
-	assert_true(world.map.is_walkable(Vector2i(7, 9)), "green pipeline -> open")
-	world.player.setup(world.map, Vector2i(10, 12), Vector2i.UP)
-	await world.interact()
-	assert_false(world.map.is_walkable(Vector2i(7, 9)), "never deploy on a Friday")
-
-
 func test_devi_awards_the_software_cert() -> void:
 	var rng := RandomNumberGenerator.new()
 	rng.seed = 3
@@ -268,18 +241,6 @@ func test_unplugging_the_miner_opens_facilities() -> void:
 	await world.interact()
 	assert_true(GameState.flags.get("miner_unplugged", false))
 	assert_true(world.map.is_walkable(Vector2i(25, 6)), "power's back, the door opens")
-
-
-func test_facilities_breaker_door() -> void:
-	await _open("department_4")
-	await wait_until(func() -> bool: return world.is_idle(), 5.0)
-	for x in [2, 6]:
-		world.player.setup(world.map, Vector2i(x, 12), Vector2i.UP)
-		await world.interact()
-	assert_true(world.map.is_walkable(Vector2i(7, 9)), "MAIN + COOLING")
-	world.player.setup(world.map, Vector2i(10, 12), Vector2i.UP)
-	await world.interact()
-	assert_false(world.map.is_walkable(Vector2i(7, 9)), "never OVERCLOCK")
 
 
 func test_kevin_holds_the_trail_and_clondor_flees() -> void:

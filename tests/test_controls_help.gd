@@ -34,6 +34,7 @@ func _open() -> void:
 
 func test_corner_hint_names_the_buttons_for_each_scheme() -> void:
 	await _open()
+	await wait_until(func() -> bool: return not world.banner_showing(), 5.0)  # the hint waits for the area banner
 	InputPrompts.scheme = "keyboard"
 	world.control_hint.refresh()
 	assert_eq(world.control_hint.text(), "Space PHONE  M MAP  Z TALK")
@@ -51,6 +52,9 @@ func test_corner_hint_names_the_buttons_for_each_scheme() -> void:
 	world.text_box.visible = false
 	world.player.moving = true
 	assert_true(world.control_hint.should_show(), "stays put while walking (it used to blink every step)")
+	world._banner.position.y = 4.0
+	assert_false(world.control_hint.should_show(), "steps aside for the area-name banner")
+	world._banner.position.y = -24.0
 	world.player.moving = false
 	var rect := world.control_hint.get_global_rect()
 	assert_true(get_viewport().get_visible_rect().encloses(rect), "on screen: %s" % rect)

@@ -7,13 +7,9 @@
     "_": "floor",
     "I": "interior_wall",
     "M": "exit_mat",
-    "k": "bookshelf",
     "c": "server_rack",
-    "b": "bed",
-    "t": "table",
     "p": "plant",
-    "r": "rug",
-    "C": "counter"
+    "T": "terminal"
   },
   "rows": [
     "IIIIIIIIIIIIIII",
@@ -26,10 +22,14 @@
     "I_____________I",
     "I_____________I",
     "IIIIIII_IIIIIII",
+    "I_____T_______I",
     "I_____________I",
-    "I_c___c___c___I",
+    "I_cc__ccc__cc_I",
     "I_____________I",
-    "I____rrrrr__k_I",
+    "I_cc__ccc__cc_I",
+    "I_____________I",
+    "I_cc__ccc__cc_I",
+    "I_____________I",
     "I_____________I",
     "I_____________I",
     "I_____________I",
@@ -38,7 +38,7 @@
   "spawns": {
     "default": {
       "x": 7,
-      "y": 16,
+      "y": 20,
       "facing": "up"
     }
   },
@@ -46,52 +46,128 @@
     {
       "type": "warp",
       "x": 7,
-      "y": 17,
+      "y": 21,
       "to_map": "secops_fortress",
       "to_spawn": "from_department"
     },
     {
       "type": "trigger",
       "x": 7,
-      "y": 16,
+      "y": 20,
       "dialogue": "department_5_welcome",
       "once_flag": "department_5_welcomed"
-    },
-    {
-      "type": "sign",
-      "x": 2,
-      "y": 11,
-      "dialogue": "sec_mfa"
-    },
-    {
-      "type": "sign",
-      "x": 6,
-      "y": 11,
-      "dialogue": "sec_logs"
-    },
-    {
-      "type": "sign",
-      "x": 10,
-      "y": 11,
-      "dialogue": "sec_guest"
-    },
-    {
-      "type": "sign",
-      "x": 12,
-      "y": 13,
-      "dialogue": "access_notes"
     },
     {
       "type": "barrier",
       "x": 7,
       "y": 9,
       "open_flags": [
-        "sec_mfa",
-        "sec_logs"
-      ],
-      "closed_flags": [
-        "sec_guest"
+        "sec_found"
       ]
+    },
+    {
+      "type": "sign",
+      "x": 6,
+      "y": 10,
+      "dialogue": "sec_console"
+    },
+    {
+      "type": "camera",
+      "x": 0,
+      "y": 11,
+      "facing": "right",
+      "range": 13,
+      "turns": [
+        "right",
+        "down"
+      ],
+      "turn_every": 2,
+      "send_to": "default",
+      "dialogue": "caught_by_camera",
+      "off_flag": "sec_found"
+    },
+    {
+      "type": "camera",
+      "x": 14,
+      "y": 13,
+      "facing": "up",
+      "range": 13,
+      "turns": [
+        "up",
+        "left"
+      ],
+      "turn_every": 4,
+      "send_to": "default",
+      "dialogue": "caught_by_camera",
+      "off_flag": "sec_found"
+    },
+    {
+      "type": "camera",
+      "x": 0,
+      "y": 15,
+      "facing": "right",
+      "range": 13,
+      "turns": [
+        "right",
+        "up"
+      ],
+      "turn_every": 4,
+      "send_to": "default",
+      "dialogue": "caught_by_camera",
+      "off_flag": "sec_found"
+    },
+    {
+      "type": "camera",
+      "x": 14,
+      "y": 17,
+      "facing": "left",
+      "range": 13,
+      "turns": [
+        "left",
+        "down"
+      ],
+      "turn_every": 3,
+      "send_to": "default",
+      "dialogue": "caught_by_camera",
+      "off_flag": "sec_found"
+    },
+    {
+      "type": "camera",
+      "x": 1,
+      "y": 21,
+      "facing": "up",
+      "range": 12,
+      "send_to": "default",
+      "dialogue": "caught_by_camera",
+      "off_flag": "sec_found"
+    },
+    {
+      "type": "camera",
+      "x": 13,
+      "y": 21,
+      "facing": "up",
+      "range": 12,
+      "send_to": "default",
+      "dialogue": "caught_by_camera",
+      "off_flag": "sec_found"
+    },
+    {
+      "type": "sign",
+      "x": 3,
+      "y": 12,
+      "dialogue": "log_auth"
+    },
+    {
+      "type": "sign",
+      "x": 11,
+      "y": 16,
+      "dialogue": "log_vpn"
+    },
+    {
+      "type": "sign",
+      "x": 7,
+      "y": 16,
+      "dialogue": "log_badge"
     },
     {
       "type": "npc",

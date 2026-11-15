@@ -37,7 +37,7 @@ func should_show() -> bool:
 	if not Settings.control_hints or InputPrompts.scheme == "touch" or world == null:
 		return false
 	# Not world.is_idle(): that's false mid-step, which made the tag blink on every step.
-	return world.is_free() and not world.text_box.visible
+	return world.is_free() and not world.text_box.visible and not world.banner_showing()
 
 
 func _process(_delta: float) -> void:

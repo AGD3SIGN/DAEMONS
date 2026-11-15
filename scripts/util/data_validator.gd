@@ -13,7 +13,9 @@ const CATEGORIES: PackedStringArray = ["physical", "special", "status"]
 const GROWTH_RATES: PackedStringArray = ["fast", "medium_fast", "medium_slow", "slow", "erratic", "fluctuating"]
 const POCKETS: PackedStringArray = ["items", "keys", "scripts", "key_items"]
 const MULTIPLIERS: Array[float] = [0.0, 0.5, 2.0]
-const TILE_BEHAVIORS: PackedStringArray = ["none", "hot_zone", "ledge_down", "water", "door", "counter"]
+const TILE_BEHAVIORS: PackedStringArray = ["none", "hot_zone", "ledge_down", "water", "door", "counter",
+	"slide_up", "slide_down", "slide_left", "slide_right"]
+const COMPARE_OPS: PackedStringArray = ["==", "!=", "<", "<=", ">", ">="]
 const FACINGS: PackedStringArray = ["up", "down", "left", "right"]
 const DIALOGUE_COMMANDS := {
 	"set_flag": ["flag"],
@@ -30,6 +32,10 @@ const DIALOGUE_COMMANDS := {
 	"name_player": [],
 	"choose_starter": ["options"],
 	"move_player": ["path"],
+	"add_var": ["var", "value"],
+	"set_var": ["var", "value"],
+	"clear_flags": ["flags"],
+	"send_player": ["spawn"],
 }
 const EVENT_TYPES := {
 	"warp": ["to_map", "to_spawn"],
@@ -38,6 +44,7 @@ const EVENT_TYPES := {
 	"trigger": ["dialogue"],
 	"hidden_item": ["item", "flag"],
 	"barrier": ["open_flags"],
+	"camera": ["facing", "range"],
 }
 
 ## effect id -> required param names
@@ -358,6 +365,16 @@ func _validate_events(events: Variant, where: String, rows: Array, legend: Dicti
 			"barrier":
 				if typeof(e["open_flags"]) != TYPE_ARRAY:
 					_err(ew, "'open_flags' must be a list of flags")
+			"camera":
+				_one_of(e, "facing", ew, FACINGS)
+				_int(e, "range", ew, 1, 20)
+				for f: Variant in e.get("turns", []):
+					if not f in FACINGS:
+						_err(ew, "'turns' must list up/down/left/right")
+				if e.has("turn_every"):
+					_int(e, "turn_every", ew, 1, 20)
+				if not tile.get("collision", false):
+					_err(ew, "a camera is mounted on a wall (solid tile)")
 			"hidden_item":
 				if not items.has(e["item"]):
 					_err(ew, "unknown item '%s'" % str(e["item"]))
@@ -396,11 +413,11 @@ func _validate_steps(steps: Variant, where: String) -> void:
 			_err(sw, "each step must be an object")
 			continue
 		var kinds := 0
-		for key in ["text", "choice", "if_flag", "if_cert", "cmd"]:
+		for key in ["text", "choice", "choose", "if_flag", "if_cert", "if_var", "cmd"]:
 			if step.has(key):
 				kinds += 1
 		if kinds != 1:
-			_err(sw, "needs exactly one of text, choice, if_flag, if_cert or cmd")
+			_err(sw, "needs exactly one of text, choice, choose, if_flag, if_cert, if_var or cmd")
 			continue
 		if step.has("text"):
 			_string(step, "text", sw)
@@ -408,6 +425,29 @@ func _validate_steps(steps: Variant, where: String) -> void:
 			_string(step, "choice", sw)
 			_validate_steps(step.get("yes", []), sw + " › yes")
 			_validate_steps(step.get("no", []), sw + " › no")
+		elif step.has("choose"):
+			_string(step, "choose", sw)
+			var options: Variant = step.get("options")
+			if typeof(options) != TYPE_ARRAY or options.size() < 2 or options.size() > 8:
+				_err(sw, "'options' must list 2 to 8 answers")
+			else:
+				for j in options.size():
+					var o: Variant = options[j]
+					var ow := "%s › options[%d]" % [sw, j]
+					if typeof(o) != TYPE_DICTIONARY or not _string(o, "label", ow):
+						_err(ow, "each answer needs a 'label'")
+						continue
+					if String(o["label"]).length() > 12:
+						_err(ow, "label '%s' is longer than 12 characters (the side list is narrow)" % o["label"])
+					_validate_steps(o.get("then", []), ow + " › then")
+			_validate_steps(step.get("cancel", []), sw + " › cancel")
+		elif step.has("if_var"):
+			_string(step, "if_var", sw)
+			_one_of(step, "op", sw, COMPARE_OPS)
+			if not _is_int(step.get("value")):
+				_err(sw, "'value' must be a whole number")
+			_validate_steps(step.get("then", []), sw + " › then")
+			_validate_steps(step.get("else", []), sw + " › else")
 		elif step.has("if_flag") or step.has("if_cert"):
 			if step.has("if_flag"):
 				_string(step, "if_flag", sw)
@@ -427,6 +467,13 @@ func _validate_command(step: Dictionary, where: String) -> void:
 			_err(where, "'%s' needs '%s'" % [step["cmd"], key])
 			return
 	match step["cmd"]:
+		"add_var", "set_var":
+			_string(step, "var", where)
+			if not _is_int(step["value"]):
+				_err(where, "'value' must be a whole number")
+		"clear_flags":
+			if typeof(step["flags"]) != TYPE_ARRAY:
+				_err(where, "'flags' must be a list")
 		"set_flag":
 			_string(step, "flag", where)
 			if step.has("value") and typeof(step["value"]) != TYPE_BOOL:

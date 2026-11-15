@@ -48,28 +48,6 @@ func test_new_game_intro_names_you() -> void:
 	assert_true(_logged("Your manager is waiting at the Help Desk"))
 
 
-func test_patch_panel_puzzle() -> void:
-	GameState.add_daemon(_daemon("pingo", 12))
-	GameState.flags["department_welcomed"] = true
-	_open("department_1")
-	var door: BarrierEvent
-	for event in world.events:
-		if event is BarrierEvent:
-			door = event
-	assert_false(door.is_open(), "starts locked")
-	assert_false(world.map.is_walkable(Vector2i(7, 9)))
-	for port_x in [2, 10]:  # odd ports 1 and 3
-		world.player.setup(world.map, Vector2i(port_x, 12), Vector2i.UP)
-		await world.interact()
-	assert_true(door.is_open(), "ports 1 and 3 live -> door opens")
-	assert_true(world.map.is_walkable(Vector2i(7, 9)))
-	world.player.setup(world.map, Vector2i(6, 12), Vector2i.UP)
-	await world.interact()  # the honeypot
-	assert_false(door.is_open(), "plugging port 2 locks it again")
-	await world.interact()
-	assert_true(door.is_open())
-
-
 func test_dana_awards_the_desktop_support_cert() -> void:
 	var team: Array[DaemonInstance] = [_daemon("emperoute", 40)]
 	var config := BattleScene.trainer_config("dana")

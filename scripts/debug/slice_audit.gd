@@ -275,9 +275,11 @@ func _scan_steps(steps: Array, where: String) -> void:
 				if step.has("trainer"):
 					_trainers_used[step["trainer"]] = true
 					_flags_set[BattleScene.trainer_flag(step["trainer"])] = where
-		for branch in ["yes", "no", "then", "else"]:
+		for branch in ["yes", "no", "then", "else", "cancel"]:
 			if step.has(branch):
 				_scan_steps(step[branch], where)
+		for option: Dictionary in step.get("options", []) if step.has("choose") else []:
+			_scan_steps(option.get("then", []), where)
 
 
 func _level_curve() -> PackedStringArray:

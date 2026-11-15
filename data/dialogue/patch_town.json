@@ -118,92 +118,24 @@
   ],
   "department_welcome": [
     {
-      "speaker": "Receptionist",
-      "text": "Welcome to Desktop Support! The trial room is behind that laser door."
+      "text": "Welcome to Desktop Support! Your trial is the ticket queue.",
+      "speaker": "Receptionist"
     },
     {
-      "speaker": "Receptionist",
-      "text": "Plug the right cables into the patch panels to open it. The patch notes are on the shelf."
-    }
-  ],
-  "port_1": [
+      "text": "Three users, three tickets. Close all three and the door to Dana opens.",
+      "speaker": "Receptionist"
+    },
     {
-      "if_flag": "port_1",
-      "then": [
-        {
-          "text": "PORT 1: You unplug the cable."
-        },
-        {
-          "cmd": "set_flag",
-          "flag": "port_1",
-          "value": false
-        }
-      ],
-      "else": [
-        {
-          "text": "PORT 1: You plug a cable in. The status light blinks green."
-        },
-        {
-          "cmd": "set_flag",
-          "flag": "port_1"
-        }
-      ]
-    }
-  ],
-  "port_2": [
-    {
-      "if_flag": "port_2",
-      "then": [
-        {
-          "text": "PORT 2: You unplug the cable. The alarm stops."
-        },
-        {
-          "cmd": "set_flag",
-          "flag": "port_2",
-          "value": false
-        }
-      ],
-      "else": [
-        {
-          "text": "PORT 2: You plug a cable in. The status light blinks RED. Something is beeping."
-        },
-        {
-          "cmd": "set_flag",
-          "flag": "port_2"
-        }
-      ]
-    }
-  ],
-  "port_3": [
-    {
-      "if_flag": "port_3",
-      "then": [
-        {
-          "text": "PORT 3: You unplug the cable."
-        },
-        {
-          "cmd": "set_flag",
-          "flag": "port_3",
-          "value": false
-        }
-      ],
-      "else": [
-        {
-          "text": "PORT 3: You plug a cable in. The status light blinks green."
-        },
-        {
-          "cmd": "set_flag",
-          "flag": "port_3"
-        }
-      ]
+      "text": "Pick the wrong fix and... well. People get attached to their Daemons. And their files.",
+      "speaker": "Receptionist"
     }
   ],
   "patch_notes": [
     {
-      "text": "PATCH NOTES v1.3: Only odd-numbered ports are live."
+      "text": "HELP DESK RULES: 1. Ask what changed. 2. Check the cable. 3. Check the OTHER cable."
     },
     {
-      "text": "Port 2 is a honeypot. Do NOT plug anything into Port 2."
+      "text": "4. Swap the cheap part before the expensive one. 5. Never reinstall anything to fix a noise."
     }
   ],
   "dana": [
@@ -234,6 +166,300 @@
     },
     {
       "text": "Route 2 is open. Port City is somewhere past the construction."
+    }
+  ],
+  "ticket_a": [
+    {
+      "if_flag": "ticket_a_fixed",
+      "then": [
+        {
+          "text": "It works! I'm telling everyone you're the good one.",
+          "speaker": "Ari"
+        }
+      ],
+      "else": [
+        {
+          "text": "TICKET #4471: \"My PC sounds like a jet engine and everything takes forever to open.\""
+        },
+        {
+          "choose": "What's the fix?",
+          "title": "FIX",
+          "options": [
+            {
+              "label": "REINSTALL OS",
+              "then": [
+                {
+                  "text": "You did that. It's still roaring, and now Ari's files are gone. Ari's Dustbunny is FURIOUS."
+                },
+                {
+                  "cmd": "start_battle",
+                  "foe": [
+                    [
+                      "dustbunny",
+                      11
+                    ]
+                  ],
+                  "trainer_name": "Upset Ari"
+                }
+              ]
+            },
+            {
+              "label": "CLEAN DUST",
+              "then": [
+                {
+                  "text": "You open the case. A decade of dust comes out in one gray brick. The fans go quiet. TICKET CLOSED."
+                },
+                {
+                  "cmd": "set_flag",
+                  "flag": "ticket_a_fixed"
+                },
+                {
+                  "text": "Thank you!! You're a wizard.",
+                  "speaker": "Ari"
+                }
+              ]
+            },
+            {
+              "label": "ADD RAM",
+              "then": [
+                {
+                  "text": "You did that. It's still roaring, and now Ari's files are gone. Ari's Dustbunny is FURIOUS."
+                },
+                {
+                  "cmd": "start_battle",
+                  "foe": [
+                    [
+                      "dustbunny",
+                      11
+                    ]
+                  ],
+                  "trainer_name": "Upset Ari"
+                }
+              ]
+            },
+            {
+              "label": "CALL KEVIN",
+              "then": [
+                {
+                  "text": "You did that. It's still roaring, and now Ari's files are gone. Ari's Dustbunny is FURIOUS."
+                },
+                {
+                  "cmd": "start_battle",
+                  "foe": [
+                    [
+                      "dustbunny",
+                      11
+                    ]
+                  ],
+                  "trainer_name": "Upset Ari"
+                }
+              ]
+            }
+          ],
+          "cancel": [
+            {
+              "text": "Take your time. I'll just... sit here.",
+              "speaker": "Ari"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "ticket_b": [
+    {
+      "if_flag": "ticket_b_fixed",
+      "then": [
+        {
+          "text": "It works! I'm telling everyone you're the good one.",
+          "speaker": "Bea"
+        }
+      ],
+      "else": [
+        {
+          "text": "TICKET #4472: \"My screen is black! The PC is on, the lights blink, but nothing shows.\""
+        },
+        {
+          "choose": "What's the fix?",
+          "title": "FIX",
+          "options": [
+            {
+              "label": "NEW PC",
+              "then": [
+                {
+                  "text": "That didn't help. The screen's still black, and Bea's Pixelsier takes it personally."
+                },
+                {
+                  "cmd": "start_battle",
+                  "foe": [
+                    [
+                      "pixelsier",
+                      11
+                    ]
+                  ],
+                  "trainer_name": "Upset Bea"
+                }
+              ]
+            },
+            {
+              "label": "NEW DRIVERS",
+              "then": [
+                {
+                  "text": "That didn't help. The screen's still black, and Bea's Pixelsier takes it personally."
+                },
+                {
+                  "cmd": "start_battle",
+                  "foe": [
+                    [
+                      "pixelsier",
+                      11
+                    ]
+                  ],
+                  "trainer_name": "Upset Bea"
+                }
+              ]
+            },
+            {
+              "label": "CHECK CABLE",
+              "then": [
+                {
+                  "text": "The video cable was hanging by a thread. You push it in. The desktop appears. TICKET CLOSED."
+                },
+                {
+                  "cmd": "set_flag",
+                  "flag": "ticket_b_fixed"
+                },
+                {
+                  "text": "Thank you!! You're a wizard.",
+                  "speaker": "Bea"
+                }
+              ]
+            },
+            {
+              "label": "SMACK IT",
+              "then": [
+                {
+                  "text": "That didn't help. The screen's still black, and Bea's Pixelsier takes it personally."
+                },
+                {
+                  "cmd": "start_battle",
+                  "foe": [
+                    [
+                      "pixelsier",
+                      11
+                    ]
+                  ],
+                  "trainer_name": "Upset Bea"
+                }
+              ]
+            }
+          ],
+          "cancel": [
+            {
+              "text": "Take your time. I'll just... sit here.",
+              "speaker": "Bea"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "ticket_c": [
+    {
+      "if_flag": "ticket_c_fixed",
+      "then": [
+        {
+          "text": "It works! I'm telling everyone you're the good one.",
+          "speaker": "Cal"
+        }
+      ],
+      "else": [
+        {
+          "text": "TICKET #4473: \"Laptop won't charge. The charge light is off. My phone charges fine from the same outlet.\""
+        },
+        {
+          "choose": "What's the fix?",
+          "title": "FIX",
+          "options": [
+            {
+              "label": "NEW BATTERY",
+              "then": [
+                {
+                  "text": "Nothing changes. 1% battery. Cal's Fanbat has had ENOUGH of this."
+                },
+                {
+                  "cmd": "start_battle",
+                  "foe": [
+                    [
+                      "fanbat",
+                      12
+                    ]
+                  ],
+                  "trainer_name": "Upset Cal"
+                }
+              ]
+            },
+            {
+              "label": "WIPE IT",
+              "then": [
+                {
+                  "text": "Nothing changes. 1% battery. Cal's Fanbat has had ENOUGH of this."
+                },
+                {
+                  "cmd": "start_battle",
+                  "foe": [
+                    [
+                      "fanbat",
+                      12
+                    ]
+                  ],
+                  "trainer_name": "Upset Cal"
+                }
+              ]
+            },
+            {
+              "label": "REINSTALL OS",
+              "then": [
+                {
+                  "text": "Nothing changes. 1% battery. Cal's Fanbat has had ENOUGH of this."
+                },
+                {
+                  "cmd": "start_battle",
+                  "foe": [
+                    [
+                      "fanbat",
+                      12
+                    ]
+                  ],
+                  "trainer_name": "Upset Cal"
+                }
+              ]
+            },
+            {
+              "label": "SWAP CHARGER",
+              "then": [
+                {
+                  "text": "The outlet works, so it's the charger. You swap it. The light turns orange. TICKET CLOSED."
+                },
+                {
+                  "cmd": "set_flag",
+                  "flag": "ticket_c_fixed"
+                },
+                {
+                  "text": "Thank you!! You're a wizard.",
+                  "speaker": "Cal"
+                }
+              ]
+            }
+          ],
+          "cancel": [
+            {
+              "text": "Take your time. I'll just... sit here.",
+              "speaker": "Cal"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

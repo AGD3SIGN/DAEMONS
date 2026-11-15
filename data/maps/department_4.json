@@ -7,13 +7,10 @@
     "_": "floor",
     "I": "interior_wall",
     "M": "exit_mat",
-    "k": "bookshelf",
     "c": "server_rack",
-    "b": "bed",
-    "t": "table",
     "p": "plant",
-    "r": "rug",
-    "C": "counter"
+    "T": "terminal",
+    "B": "breaker_panel"
   },
   "rows": [
     "IIIIIIIIIIIIIII",
@@ -27,58 +24,49 @@
     "I_____________I",
     "IIIIIII_IIIIIII",
     "I_____________I",
-    "I_c___c___c___I",
-    "I_____________I",
-    "I____rrrrr__k_I",
+    "I_B_B_B_B_B_B_I",
     "I_____________I",
     "I_____________I",
+    "Ic__c_____c__cI",
+    "I_____________I",
+    "IB__________T_I",
     "I_____________I",
     "IIIIIIIMIIIIIII"
   ],
   "spawns": {
     "default": {
       "x": 7,
-      "y": 16,
+      "y": 17,
       "facing": "up"
     }
   },
+  "dark_until_flag": "brk_lights",
+  "dark_tint": "#3a3a58",
   "events": [
     {
       "type": "warp",
       "x": 7,
-      "y": 17,
+      "y": 18,
       "to_map": "power_plant",
       "to_spawn": "from_department"
     },
     {
       "type": "trigger",
       "x": 7,
-      "y": 16,
+      "y": 17,
       "dialogue": "department_4_welcome",
       "once_flag": "department_4_welcomed"
     },
     {
       "type": "sign",
-      "x": 2,
-      "y": 11,
-      "dialogue": "brk_main"
-    },
-    {
-      "type": "sign",
-      "x": 6,
-      "y": 11,
-      "dialogue": "brk_cooling"
-    },
-    {
-      "type": "sign",
-      "x": 10,
-      "y": 11,
-      "dialogue": "brk_overclock"
-    },
-    {
-      "type": "sign",
       "x": 12,
-      "y": 13,
+      "y": 16,
+      "dialogue": "power_meter"
+    },
+    {
+      "type": "sign",
+      "x": 1,
+      "y": 14,
       "dialogue": "breaker_notes"
     },
     {
@@ -86,12 +74,55 @@
       "x": 7,
       "y": 9,
       "open_flags": [
-        "brk_main",
-        "brk_cooling"
+        "brk_servers",
+        "brk_cooling",
+        "brk_door"
       ],
       "closed_flags": [
-        "brk_overclock"
+        "brk_rig"
       ]
+    },
+    {
+      "type": "sign",
+      "x": 2,
+      "y": 11,
+      "dialogue": "breaker_servers"
+    },
+    {
+      "type": "sign",
+      "x": 4,
+      "y": 11,
+      "dialogue": "breaker_coffee"
+    },
+    {
+      "type": "sign",
+      "x": 6,
+      "y": 11,
+      "dialogue": "breaker_cooling"
+    },
+    {
+      "type": "sign",
+      "x": 8,
+      "y": 11,
+      "dialogue": "breaker_rig"
+    },
+    {
+      "type": "sign",
+      "x": 10,
+      "y": 11,
+      "dialogue": "breaker_door"
+    },
+    {
+      "type": "sign",
+      "x": 12,
+      "y": 11,
+      "dialogue": "breaker_heater"
+    },
+    {
+      "type": "sign",
+      "x": 1,
+      "y": 16,
+      "dialogue": "breaker_lights"
     },
     {
       "type": "npc",

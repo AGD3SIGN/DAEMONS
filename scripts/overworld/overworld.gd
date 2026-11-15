@@ -23,6 +23,7 @@ var events: Array[MapEvent] = []
 var time_scale: float = 1.0
 var auto_advance_text := false
 var auto_choice: Variant = null      # true / false answers every yes/no question automatically (or an Array: one answer per question, in order)
+var auto_picks: Variant = null  # tests: Array of answer indexes for choose()
 var encounter_rate_override: float = -1.0  # >= 0 replaces the map's encounter rate (tests)
 var encounter_rng := RandomNumberGenerator.new()
 var allow_scene_change := true       # false: start_battle only emits battle_requested
@@ -102,14 +103,26 @@ func _apply_map_mood() -> void:
 	if _tint == null:
 		_tint = CanvasModulate.new()
 		add_child(_tint)
-	_tint.color = Color(String(map.map_data.get("tint", "#ffffff")))
+	refresh_tint()
 
 
-## Re-checks every laser door (after dialogue changes flags).
+## A map's "tint" darkens it; "dark_until_flag" keeps it dark (brownout) until that flag is set.
+func refresh_tint() -> void:
+	if _tint == null or map == null:
+		return
+	var data := map.map_data
+	var tint := String(data.get("tint", "#ffffff"))
+	if data.has("dark_until_flag"):
+		tint = "#ffffff" if GameState.flags.get(data["dark_until_flag"], false) else String(data.get("dark_tint", "#40405c"))
+	_tint.color = Color(tint)
+
+
+## Re-checks every laser door, camera and dark room (after dialogue changes flags).
 func refresh_barriers() -> void:
 	for event in events:
-		if event is BarrierEvent:
+		if event is BarrierEvent or event is CameraEvent:
 			event.refresh()
+	refresh_tint()
 
 
 ## Trigger zones under the player when they arrive (cutscenes on entering a map).
@@ -121,6 +134,7 @@ func _check_arrival() -> void:
 			_busy = true
 			player.input_enabled = false
 			await event.run()
+			await flush_pending_send()
 			return
 
 
@@ -147,6 +161,8 @@ static func _new_event(type: String) -> MapEvent:
 			return TriggerEvent.new()
 		"barrier":
 			return BarrierEvent.new()
+		"camera":
+			return CameraEvent.new()
 	return HiddenItemEvent.new()
 
 
@@ -188,11 +204,14 @@ func _on_stepped(cell: Vector2i, _behavior: String) -> void:
 			_busy = true
 			player.input_enabled = false
 			await event.run()
+			await flush_pending_send()
 			return
 	for event in events:
 		if event is NpcEvent and trainer_sees_player(event):
 			await engage_trainer(event, true)
 			return
+	if await _check_cameras():
+		return
 	if GameState.repel_steps > 0:
 		GameState.repel_steps -= 1
 		if GameState.repel_steps == 0:
@@ -215,6 +234,33 @@ func _check_encounter(cell: Vector2i) -> void:
 	var hit := Encounters.roll(map.map_id, info["name"], encounter_rng, GameState.lead_level(), GameState.repel_steps > 0, rate)
 	if not hit.is_empty():
 		start_wild_battle(hit["species"], hit["level"])
+
+
+## Security cameras turn on your steps; if one sees you after turning, you're walked back to its spawn point.
+func _check_cameras() -> bool:
+	var spotter: CameraEvent = null
+	for event in events:
+		if event is CameraEvent:
+			event.on_player_step()
+			if spotter == null and event.sees(player.cell):
+				spotter = event
+	if spotter == null:
+		return false
+	_busy = true
+	player.input_enabled = false
+	await spotter.flash()
+	text_box.visible = true
+	if spotter.dialogue_id.is_empty():
+		await say("CAMERA: Unauthorized movement detected. Returning you to the entrance.")
+	else:
+		await DialogueRunner.new(self).run(DataRegistry.get_dialogue(spotter.dialogue_id))
+	text_box.visible = false
+	_speaker_tab.visible = false
+	for event in events:
+		if event is CameraEvent:
+			event.reset()
+	await warp_to(map.map_id, spotter.send_to)
+	return true
 
 
 ## True if an unbeaten trainer is looking straight at the player within its sight range,
@@ -318,6 +364,20 @@ func interact() -> void:
 	await event.interact()
 	_busy = false
 	player.input_enabled = true
+	await flush_pending_send()
+
+
+## Dialogue's "send_player" can't reload the map while the sign or NPC that started it is still running (the
+## event would be freed mid-await), so it's queued and done here once the event is finished.
+var pending_send := ""
+
+
+func flush_pending_send() -> void:
+	if pending_send.is_empty():
+		return
+	var spawn := pending_send
+	pending_send = ""
+	await warp_to(map.map_id, spawn)
 
 
 ## Runs a dialogue by id. The text box shows while it runs; movement is paused.
@@ -351,6 +411,21 @@ func show_message(text: String) -> void:
 
 ## Yes/No question. Returns true for yes.
 ## default_yes = false starts the cursor on NO (for choices that throw something away).
+## A question with up to 8 short answers (side list, top right). Returns the index, or -1 for BACK.
+## Tests answer through auto_picks (indexes, in order).
+func choose(question: String, options: PackedStringArray, speaker: String = "", title: String = "CHOOSE") -> int:
+	dialogue_log.append(question)
+	_set_speaker(speaker)
+	text_box.visible = true
+	text_box.show_now(question)
+	if auto_picks != null:
+		await get_tree().process_frame
+		return int(auto_picks.pop_front()) if not auto_picks.is_empty() else -1
+	var r := await field_menus.side.choose(title, options)
+	field_menus.side.close()
+	return int(r["index"]) if r["action"] == "pick" else -1
+
+
 func ask(question: String, speaker: String = "", default_yes: bool = true) -> bool:
 	dialogue_log.append(question)
 	_set_speaker(speaker)
@@ -489,6 +564,11 @@ func _build_ui() -> void:
 	_fade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_fade.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	root.add_child(_fade)
+
+
+## True while the area-name banner is on screen (the corner control hint steps aside for it).
+func banner_showing() -> bool:
+	return _banner != null and _banner.position.y > -24.0
 
 
 func _show_banner(text: String) -> void:

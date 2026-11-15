@@ -4,6 +4,22 @@ Newest entries at the top. Each entry: what's done, decisions, what's next.
 
 ---
 
+## 2026-11-15 — Department challenges: five different trials, harder each time; Kevin rewrite
+
+- Brandon: the department puzzles were all "flip the right two of three switches". Now each is its own mechanic:
+  Desktop Support ticket triage → Networking packet lanes → DevOps pipeline order → Facilities power budget in
+  the dark → SecOps stealth past turning cameras + log forensics. Table in docs/data-format.md.
+- Engine: `choose` multi-answer step, counters (`if_var`, `add_var`, `set_var`, `{var:x}` in text), `clear_flags`,
+  `send_player` (queued until the event finishes, so the sign isn't freed mid-await), lane tiles (`slide_*`, a ride
+  can't loop between opposing lanes), `camera` events, `dark_until_flag` maps. New tiles: 4 lanes, terminal,
+  breaker panel. Validator + slice audit know all of it.
+- Puzzles were checked by small solvers while designing (lane maze seed 5985: 16 moves, no traps; SecOps: 18 moves
+  to the console, 46 with all three logs). tests/test_departments.gd re-checks both from the real map data.
+- The corner control hint hides while the area banner is showing (they overlapped).
+- Kevin rewritten as an obnoxious know-it-all (all 39 lines). Suite 329/329.
+
+---
+
 ## 2026-11-15 — Your phone: menu + Maps app; balance round 2; four new Daemons
 
 - **Phone** (`scripts/ui/phone.gd`, class Phone): the menu button opens your work phone instead of the side menu.
