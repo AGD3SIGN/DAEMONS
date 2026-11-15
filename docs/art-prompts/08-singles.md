@@ -1,4 +1,4 @@
-# Single-stage Hexforged
+# Single-stage Forgelings
 
 Paste one stage per image. Generate and approve each stage before the next.
 

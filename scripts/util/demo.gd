@@ -15,7 +15,7 @@ static func is_demo_build() -> bool:
 	return OS.has_feature(FEATURE) or bool(ProjectSettings.get_setting(SETTING, false))
 
 
-## The scripted one-off at the end of Port City: a glitched Hexforged you can't catch, that flees after 2 turns.
+## The scripted one-off at the end of Port City: a glitched Forgeling you can't catch, that flees after 2 turns.
 ## It is NOT the corruption reveal (that's the Power Plant): it never sets corruption_revealed.
 static func teaser_battle_config() -> Dictionary:
 	var config := {"foe": [[TEASER_SPECIES, TEASER_LEVEL]], "wild": true, "teaser": true, "zone": "coolant_loop"}

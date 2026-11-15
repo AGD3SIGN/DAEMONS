@@ -17,7 +17,7 @@ var outcome: String = ""            # "" while ongoing, then "player_won", "play
 ## Scripted encounters (the demo teaser): Quarantine Keys can't lock on, and the foe leaves on its own at the end of
 ## turn `foe_flees_after` (0 = never).
 var uncatchable: bool = false
-## The player's level cap (from Certifications); the scene fills it in. Each capped Hexforged is told once per battle.
+## The player's level cap (from Certifications); the scene fills it in. Each capped Forgeling is told once per battle.
 var level_cap: int = DaemonInstance.MAX_LEVEL
 var cap_announced: Dictionary = {}
 var foe_flees_after: int = 0

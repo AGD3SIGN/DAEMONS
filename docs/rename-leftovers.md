@@ -1,6 +1,6 @@
 # DAEMONS → HEXFORGED: code-level references left as they are
 
-Written 2026-11-15 during the rename. Player-facing text now says HEXFORGED / Hexforged. Everything below still says
+Written 2026-11-15 during the rename. Player-facing text now says HEXFORGED / Forgelings. Everything below still says
 Daemon/DMN on purpose, waiting for Brandon's decision on a code rename (open decision 6). A rename here touches
 tests, saves or published URLs, so each group notes what would break.
 

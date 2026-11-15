@@ -1,5 +1,5 @@
 extends GutTest
-## The GDD demo (Acts 1-2) ends after Cert 2 in Port City: a glitched "???" Hexforged you can't catch, CMDB
+## The GDD demo (Acts 1-2) ends after Cert 2 in Port City: a glitched "???" Forgeling you can't catch, CMDB
 ## "Status: UNKNOWN", gone after 2 turns. It sets demo_teaser_seen, never corruption_revealed. DEMO_BUILD then shows
 ## "Thanks for playing".
 

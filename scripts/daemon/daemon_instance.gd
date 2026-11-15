@@ -286,7 +286,7 @@ static func _max_pp(move_id: String) -> int:
 
 ## Returns the species this Daemon would upgrade into for a trigger, or "" if none.
 ## trigger: "level" (after battle), "item" (pass item_id), "sync".
-## The species this Hexforged upgrades into for `trigger` right now, or "". "flag" and "cert" read the story state
+## The species this Forgeling upgrades into for `trigger` right now, or "". "flag" and "cert" read the story state
 ## (GameState flags / Certifications) unless `context` gives {"flags": {...}, "certs": n} (tests, the sim).
 func check_evolution(trigger: String, item_id: String = "", context: Dictionary = {}) -> String:
 	for evo: Dictionary in species_data().get("evolutions", []):

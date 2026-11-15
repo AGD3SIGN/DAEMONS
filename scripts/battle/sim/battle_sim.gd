@@ -149,7 +149,7 @@ static func validate_action(state: BattleState, side: int, action: BattleAction)
 		BattleAction.Kind.FIGHT:
 			var user := s.active()
 			if user == null or user.is_fainted():
-				return "the active Hexforged has crashed"
+				return "the active Forgeling has crashed"
 			if action.slot == FALLBACK_SLOT:
 				return "" if not has_pp(user) else "it still has moves with Cycles left"
 			if action.slot < 0 or action.slot >= user.moves.size():
@@ -758,11 +758,11 @@ static func _check_end(state: BattleState, events: Array[Dictionary]) -> void:
 
 static func _validate_switch_target(s: BattleSide, index: int) -> String:
 	if index < 0 or index >= s.stack.size():
-		return "there's no Hexforged in that slot"
+		return "there's no Forgeling in that slot"
 	if index == s.active_index:
-		return "that Hexforged is already in battle"
+		return "that Forgeling is already in battle"
 	if s.stack[index].is_fainted():
-		return "that Hexforged has crashed"
+		return "that Forgeling has crashed"
 	return ""
 
 
@@ -776,7 +776,7 @@ static func _validate_item(state: BattleState, side: int, action: BattleAction) 
 	var effect: String = item["effect"]["id"]
 	if effect == "capture":
 		if not state.is_wild:
-			return "you can't Quarantine another trainer's Hexforged"
+			return "you can't Quarantine another trainer's Forgeling"
 		if side != BattleState.PLAYER:
 			return "only the player can use Quarantine Keys"
 		var foe := state.sides[BattleState.opponent(side)].active()
@@ -788,12 +788,12 @@ static func _validate_item(state: BattleState, side: int, action: BattleAction) 
 	if not effect in BATTLE_ITEM_EFFECTS:
 		return "that can't be used in battle"
 	if action.index < 0 or action.index >= s.stack.size():
-		return "there's no Hexforged in that slot"
+		return "there's no Forgeling in that slot"
 	var target := s.stack[action.index]
 	if effect == "revive":
-		return "" if target.is_fainted() else "that Hexforged hasn't crashed"
+		return "" if target.is_fainted() else "that Forgeling hasn't crashed"
 	if target.is_fainted():
-		return "that Hexforged needs a Hard Reboot first"
+		return "that Forgeling needs a Hard Reboot first"
 	var full := target.current_uptime >= target.max_uptime()
 	if effect == "heal_uptime" and full:
 		return "it won't have any effect"

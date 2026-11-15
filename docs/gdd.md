@@ -11,14 +11,14 @@ HEXFORGED is a GBA-era, top-down, turn-based monster collector where you start a
 | Item | Decision |
 | --- | --- |
 | Title | HEXFORGED (creatures built by code). Renamed from DAEMONS because players read it as "demons." |
-| Creatures | Hexforged (same word for one or many) |
+| Creatures | Forgelings (one Forgeling, many Forgelings). Renamed from "Hexforged" on 2026-11-15: as a creature word it didn't flow in dialogue. The game stays HEXFORGED |
 | Genre | Turn-based monster-collecting RPG, top-down, GBA-era pixel art |
 | Core fantasy | Zero-to-hero: the lowest person on the org chart saves the whole valley |
 | Story goal | Fun, mysterious and challenging; the story is a reason to keep playing, not a wrapper |
 | Tone | The Office (quick one-liners, awkward workplace humor) + The IT Crowd (tech absurdity) on top of Pokémon-style gameplay |
 | Tagline | FUSE is cut (no fusing mechanic). Suggested: **CATCH · CLEAN · RESTORE**. Alternatives: CATCH · PATCH · RESTORE, CATCH · TRAIN · REBOOT, "Have you tried turning it off and on again?" |
 
-**Hook that sets it apart:** the creatures aren't wild animals. Every Hexforged was compiled for a job and lives inside the system it runs. Corruption is a broken computer, and cleaning corrupted creatures is how you heal the valley.
+**Hook that sets it apart:** the creatures aren't wild animals. Every Forgeling was compiled for a job and lives inside the system it runs. Corruption is a broken computer, and cleaning corrupted creatures is how you heal the valley.
 
 ## 2. Audience & Player Experience
 
@@ -50,7 +50,7 @@ The core loop is classic monster-collector: explore, battle, catch, build a stac
 
 | Classic idea | HEXFORGED |
 | --- | --- |
-| Monsters | Hexforged |
+| Monsters | Forgelings |
 | Capture device | Quarantine Key: Thumb Drive → Encrypted Key → Hardware Token → Root Key |
 | Dex | CMDB (entries written like asset records) |
 | Heal center | Help Desk ("Have you tried turning it off and on again?") |
@@ -73,8 +73,8 @@ The core loop is classic monster-collector: explore, battle, catch, build a stac
 
 ### Corruption & cleaning (revealed mid-game)
 
-- Corruption is **not** a day-one mechanic. Players discover it slowly; the first real corrupted (ERR::) Hexforged appears at the halfway point (Act 4).
-- A corrupted Hexforged is the same species in a glitched, hostile state: gains Malware as a second type, Throughput ×1.10, Encryption ×0.90 (tune later). Battle text: "A wild ERR::CABLESNAKE spawned!"
+- Corruption is **not** a day-one mechanic. Players discover it slowly; the first real corrupted (ERR::) Forgeling appears at the halfway point (Act 4).
+- A corrupted Forgeling is the same species in a glitched, hostile state: gains Malware as a second type, Throughput ×1.10, Encryption ×0.90 (tune later). Battle text: "A wild ERR::CABLESNAKE spawned!"
 - Catch it → it goes to a Quarantined bag pocket (can't battle) → clean it at any Help Desk → it joins your stack as the normal version.
 - Malware lines Ransom built from scratch (Hashling, Wormby, Spigeon, Phishgill, etc.) can't be corrupted or cleaned; they're normal catchable species.
 - As areas are cleaned up after the restore, they visibly heal (see Art).
@@ -90,7 +90,7 @@ Each Certification sets a level cap. **EXP stops at the cap until you earn the n
 ### Difficulty
 
 - Boss fights and puzzle gyms ramp up gradually as the game goes on (smarter AI, switching, status moves; harder puzzles like the Dept 1 cable-routing gym).
-- **Hard mode** unlocks after beating the game: higher-level Hexforged and **secret upgrades**. Planned for a later release, not v1.
+- **Hard mode** unlocks after beating the game: higher-level Forgelings and **secret upgrades**. Planned for a later release, not v1.
 
 ### Legal guardrails
 
@@ -102,8 +102,8 @@ The story is a slow-burn mystery: a cloud vendor secretly running Ransom has hij
 
 ### Lore rules
 
-1. **Hexforged are built, never born.** No breeding, eggs, nests, parents or babies. Stages are upgrades (new versions).
-2. Every Hexforged was compiled by the **Hexforge** for a job and lives inside the system it runs (Cablesnakes in cable runs, Fanbats in server rooms, Pingos in routers). A "wild" one is running loose with no handler; catching it assigns it to you.
+1. **Forgelings are built, never born.** No breeding, eggs, nests, parents or babies. Stages are upgrades (new versions).
+2. Every Forgeling was compiled by the **Hexforge** for a job and lives inside the system it runs (Cablesnakes in cable runs, Fanbats in server rooms, Pingos in routers). A "wild" one is running loose with no handler; catching it assigns it to you.
 3. **Corruption is a broken computer, not a demon.** Glitched and damaged, never hellish. No horns, devil wings, skulls, flames or occult imagery anywhere.
 
 ### Backstory
@@ -114,7 +114,7 @@ Then the valley "moved to the cloud" with `[VENDOR_NAME]`, and the sysadmin got 
 
 ### The villain (locked: Option B combo)
 
-- **`[RANSOM_LEADER]`** runs `[VENDOR_NAME]`, the cloud vendor that sold the migration. They found the backdoor and use it to corrupt good Hexforged and compile new malware ones, then sell towns a fake "recovery service." Break it, sell the fix.
+- **`[RANSOM_LEADER]`** runs `[VENDOR_NAME]`, the cloud vendor that sold the migration. They found the backdoor and use it to corrupt good Forgelings and compile new malware ones, then sell towns a fake "recovery service." Break it, sell the fix.
 - **`[INSIDER]`**, a C-Suite member, signed the vendor contract and laid off the sysadmin on purpose. Unmasked during the HQ Tower climb.
 - **Kevin is the red herring.** He keeps turning up where things go wrong. Cleared in Act 4; he was just very annoying.
 
@@ -141,7 +141,7 @@ Early hook: a Help Desk ticket mentions "the 3-2-1 rule" as an office in-joke no
 | 1. Onboarding | Onboarding Town → Route 1 → Patch Town **(Cert 1, Hardware)** | Plain IT problems and humor. Starter from the e-waste bin (Chipmunk, Pingo or Glowbit). First old tape label. The 3-2-1 in-joke. Phishers are petty scammers |
 | 2. Bad Signal | Route 2 → Wi-Fi Dead Zone → Port City **(Cert 2, Network)** | Creatures oddly aggressive ("it's just bad signal"). Weird Port 443 traffic. Kevin keeps showing up. **Demo ends here** with a glitched creature that flees |
 | 3. Legacy | Route 3 → The Basement → DevOps Heights **(Cert 3, Software)** | Hexforge manual: creatures were built. Meet Restorephant. First fresh note. Commit history: `temp fix, will clean up later`, then an unknown account. A creature glitches mid-battle and flees |
-| 4. Outage | Route 4 → Power Plant **(Cert 4, Power)** | Rolling blackouts. **First real ERR:: Hexforged (halfway point).** Corruption gets a name. Kevin cleared |
+| 4. Outage | Route 4 → Power Plant **(Cert 4, Power)** | Rolling blackouts. **First real ERR:: Forgeling (halfway point).** Corruption gets a name. Kevin cleared |
 | 5. Breach | Abandoned Data Center → Cloud Summit → Data Dept **(Cert 5)** | The forge and corrupted ERR::PYREWALL. Sudofox's root key stolen. The vendor revealed as Ransom. Clondor's off-site copy |
 | 6. Incident Response | SecOps Fortress **(Cert 6)** → Mobile Dept **(Cert 7)** → AI Lab **(Cert 8)** | Corruption everywhere, towns encrypted. Fight back town by town; recovery-service quest chains open. SecOps gives the patch, but you need root |
 | 7. Restore | Final route → HQ Tower | C-Suite, insider unmasked, The Board, `[RANSOM_LEADER]`. Free Sudofox; the trio runs the restore ("The backups were tested. A miracle."); patch the forge; Pyrewall cleaned first; the valley returns to normal |
@@ -183,7 +183,7 @@ A multi-part hunt for every note, commit and tape label the sysadmin left, old a
 
 ### Kudos (achievements)
 
-In-game achievements called **Kudos**, e.g. "Kudos unlocked: Turned It Off and On Again (clean 10 corrupted Hexforged)." Mostly bragging rights plus small cosmetics (trainer card flair, Employee of the Month plaques on the Help Desk wall). Synced to Steam achievements later.
+In-game achievements called **Kudos**, e.g. "Kudos unlocked: Turned It Off and On Again (clean 10 corrupted Forgelings)." Mostly bragging rights plus small cosmetics (trainer card flair, Employee of the Month plaques on the Help Desk wall). Synced to Steam achievements later.
 
 ### Where the hours come from
 
@@ -214,7 +214,7 @@ Music and sound are made in-house by Brandon and his son, in a GBA-style chiptun
 
 - **Music hooks:** town, route, battle, trainer battle, boss, victory, Help Desk jingle, plus area themes as content grows.
 - **Corrupted battles:** a glitched remix of the battle theme (default; their call).
-- **SFX:** chiptune blips, hits and menu sounds; a short cry per Hexforged.
+- **SFX:** chiptune blips, hits and menu sounds; a short cry per Forgeling.
 - **Tools:** their choice (the old plan suggested Furnace or Bosca Ceoil for music, jsfxr/ChipTone for SFX).
 - **Voice acting:** none; all dialogue is text.
 
@@ -249,7 +249,7 @@ Commercial premium game; pricing waits on player feedback and an IP check.
 - **Model:** premium. Free demo first.
 - **Price:** `[TBD]` after demo feedback. The old plan's reference point was $15–20 on Steam, with mobile free-to-try plus a one-time unlock.
 - **Expansions:** a mix of free and paid (details later). New regions arrive as expansions.
-- **Launch blockers:** trademark search on "Hexforged" and an IP lawyer review before any paid release (not legal advice).
+- **Launch blockers:** trademark search on "HEXFORGED" and an IP lawyer review before any paid release (not legal advice).
 
 ## 11. UI/UX Flow & Onboarding
 
@@ -274,7 +274,7 @@ The next target is a demo covering Acts 1–2 with about 30–35 creatures; ever
 
 - **Covers:** Acts 1–2, through Port City and Cert 2.
 - **Ends on a hook:** a scripted one-off encounter with a glitched creature; the CMDB shows `Status: UNKNOWN`; it flees before you can catch it. Then "Thanks for playing." The real corruption reveal stays saved for the Power Plant.
-- **Creatures:** the 28 already-designed Hexforged (Nos. 000–027) plus a few expansion creatures that live in early areas. The other \~145 stay concepts until after the demo.
+- **Creatures:** the 28 already-designed Forgelings (Nos. 000–027) plus a few expansion creatures that live in early areas. The other \~145 stay concepts until after the demo.
 - **Not in the demo:** catchable corrupted creatures, cleaning, Hard mode, post-game, trading.
 
 ### Milestones
@@ -305,5 +305,5 @@ Trading / Sync, online features, Hard mode, secret upgrades, new regions, Steam 
 - [ ] Code/ID rename (`DMN-###` → `HXF-###`, class and file names)
 - [ ] Balancing: corrupted stat mods, encounter `corrupted_chance` per area
 - [ ] Price and free vs. paid expansion split
-- [ ] Trademark check on "Hexforged" + IP review
+- [ ] Trademark check on "HEXFORGED" (and "Forgeling") + IP review
 - [ ] **Update the story agent prompt** (`hexforged-master-prompt.md`): its Act 1 still has corrupted creatures in your first tickets and the old sysadmin-villain framing. It needs the new 7-act pacing, Option B villain and halfway reveal before Claude Code builds story content.

@@ -181,7 +181,7 @@
     },
     {
       "speaker": "Help Desk",
-      "choice": "Want me to restore your Hexforged?",
+      "choice": "Want me to restore your Forgelings?",
       "yes": [
         {
           "speaker": "Help Desk",

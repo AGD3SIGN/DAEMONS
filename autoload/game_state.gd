@@ -21,7 +21,7 @@ var cmdb_found_at: Dictionary = {}  # species_id -> map name where it was first 
 var location: Dictionary = {}       # {"map": id, "x": cell x, "y": cell y, "facing": "down"}
 var counters: Dictionary = {}       # story/puzzle numbers (power load, pipeline stage), name -> int
 var visited: Dictionary = {}
-var quarantined: Array = []         # corrupted Hexforged you caught, waiting for a Help Desk clean (can't battle)
+var quarantined: Array = []         # corrupted Forgelings you caught, waiting for a Help Desk clean (can't battle)
 var cmdb_compromised: Dictionary = {}  # species_id -> true once you've seen a corrupted one
 var cmdb_recovered: Dictionary = {}    # species_id -> true once a Help Desk cleaned one of yours
 var cmdb_unknown: Dictionary = {}      # species_id -> true after the demo teaser (CMDB "Status: UNKNOWN")        # region-map place id -> true (the phone's Maps app)
@@ -72,7 +72,7 @@ func reset() -> void:
 
 ## Adds a Daemon to the Active Stack, or the Server Rack if the stack is full.
 ## Returns "stack", "rack" or "full" (everything is full).
-## Returns where it went: "stack", "rack", "full", or "quarantined" (a corrupted Hexforged never joins the stack
+## Returns where it went: "stack", "rack", "full", or "quarantined" (a corrupted Forgeling never joins the stack
 ## or rack; it waits in the Quarantined pocket until a Help Desk cleans it).
 func add_daemon(d: DaemonInstance) -> String:
 	cmdb_seen[d.species_id] = true
@@ -87,7 +87,7 @@ func add_daemon(d: DaemonInstance) -> String:
 	return "rack" if rack_add(d) >= 0 else "full"
 
 
-## Story upgrades (flag / cert triggers): upgrades every Hexforged in the stack and racks that now qualifies.
+## Story upgrades (flag / cert triggers): upgrades every Forgeling in the stack and racks that now qualifies.
 ## Returns [[old name, new name], ...] for the messages. Called after dialogue sets a flag or awards a Cert.
 func apply_story_upgrades() -> Array:
 	var done := []
@@ -116,13 +116,13 @@ func level_cap() -> int:
 	return int(DataRegistry.level_caps[mini(certifications.size(), DataRegistry.level_caps.size() - 1)])
 
 
-## GDD: corruption is a slow reveal. Until the Power Plant event sets this flag, no ERR:: Hexforged spawn and the
+## GDD: corruption is a slow reveal. Until the Power Plant event sets this flag, no ERR:: Forgelings spawn and the
 ## Quarantined pocket, Help Desk cleaning and CMDB COMPROMISED status stay hidden.
 func corruption_revealed() -> bool:
 	return bool(flags.get("corruption_revealed", false))
 
 
-## Help Desk scan ("Have you tried turning it off and on again?"): cleans the quarantined Hexforged at `index`
+## Help Desk scan ("Have you tried turning it off and on again?"): cleans the quarantined Forgeling at `index`
 ## and adds it like a new catch. Returns where it went ("stack", "rack", "full") or "" if there's nothing there.
 func clean_quarantined(index: int) -> String:
 	if index < 0 or index >= quarantined.size():
@@ -194,7 +194,7 @@ func rack_total() -> int:
 ## Stack -> rack. Refuses to leave you without a Daemon that can fight. Returns "" or a reason.
 func deposit(stack_index: int, rack_index: int) -> String:
 	if stack_index < 0 or stack_index >= active_stack.size():
-		return "There's no Hexforged there."
+		return "There's no Forgeling there."
 	if racks[rack_index].size() >= RACK_SLOTS:
 		return "That rack is full."
 	var d: DaemonInstance = active_stack[stack_index]
@@ -203,7 +203,7 @@ func deposit(stack_index: int, rack_index: int) -> String:
 		if i != stack_index and not active_stack[i].is_fainted():
 			others_can_fight = true
 	if not others_can_fight:
-		return "You need at least one Hexforged that can fight."
+		return "You need at least one Forgeling that can fight."
 	active_stack.remove_at(stack_index)
 	racks[rack_index].append(d)
 	return ""
@@ -214,7 +214,7 @@ func withdraw(rack_index: int, slot: int) -> String:
 	if active_stack.size() >= MAX_STACK:
 		return "Your Active Stack is full."
 	if slot < 0 or slot >= racks[rack_index].size():
-		return "There's no Hexforged there."
+		return "There's no Forgeling there."
 	active_stack.append(racks[rack_index][slot])
 	racks[rack_index].remove_at(slot)
 	return ""
@@ -227,7 +227,7 @@ func move_between_racks(from_rack: int, slot: int, to_rack: int) -> String:
 	if racks[to_rack].size() >= RACK_SLOTS:
 		return "That rack is full."
 	if slot < 0 or slot >= racks[from_rack].size():
-		return "There's no Hexforged there."
+		return "There's no Forgeling there."
 	racks[to_rack].append(racks[from_rack][slot])
 	racks[from_rack].remove_at(slot)
 	return ""

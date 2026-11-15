@@ -62,7 +62,7 @@ func test_desktop_support_tickets() -> void:
 	assert_false(_door_open())
 	world.auto_picks = [0]  # REINSTALL OS: wrong
 	await _use(Vector2i(3, 13), Vector2i.UP)
-	assert_signal_emitted(world, "battle_requested", "a wrong fix makes the user's Hexforged attack")
+	assert_signal_emitted(world, "battle_requested", "a wrong fix makes the user's Forgeling attack")
 	assert_false(GameState.flags.get("ticket_a_fixed", false))
 	for t: Array in [[Vector2i(3, 13), 1], [Vector2i(11, 13), 2], [Vector2i(12, 16), 3]]:
 		world.auto_picks = [t[1]]

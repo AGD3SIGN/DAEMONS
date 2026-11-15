@@ -1,5 +1,5 @@
 extends GutTest
-## Corrupted Hexforged (HEXFORGED story, 2026-11-15): ERR:: versions of wild species, caught into the Quarantined
+## Corrupted Forgelings (HEXFORGED story, 2026-11-15): ERR:: versions of wild species, caught into the Quarantined
 ## pocket, cleaned at a Help Desk. Malware lines (Ransom's own builds) can never be corrupted.
 
 var world: Overworld
@@ -231,4 +231,4 @@ func test_validation_rejects_corruption_before_the_power_plant() -> void:
 				assert_eq(float(slot.get("corrupted_chance", 0.0)), 0.0, "%s %s" % [map_id, slot["species"]])
 	var raw := DataRegistry.read_raw(PackedStringArray())
 	raw["encounters"]["route_2"]["zones"]["cable_tangle"][1]["corrupted_chance"] = 0.3
-	assert_string_contains("\n".join(DataValidator.new().validate(raw)), "no corrupted Hexforged before the Power Plant")
+	assert_string_contains("\n".join(DataValidator.new().validate(raw)), "no corrupted Forgelings before the Power Plant")

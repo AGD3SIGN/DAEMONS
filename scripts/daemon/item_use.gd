@@ -33,7 +33,7 @@ static func use_in_field(item_id: String) -> Dictionary:
 				return {"ok": false, "messages": ["A Firewall Rule is already active."]}
 			GameState.repel_steps = int(item["effect"]["params"]["steps"])
 			_consume(item_id)
-			return {"ok": true, "messages": ["You applied a %s. Weaker wild Hexforged will be blocked." % item["name"]]}
+			return {"ok": true, "messages": ["You applied a %s. Weaker wild Forgelings will be blocked." % item["name"]]}
 		"escape":
 			return {"ok": false, "messages": ["Ctrl+Z only works inside dungeons."]}
 		"capture":

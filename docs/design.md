@@ -1,6 +1,6 @@
 # HEXFORGED — IT Monster Tamer: Game Design + Phased Build Plan
 
-> Working title. "Hexforged" are the creatures (named after Unix background processes). Do a trademark search before going public with the name.
+> HEXFORGED (the game) and Forgelings (the creatures). Do a trademark search on both before going public.
 >
 > How to use this doc:
 > 1. Section 1 is the creative concept. Edit it however you want.
@@ -12,34 +12,34 @@
 ## 1. The concept
 
 ### Pitch
-An early-2000s handheld-style, top-down, turn-based creature collector set in a world where tech comes alive. You're a new hire on the help desk at **Root Valley**, a tech town where wild Hexforged live in server rooms, cable runs, abandoned data centers and the cloud. Catch them, train them, patch them into stronger versions, earn all 8 **Certifications**, and take down **Ransom**, a syndicate that's encrypting the whole valley.
+An early-2000s handheld-style, top-down, turn-based creature collector set in a world where tech comes alive. You're a new hire on the help desk at **Root Valley**, a tech town where wild Forgelings live in server rooms, cable runs, abandoned data centers and the cloud. Catch them, train them, patch them into stronger versions, earn all 8 **Certifications**, and take down **Ransom**, a syndicate that's encrypting the whole valley.
 
 ### Core loop
-Explore → find wild Hexforged in "hot zones" (**cable tangles**, server racks, Wi-Fi dead zones) → battle → **Quarantine** them into a USB key → build an **Active Stack** of 6 → beat trainers and Department bosses → unlock new areas → fill the **CMDB**.
+Explore → find wild Forgelings in "hot zones" (**cable tangles**, server racks, Wi-Fi dead zones) → battle → **Quarantine** them into a USB key → build an **Active Stack** of 6 → beat trainers and Department bosses → unlock new areas → fill the **CMDB**.
 
 ### Glossary
 | Term | What it is |
 |---|---|
-| **Hexforged** | a living tech creature, named after Unix background processes |
-| **Quarantine Key** | a USB stick that captures a weakened wild Hexforged, chosen from the Bag in battle. Tiers: Thumb Drive → Encrypted Key → Hardware Token → Root Key (guaranteed) |
-| **CMDB** | Configuration Management Database: your record of every Hexforged seen and caught, written like asset records (DMN-### numbers) |
+| **Forgelings** | a living tech creature, named after Unix background processes |
+| **Quarantine Key** | a USB stick that captures a weakened wild Forgelings, chosen from the Bag in battle. Tiers: Thumb Drive → Encrypted Key → Hardware Token → Root Key (guaranteed) |
+| **CMDB** | Configuration Management Database: your record of every Forgeling seen and caught, written like asset records (DMN-### numbers) |
 | **Help Desk** | free healing; the tech asks "Have you tried turning it off and on again?" |
 | **Supply Closet** | the shop |
-| **Server Rack** | storage for Hexforged beyond your stack (racks = boxes of units) |
-| **Active Stack** | the 6 Hexforged you carry |
+| **Server Rack** | storage for Forgelings beyond your stack (racks = boxes of units) |
+| **Active Stack** | the 6 Forgelings you carry |
 | **Departments** | the 8 bosses; beating one earns a **Certification**, which opens new areas |
 | **The C-Suite** | CIO, CISO, CTO and CFO, then the final boss, **The Board** |
 | **Ransom** | the villain syndicate (grunts = "Phishers", admins = "Exploit Kits") |
-| **Upgrading** | a Hexforged growing into its next stage: "Your Pingo is upgrading!" |
+| **Upgrading** | a Forgeling growing into its next stage: "Your Pingo is upgrading!" |
 | **Sync** | upgrading that needs a link with another save file (later, local multiplayer) |
 | **Coffee / Energy Drink / Pizza Friday** | healing items, small to full |
-| **Hard Reboot** | brings back a crashed Hexforged |
-| **Firewall Rule** | keeps weaker wild Hexforged away for a while |
+| **Hard Reboot** | brings back a crashed Forgeling |
+| **Firewall Rule** | keeps weaker wild Forgelings away for a while |
 | **Ctrl+Z** | escape back to a dungeon's entrance |
 | **Scripts** | reusable items that teach a move |
 | **Overclock Chip** | +1 level |
 | **Credits** | money |
-| **Cycles** | how many times a Hexforged can still run a move |
+| **Cycles** | how many times a Forgeling can still run a move |
 | **Kevin** | your rival, the guy who always replies-all |
 
 ### Stats (6)
@@ -52,7 +52,7 @@ Explore → find wild Hexforged in "hot zones" (**cable tangles**, server racks,
 | **Encryption** | special defense |
 | **Bandwidth** | who goes first |
 
-Every Hexforged also has hidden **Build Quality** (0–15 per stat, random when it's created), **Experience Logs** earned from battles (up to 64 per stat, 192 total) and a **Config Profile** (21 profiles: Balanced, or +10% to one stat and −5% to another, e.g. "Aggressive", "Defensive", "Power-Saver").
+Every Forgeling also has hidden **Build Quality** (0–15 per stat, random when it's created), **Experience Logs** earned from battles (up to 64 per stat, 192 total) and a **Config Profile** (21 profiles: Balanced, or +10% to one stat and −5% to another, e.g. "Aggressive", "Defensive", "Power-Saver").
 
 Our formulas (see `scripts/daemon/daemon_instance.gd` and `scripts/battle/sim/battle_sim.gd`):
 - Stats: core = (2×Base + 2×BQ + Logs/2) × Level/100; Uptime = core + Level + 12; others = (core + 6) × profile.
@@ -93,8 +93,8 @@ Draft type chart (attacker → defender; 2 = super effective, ½ = resisted, 0 =
 | **Hung** | can't act; 20% chance per turn to recover |
 | **Looping** | volatile; 33% chance to hit itself |
 
-### Sample Hexforged (original designs, starting roster ideas)
-**Rule:** an upgrade line keeps the SAME animal design. Hexforged are built, never born: each stage is a newer build of the same creature (v1 → v2 → v3), bigger and more capable, while its tech upgrades (home → business → enterprise gear).
+### Sample Forgelings (original designs, starting roster ideas)
+**Rule:** an upgrade line keeps the SAME animal design. Forgelings are built, never born: each stage is a newer build of the same creature (v1 → v2 → v3), bigger and more capable, while its tech upgrades (home → business → enterprise gear).
 
 | Line | Type | Concept |
 |---|---|---|
@@ -124,9 +124,9 @@ Draft type chart (attacker → defender; 2 = super effective, ½ = resisted, 0 =
 | **Calfiber → Orcable** | Network | orca that spouts fiber-optic light, then lays undersea cable |
 | **Proxkit → Proxferret** | Network | masked ferret that tunnels like a proxy/VPN and leaves decoy copies |
 
-CMDB numbers come from the master roster (179 Hexforged, Nos. 000–178; `number` in species.json). Ramster (021) and Servurtle (022) stay **Hardware** (decided 2026-11-13; the roster had proposed Data and Security). Built so far: 000–022, 028–040 and 041–047; 023–027 (Captchat, Phishgill, Cumulonimbyte, Hallucinaut, Uptimus) keep their slots until they are made.
+CMDB numbers come from the master roster (179 Forgelings, Nos. 000–178; `number` in species.json). Ramster (021) and Servurtle (022) stay **Hardware** (decided 2026-11-13; the roster had proposed Data and Security). Built so far: 000–022, 028–040 and 041–047; 023–027 (Captchat, Phishgill, Cumulonimbyte, Hallucinaut, Uptimus) keep their slots until they are made.
 
-Target roster: **40–60 Hexforged** for v1 (about 18 evolution lines + singles + 2–3 legendaries). Design rule: every Hexforged is a real animal/creature fused with a real piece of tech, and its name is a pun. No silhouettes, names or palettes borrowed from any existing monster franchise.
+Target roster: **40–60 Forgelings** for v1 (about 18 evolution lines + singles + 2–3 legendaries). Design rule: every Forgeling is a real animal/creature fused with a real piece of tech, and its name is a pun. No silhouettes, names or palettes borrowed from any existing monster franchise.
 
 ### Region: Root Valley (main path, per docs/gdd.md §5)
 Routes sit between every town; at least one optional side area per act (`[TBD]`).
@@ -140,7 +140,7 @@ Routes sit between every town; at least one optional side area per act (`[TBD]`)
 8. **The Basement**: Legacy dungeon, Restorephant's tape vault — Act 3
 9. **DevOps Heights**: Software (Cert 3) — Act 3
 10. **Route 4** — Act 4 (not built)
-11. **Power Plant**: Facilities (Cert 4, Power); **first real ERR:: Hexforged (halfway point)** — Act 4
+11. **Power Plant**: Facilities (Cert 4, Power); **first real ERR:: Forgelings (halfway point)** — Act 4
 12. **Abandoned Data Center**: the Hexforge, ERR::PYREWALL — Act 5 (now after the Power Plant)
 13. **Cloud Summit**: Clondor — Act 5
 14. **Data/Analytics Dept** (Cert 5) — Act 5 (not built)
@@ -152,9 +152,9 @@ Routes sit between every town; at least one optional side area per act (`[TBD]`)
 The source of truth is **docs/gdd.md §4** (lore rules, backstory, villain, the sysadmin, the backup trio, 7-act pacing,
 post-game). Short version: the laid-off sysadmin `[SYSADMIN_NAME]` built the Hexforge; his untested last build left a
 backdoor at Port 443. `[RANSOM_LEADER]`, who runs the cloud vendor `[VENDOR_NAME]`, uses it to corrupt the valley's
-Hexforged and sell a fake "recovery service", helped by `[INSIDER]` in the C-Suite. The sysadmin is never on screen
+Forgelings and sell a fake "recovery service", helped by `[INSIDER]` in the C-Suite. The sysadmin is never on screen
 (notes, commits, tape labels; some fresh) and is not the villain. Kevin is a red herring, cleared in Act 4.
-Corruption is a slow reveal: Acts 1–3 only hint; the first real ERR:: Hexforged appears at the Power Plant (Act 4).
+Corruption is a slow reveal: Acts 1–3 only hint; the first real ERR:: Forgelings appears at the Power Plant (Act 4).
 The backup trio (Restorephant, Clondor, Sudofox) runs the restore in Act 7. The demo is Acts 1–2 and ends in Port City
 after Cert 2 with a glitched creature that flees.
 
@@ -163,7 +163,7 @@ Superseded: docs/story-outline.md and docs/story-demo-draft.md (the DAEMONS stor
 ### Legal guardrails (from the research; not legal advice)
 - 100% original names, creature designs, UI, text, formulas and music. Never use another franchise's assets, names, fonts, sounds or code.
 - Keep capture **menu-based inside turn-based battles**. No real-time throwing of a capture device in the overworld, no capture-odds reticle, no summon-then-auto-battle. That steers clear of existing capture/summon patents.
-- Keep a dated design log (sketches + dates) for every Hexforged.
+- Keep a dated design log (sketches + dates) for every Forgeling.
 - Trademark-search the final title. Get an IP lawyer review before a paid release. Consider an LLC.
 
 ---
@@ -185,7 +185,7 @@ Each phase: **Goal → Prompt → Done when.** Big phases are split into sub-ste
 **Goal:** Empty project that runs on Mac with the right pixel settings, test framework and folders.
 
 **Prompt:**
-> Create a new Godot 4.7 project called "Hexforged" in this repo using GDScript. Set base resolution 320x180, stretch mode canvas_items, scale mode integer, default texture filter Nearest. Create the folder layout from CLAUDE.md. Add autoload stubs: DataRegistry, GameState, SaveManager, AudioManager, SceneRouter. Install GUT into addons/ and add one passing sample test. Define input actions: move_up/down/left/right, ui_accept, ui_cancel, menu, run, mapped to arrows/WASD, Z/Enter, X/Esc, and gamepad equivalents. Add a title scene with "HEXFORGED — press Start" in a pixel font (use a free OFL-licensed pixel font and note its license in assets/fonts/LICENSE.txt). Add .gitignore for Godot. Copy the design doc I give you into docs/design.md. Create docs/phase-log.md.
+> Create a new Godot 4.7 project called "Forgelings" in this repo using GDScript. Set base resolution 320x180, stretch mode canvas_items, scale mode integer, default texture filter Nearest. Create the folder layout from CLAUDE.md. Add autoload stubs: DataRegistry, GameState, SaveManager, AudioManager, SceneRouter. Install GUT into addons/ and add one passing sample test. Define input actions: move_up/down/left/right, ui_accept, ui_cancel, menu, run, mapped to arrows/WASD, Z/Enter, X/Esc, and gamepad equivalents. Add a title scene with "HEXFORGED — press Start" in a pixel font (use a free OFL-licensed pixel font and note its license in assets/fonts/LICENSE.txt). Add .gitignore for Godot. Copy the design doc I give you into docs/design.md. Create docs/phase-log.md.
 
 **Done when:** project opens, title screen shows crisp pixels at any window size, `gut` test passes, and the first commit is made.
 
@@ -196,7 +196,7 @@ Each phase: **Goal → Prompt → Done when.** Big phases are split into sub-ste
 > Build the data layer. Create data/types.json (12 types + effectiveness chart from docs/design.md), data/moves.json (start with 30 moves: id, name, type, category physical/special/status, power, accuracy, max_pp, priority, effect id + params, description), data/species.json (the 3 starter lines + Wormby, Spamlet, Dustbunny, Fanbat, Cablesnake, Floppit — base stats for uptime/throughput/hardening/compute/encryption/bandwidth, types, growth_rate, catch_rate, base_exp, learnset by level, evolutions with trigger type level/item/sync, CMDB entry text), data/items.json (Coffee, Energy Drink, Pizza Friday, Hard Reboot, Firewall Rule, Ctrl+Z, Thumb Drive, Encrypted Key, Hardware Token, Root Key, Overclock Chip). DataRegistry loads all of them at startup, validates required fields and cross-references (every learnset move exists, every evolution target exists) and prints clear errors. Write GUT tests for loading and validation.
 
 **1b prompt:**
-> Create the DaemonInstance class (a caught Hexforged): species id, nickname, level, exp, current uptime, status, 4 move slots with Cycles, build_quality (6 values 0–15), experience_logs (6 values, max 64 each, 192 total), config_profile (21 profiles: Balanced, or +10%/−5% to two stats), original trainer id. Implement our stat formulas (see Stats above), the growth-rate EXP curves, level up, learning moves on level up, and evolution checks. Add to_dict()/from_dict() for saving. Full GUT tests for the formulas.
+> Create the DaemonInstance class (a caught Forgeling): species id, nickname, level, exp, current uptime, status, 4 move slots with Cycles, build_quality (6 values 0–15), experience_logs (6 values, max 64 each, 192 total), config_profile (21 profiles: Balanced, or +10%/−5% to two stats), original trainer id. Implement our stat formulas (see Stats above), the growth-rate EXP curves, level up, learning moves on level up, and evolution checks. Add to_dict()/from_dict() for saving. Full GUT tests for the formulas.
 
 **Done when:** game boots with no data errors, and tests prove stats and EXP math.
 
@@ -204,7 +204,7 @@ Each phase: **Goal → Prompt → Done when.** Big phases are split into sub-ste
 **Goal:** A complete battle engine you can run from tests or a debug console.
 
 **2a prompt:**
-> Build the headless battle sim in scripts/battle/sim/. BattleState holds two sides (each an active Hexforged + the rest of the stack), field effects, turn counter, and a seeded RNG. Each turn takes one action per side: fight(move_slot), switch(index), item(item_id, target), run. Turn order: switches first, then items, then moves by priority, then bandwidth (with throttled modifier), with random speed ties. Output a list of BattleEvent dictionaries. No nodes, no UI.
+> Build the headless battle sim in scripts/battle/sim/. BattleState holds two sides (each an active Forgeling + the rest of the stack), field effects, turn counter, and a seeded RNG. Each turn takes one action per side: fight(move_slot), switch(index), item(item_id, target), run. Turn order: switches first, then items, then moves by priority, then bandwidth (with throttled modifier), with random speed ties. Output a list of BattleEvent dictionaries. No nodes, no UI.
 
 **2b prompt:**
 > Add damage and effects. Damage: our formula from the Stats section above (crit 1.5 at 1 in 20, random 0.88–1.00, native-type bonus 1.35, type effectiveness). Physical uses throughput/hardening, special uses compute/encryption. Accuracy checks with accuracy/evasion stages. Stat stages −6..+6 with the standard multipliers. Status effects from docs/design.md (Throttled, Infected, Overheated, Standby, Hung, Looping). Move effects as a registry of small handler functions keyed by effect id (e.g. "status_chance", "stat_change", "drain", "multi_hit", "recoil"). Fainting, forced switch, battle end, EXP + experience-log gain, level ups during battle, evolution flagged for after battle.
@@ -218,7 +218,7 @@ Each phase: **Goal → Prompt → Done when.** Big phases are split into sub-ste
 **Goal:** It looks and feels like an early-2000s handheld battle, in our own style.
 
 **Prompt:**
-> Build the battle scene on top of the sim. Layout at 320x180: enemy Hexforged top-right on a platform with name/level/uptime bar top-left; player Hexforged bottom-left (back sprite) with name/level/uptime bar + EXP bar bottom-right; text box along the bottom; command menu Fight / Stack / Bag / Run; move menu showing PP and type. A BattlePlayer reads the sim's BattleEvent list and animates each in order: typewriter text, uptime bars draining smoothly, flash/shake on hit, faint drop, capture Quarantine Key shake animation, level-up stat popup, then "upgrading" evolution scene after battle. Use placeholder colored-shape sprites generated in code if no art exists yet (64x64 front/back). Every menu works with keyboard, gamepad, and touch/mouse taps.
+> Build the battle scene on top of the sim. Layout at 320x180: enemy Forgelings top-right on a platform with name/level/uptime bar top-left; player Forgelings bottom-left (back sprite) with name/level/uptime bar + EXP bar bottom-right; text box along the bottom; command menu Fight / Stack / Bag / Run; move menu showing PP and type. A BattlePlayer reads the sim's BattleEvent list and animates each in order: typewriter text, uptime bars draining smoothly, flash/shake on hit, faint drop, capture Quarantine Key shake animation, level-up stat popup, then "upgrading" evolution scene after battle. Use placeholder colored-shape sprites generated in code if no art exists yet (64x64 front/back). Every menu works with keyboard, gamepad, and touch/mouse taps.
 
 **Done when:** you can fight and catch a wild Dustbunny from a debug button, start to finish, with no console needed.
 
@@ -237,7 +237,7 @@ Each phase: **Goal → Prompt → Done when.** Big phases are split into sub-ste
 **Goal:** The actual monster-collector loop.
 
 **Prompt:**
-> Add: (1) Wild encounters: data/encounters/<map>.json lists slots (species, level range, weight) per zone type (cable_tangle, server_rack, water). Each step on a hot_zone tile rolls an encounter rate; Firewall Rule item blocks encounters below your lead's level for N steps. Screen-flash transition into battle. (2) Active Stack menu: view summary (stats, moves, CMDB text, build quality hidden), reorder, use items on a Hexforged. (3) Server Rack storage at Help Desks: 12 racks × 30 slots, deposit/withdraw/move. (4) Bag with pockets: Items, Keys (capture), Scripts (TMs), Key Items. (5) CMDB: seen/caught tracking with entries, sprite, type, area found. (6) Help Desk nurse NPC heals the stack. (7) Supply Closet shop with buy/sell.
+> Add: (1) Wild encounters: data/encounters/<map>.json lists slots (species, level range, weight) per zone type (cable_tangle, server_rack, water). Each step on a hot_zone tile rolls an encounter rate; Firewall Rule item blocks encounters below your lead's level for N steps. Screen-flash transition into battle. (2) Active Stack menu: view summary (stats, moves, CMDB text, build quality hidden), reorder, use items on a Forgeling. (3) Server Rack storage at Help Desks: 12 racks × 30 slots, deposit/withdraw/move. (4) Bag with pockets: Items, Keys (capture), Scripts (TMs), Key Items. (5) CMDB: seen/caught tracking with entries, sprite, type, area found. (6) Help Desk nurse NPC heals the stack. (7) Supply Closet shop with buy/sell.
 
 **Done when:** you can walk into a cable tangle, catch something, put it in the Server Rack, heal at the Help Desk, and see it in the CMDB.
 
@@ -252,13 +252,13 @@ Each phase: **Goal → Prompt → Done when.** Big phases are split into sub-ste
 ### Phase 7 — Vertical slice (3–5 sessions, the big milestone)
 **Goal:** 30–45 minutes of real, polished gameplay. This becomes your Steam demo later.
 
-Scope: Onboarding Town → Route 1: Cable Run → Wi-Fi Dead Zone (short) → Patch Town → Department 1 (Desktop Support, Hardware cert). About 10 Hexforged, 3 starters, 8 trainers, Kevin rival fight #1.
+Scope: Onboarding Town → Route 1: Cable Run → Wi-Fi Dead Zone (short) → Patch Town → Department 1 (Desktop Support, Hardware cert). About 10 Forgelings, 3 starters, 8 trainers, Kevin rival fight #1.
 
 **Prompt:**
 > Build the vertical slice described in docs/design.md Phase 7. Write the intro cutscene (first day at the help desk, manager gives you the choice of 3 starters from the e-waste bin), Kevin's first rival battle, Route 1 with trainers, the Wi-Fi Dead Zone, Patch Town, and the Department 1 building (a small puzzle: route cables to unlock doors, then the boss). Swap in real art from assets/ wherever it exists; keep placeholders elsewhere. Add music hooks: town, route, battle, trainer battle, boss, victory, Help Desk jingle. Balance levels so the cert boss is beatable at around level 12–14 without grinding. Then playtest the whole slice by reading through the scripts and listing any broken flags, dead ends or softlocks.
 
 **Art/audio track during Phase 7 (outside Claude Code):**
-- Aseprite ($19.99): draw the 10 slice Hexforged (64x64 front + back, 2-frame idle), player + Kevin + NPC overworld sprites, one town tileset, one route tileset.
+- Aseprite ($19.99): draw the 10 slice Forgelings (64x64 front + back, 2-frame idle), player + Kevin + NPC overworld sprites, one town tileset, one route tileset.
 - Music: Furnace (chiptune tracker) or Bosca Ceoil Blue (free, easy). Or commission (about $50–150/min entry level, work-for-hire contract).
 - SFX: jsfxr/ChipTone for blips, hits, menu sounds.
 
@@ -285,23 +285,23 @@ Accounts needed around here: Apple Developer ($99/yr, needed even for a notarize
 **Goal:** The full game. Each session = one content chunk.
 
 Repeatable prompt template:
-> Add the next content chunk: [area name]. Build the map(s), encounter table, trainers, NPC dialogue, items, and story beats described in docs/design.md under [area]. Add these Hexforged to data/species.json: [list with types and evolution notes]. Keep difficulty curve: wild levels [x–y], trainers [x–y], boss ace level [z]. Validate data, run tests, and list anything that needs art.
+> Add the next content chunk: [area name]. Build the map(s), encounter table, trainers, NPC dialogue, items, and story beats described in docs/design.md under [area]. Add these Forgelings to data/species.json: [list with types and evolution notes]. Keep difficulty curve: wild levels [x–y], trainers [x–y], boss ace level [z]. Validate data, run tests, and list anything that needs art.
 
 Suggested chunk order: Port City + Networking cert → The Basement → DevOps Heights + Software cert → Abandoned Data Center (Ransom mid-boss) → Power Plant + Facilities cert → Cloud Summit → SecOps Fortress → remaining Departments → HQ Tower (C-Suite + The Board) → post-game legendaries (Uptimus, Hallucinaut, Pyrewall — exact spot decided later).
 
 Also in this phase: Scripts (TMs) placed around the world, move tutors, item-based upgrades (e.g. Floppit needs a "Legacy Driver"), a Sync feature (local trade between save files) if you want trade evolutions.
 
-**Done when:** 40–60 Hexforged, 8 certs, the C-Suite, credits roll. Roughly 8–15 hours.
+**Done when:** 40–60 Forgelings, 8 certs, the C-Suite, credits roll. Roughly 8–15 hours.
 
 ### Phase 11 — Polish + balance (2–4 weeks of sessions)
 **Prompt ideas:**
-> Write a balance report: for every Hexforged, list base stat total, type, available moves by level, and flag outliers. Simulate 1,000 battles between each starter's final form at level 50 with the smart AI using the headless sim and report win rates.
+> Write a balance report: for every Forgeling, list base stat total, type, available moves by level, and flag outliers. Simulate 1,000 battles between each starter's final form at level 50 with the smart AI using the headless sim and report win rates.
 
 > Accessibility pass: text speed options, colorblind-safe type colors, remappable controls, larger text option, screen-shake toggle.
 
 > Bug sweep: scan every dialogue file for missing flags, unreachable maps, items that can't be obtained, and trainers that can't be reached.
 
-Plus: juice (screen transitions, particles, Hexforged cries made in jsfxr), Steam Deck check (1280x800, controller only, text ≥ 9px).
+Plus: juice (screen transitions, particles, Forgelings cries made in jsfxr), Steam Deck check (1280x800, controller only, text ≥ 9px).
 
 ### Phase 12 — Launch (PC first, then mobile)
 1. **Steam (Windows + Mac)**: about $15–20. Mac build notarized, no Apple sandbox.
@@ -321,9 +321,9 @@ Plus: juice (screen transitions, particles, Hexforged cries made in jsfxr), Stea
 | 10 (full content) | 6–12+ months (art is the bottleneck) |
 | 11–12 (polish, launch) | 1–3 months |
 
-Estimates, not sourced benchmarks. Keep scope tight: 40–60 Hexforged, one region, one hook (the IT theme).
+Estimates, not sourced benchmarks. Keep scope tight: 40–60 Forgelings, one region, one hook (the IT theme).
 
-## 5. Hexforged design sheet (copy per creature, for the design log)
+## 5. Forgelings design sheet (copy per creature, for the design log)
 ```
 Name:            (pun: animal + tech)
 Date designed:

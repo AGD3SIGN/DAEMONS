@@ -12,7 +12,7 @@ maps, dialogue). Nothing has been changed yet.
 - 320x180 base, integer scaling, nearest filter, 16x16 tiles, 64x64 battle sprites, 15-color sheets.
 
 **Vocabulary and systems**
-- Hexforged, Quarantine Keys (Thumb Drive → Encrypted Key → Hardware Token → Root Key), CMDB written as asset
+- Forgelings, Quarantine Keys (Thumb Drive → Encrypted Key → Hardware Token → Root Key), CMDB written as asset
   records, Help Desk ("Have you tried turning it off and on again?"), Supply Closet, Server Rack, Active Stack of 6,
   8 Departments / Certifications, Ransom (Phishers, Exploit Kits), Kevin replies-all.
 - Items: Coffee, Energy Drink, Pizza Friday, Hard Reboot, Firewall Rule, Ctrl+Z, Scripts pocket, Overclock Chip,
@@ -84,7 +84,7 @@ maps, dialogue). Nothing has been changed yet.
 5. **D5 Kudos v1** (milestone 4).
 6. **D6 Pause menu per the GDD**: Tickets and Kudos entries (the phone can host them as apps).
 7. **D7 Real art** for the demo cast (Phishers, Port City / Patch Town NPCs, Ping Okoro, Act 1–2 trainers) and
-   tiles; real audio from Brandon and his son (music hooks, Help Desk jingle, a cry per Hexforged).
+   tiles; real audio from Brandon and his son (music hooks, Help Desk jingle, a cry per Forgelings).
 8. **D8 Battle menu labels** per Q4.
 9. **D9 Accessibility basics for the demo**: type shown as icon + text (not color only), screen-shake/flash toggle,
    hold vs. toggle for run. The full accessibility menu is post-demo (below).
@@ -103,7 +103,7 @@ maps, dialogue). Nothing has been changed yet.
   mode, "where was I?" recap, objective reminder.
 - World-corruption tile sets (second tile set per affected area) and healing after the restore.
 - Per-location battle backgrounds (today: 3 palettes chosen per map).
-- Corrupted-battle music remix, Hexforged cries.
+- Corrupted-battle music remix, Forgelings cries.
 - Hard mode and secret upgrades, post-game (Hallucinaut, Uptimus, clean Pyrewall, the trio catchable), trading.
 - Steam achievement sync for Kudos.
 

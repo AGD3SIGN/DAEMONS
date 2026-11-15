@@ -236,8 +236,8 @@ func _send_replacements() -> void:
 	while state.needs_switch[BattleState.PLAYER]:
 		var index := BattleAI.choose_replacement(state, BattleState.PLAYER, "smart")
 		if not auto:
-			text_box.show_now("Choose a Hexforged to deploy.")
-			index = await menu.choose_from_list("Deploy which Hexforged?", _stack_rows(), _stack_enabled(), false)
+			text_box.show_now("Choose a Forgeling to deploy.")
+			index = await menu.choose_from_list("Deploy which Forgeling?", _stack_rows(), _stack_enabled(), false)
 		var events := BattleSim.forced_switch(state, BattleState.PLAYER, index)
 		if events[0]["type"] == "invalid_action":
 			await text_box.show_text(_sentence(events[0]["reason"]))
@@ -260,7 +260,7 @@ func _choose_player_action() -> BattleAction:
 				if slot >= 0:
 					return BattleAction.fight(slot)
 			"stack":
-				var index := await menu.choose_from_list("Switch to which Hexforged?", _stack_rows(), _stack_enabled(), true)
+				var index := await menu.choose_from_list("Switch to which Forgeling?", _stack_rows(), _stack_enabled(), true)
 				if index >= 0:
 					return BattleAction.switch_to(index)
 			"bag":
@@ -302,7 +302,7 @@ func _choose_item() -> BattleAction:
 		return null
 	if DataRegistry.get_item(ids[pick])["effect"]["id"] == "capture":
 		return BattleAction.item(ids[pick], 0)
-	var target := await menu.choose_from_list("Use it on which Hexforged?", _stack_rows(), [], true)
+	var target := await menu.choose_from_list("Use it on which Forgeling?", _stack_rows(), [], true)
 	return BattleAction.item(ids[pick], target) if target >= 0 else null
 
 
@@ -408,7 +408,7 @@ func _story_loss() -> void:
 	var defeat: String = config.get("defeat_text", "")
 	if not defeat.is_empty():
 		await text_box.show_text("%s: Ha! Read receipt: you LOST. ...But fine. %s" % [trainer_name, defeat])
-	await text_box.show_text("Your Hexforged got patched up.")
+	await text_box.show_text("Your Forgelings got patched up.")
 
 
 ## Lose a slice of your credits (GameState.blackout_loss), heal up, wake at the last Help Desk.

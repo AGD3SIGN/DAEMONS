@@ -17,7 +17,7 @@ extends RefCounted
 ##   {"cmd": "add_var", "var": "load", "value": -4}  /  {"cmd": "set_var", "var": "stage", "value": 0}
 ##   {"cmd": "clear_flags", "flags": ["brk_a", "brk_b"]}
 ##   {"cmd": "send_player", "spawn": "entrance"}     fade out and back in at a spawn point on this map
-##   {"cmd": "clean_quarantined"}                   Help Desk: offer to clean every corrupted Hexforged you caught
+##   {"cmd": "clean_quarantined"}                   Help Desk: offer to clean every corrupted Forgeling you caught
 ##   {"cmd": "sfx", "id": "error"}                 play a sound effect (AudioManager ids)
 ##   {"cmd": "demo_teaser"}                          the Port City teaser battle (glitched, uncatchable, flees)
 ##   {"cmd": "end_demo"}                              sets demo_complete, saves, rolls the end card + credits
@@ -181,12 +181,12 @@ func _story_upgrades() -> void:
 		await world.show_message("%s upgraded into %s!" % [pair[0], pair[1]])
 
 
-## The Help Desk scan for corrupted Hexforged in the Quarantined pocket (nothing if it's empty).
+## The Help Desk scan for corrupted Forgelings in the Quarantined pocket (nothing if it's empty).
 func _clean_quarantined(speaker: String) -> void:
 	var count := GameState.quarantined.size()
 	if count == 0 or not GameState.corruption_revealed():
 		return
-	await world.say("Your Quarantined pocket has %d corrupted Hexforged in it. Unauthorized code, the works." % count, speaker)
+	await world.say("Your Quarantined pocket has %d corrupted Forgelings in it. Unauthorized code, the works." % count, speaker)
 	if not await world.ask("Run a scan and clean %s?" % ("it" if count == 1 else "them"), speaker):
 		await world.say("They'll stay locked up until you're ready.", speaker)
 		return

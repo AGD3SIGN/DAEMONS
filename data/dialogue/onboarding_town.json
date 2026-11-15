@@ -14,7 +14,7 @@
   ],
   "help_desk_sign": [
     {
-      "text": "HELP DESK - Hexforged restored free of charge."
+      "text": "HELP DESK - Forgelings restored free of charge."
     },
     {
       "text": "Please describe your issue in detail. Tickets that say \"it's broken\" will be closed."
@@ -23,7 +23,7 @@
   "townsperson": [
     {
       "speaker": "Townsperson",
-      "text": "Wild Hexforged hide in tangled cables. Nobody ever labels them."
+      "text": "Wild Forgelings hide in tangled cables. Nobody ever labels them."
     },
     {
       "speaker": "Townsperson",
@@ -59,7 +59,7 @@
           "then": [
             {
               "speaker": "Mom",
-              "text": "A Hexforged of your own! Does it need a charger? A blanket? A firewall?"
+              "text": "A Forgeling of your own! Does it need a charger? A blanket? A firewall?"
             }
           ],
           "else": [
@@ -122,7 +122,7 @@
     },
     {
       "speaker": "Help Desk",
-      "choice": "Want me to restore your Hexforged?",
+      "choice": "Want me to restore your Forgelings?",
       "yes": [
         {
           "speaker": "Help Desk",
@@ -250,17 +250,17 @@
     },
     {
       "speaker": "Kevin",
-      "text": "The manager's handing out Hexforged at the Help Desk. I'm getting the best one. I sent a calendar invite about it. To everyone. Marked URGENT."
+      "text": "The manager's handing out Forgelings at the Help Desk. I'm getting the best one. I sent a calendar invite about it. To everyone. Marked URGENT."
     }
   ],
   "town_exit_block": [
     {
       "speaker": "Kevin",
-      "text": "Whoa, whoa, whoa. Cable tangles without a Hexforged? That's IT 101. I took IT 101. I passed most of it."
+      "text": "Whoa, whoa, whoa. Cable tangles without a Forgeling? That's IT 101. I took IT 101. I passed most of it."
     },
     {
       "speaker": "Kevin",
-      "text": "Wild ones bite. Go get a Hexforged at the Help Desk. Blue roof. You're welcome, by the way."
+      "text": "Wild ones bite. Go get a Forgeling at the Help Desk. Blue roof. You're welcome, by the way."
     },
     {
       "cmd": "move_player",
@@ -284,7 +284,7 @@
     },
     {
       "speaker": "Marge",
-      "text": "Every new hire gets a Hexforged to help with tickets. We keep them in the e-waste bin. Don't ask."
+      "text": "Every new hire gets a Forgeling to help with tickets. We keep them in the e-waste bin. Don't ask."
     },
     {
       "speaker": "Marge",
@@ -383,7 +383,7 @@
           "then": [
             {
               "speaker": "Marge",
-              "text": "Use Thumb Drives on weakened wild Hexforged. Quarantine them, don't fight them all."
+              "text": "Use Thumb Drives on weakened wild Forgelings. Quarantine them, don't fight them all."
             }
           ],
           "else": [

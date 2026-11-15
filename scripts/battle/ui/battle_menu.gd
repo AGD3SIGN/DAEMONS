@@ -22,8 +22,8 @@ const LIST_RECT := Rect2(16, 16, 928, 454)
 const PADDING := 12
 const GAP := 10
 const COMMANDS := [
-	["EXECUTE", "fight", "run one of your Hexforged's moves."],
-	["STACK", "stack", "swap in another Hexforged."],
+	["EXECUTE", "fight", "run one of your Forgeling's moves."],
+	["STACK", "stack", "swap in another Forgeling."],
 	["INVENTORY", "bag", "open your gear and patches."],
 	["DISCONNECT", "run", "drop the connection and flee."],
 ]

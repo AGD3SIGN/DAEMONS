@@ -47,7 +47,7 @@
         "fraction": 0.5
       }
     },
-    "description": "Revives a crashed Hexforged with half its Uptime. Off, then on."
+    "description": "Revives a crashed Forgeling with half its Uptime. Off, then on."
   },
   {
     "id": "firewall_rule",
@@ -60,7 +60,7 @@
         "steps": 100
       }
     },
-    "description": "For 100 steps, wild Hexforged weaker than your lead stay away."
+    "description": "For 100 steps, wild Forgelings weaker than your lead stay away."
   },
   {
     "id": "ctrl_z",
@@ -84,7 +84,7 @@
         "bonus": 1.0
       }
     },
-    "description": "Quarantine Key: use in battle to catch a wild Hexforged. Basic odds."
+    "description": "Quarantine Key: use in battle to catch a wild Forgeling. Basic odds."
   },
   {
     "id": "encrypted_key",
@@ -97,7 +97,7 @@
         "bonus": 1.5
       }
     },
-    "description": "Quarantine Key with better odds (x1.5) of catching a wild Hexforged."
+    "description": "Quarantine Key with better odds (x1.5) of catching a wild Forgeling."
   },
   {
     "id": "hardware_token",
@@ -110,7 +110,7 @@
         "bonus": 2.0
       }
     },
-    "description": "Quarantine Key with high odds (x2) of catching a wild Hexforged."
+    "description": "Quarantine Key with high odds (x2) of catching a wild Forgeling."
   },
   {
     "id": "root_key",
@@ -123,7 +123,7 @@
         "bonus": 255.0
       }
     },
-    "description": "Full admin access. Quarantines any Hexforged, guaranteed."
+    "description": "Full admin access. Quarantines any Forgeling, guaranteed."
   },
   {
     "id": "overclock_chip",
@@ -134,7 +134,7 @@
       "id": "level_up",
       "params": {}
     },
-    "description": "Raises one Hexforged's level by 1. It may learn a move or upgrade."
+    "description": "Raises one Forgeling's level by 1. It may learn a move or upgrade."
   },
   {
     "id": "legacy_driver",
@@ -145,6 +145,6 @@
       "id": "evolve",
       "params": {}
     },
-    "description": "Upgrades certain Legacy Hexforged. A driver for long-gone hardware."
+    "description": "Upgrades certain Legacy Forgelings. A driver for long-gone hardware."
   }
 ]

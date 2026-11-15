@@ -127,7 +127,7 @@ func test_trainers_show_then_step_out_before_daemons() -> void:
 	await wait_until(func() -> bool: return scene.foe_trainer.visible and scene.player_trainer.visible, 5.0)
 	assert_true(scene.player_trainer.visible, "you, from behind")
 	assert_true(scene.foe_trainer.visible, "and Kevin, both on screen at the start")
-	assert_false(scene.player_sprite.visible or scene.foe_sprite.visible, "before any Hexforged is out")
+	assert_false(scene.player_sprite.visible or scene.foe_sprite.visible, "before any Forgeling is out")
 	assert_not_null(scene.foe_trainer.texture)
 	await wait_until(func() -> bool: return scene.foe_sprite.visible and scene.player_sprite.visible, 10.0)
 	assert_false(scene.player_trainer.visible, "trainers stepped out of frame")
@@ -354,4 +354,4 @@ func test_lasting_statuses_show_an_effect_on_both_sides() -> void:
 				and scene.player_sprite.get_meta("aura").status == "overheated":
 			seen[0] = true
 		return seen[0], 15.0)
-	assert_true(seen[0], "your own Hexforged, seen from behind, shows it too")
+	assert_true(seen[0], "your own Forgeling, seen from behind, shows it too")

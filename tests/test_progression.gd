@@ -406,7 +406,7 @@ func test_v2_saves_rescale_build_quality_and_logs() -> void:
 	var logs: Dictionary = data["stack"][0]["experience_logs"]
 	assert_eq(logs["uptime"], 64, "252 -> 64")
 	assert_eq(logs["hardening"], 1, "6 * 64 / 252")
-	assert_eq(data["rack"][0][0]["build_quality"]["uptime"], 15, "rack Hexforged too")
+	assert_eq(data["rack"][0][0]["build_quality"]["uptime"], 15, "rack Forgelings too")
 	assert_eq(data["credits"], 5, "everything else untouched")
 	var d := DaemonInstance.from_dict(data["stack"][0])
 	assert_eq(d.build_quality["compute"], 15)
@@ -418,4 +418,4 @@ func test_v3_saves_rename_the_corrupted_status_to_infected() -> void:
 	var out := SaveManager.migrate(old, 3)
 	assert_eq(out["active_stack"][0]["status"], "infected")
 	assert_eq(out["racks"][0][0]["status"], "infected", "rack too")
-	assert_eq(out["flags"]["status"], "corrupted", "only Hexforged records change")
+	assert_eq(out["flags"]["status"], "corrupted", "only Forgeling records change")

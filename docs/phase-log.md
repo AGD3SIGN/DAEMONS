@@ -4,6 +4,18 @@ Newest entries at the top. Each entry: what's done, decisions, what's next.
 
 ---
 
+## 2026-11-15 — Creatures renamed: Hexforged → Forgelings
+
+Brandon (playing on his phone): "Wild Hexforged hide in tangled cables" didn't flow. The game stays HEXFORGED; the
+creatures are **Forgelings** (one Forgeling, many Forgelings). Every player-facing use was swapped by context
+(singular after a / another / which / that / each / every / any / my / own / "the active"; plural otherwise; possessive
+"Forgeling's"), then the misses fixed by hand. The Hexforge (the machine), /dev/hexforge and hexforge@field keep their
+names. Updated: UI strings, dialogue, items, trainers, tests, CLAUDE.md, README, design.md, data-format.md, the GDD's
+vocabulary (with a note), the gap report and art-prompt docs. Trademark lines now name HEXFORGED (and Forgeling).
+Suite 368/368.
+
+---
+
 ## 2026-11-15 — Realigned to the GDD (Master Prompt v2)
 
 docs/gdd.md is the source of truth (CLAUDE.md says so). Step 1 gap report: docs/gdd-gap-report.md (15 conflicts,

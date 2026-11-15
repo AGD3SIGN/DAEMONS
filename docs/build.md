@@ -101,7 +101,7 @@ cp bin/libgodot.ios.template_debug.arm64.simulator.a ~/Library/Application\ Supp
 ./tools/run_ios_simulator.sh            # or: ./tools/run_ios_simulator.sh "iPhone 17"
 ```
 builds for the Simulator and launches the game. The Simulator uses the OpenGL Compatibility renderer, which
-is what Hexforged uses anyway. Rebuild the library when you upgrade Godot (change the version in both paths).
+is what Forgelings uses anyway. Rebuild the library when you upgrade Godot (change the version in both paths).
 Game logs: the game's ERROR lines show in Console.app / `log stream` under subsystem `com.agd3sign.daemons`.
 
 - Orientation is landscape (either way). Touch controls appear automatically. Notch/home-indicator safe areas are respected.

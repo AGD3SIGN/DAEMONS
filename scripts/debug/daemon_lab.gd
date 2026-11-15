@@ -32,7 +32,7 @@ func _ready() -> void:
 	_right = _make_label(Vector2(164, 4), Vector2(154, 150))
 	var help := _make_label(Vector2(4, 160), Vector2(312, 20))
 	help.modulate = Color(0.6, 0.65, 0.85)
-	help.text = "<> Hexforged  ^v Level  Z +1 Lv (chip)\nSHIFT Reroll  SPACE Upgrade  X Back"
+	help.text = "<> Forgeling  ^v Level  Z +1 Lv (chip)\nSHIFT Reroll  SPACE Upgrade  X Back"
 	_rebuild()
 
 

@@ -12,7 +12,7 @@ Ids are `lower_snake_case` and unique within a file. Lists, not objects, so dupl
   "chart": { "hardware": { "software": 2, "network": 0.5 } } }
 ```
 `chart[attacker][defender]` is 0, 0.5 or 2. Anything missing = 1.
-Optional `"status_immunities": ["overheated"]` on a type: Hexforged of that type can't get those statuses.
+Optional `"status_immunities": ["overheated"]` on a type: Forgeling of that type can't get those statuses.
 Current: Hardware can't Overheat, Power can't be Throttled, Malware can't be Infected.
 Dual types multiply: `DataRegistry.type_multiplier("network", ["hardware", "power"])`.
 
@@ -45,7 +45,7 @@ or "#rrggbb"), `on` ("user"/"target"), `glyph` for particles (square, dot, plus,
 envelope, cell, code, wave, hook, drop), size/count/radius knobs, and `"parallel": true` to start the next step at
 once. Example (Packet Flood): `[{"kind": "stream", "count": 18, "size": 3}, {"kind": "burst", "count": 10}]`.
 
-**Force Quit** (`force_quit`) is the 0-Cycles fallback: when every move a Hexforged knows is out of Cycles, choosing
+**Force Quit** (`force_quit`) is the 0-Cycles fallback: when every move a Forgeling knows is out of Cycles, choosing
 FIGHT uses it automatically (fight slot `BattleSim.FALLBACK_SLOT`). Typeless, power 50, never misses, 1/4 recoil.
 It's never put in a learnset. Change it here; the id is `BattleSim.FALLBACK_MOVE`.
 
@@ -62,7 +62,7 @@ It's never put in a learnset. Change it here; the id is `BattleSim.FALLBACK_MOVE
 | learnset | `[{ "level": 1, "move": "bump" }]` |
 | evolutions | `[{ "to": id, "trigger": "level", "level": 16 }]`, `"item"` + `"item": id` (item must have the `evolve` effect), or `"sync"`. `[]` for none |
 | cmdb | `{ "category": "Penguin / Echo Unit", "entry": "..." }` |
-| art (opt) | `{ "flip_back": true }` mirrors the back poses in battle (for sheets whose back view was drawn facing left; your Hexforged must face up-right toward the foe) |
+| art (opt) | `{ "flip_back": true }` mirrors the back poses in battle (for sheets whose back view was drawn facing left; your Forgelings must face up-right toward the foe) |
 | legendary (opt) | `true` for legendaries (Pyrewall). Informational for now; low `catch_rate` does the gameplay work |
 
 ## items.json
@@ -130,7 +130,7 @@ Every file is an object of `dialogue id → list of steps`. Ids must be unique a
 | step | example |
 |---|---|
 | text | `{"speaker": "Mom", "text": "Hi, {player}!"}` |
-| yes/no | `{"choice": "Heal your Hexforged?", "yes": [steps], "no": [steps]}` |
+| yes/no | `{"choice": "Heal your Forgelings?", "yes": [steps], "no": [steps]}` |
 | flag check | `{"if_flag": "got_coffee", "then": [steps], "else": [steps]}` |
 | set_flag | `{"cmd": "set_flag", "flag": "met_kevin", "value": true}` |
 | give_item | `{"cmd": "give_item", "item": "coffee", "count": 3}` |
@@ -180,7 +180,7 @@ start off the map (not drawn, not solid) until a `show_npc` cutscene step brings
 
 Trainers can have `"sprite": "<character id>"` (assets/sprites/characters/<id>.png). In battle, that figure
 (front view) and you (from behind) slide onto the platforms first, then step out of frame as each side's first
-Hexforged comes out. Wild battles show only you.
+Forgelings comes out. Wild battles show only you.
 
 ## title_screen.json
 
@@ -198,7 +198,7 @@ layout/color/timing value lives in `scripts/ui/title/title_style.gd`).
   - `palette`: character -> `#hex`, or `"accent"` to follow the theme accent color.
   - `anim`: character -> `flicker` (flame), `core` / `core_accent` (pulse), or `eye` (blink).
 
-`tools/art_import/pixel_map_sheet.gd -- <id>` turns a featured sprite into that Hexforged's battle sheet
+`tools/art_import/pixel_map_sheet.gd -- <id>` turns a featured sprite into that Forgeling's battle sheet
 (`assets/sprites/daemons/<id>_sheet.png`, 2x, poses by shape so it stays under 16 colors).
 
 `data/build_info.json` (`{"build": n}`) is the build number on the title's version tag; the web deploy writes
@@ -263,7 +263,7 @@ discarded (battle: "MUNKBOARD needs a new certification to grow further.", once 
 refused at the cap and not used up. Validated: 9 levels, 1-100, never going down. Battle config `level_cap` overrides
 (tests). Certification order follows the GDD: Data is Cert 5, Security Cert 6.
 
-## Corrupted Hexforged (2026-11-15)
+## Corrupted Forgelings (2026-11-15)
 The same species in a glitched, hostile state (Ransom's code pushed through the broken Hexforge). Not a separate
 species or CMDB entry: `DaemonInstance.is_corrupted` (saved as `"corrupted"`).
 - **species.json** optional block, only for species met in the wild and never Malware lines (validated):

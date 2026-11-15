@@ -12,7 +12,7 @@ var upgrades: Array[Dictionary] = []
 
 var _active: Array[int] = [-1, -1]
 var _species: Array[String] = ["", ""]
-var _corrupted: Array[bool] = [false, false]  # this side's active Hexforged is an ERR:: version (foe only)
+var _corrupted: Array[bool] = [false, false]  # this side's active Forgeling is an ERR:: version (foe only)
 var _held: Array[bool] = [false, false]  # a pose is showing; the idle loop leaves it alone
 var _trainer_up: Array[bool] = [false, false]  # a trainer figure is on screen for that side
 var _breath := 0.0

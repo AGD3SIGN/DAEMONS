@@ -219,7 +219,7 @@ static func _ask_item(out: Array[String], echo: bool, state: BattleState) -> Bat
 
 
 static func _ask_replacement(out: Array[String], echo: bool, state: BattleState) -> int:
-	_say(out, echo, "Choose a Hexforged to deploy:")
+	_say(out, echo, "Choose a Forgeling to deploy:")
 	while true:
 		var index := _pick_from_stack(out, echo, state, false)
 		if index == -2:

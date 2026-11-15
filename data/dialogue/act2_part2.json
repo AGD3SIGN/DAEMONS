@@ -41,7 +41,7 @@
             },
             {
               "speaker": "Archivist",
-              "text": "Take this. It's a driver for very old hardware. Some old Hexforged only upgrade with it."
+              "text": "Take this. It's a driver for very old hardware. Some old Forgelings only upgrade with it."
             },
             {
               "cmd": "give_item",
@@ -166,7 +166,7 @@
     },
     {
       "speaker": "Help Desk",
-      "choice": "Want me to restore your Hexforged?",
+      "choice": "Want me to restore your Forgelings?",
       "yes": [
         {
           "speaker": "Help Desk",

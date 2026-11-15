@@ -2,21 +2,21 @@
 
 ## What this is
 An early-2000s handheld-style, top-down, turn-based creature-collecting RPG with an IT theme.
-Creatures are "Hexforged". Capture device is a "Quarantine Key". Healing is the "Help Desk".
+Creatures are "Forgelings". Capture device is a "Quarantine Key". Healing is the "Help Desk".
 **docs/gdd.md is the source of truth** (story, acts, world order, demo scope). Read it, docs/design.md and
 docs/phase-log.md before adding content. Where anything disagrees with the GDD, the GDD wins.
 
 ## Name and lore (2026-11-15)
 - The game was called DAEMONS; players read it as "demons". It's now **HEXFORGED**, and the creatures are
-  **Hexforged** (same word for one or many). Code identifiers, class names, file names, species ids and
-  `DMN-###` CMDB ids still say Daemon/DMN until Brandon decides on a code rename; player-facing text says Hexforged.
+  **Forgelings** (one Forgeling, many Forgelings; renamed from "Hexforged" 2026-11-15 because it didn't read well in sentences). Code identifiers, class names, file names, species ids and
+  `DMN-###` CMDB ids still say Daemon/DMN until Brandon decides on a code rename; player-facing text says Forgelings.
 - Lore rules (docs/gdd.md §4), everywhere:
-  1. Hexforged are **built, never born**. No breeding, eggs, nests, parents or babies. Stages are upgrades.
-  2. Every Hexforged was compiled by the **Hexforge** for a job and lives in the system it runs.
+  1. Forgelings are **built, never born**. No breeding, eggs, nests, parents or babies. Stages are upgrades.
+  2. Every Forgeling was compiled by the **Hexforge** for a job and lives in the system it runs.
   3. Corruption is a **broken computer**, never demonic: no horns, devil wings, skulls, flames or occult imagery.
   4. **All ages.** Ransom's menace stays cartoony.
   5. Humor works on **two layers**: funny to anyone, funnier to IT people.
-- Corruption is a slow reveal: no ERR:: Hexforged before the Power Plant (flag `corruption_revealed`).
+- Corruption is a slow reveal: no ERR:: Forgelings before the Power Plant (flag `corruption_revealed`).
 - **Keyboard, controller and touch must all work on every screen.**
 ## Documentation
 Project notes are mirrored in the Obsidian vault at

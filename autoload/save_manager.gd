@@ -147,8 +147,8 @@ func migrate(data: Dictionary, from_version: int) -> Dictionary:
 	return out
 
 
-## v3 -> v4 (2026-11-15): the poison-style status "corrupted" is now "infected" (corrupted Hexforged are a
-## different thing now). Rewrites the status of every saved Hexforged, wherever it sits.
+## v3 -> v4 (2026-11-15): the poison-style status "corrupted" is now "infected" (corrupted Forgelings are a
+## different thing now). Rewrites the status of every saved Forgeling, wherever it sits.
 static func _rename_status(value: Variant, old: String, new: String) -> Variant:
 	match typeof(value):
 		TYPE_ARRAY:

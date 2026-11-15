@@ -1,13 +1,13 @@
 # HEXFORGED
 
 An early-2000s handheld-style, top-down, turn-based creature collector where tech comes alive. You're the new hire on the
-help desk in **Root Valley**: catch Hexforged in Quarantine Keys, earn Certifications, and stop the
+help desk in **Root Valley**: catch Forgelings in Quarantine Keys, earn Certifications, and stop the
 **Ransom** syndicate. Built with Godot 4.7 (GDScript).
 
 **▶ Play in your browser: https://agd3sign.github.io/DAEMONS/** (updates automatically on every push to `main`
 once the tests pass; see `.github/workflows/web.yml`).
 
-> Working title. All 22 Hexforged have pixel-art battle sprites and 18 overworld characters have walking sprites
+> Working title. All 22 Forgelings have pixel-art battle sprites and 18 overworld characters have walking sprites
 > (AI-drafted, imported and polished with Aseprite); 3 minor NPCs still use placeholders. The playable demo runs from New Game to the first Certification
 > (about 30-45 minutes). Builds for macOS, Windows, Android and iOS: [docs/build.md](docs/build.md).
 
@@ -18,7 +18,7 @@ godot --path .                   # play
 godot --path . --editor          # open in the editor
 ./tools/serve_web.sh             # browser version at http://localhost:8060
 ```
-In debug builds the title menu also has a **Debug Menu** (test battles, the Hexforged Lab, overworld shortcuts).
+In debug builds the title menu also has a **Debug Menu** (test battles, the Forgeling Lab, overworld shortcuts).
 
 ## Controls
 | Action | Keyboard | Gamepad | Mouse / touch |
@@ -50,11 +50,11 @@ godot --headless --path . res://scenes/debug/console_battle.tscn
 ## Where things live
 | Folder | What |
 |---|---|
-| `data/` | All game content as JSON: Hexforged, moves, types, items, maps, dialogue, encounters, trainers. Format: [docs/data-format.md](docs/data-format.md) |
+| `data/` | All game content as JSON: Forgelings, moves, types, items, maps, dialogue, encounters, trainers. Format: [docs/data-format.md](docs/data-format.md) |
 | `scripts/battle/sim/` | The battle rules, pure and seeded (no UI) |
 | `scripts/battle/`, `scripts/overworld/`, `scripts/ui/` | Battle screen, overworld, menus |
 | `autoload/` | DataRegistry, GameState, SaveManager, AudioManager, SceneRouter, ScreenFitter, Settings, InputPrompts, TouchControls, AppLifecycle |
-| `assets/sprites/daemons/` | One battle sheet per Hexforged: `<id>_sheet.png`, 4x4 poses of 64x64 |
+| `assets/sprites/daemons/` | One battle sheet per Forgelings: `<id>_sheet.png`, 4x4 poses of 64x64 |
 | `assets/sprites/characters/` | Overworld walking sheets: `<id>.png`, 3 frames x 4 directions of 20x28 |
 | `art_src/daemons/`, `art_src/characters/` | Source art (ChatGPT sheets). Not shipped in builds |
 | `services/feedback-worker/` | Cloudflare Worker that files in-game feedback as private GitHub issues ([setup](services/feedback-worker/README.md)) |
@@ -62,8 +62,8 @@ godot --headless --path . res://scenes/debug/console_battle.tscn
 | `docs/` | [Design doc](docs/design.md), [phase log](docs/phase-log.md), [data formats](docs/data-format.md), [builds](docs/build.md), [art prompts](docs/art-prompts/README.md) |
 
 ## Art
-Hexforged sprites go from a ChatGPT prompt to the game in four steps (details in [docs/art-prompts/README.md](docs/art-prompts/README.md)):
-1. Generate a sheet with the prompt for that Hexforged's stage (`docs/art-prompts/`, built by `tools/art_prompts/build_prompts.py`).
+Forgelings sprites go from a ChatGPT prompt to the game in four steps (details in [docs/art-prompts/README.md](docs/art-prompts/README.md)):
+1. Generate a sheet with the prompt for that Forgeling's stage (`docs/art-prompts/`, built by `tools/art_prompts/build_prompts.py`).
 2. Save it as `art_src/daemons/<NN-Line>/<id>_gpt_v<stage>.png` (or `.webp`). 4x4 (16 poses) and 6x2 (12 poses) layouts both work.
 3. Import every sheet: `godot --headless -s tools/art_import/import_sheet.gd -- --all` (background removed, poses cut to 64x64).
 4. Polish to ~15 colors with Aseprite through the Aseprite MCP: `tools/art_import/polish_sheet.py` (setup in the vault's Assets > Tools).
@@ -75,12 +75,12 @@ The importer also writes `<id>_battle.png` (front + back standing poses at 48x72
 source so faces keep their detail) for the battle intro; polish those with `--colors 16`. Re-running `--all`
 overwrites polished sheets, so polish again (or `git checkout` the ones you didn't mean to change).
 
-A test fails if a Hexforged has no sheet or a sheet has more than 16 colors. Each move's battle effect is data too:
+A test fails if a Forgeling has no sheet or a sheet has more than 16 colors. Each move's battle effect is data too:
 `"fx"` in `data/moves.json` (see [docs/data-format.md](docs/data-format.md)).
 
 ## Progress
 - [x] Phase 0 — Project setup
-- [x] Phase 1 — Data layer, Hexforged stats and EXP
+- [x] Phase 1 — Data layer, Forgelings stats and EXP
 - [x] Phase 2 — Battle simulation (damage, statuses, capture, AI)
 - [x] Phase 3 — Battle screen
 - [x] Phase 4 — Overworld, maps, NPCs, dialogue
@@ -88,7 +88,7 @@ A test fails if a Hexforged has no sheet or a sheet has more than 16 colors. Eac
 - [x] Phase 6 — Trainers, Certifications, black-out, saving, options
 - [x] Phase 7 — Vertical slice (intro, Route 1, Wi-Fi Dead Zone, Patch Town, Desktop Support Dept.)
 - [~] Phase 8 — Platform builds: touch controls, prompts, lifecycle, export presets, Mac/Windows/Android/iOS builds and the iOS Simulator done ([docs/build.md](docs/build.md)); testing on real devices pending
-- [x] Art: all 22 Hexforged drawn, imported and polished; every move has its own battle effect
+- [x] Art: all 22 Forgelings drawn, imported and polished; every move has its own battle effect
 - [x] Overworld character art (18 characters; Kevin's mom, the gate guard and the angler still placeholders)
 - [ ] Phase 9+ — Steam page, content, polish, launch
 

@@ -665,7 +665,7 @@ func stack_rows() -> PackedStringArray:
 
 # --- Bag ---------------------------------------------------------------------
 
-## Bag pages: the 4 item pockets, then QUARANTINED (corrupted Hexforged you caught, waiting for a Help Desk).
+## Bag pages: the 4 item pockets, then QUARANTINED (corrupted Forgelings you caught, waiting for a Help Desk).
 const QUARANTINED_PAGE := 4
 
 
@@ -730,7 +730,7 @@ func _bag_pages() -> int:
 	return POCKETS.size() + (1 if GameState.corruption_revealed() else 0)
 
 
-## The QUARANTINED page: one row per corrupted Hexforged you're holding. They can't battle or be used.
+## The QUARANTINED page: one row per corrupted Forgeling you're holding. They can't battle or be used.
 func quarantined_rows() -> PackedStringArray:
 	var rows := PackedStringArray()
 	for d: DaemonInstance in GameState.quarantined:
@@ -778,7 +778,7 @@ func _show_pocket(pocket: int, ids: Array[String], start: int, title_suffix: Str
 
 func _use_item(item_id: String) -> void:
 	if ItemUse.needs_target(item_id):
-		var r := await list.choose("Use on which Hexforged?", stack_rows())
+		var r := await list.choose("Use on which Forgeling?", stack_rows())
 		if r["action"] == "pick":
 			await _use_on(item_id, GameState.active_stack[r["index"]])
 	else:
