@@ -400,8 +400,13 @@ func _node(p: Dictionary, st: String) -> void:
 	var c := place_pos(p)
 	var kind := String(p["kind"])
 	if st == "rumored":
-		draw_rect(Rect2(c - Vector2(4, 4), Vector2(8, 8)), Color("2a3448"))
-		_text(c + Vector2(-6, 3), "?", Color("8090a8"))
+		var box := Rect2(c - Vector2(5, 5), Vector2(10, 10))
+		draw_rect(box, Color("2a3448"))
+		draw_rect(box, Color("8090a8"), false, 1.0)
+		# Center the "?" on the box from the font's real glyph size, not a guessed offset.
+		var glyph := _font.get_string_size("?", HORIZONTAL_ALIGNMENT_LEFT, -1, 8)
+		var baseline := c.y + (_font.get_ascent(8) - _font.get_descent(8)) / 2.0
+		_text(Vector2(roundf(c.x - glyph.x / 2.0), roundf(baseline)), "?", Color("c8d4e8"))
 		return
 	match kind:
 		"town":  # a chip with pins
@@ -431,9 +436,9 @@ func _node(p: Dictionary, st: String) -> void:
 			"above":
 				at = c + Vector2(-w / 2.0, -11)
 			"left":
-				at = c + Vector2(-w - 10, 3)
+				at = c + Vector2(-w - 13, 3)
 			"right":
-				at = c + Vector2(10, 3)
+				at = c + Vector2(13, 3)
 			_:
 				at = c + Vector2(-w / 2.0, 17)
 		at.x = clampf(at.x, L_SCREEN.position.x + 2, L_SCREEN.end.x - w - 2)
