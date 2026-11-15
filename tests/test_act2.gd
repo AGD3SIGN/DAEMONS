@@ -292,3 +292,24 @@ func test_kalb_traces_ransom_to_hq_tower() -> void:
 	await world.interact()
 	assert_true(_logged("HQ Tower"))
 	assert_true(GameState.flags.get("hq_traced", false))
+	assert_signal_emitted(world, "demo_ended", "Kalb's trace ends the Acts 1-3 demo")
+	assert_true(GameState.flags.get("demo_complete", false))
+	await wait_until(func() -> bool: return world.is_idle(), 5.0)
+	world.player.setup(world.map, Vector2i(7, 4), Vector2i.UP)
+	await world.interact()
+	assert_signal_emit_count(world, "demo_ended", 1, "only once; talking to her again doesn't replay it")
+
+
+
+func test_demo_end_card_and_credits_roll_to_the_end() -> void:
+	var card: DemoEnd = load(DemoEnd.SCENE).instantiate()
+	card.time_scale = 0.0
+	add_child_autofree(card)
+	await wait_until(func() -> bool: return card.finished, 10.0)
+	assert_true(card.finished, "the credits finish and wait for a button")
+	var text := []
+	for l in card.find_children("*", "Label", true, false):
+		text.append(l.text)
+	assert_has(text, "END OF THE DEMO")
+	assert_has(text, "Act 4: Escalation")
+	assert_true(DataRegistry.demo_end["credits"].size() >= 3)

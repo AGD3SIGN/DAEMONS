@@ -269,6 +269,8 @@ func _scan_steps(steps: Array, where: String) -> void:
 		match step.get("cmd", ""):
 			"set_flag":
 				_flags_set[step["flag"]] = where
+			"end_demo":
+				_flags_set["demo_complete"] = where
 			"give_cert":
 				_certs_given[step["cert"]] = true
 			"start_battle":

@@ -36,6 +36,7 @@ const DIALOGUE_COMMANDS := {
 	"set_var": ["var", "value"],
 	"clear_flags": ["flags"],
 	"send_player": ["spawn"],
+	"end_demo": [],
 }
 const EVENT_TYPES := {
 	"warp": ["to_map", "to_spawn"],
@@ -89,6 +90,7 @@ var title_screen: Dictionary = {}  # tagline, prompt, boot_log, featured legenda
 var feedback: Dictionary = {}      # Feedback form config (data/feedback.json)
 var balance: Dictionary = {}       # EXP rate and blackout penalty (data/balance.json)
 var region_map: Dictionary = {}    # phone Maps app layout (data/region_map.json)
+var demo_end: Dictionary = {}      # end-of-demo card and credits (data/demo_end.json)
 
 
 ## raw = {"types": ..., "moves": ..., "species": ..., "items": ..., "config_profiles": ...}
@@ -121,6 +123,7 @@ func validate(raw: Dictionary) -> PackedStringArray:
 	_validate_feedback(raw.get("feedback"))
 	_validate_balance(raw.get("balance"))
 	_validate_region_map(raw.get("region_map"))
+	_validate_demo_end(raw.get("demo_end"))
 	return errors
 
 
@@ -976,6 +979,27 @@ func _validate_feedback(raw: Variant) -> void:
 	var categories: Variant = raw.get("categories")
 	if typeof(categories) != TYPE_ARRAY or categories.is_empty():
 		_err("feedback", "'categories' must be a non-empty list")
+
+
+# --- demo end ------------------------------------------------------------------
+
+## data/demo_end.json: "card" (lines shown big, in order), "credits" ([role, name] pairs), "thanks" (last line).
+func _validate_demo_end(raw: Variant) -> void:
+	demo_end = {}
+	if typeof(raw) != TYPE_DICTIONARY:
+		_err("demo_end", "must be an object")
+		return
+	demo_end = raw
+	if typeof(raw.get("card")) != TYPE_ARRAY or raw["card"].is_empty():
+		_err("demo_end", "'card' must list at least one line")
+	var credits: Variant = raw.get("credits")
+	if typeof(credits) != TYPE_ARRAY:
+		_err("demo_end", "'credits' must be a list of [role, name]")
+	else:
+		for c: Variant in credits:
+			if typeof(c) != TYPE_ARRAY or c.size() != 2:
+				_err("demo_end › credits", "%s must be [role, name]" % str(c))
+	_string(raw, "thanks", "demo_end")
 
 
 # --- region map ----------------------------------------------------------------

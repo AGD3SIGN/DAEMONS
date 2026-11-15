@@ -10,6 +10,7 @@ extends Node2D
 
 signal battle_requested(config: Dictionary)
 signal map_loaded(map_id: String)
+signal demo_ended
 
 const SCENE := "res://scenes/overworld/overworld.tscn"
 const DEFAULT_MAP := "onboarding_town"
@@ -447,6 +448,16 @@ func move_player(path: Array) -> void:
 			await player.try_step(dir)
 	_scripted_move = false
 	_remember_location()
+
+
+## The end of the Acts 1–3 demo: remember it, save (so CONTINUE comes back here), then the end card + credits.
+func end_demo() -> void:
+	GameState.flags["demo_complete"] = true
+	_remember_location()
+	demo_ended.emit()
+	if allow_scene_change:
+		SaveManager.save_game()
+		SceneRouter.goto(DemoEnd.SCENE)
 
 
 func start_battle(config: Dictionary) -> void:

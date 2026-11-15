@@ -252,6 +252,8 @@ Options live separately in user://settings.cfg.
 | clear_flags | `{"cmd": "clear_flags", "flags": ["log_auth", "log_vpn"]}` |
 | send_player | `{"cmd": "send_player", "spawn": "default"}`: after the dialogue's event finishes, fade and move to that spawn on this map |
 
+| end_demo | `{"cmd": "end_demo"}`: sets `demo_complete`, saves, plays the end card + credits from `data/demo_end.json` (`card` lines, `credits` [role, name] pairs, `thanks`) |
+
 Text can show a counter: `"LOAD METER: {var:load} / 12 kW"`.
 
 **Packet lanes** (tiles `lane_up/down/left/right`, behaviors `slide_*`): stepping on one carries you along its arrow
