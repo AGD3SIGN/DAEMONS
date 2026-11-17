@@ -210,8 +210,9 @@ its run number there before exporting.
 match the Worker's `LIMITS`. Offline reports wait in `user://feedback_outbox.json`.
 
 ## balance.json (tuning knobs)
-`{"starting_credits": 3000, "exp_divisor": 7, "trainer_exp_bonus": 1.5, "uptime_bonus": 20, "damage": {"level_offset": 4, "divisor": 108}, "loss_penalty": {"percent": 10, "cap_base": 300, "cap_per_cert": 300}}`.
-EXP per defeated foe = floor(base_exp x level / exp_divisor), x trainer_exp_bonus in trainer battles.
+`{"starting_credits": 3000, "exp_divisor": 7, "trainer_exp_bonus": 1.5, "exp_scaling": {"power": 2.5, "offset": 10}, "uptime_bonus": 20, "damage": {"level_offset": 4, "divisor": 108}, "loss_penalty": {"percent": 10, "cap_base": 300, "cap_per_cert": 300}}`.
+EXP per defeated foe = floor(base_exp x level / exp_divisor), x trainer_exp_bonus in trainer battles, split between
+participants, then each share x ((2 x foe + offset) / (foe + mine + offset)) ^ power (exp_scaling; power 0 = off).
 Max Uptime = core + level + `uptime_bonus` (a flat bonus that matters most at low levels).
 Damage = floor(Power x Atk x (level + `level_offset`) / (Def x `divisor`)) + 2, then crit, roll, native type, effectiveness.
 tests/test_early_balance.gd keeps early fights winnable but not pushovers, and fails if any early foe can

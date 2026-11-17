@@ -2,6 +2,10 @@
   "starting_credits": 3000,
   "exp_divisor": 7,
   "trainer_exp_bonus": 1.5,
+  "exp_scaling": {
+    "power": 2.5,
+    "offset": 10
+  },
   "uptime_bonus": 20,
   "damage": {
     "level_offset": 4,

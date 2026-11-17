@@ -699,8 +699,8 @@ static func _handle_faints(state: BattleState, events: Array[Dictionary]) -> voi
 
 
 ## EXP = floor(base_exp * foe level / exp_divisor), x trainer_exp_bonus in trainer battles (both from
-## data/balance.json), split between the
-## participants still standing. Each of them also gets the foe's full Experience Logs.
+## data/balance.json), split between the participants still standing, then each share is scaled by the level gap
+## (exp_gap_multiplier). Each of them also gets the foe's full Experience Logs.
 @warning_ignore("integer_division")
 static func _award_exp(state: BattleState, events: Array[Dictionary]) -> void:
 	var foe := state.sides[BattleState.FOE].active()
@@ -715,7 +715,7 @@ static func _award_exp(state: BattleState, events: Array[Dictionary]) -> void:
 			receivers.append(i)
 	if receivers.is_empty():
 		return
-	var share := maxi(1, total / receivers.size())
+	var base_share := total / float(receivers.size())
 	var log_yield: Dictionary = foe.species_data()["log_yield"]
 	for i in receivers:
 		var d := player.stack[i]
@@ -725,6 +725,7 @@ static func _award_exp(state: BattleState, events: Array[Dictionary]) -> void:
 				state.cap_announced[i] = true
 				events.append(_ev("level_capped", {"side": BattleState.PLAYER, "index": i, "daemon": d.display_name()}))
 			continue
+		var share := maxi(1, floori(base_share * exp_gap_multiplier(d.level, foe.level)))
 		events.append(_ev("exp_gained", {"side": BattleState.PLAYER, "index": i, "daemon": d.display_name(), "amount": share}))
 		for e in d.gain_exp(share, state.level_cap):
 			e["side"] = BattleState.PLAYER
@@ -733,6 +734,20 @@ static func _award_exp(state: BattleState, events: Array[Dictionary]) -> void:
 			events.append(e)
 			if e["type"] == "level_up":
 				state.leveled_up[i] = true
+
+
+## Level-gap EXP scaling (2026-11-16, from the balance research: Pokémon Gen 5 does the same):
+##   ((2 * foe + offset) / (foe + mine + offset)) ^ power      power/offset from balance.json "exp_scaling"
+## Same level = x1. A Lv8 beating a Lv12 gets x1.37; a Lv14 beating a Lv10 gets x0.73. A new catch catches up
+## fast and over-leveling slows down, so nobody has to grind, and the fights themselves stay as hard.
+## power 0 turns it off.
+static func exp_gap_multiplier(my_level: int, foe_level: int) -> float:
+	var rule: Dictionary = DataRegistry.balance.get("exp_scaling", {})
+	var power := float(rule.get("power", 0.0))
+	if power <= 0.0:
+		return 1.0
+	var offset := float(rule.get("offset", 10))
+	return pow((2.0 * foe_level + offset) / (foe_level + my_level + offset), power)
 
 
 static func _check_end(state: BattleState, events: Array[Dictionary]) -> void:

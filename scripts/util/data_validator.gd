@@ -1171,6 +1171,14 @@ func _validate_balance(raw: Variant) -> void:
 		if not (typeof(v) == TYPE_INT or typeof(v) == TYPE_FLOAT) or float(v) < 1.0 or float(v) > 20.0:
 			_err("balance", "'%s' must be a number from 1 to 20" % field)
 	_int(raw, "uptime_bonus", "balance", 0, 100)
+	var scaling: Variant = raw.get("exp_scaling")
+	if typeof(scaling) != TYPE_DICTIONARY:
+		_err("balance", "'exp_scaling' must be an object with power (0 = off) and offset")
+	else:
+		var power: Variant = scaling.get("power")
+		if not (typeof(power) == TYPE_INT or typeof(power) == TYPE_FLOAT) or float(power) < 0.0 or float(power) > 5.0:
+			_err("balance › exp_scaling", "'power' must be a number from 0 to 5")
+		_int(scaling, "offset", "balance › exp_scaling", 0, 100)
 	var curve: Variant = raw.get("damage")
 	if typeof(curve) != TYPE_DICTIONARY:
 		_err("balance", "'damage' must be an object with level_offset and divisor")

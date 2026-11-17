@@ -325,7 +325,7 @@ func test_wild_win_gives_exp_and_logs() -> void:
 	var state := _battle([pingo], [bunny])
 	var events := BattleSim.run_turn(state, _fight(pingo, "fast_ethernet"), BattleAction.fight(0))
 	assert_eq(_types(events).slice(-4), ["damage", "fainted", "exp_gained", "battle_end"])
-	assert_eq(_of(events, "exp_gained")[0]["amount"], 35, "floor(50 * 5 / 7), divisor from data/balance.json")
+	assert_eq(_of(events, "exp_gained")[0]["amount"], 8, "floor(50 * 5 / 7) = 35, x0.247 for a Lv20 beating a Lv5")
 	assert_eq(state.outcome, "player_won")
 	assert_eq(pingo.experience_logs["bandwidth"], 1)
 	assert_eq(_of(events, "move_used").size(), 1, "the crashed foe doesn't act")
@@ -337,7 +337,7 @@ func test_trainer_battle_forced_switch_and_bonus_exp() -> void:
 	bunny.current_uptime = 1
 	var state := _battle([pingo], [bunny, _daemon("wormby", 5)], false)
 	var events := BattleSim.run_turn(state, _fight(pingo, "fast_ethernet"), BattleAction.fight(0))
-	assert_eq(_of(events, "exp_gained")[0]["amount"], 52, "floor(35 * 1.5) trainer bonus")
+	assert_eq(_of(events, "exp_gained")[0]["amount"], 12, "floor(35 * 1.5) = 52 trainer bonus, x0.247 level gap")
 	assert_eq(_of(events, "switch_needed")[0]["side"], 1)
 	assert_eq(state.outcome, "")
 	var blocked := BattleSim.run_turn(state, BattleAction.fight(0), BattleAction.fight(0))
@@ -361,7 +361,7 @@ func test_exp_is_split_between_participants() -> void:
 		var events := BattleSim.run_turn(state, _fight(glowbit, "code_injection"), _fight(bunny, "bump"))
 		assert_eq(state.outcome, "player_won")
 		var gains := _of(events, "exp_gained").map(func(e: Dictionary) -> int: return e["amount"])
-		assert_eq(gains, [35] if pingo_crashed else [17, 17])
+		assert_eq(gains, [8] if pingo_crashed else [4, 4], "35 (or 17.5 each) x0.247 level gap")
 
 
 func test_level_up_mid_battle_then_upgrade_after() -> void:
@@ -447,3 +447,26 @@ func test_trainer_battle_with_no_pp_finishes() -> void:
 	await wait_for_signal(scene.finished, 30.0)
 	assert_true(scene.state.is_over(), "the battle ends instead of looping")
 	scene.free()
+
+
+# --- level-gap EXP scaling (balance.json exp_scaling) ---------------------------
+
+func test_exp_gap_multiplier_rewards_underdogs_and_slows_overleveling() -> void:
+	assert_almost_eq(BattleSim.exp_gap_multiplier(12, 12), 1.0, 0.0001, "same level: unchanged")
+	assert_almost_eq(BattleSim.exp_gap_multiplier(8, 12), 1.37, 0.01, "4 levels under: catch up")
+	assert_almost_eq(BattleSim.exp_gap_multiplier(14, 10), 0.73, 0.01, "4 levels over: slower")
+	assert_gt(BattleSim.exp_gap_multiplier(5, 6), BattleSim.exp_gap_multiplier(6, 6))
+	assert_lt(BattleSim.exp_gap_multiplier(7, 6), BattleSim.exp_gap_multiplier(6, 6))
+
+
+func test_each_participant_is_scaled_by_its_own_level() -> void:
+	var low := _daemon("pingo", 8)
+	var high := _daemon("glowbit", 16)
+	var bunny := _daemon("dustbunny", 12)
+	var state := _battle([low, high], [bunny])
+	BattleSim.run_turn(state, BattleAction.switch_to(1), _fight(bunny, "bump"))
+	bunny.current_uptime = 1
+	var events := BattleSim.run_turn(state, _fight(high, "code_injection"), _fight(bunny, "bump"))
+	var gains := _of(events, "exp_gained")
+	assert_eq(gains.size(), 2)
+	assert_gt(int(gains[0]["amount"]), int(gains[1]["amount"]), "the Lv8 earns more than the Lv16 from the same Lv12 foe")
