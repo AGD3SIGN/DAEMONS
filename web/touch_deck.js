@@ -7,6 +7,9 @@
 // The export uses canvas resize policy 0 ("None"), so Godot follows the canvas size set here.
 // Presses go to the game through window.daemonsDeck (registered by autoload/touch_controls.gd):
 //   daemonsDeck("shown", bool)   daemonsDeck("button", action, pressed)   daemonsDeck("dir", x, y)
+// Phone keyboard (2026-11-16): the game calls window.daemonsTextInput(title, text, maxLength, placeholder) to
+// show a real text box over the page, so the phone's own keyboard can type (Feedback). The answer comes back as
+//   daemonsDeck("text", ok, value)     ok = false when cancelled
 // Copied next to index.html by tools/serve_web.sh and .github/workflows/web.yml.
 (function () {
   "use strict";
@@ -37,6 +40,21 @@
       border: 3px solid #0d0f1c; font-size: 9px; box-shadow: inset 0 -3px 0 #2a2f48; }
     #daemons-deck .on { transform: translateY(2px); filter: brightness(1.25); box-shadow: none; }
     #daemons-deck .pill.toggled { background: #3f8a52; color: #f4f2ea; }
+    #daemons-text { position: fixed; inset: 0; z-index: 1000; background: rgba(8, 10, 20, 0.72);
+      display: flex; align-items: flex-start; justify-content: center; padding: 12px; box-sizing: border-box;
+      padding-top: calc(12px + env(safe-area-inset-top)); font-family: "Press Start 2P", monospace; }
+    #daemons-text .card { width: 100%; max-width: 560px; background: #f4f2ea; color: #1c1c2c;
+      border: 3px solid #0d0f1c; box-shadow: 0 0 0 3px #5a6a9a; padding: 12px; box-sizing: border-box; }
+    #daemons-text .title { font-size: 11px; margin-bottom: 10px; letter-spacing: 1px; }
+    #daemons-text textarea { width: 100%; height: 30vh; min-height: 110px; box-sizing: border-box; resize: none;
+      font: 16px/1.4 ui-monospace, Menlo, Consolas, monospace; color: #1c1c2c; background: #fff;
+      border: 2px solid #1c1c2c; border-radius: 0; padding: 8px; outline: none; }
+    #daemons-text textarea:focus { border-color: #4f7fd0; }
+    #daemons-text .row { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; gap: 8px; }
+    #daemons-text .count { font-size: 8px; color: #6a6a80; }
+    #daemons-text button { font: 10px "Press Start 2P", monospace; padding: 12px 14px; border: 3px solid #0d0f1c;
+      background: #3a4060; color: #f4f2ea; box-shadow: inset 0 -3px 0 rgba(0,0,0,0.3); border-radius: 0; }
+    #daemons-text button.done { background: #d0484a; }
   `;
 
   // The D-pad outline in a 100x100 box: arms 32 wide, rounded ends.
@@ -205,6 +223,62 @@
       }
     }, 250);
   }
+
+  // A real text box over the game so the phone keyboard can type (game text grids are slow on a touch screen).
+  // Keys typed here stop at the overlay so the game doesn't also react to them.
+  function textInput(title, text, maxLength, placeholder) {
+    closeTextInput();
+    const max = Math.max(1, Number(maxLength) || 2000);
+    const box = document.createElement("div");
+    box.id = "daemons-text";
+    box.innerHTML = `
+      <div class="card" role="dialog" aria-modal="true">
+        <div class="title"></div>
+        <textarea autocapitalize="sentences" autocomplete="off" spellcheck="true"></textarea>
+        <div class="row">
+          <span class="count"></span>
+          <span><button type="button" class="cancel">BACK</button> <button type="button" class="done">DONE</button></span>
+        </div>
+      </div>`;
+    box.querySelector(".title").textContent = String(title || "TYPE");
+    const area = box.querySelector("textarea");
+    area.maxLength = max;
+    area.placeholder = String(placeholder || "");
+    area.value = String(text || "").slice(0, max);
+    const count = box.querySelector(".count");
+    const recount = () => { count.textContent = area.value.length + " / " + max; };
+    recount();
+    area.addEventListener("input", recount);
+    const finish = (ok) => {
+      const value = area.value;
+      closeTextInput();
+      if (canvas) canvas.focus();
+      send("text", ok, ok ? value : "");
+    };
+    box.querySelector(".done").addEventListener("click", () => finish(true));
+    box.querySelector(".cancel").addEventListener("click", () => finish(false));
+    for (const type of ["keydown", "keyup", "keypress"]) {
+      box.addEventListener(type, (e) => {
+        e.stopPropagation();
+        if (type === "keydown" && e.key === "Escape") finish(false);
+        if (type === "keydown" && e.key === "Enter" && (e.ctrlKey || e.metaKey)) finish(true);
+      });
+    }
+    for (const type of ["pointerdown", "pointerup", "touchstart", "touchend", "mousedown", "mouseup"]) {
+      box.addEventListener(type, (e) => e.stopPropagation());
+    }
+    document.body.appendChild(box);
+    // Android opens the keyboard right away; iOS only does when the box is tapped, so it's large and on top.
+    setTimeout(() => { area.focus(); area.setSelectionRange(area.value.length, area.value.length); }, 30);
+  }
+
+  function closeTextInput() {
+    const old = document.getElementById("daemons-text");
+    if (old) old.remove();
+  }
+
+  window.daemonsTextInput = textInput;
+  window.daemonsTextInputClose = closeTextInput;
 
   function start() {
     canvas = document.getElementById("canvas");

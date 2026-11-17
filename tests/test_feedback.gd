@@ -183,3 +183,36 @@ func test_escape_backs_out_of_the_writing_box() -> void:
 	edit.gui_input.emit(esc)
 	await wait_process_frames(2)
 	assert_eq(result, [""], "nothing is sent")
+
+
+## Web on a phone (2026-11-16): the writing box offers the phone's own keyboard. It opens by itself, the KEYBOARD
+## key and a tap on the box open it again, and what's typed there lands in the box for SEND.
+func test_phone_keyboard_types_into_the_box() -> void:
+	var menus := await _open()
+	menus.phone_keyboard_available = func() -> bool: return true
+	var opens := TouchControls.phone_keyboard_opens
+	var result := []
+	var run := func() -> void: result.append(await menus._write_feedback("BUG"))
+	run.call()
+	await wait_process_frames(2)
+	assert_eq(TouchControls.phone_keyboard_opens, opens + 1, "opens by itself")
+	var panel: Panel = menus.get_node("FeedbackEntry")
+	assert_true(get_viewport().get_visible_rect().encloses(panel.get_global_rect()), "fits the screen")
+	var key: Button = panel.find_child("PhoneKeyboard", true, false)
+	assert_not_null(key, "a KEYBOARD key")
+	assert_true(panel.get_global_rect().encloses(key.get_global_rect()), "the KEYBOARD key fits in the panel")
+	key.pressed.emit()
+	assert_eq(TouchControls.phone_keyboard_opens, opens + 2)
+	TouchControls._on_deck_message(["text", true, "The map ? sits off center."])
+	var edit: TextEdit = panel.get_node("Edit")
+	assert_eq(edit.text, "The map ? sits off center.")
+	TouchControls._on_deck_message(["text", false, ""])
+	assert_eq(edit.text, "The map ? sits off center.", "backing out keeps what was there")
+	var send: Button = null
+	for b in panel.get_node("Keys").find_children("*", "Button", true, false):
+		if (b as Button).text == "SEND":
+			send = b
+	send.pressed.emit()
+	await wait_process_frames(2)
+	assert_eq(result, ["The map ? sits off center."])
+	assert_eq(TouchControls.text_input_done.get_connections().size(), 0, "the box lets go of the signal")

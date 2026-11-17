@@ -14,6 +14,8 @@ extends CanvasLayer
 ## through window.daemonsDeck as the same actions.
 
 signal shown_changed(shown: bool)
+## The web page's phone-keyboard text box closed (web/touch_deck.js). ok is false when the player backed out.
+signal text_input_done(ok: bool, text: String)
 
 const MIN_TARGET_PT := 44.0
 const BUTTON_PT := 58.0
@@ -47,6 +49,7 @@ var _button_touches := {}  # touch index -> action
 ## The web page's control deck is showing (portrait phone): no overlay, input comes from the deck.
 var deck := false
 var _deck_callback: JavaScriptObject
+var phone_keyboard_opens := 0  # how many times the phone-keyboard box was asked for (tests)
 
 
 func _ready() -> void:
@@ -67,7 +70,8 @@ func _ready() -> void:
 		set_deck(bool(window.daemonsDeckShown))
 
 
-## Messages from web/touch_deck.js: ["shown", bool], ["button", action, pressed], ["dir", x, y].
+## Messages from web/touch_deck.js: ["shown", bool], ["button", action, pressed], ["dir", x, y],
+## ["text", ok, value] (the phone-keyboard text box closed).
 func _on_deck_message(args: Array) -> void:
 	if args.is_empty():
 		return
@@ -78,6 +82,29 @@ func _on_deck_message(args: Array) -> void:
 			deck_button(String(args[1]), bool(args[2]))
 		"dir":
 			deck_direction(Vector2i(int(args[1]), int(args[2])))
+		"text":
+			text_input_done.emit(bool(args[1]), String(args[2]) if args.size() > 2 else "")
+
+
+## True on the web build on a touch screen, where the page can show a real text box for the phone keyboard.
+func can_use_phone_keyboard() -> bool:
+	if not OS.has_feature("web") or not DisplayServer.is_touchscreen_available():
+		return false
+	return bool(JavaScriptBridge.eval("typeof window.daemonsTextInput === 'function'", true))
+
+
+## Shows the page's text box (web only). The answer arrives as text_input_done.
+func open_phone_keyboard(title: String, text: String, max_length: int, placeholder: String) -> void:
+	phone_keyboard_opens += 1
+	if not OS.has_feature("web"):
+		return
+	var window: JavaScriptObject = JavaScriptBridge.get_interface("window")
+	window.daemonsTextInput(title, text, max_length, placeholder)
+
+
+func close_phone_keyboard() -> void:
+	if OS.has_feature("web"):
+		JavaScriptBridge.eval("window.daemonsTextInputClose && window.daemonsTextInputClose()", true)
 
 
 func set_deck(on: bool) -> void:

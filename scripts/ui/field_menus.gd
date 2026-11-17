@@ -176,6 +176,10 @@ func _send_feedback(data: Dictionary) -> void:
 
 ## The writing box: a multi-line field (keyboard / on-screen keyboard on phones) plus a letter grid for gamepads.
 ## Returns the text, or "" if the player backed out.
+## Whether the feedback box can use the phone's own keyboard (web on a touch screen). Tests swap it.
+var phone_keyboard_available: Callable = func() -> bool: return TouchControls.can_use_phone_keyboard()
+
+
 func _write_feedback(kind: String) -> String:
 	var panel := Panel.new()
 	panel.name = "FeedbackEntry"
@@ -209,9 +213,36 @@ func _write_feedback(kind: String) -> String:
 	keys.name = "Keys"
 	keys.position = Vector2(8, 78)
 	panel.add_child(keys)
+	# Web on a phone: a KEYBOARD key (and tapping the text box) opens a real text box so the phone's own
+	# keyboard can type (2026-11-16, Brandon: the letter grid is slow). It opens by itself the first time.
+	var phone_keyboard := phone_keyboard_available.call() as bool
+	var open_keyboard := func() -> void:
+		TouchControls.open_phone_keyboard("FEEDBACK: %s" % kind, edit.text, max_len,
+			"What happened? What would make it better?")
+	if phone_keyboard:
+		var last_row := keys.get_child(keys.get_child_count() - 1) as HBoxContainer
+		var kb := Button.new()
+		kb.name = "PhoneKeyboard"
+		kb.text = "KEYBOARD"
+		kb.focus_mode = Control.FOCUS_ALL
+		kb.custom_minimum_size = Vector2(70, 11)
+		kb.pressed.connect(open_keyboard)
+		last_row.add_child(kb)
+		edit.editable = false  # tapping the box opens the phone keyboard instead of Godot's caret
+		edit.add_theme_color_override("font_readonly_color", edit.get_theme_color("font_color"))  # not greyed out
+		edit.gui_input.connect(func(e: InputEvent) -> void:
+			if (e is InputEventMouseButton and e.pressed) or (e is InputEventScreenTouch and e.pressed):
+				edit.accept_event()
+				open_keyboard.call())
+	var on_typed := func(ok: bool, typed: String) -> void:
+		if ok and is_instance_valid(edit):
+			edit.text = typed.left(max_len)
 	var hint := Label.new()
 	hint.name = "Hint"
 	hint.text = feedback_hint()
+	if phone_keyboard:
+		TouchControls.text_input_done.connect(on_typed)
+		hint.text = "Tap KEYBOARD to type, SEND to send."
 	hint.add_theme_color_override("font_color", Color("505068"))
 	hint.position = Vector2(8, FEEDBACK_PANEL.y - 16)
 	panel.add_child(hint)
@@ -232,9 +263,15 @@ func _write_feedback(kind: String) -> String:
 	panel.add_child(back)
 	if InputPrompts.scheme in ["xbox", "playstation", "nintendo"]:
 		keys.get_child(0).get_child(0).grab_focus()
+	elif phone_keyboard:
+		keys.get_child(0).get_child(0).grab_focus()
+		open_keyboard.call()
 	else:
 		edit.grab_focus()
 	var text: String = await result.done
+	if phone_keyboard:
+		TouchControls.text_input_done.disconnect(on_typed)
+		TouchControls.close_phone_keyboard()
 	panel.queue_free()
 	return text.strip_edges()
 
