@@ -220,5 +220,13 @@
   { "id": "special_delivery", "name": "Special Delivery", "type": "cloud", "category": "physical", "power": 75, "accuracy": 95, "max_pp": 15, "priority": 0,
     "effect": { "id": "none", "params": {} },
     "fx": [{"kind": "fall", "glyph": "arrow_down", "count": 4, "color": "#9FC8EC"}, {"kind": "burst", "count": 12, "color": "#E8F4FF", "radius": 20}],
-    "description": "Storkache's signature. Drops a cached bundle on the foe from very high up." }
+    "description": "Storkache's signature. Drops a cached bundle on the foe from very high up." },
+  { "id": "hotkey_macro", "name": "Hotkey Macro", "type": "software", "category": "special", "power": 75, "accuracy": 100, "max_pp": 15, "priority": 0,
+    "effect": { "id": "none", "params": {} },
+    "fx": [{"kind": "stream", "glyph": "code", "count": 6, "color": "#5CF07A"}],
+    "description": "Mashes one shortcut that runs a whole script at the foe. Nobody remembers recording it." },
+  { "id": "tether", "name": "Tether", "type": "mobile", "category": "special", "power": 60, "accuracy": 100, "max_pp": 20, "priority": 0,
+    "effect": { "id": "none", "params": {} },
+    "fx": [{"kind": "rings", "travel": true, "count": 2, "radius": 12, "color": "#F2C63A"}],
+    "description": "Shares its connection with the foe, then burns through the whole data plan." }
 ]

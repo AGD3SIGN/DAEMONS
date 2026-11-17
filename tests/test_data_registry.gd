@@ -47,7 +47,7 @@ func test_real_data_has_no_errors() -> void:
 
 func test_expected_counts() -> void:
 	assert_eq(DataRegistry.types.size(), 12)
-	assert_eq(DataRegistry.moves.size(), 54, "53 learnable + Force Quit")
+	assert_eq(DataRegistry.moves.size(), 56, "55 learnable + Force Quit (Hotkey Macro and Tether added 2026-11-16)")
 	assert_eq(DataRegistry.species.size(), 47, "22 + Pyrewall + 13 Hardware + 7 Network expansion + 4 Network/Cloud singles")
 	assert_eq(DataRegistry.items.size(), 12)
 

@@ -23,7 +23,7 @@
     "growth_rate": "medium_slow", "catch_rate": 45, "base_exp": 142, "log_yield": { "compute": 1, "throughput": 1 },
     "learnset": [
       { "level": 1, "move": "bump" }, { "level": 1, "move": "screen_glare" }, { "level": 1, "move": "heatsink_slam" },
-      { "level": 10, "move": "chassis_guard" }, { "level": 13, "move": "double_click" }, { "level": 20, "move": "overclock" },
+      { "level": 10, "move": "chassis_guard" }, { "level": 13, "move": "double_click" }, { "level": 17, "move": "hotkey_macro" }, { "level": 20, "move": "overclock" },
       { "level": 26, "move": "thermal_runaway" }, { "level": 31, "move": "hard_reset" }
     ],
     "evolutions": [ { "to": "mainmunk", "trigger": "level", "level": 34 } ],
@@ -52,7 +52,7 @@
     "growth_rate": "medium_slow", "catch_rate": 45, "base_exp": 142, "log_yield": { "hardening": 1, "encryption": 1 },
     "learnset": [
       { "level": 1, "move": "bump" }, { "level": 1, "move": "screen_glare" }, { "level": 1, "move": "ping" },
-      { "level": 10, "move": "fast_ethernet" }, { "level": 13, "move": "bandwidth_hog" }, { "level": 19, "move": "latency_spike" },
+      { "level": 10, "move": "fast_ethernet" }, { "level": 13, "move": "bandwidth_hog" }, { "level": 17, "move": "tether" }, { "level": 19, "move": "latency_spike" },
       { "level": 27, "move": "packet_flood" }
     ],
     "evolutions": [ { "to": "emperoute", "trigger": "level", "level": 34 } ],

@@ -18,11 +18,10 @@ const FIGHTS := [
 	# GDD order (2026-11-15): the Wi-Fi Dead Zone comes after Route 2, so Hal and Pete are met after Cert 1.
 	["signal_hunter_hal", 14, [["cablesnake", 12], ["ramster", 11]], 10, 36],
 	["phisher_pete", 14, [["cablesnake", 12], ["ramster", 11]], 16, 40],
-	# Cert 2 (2026-11-16): Ping's team is all Network. Starters have upgraded by Lv16. Pengwan and Munkboard can't hurt
-	# Network much, and Pixelsier (Wi-Fi Dead Zone, Render at Lv12) is the only Software attack before Ping. With
-	# Cablesnake + Ramster instead, those two paths win 0/40. If Pixelsier ever leaves Acts 1-2, give Pengwan/Munkboard
-	# coverage. (Smart AI for Ping was tried: fair with Pixelsier, a wall without it under the Lv20 cap. Kept basic.)
-	["ping_okoro", 18, [["pixelsier", 17], ["cablesnake", 16]], 15, 36],
+	# Cert 2 (2026-11-16): Ping has smart AI and an all-Network team; starters have upgraded by Lv16. Pengwan learns
+	# Tether (Mobile) and Munkboard learns Hotkey Macro (Software) at Lv17, so every path has a super-effective answer
+	# without depending on a catch. Partners are plain Route 1/2 catches (no Pixelsier) on purpose.
+	["ping_okoro", 18, [["cablesnake", 16], ["ramster", 15]], 12, 36],
 ]
 
 ## Forgelings that have upgraded by the fight's level (the Lv16 starter upgrades).
@@ -114,3 +113,16 @@ func test_nothing_early_one_shots_a_starter_without_a_crit() -> void:
 			var me := _d(starter, int(f[3]), 1)
 			var hit := _worst_hit(_d(f[1], int(f[2]), 2), me)
 			assert_lt(hit, me.max_uptime(), "%s's Lv%d %s one-shots a Lv%d %s (%d >= %d)" % [f[0], f[2], f[1], f[3], starter, hit, me.max_uptime()])
+
+
+## Ping's team is all Network (2026-11-16). Every upgraded starter must learn a move that hits Network
+## super-effectively by Lv17, so no starter path depends on catching one particular counter.
+func test_every_starter_line_can_hit_network_hard_before_ping() -> void:
+	for species: String in ["munkboard", "pengwan", "scriptfly"]:
+		var d := _d(species, 17, 1)
+		var best := 0.0
+		for slot: Dictionary in d.moves:
+			var move := DataRegistry.get_move(slot["id"])
+			if move["category"] != "status":
+				best = maxf(best, DataRegistry.type_multiplier(move["type"], ["network"]))
+		assert_eq(best, 2.0, "%s at Lv17 has no super-effective move against Network" % species)
