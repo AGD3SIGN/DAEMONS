@@ -18,7 +18,15 @@ const FIGHTS := [
 	# GDD order (2026-11-15): the Wi-Fi Dead Zone comes after Route 2, so Hal and Pete are met after Cert 1.
 	["signal_hunter_hal", 14, [["cablesnake", 12], ["ramster", 11]], 10, 36],
 	["phisher_pete", 14, [["cablesnake", 12], ["ramster", 11]], 16, 40],
+	# Cert 2 (2026-11-16): Ping's team is all Network. Starters have upgraded by Lv16. Pengwan and Munkboard can't hurt
+	# Network much, and Pixelsier (Wi-Fi Dead Zone, Render at Lv12) is the only Software attack before Ping. With
+	# Cablesnake + Ramster instead, those two paths win 0/40. If Pixelsier ever leaves Acts 1-2, give Pengwan/Munkboard
+	# coverage. (Smart AI for Ping was tried: fair with Pixelsier, a wall without it under the Lv20 cap. Kept basic.)
+	["ping_okoro", 18, [["pixelsier", 17], ["cablesnake", 16]], 15, 36],
 ]
+
+## Forgelings that have upgraded by the fight's level (the Lv16 starter upgrades).
+const UPGRADED := {"chipmunk": "munkboard", "pingo": "pengwan", "glowbit": "scriptfly"}
 
 
 func _d(species: String, lvl: int, seed_value: int) -> DaemonInstance:
@@ -62,7 +70,8 @@ func test_every_early_trainer_is_winnable_on_every_starter_path() -> void:
 		var total := 0
 		for starter: String in ["chipmunk", "pingo", "glowbit"]:
 			var trainer: String = fight[0] % RIVAL[starter] if "%s" in fight[0] else fight[0]
-			var wins := _wins(trainer, starter, int(fight[1]), fight[2])
+			var species: String = UPGRADED[starter] if int(fight[1]) >= 16 else starter
+			var wins := _wins(trainer, species, int(fight[1]), fight[2])
 			line += "  %-8s %2d/40" % [starter, wins]
 			total += wins
 			assert_gte(wins, int(fight[3]), "%s vs %s at Lv%d" % [starter, trainer, fight[1]])
