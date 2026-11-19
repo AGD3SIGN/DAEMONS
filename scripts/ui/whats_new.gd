@@ -330,11 +330,13 @@ func _gui_input(_event: InputEvent) -> void:
 	accept_event()  # clicks and taps outside the panel do nothing
 
 
-func _unhandled_input(event: InputEvent) -> void:
+## Keys, pad buttons and the touch deck are read here, before the GUI: otherwise ui_up / ui_down would be used
+## up moving focus off OK, and the list would never scroll (2026-11-18, Brandon on iPhone: "I can't scroll").
+func _input(event: InputEvent) -> void:
 	if _closing or update.is_empty():
 		return
-	if event is InputEventMouse or event is InputEventScreenTouch:
-		return
+	if event is InputEventMouse or event is InputEventScreenTouch or event is InputEventScreenDrag:
+		return  # pointers go to the GUI: OK, the list (drag / wheel), or the backdrop (ignored)
 	if event.is_pressed():
 		_ok.keyboard_focus = true
 		_ok.queue_redraw()
@@ -350,8 +352,26 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif event.is_action_pressed("ui_down") or event.is_action_pressed("move_down"):
 		get_viewport().set_input_as_handled()
 		scroll_by(layout.text_size * 2.0)
-	elif event.is_pressed():
+	elif event.is_pressed() or event.is_action_type():
 		get_viewport().set_input_as_handled()  # nothing behind the screen reacts while it's open
+
+
+## Holding Up/Down (keys, pad or the touch d-pad) keeps scrolling smoothly after a short pause.
+const HOLD_DELAY := 0.25
+const HOLD_SPEED := 900.0  # spec px per second
+var _held := 0.0
+
+
+func _hold_scroll(delta: float) -> void:
+	var dir := 0.0
+	for pair: Array in [["ui_up", "ui_down"], ["move_up", "move_down"]]:
+		dir = dir if dir != 0.0 else Input.get_axis(pair[0], pair[1])
+	if dir == 0.0:
+		_held = 0.0
+		return
+	_held += delta
+	if _held > HOLD_DELAY:
+		scroll_by(signf(dir) * HOLD_SPEED * delta)
 
 
 func scroll_by(amount: float) -> void:
@@ -384,6 +404,8 @@ func _open_motion() -> void:
 
 
 func _process(delta: float) -> void:
+	if not _closing and layout != null:
+		_hold_scroll(delta)
 	var was := cursor_on()
 	_blink += delta
 	if cursor_on() != was and _panel != null:
@@ -463,10 +485,17 @@ class PanelArt extends Control:
 class ListArt extends Control:
 	var screen: WhatsNew
 
+	## Wheel, a drag with the mouse, or a finger drag (touch arrives as emulated mouse motion) scrolls.
 	func _gui_input(event: InputEvent) -> void:
 		var mb := event as InputEventMouseButton
 		if mb != null and mb.pressed and mb.button_index in [MOUSE_BUTTON_WHEEL_UP, MOUSE_BUTTON_WHEEL_DOWN]:
 			screen.scroll_by(screen.layout.text_size * (-1.5 if mb.button_index == MOUSE_BUTTON_WHEEL_UP else 1.5))
+		var motion := event as InputEventMouseMotion
+		if motion != null and motion.button_mask & MOUSE_BUTTON_MASK_LEFT:
+			screen.scroll_by(-motion.relative.y)
+		var drag := event as InputEventScreenDrag
+		if drag != null and not ProjectSettings.get_setting("input_devices/pointing/emulate_mouse_from_touch", true):
+			screen.scroll_by(-drag.relative.y)
 		accept_event()
 
 	func _draw() -> void:
@@ -499,6 +528,18 @@ class ListArt extends Control:
 				while dx < x0 + w:
 					draw_rect(Rect2(dx, dy, minf(6.0, x0 + w - dx), 2), WhatsNew.DIVIDER)
 					dx += 10.0
+		_draw_scrollbar()
+
+	## When the list overflows, a thin bar on the right shows there's more and where you are (our addition).
+	func _draw_scrollbar() -> void:
+		var most := screen.max_scroll()
+		if most <= 0.0:
+			return
+		var track := Rect2(size.x - 9, 6, 4, size.y - 12)
+		draw_rect(track, WhatsNew.DIVIDER)
+		var thumb_h := maxf(24.0, track.size.y * size.y / (size.y + most))
+		var y := track.position.y + (track.size.y - thumb_h) * screen.scroll / most
+		draw_rect(Rect2(track.position.x, y, track.size.x, thumb_h), WhatsNew.MUTED)
 
 
 ## OK: cream fill and a 3px frame border; hover or focus swaps to the dark fill with cream text. The 3px focus

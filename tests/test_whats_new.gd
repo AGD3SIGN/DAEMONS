@@ -126,13 +126,13 @@ func test_every_input_closes_it_but_taps_outside_do_not() -> void:
 		screen.closed.connect(func() -> void: closed.append(true))
 		match how:
 			"ui_accept", "ui_cancel":
-				screen._unhandled_input(_action(how))
+				screen._input(_action(how))
 			"space":
-				screen._unhandled_input(_key(KEY_SPACE))
+				screen._input(_key(KEY_SPACE))
 			"escape":
-				screen._unhandled_input(_key(KEY_ESCAPE))
+				screen._input(_key(KEY_ESCAPE))
 			"enter":
-				screen._unhandled_input(_key(KEY_ENTER))
+				screen._input(_key(KEY_ENTER))
 			"click":
 				var ok := screen.get_node("Stage/Panel/OK") as Control
 				var down := InputEventMouseButton.new()
@@ -151,7 +151,7 @@ func test_every_input_closes_it_but_taps_outside_do_not() -> void:
 	tap.pressed = true
 	tap.position = Vector2(2, 2)
 	stays._gui_input(tap)
-	stays._unhandled_input(tap)
+	stays._input(tap)
 	await wait_seconds(0.15)
 	assert_eq(closed_outside, [], "a tap outside the panel does nothing")
 
@@ -167,15 +167,26 @@ func test_long_lists_scroll_with_the_title_and_footer_pinned() -> void:
 	assert_lte(panel.position.y + panel.size.y, screen.layout.frame.y, "the panel stays on screen")
 	var list_top := list.position.y
 	var ok_top := (screen.get_node("Stage/Panel/OK") as Control).position.y
-	screen._unhandled_input(_action("ui_down"))
+	screen._input(_action("ui_down"))
 	assert_gt(screen.scroll, 0.0, "Down scrolls the list")
 	assert_eq(list.position.y, list_top, "the title bar and log line don't move")
 	assert_eq((screen.get_node("Stage/Panel/OK") as Control).position.y, ok_top, "the footer doesn't move")
 	for i in 40:
 		screen.scroll_by(100)
 	assert_eq(screen.scroll, screen.max_scroll())
+	screen.scroll = 0.0
+	var drag := InputEventMouseMotion.new()
+	drag.button_mask = MOUSE_BUTTON_MASK_LEFT
+	drag.relative = Vector2(0, -80)
+	list._gui_input(drag)
+	assert_eq(screen.scroll, 80.0, "dragging up with a finger or mouse scrolls down")
+	Input.action_press("move_down")
+	for i in 10:
+		screen._process(0.05)
+	Input.action_release("move_down")
+	assert_gt(screen.scroll, 80.0, "holding the d-pad keeps scrolling")
 	var short := _screen(Vector2(320, 180))
-	short._unhandled_input(_action("ui_down"))
+	short._input(_action("ui_down"))
 	assert_eq(short.scroll, 0.0, "no scrolling when it all fits")
 
 
@@ -198,7 +209,7 @@ func test_shows_once_per_update_then_stays_hidden() -> void:
 	await wait_process_frames(2)
 	var screen: WhatsNew = find_child("WhatsNew", true, false)
 	assert_not_null(screen)
-	screen._unhandled_input(_action("ui_accept"))
+	screen._input(_action("ui_accept"))
 	await wait_seconds(0.15)
 	assert_eq(shown, [true])
 	assert_eq(Settings.last_seen_update, "b", "saved on OK")
