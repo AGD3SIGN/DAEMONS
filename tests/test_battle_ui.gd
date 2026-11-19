@@ -226,6 +226,37 @@ func test_move_menu_and_back() -> void:
 	await wait_process_frames(1)
 
 
+## Feedback #3 (2026-11-18): the move cursor starts on the move this Forgeling used last, for the whole battle.
+func test_move_cursor_remembers_the_last_move_per_forgeling() -> void:
+	var menu := _menu()
+	var pingo := _daemon("pingo", 20)
+	var other := _daemon("glowbit", 20)
+	var picked := []
+	var run := func(d: DaemonInstance) -> void: picked.append(await menu.choose_move(d, true))
+	run.call(pingo)
+	await wait_process_frames(1)
+	assert_true(menu._move_buttons[0].has_focus(), "first time: the first move")
+	menu._move_buttons[2].pressed.emit()
+	await wait_process_frames(1)
+	run.call(pingo)
+	await wait_process_frames(1)
+	assert_true(menu._move_buttons[2].has_focus(), "next turn: the move used last")
+	menu._move_back.pressed.emit()
+	await wait_process_frames(1)
+	run.call(other)
+	await wait_process_frames(1)
+	assert_true(menu._move_buttons[0].has_focus(), "each Forgeling has its own memory")
+	menu._move_back.pressed.emit()
+	await wait_process_frames(1)
+	pingo.moves[2]["pp"] = 0
+	run.call(pingo)
+	await wait_process_frames(1)
+	assert_true(menu._move_buttons[0].has_focus(), "out of Cycles: back to the first usable move")
+	menu._move_back.pressed.emit()
+	await wait_process_frames(1)
+	assert_eq(picked, [2, -1, -1, -1])
+
+
 func test_list_cancel_with_ui_cancel() -> void:
 	var menu := _menu()
 	var cancel := InputEventAction.new()

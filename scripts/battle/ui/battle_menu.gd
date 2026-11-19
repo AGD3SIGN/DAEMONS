@@ -65,6 +65,11 @@ func choose_command() -> String:
 	return result
 
 
+## The move each Forgeling last used this battle (instance id -> slot), so the cursor starts there next turn
+## (player feedback #3, 2026-11-18: "remember last attack ... faster game play").
+var _last_move := {}
+
+
 ## needs_pp: grey out moves with no Cycles left (choosing a move to use; not when replacing one).
 func choose_move(d: DaemonInstance, needs_pp: bool = false) -> int:
 	_hide_all()
@@ -85,10 +90,15 @@ func choose_move(d: DaemonInstance, needs_pp: bool = false) -> int:
 		if not _move_buttons[i].disabled:
 			first = i
 			break
+	var remembered := int(_last_move.get(d.get_instance_id(), -1)) if needs_pp else -1
+	if remembered >= 0 and remembered < 4 and not _move_buttons[remembered].disabled:
+		first = remembered
 	_move_buttons[first].grab_focus()
 	hovered.emit("move", first)
 	var result: Variant = await _await_pick(-1)
 	_hide_all()
+	if needs_pp and int(result) >= 0:
+		_last_move[d.get_instance_id()] = int(result)
 	return int(result)
 
 
