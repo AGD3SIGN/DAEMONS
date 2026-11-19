@@ -80,6 +80,7 @@ func _play_event(e: Dictionary) -> void:
 				_panel(side).visible = true
 			await _say(text)
 		"switch_out":
+			_aura(side).looping = false  # Looping ends when it leaves
 			await _say(text, false)
 			await _anim_exit(side)
 			_panel(side).visible = false
@@ -110,6 +111,8 @@ func _play_event(e: Dictionary) -> void:
 			await _panel(side).animate_uptime(int(e["uptime"]), int(e["max_uptime"]))
 			await _say(text)
 		"status_applied":
+			if e["status"] == "looping":
+				_aura(side).looping = true
 			if e["status"] != "looping":
 				_shown[side][_active[side]]["status"] = e["status"]
 				_panel(side).set_status(e["status"])
@@ -127,6 +130,7 @@ func _play_event(e: Dictionary) -> void:
 			await _say(text)
 		"fainted":
 			_aura(side).status = ""
+			_aura(side).looping = false
 			_hold_pose(side, "faint")
 			await _anim_faint(side)
 			_held[side] = false
@@ -167,6 +171,9 @@ func _play_event(e: Dictionary) -> void:
 			await _say(text)
 		"upgrade_ready":
 			upgrades.append(e)
+		"looping_ended":
+			_aura(side).looping = false
+			await _say(text)
 		_:
 			await _say(text)
 
