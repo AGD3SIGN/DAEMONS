@@ -159,6 +159,12 @@ func _play_event(e: Dictionary) -> void:
 			await _anim_captured()
 			await _say(text)
 			view.capture_meter.visible = false
+		"foe_fled":
+			# The demo teaser's glitched Forgeling leaves on its own (2026-11-19 audit: it used to stay on screen).
+			_aura(BattleState.FOE).status = ""
+			await _anim_glitch_out(BattleState.FOE)
+			view.foe_panel.visible = false
+			await _say(text)
 		"upgrade_ready":
 			upgrades.append(e)
 		_:
@@ -423,6 +429,40 @@ func _anim_faint(side: int) -> void:
 	t.parallel().tween_property(s, "modulate:a", 0.0, 0.4 * _ts())
 	await t.finished
 	s.visible = false
+
+
+## A foe whose signal drops: color-split flicker and jitter, then it collapses to a bright line like a CRT
+## switching off, and is gone.
+func _anim_glitch_out(side: int) -> void:
+	var s := _sprite(side)
+	if _ts() <= 0.0:
+		s.visible = false
+		if side == BattleState.FOE:
+			view.foe_panel.visible = false
+		return
+	var base_scale := s.scale
+	var base_pivot := s.pivot_offset
+	s.pivot_offset = s.size / 2.0
+	var t := _tween()
+	for i in 4:
+		var tint := Color(0.4, 1.6, 1.8) if i % 2 == 0 else Color(1.8, 0.4, 1.4)
+		t.tween_property(s, "modulate", tint, 0.04 * _ts())
+		t.parallel().tween_property(s, "position:x", 6.0 if i % 2 == 0 else -6.0, 0.04 * _ts())
+		t.tween_property(s, "modulate", Color(1, 1, 1, 0.3), 0.05 * _ts())
+	t.tween_property(s, "position:x", 0.0, 0.03 * _ts())
+	t.tween_property(s, "modulate", Color(3, 3, 3, 1), 0.06 * _ts())
+	t.tween_property(s, "scale", Vector2(base_scale.x * 1.25, base_scale.y * 0.06), 0.12 * _ts()).set_trans(Tween.TRANS_QUAD)
+	t.tween_property(s, "scale", Vector2(0.0, base_scale.y * 0.06), 0.1 * _ts())
+	if view.foe_panel.visible and side == BattleState.FOE:
+		t.parallel().tween_property(view.foe_panel, "modulate:a", 0.0, 0.1 * _ts())
+	await t.finished
+	s.visible = false
+	if side == BattleState.FOE:
+		view.foe_panel.visible = false
+	s.scale = base_scale
+	s.pivot_offset = base_pivot
+	s.modulate = Color.WHITE
+	view.foe_panel.modulate.a = 1.0
 
 
 func _anim_tint(side: int, up: bool) -> void:

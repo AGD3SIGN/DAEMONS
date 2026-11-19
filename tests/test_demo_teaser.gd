@@ -106,3 +106,24 @@ func test_saves_round_trip_the_new_flags() -> void:
 	assert_true(GameState.flags.get("demo_teaser_seen", false))
 	assert_false(GameState.flags.get("corruption_revealed", false))
 	assert_true(GameState.cmdb_unknown.has("cablesnake"))
+
+
+## Audit 2026-11-19: when the teaser flees, its sprite and card leave the screen (they used to stay up).
+func test_a_fleeing_foe_glitches_off_the_screen() -> void:
+	var config := Demo.teaser_battle_config()
+	config.merge({"player_stack": _team(), "items": {}, "auto": true, "time_scale": 0.0, "seed": 3}, true)
+	var scene: BattleScene = load(BattleScene.SCENE).instantiate()
+	scene.setup(config)
+	add_child_autofree(scene)
+	await wait_process_frames(3)
+	scene.time_scale = 0.05
+	var foe := scene.foe_sprite
+	foe.visible = true
+	scene.foe_panel.visible = true
+	var original := foe.scale
+	await scene._player._anim_glitch_out(BattleState.FOE)
+	assert_false(foe.visible, "the sprite is gone")
+	assert_false(scene.foe_panel.visible, "so is its card")
+	assert_eq(foe.scale, original, "scale restored for anything that reuses the sprite")
+	assert_eq(foe.modulate, Color.WHITE)
+	await wait_for_signal(scene.finished, 30.0)
