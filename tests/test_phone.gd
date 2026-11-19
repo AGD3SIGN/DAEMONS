@@ -204,3 +204,27 @@ func test_home_screen_grows_on_tall_views_and_taps_still_land() -> void:
 	phone._tap_home((target - phone.home_origin()) / phone.home_scale())
 	await wait_process_frames(2)
 	assert_eq(picked, [phone.apps[4][0]], "a tap on the scaled icon opens that app")
+
+
+## Icons (2026-11-18): 16x16 two-tone glyphs, a short label under each that fits its 32px column, and every
+## icon and label inside the phone screen, with or without the debug row.
+func test_icons_and_labels_fit() -> void:
+	for app: Array in Phone.APPS + [Phone.DEBUG_APP]:
+		assert_eq((app[3] as Array).size(), 16, "%s glyph is 16 rows" % app[0])
+		for row: String in app[3]:
+			assert_eq(row.length(), 16, "%s glyph row" % app[0])
+		var label := Phone.short_label(String(app[0]), String(app[1]))
+		assert_lte(Phone.tiny_width(label), 26, "%s label leaves a gap to its neighbors" % label)
+		for ch in label:
+			assert_true(Phone.TINY.has(ch), "3x5 letter %s exists" % ch)
+	for with_debug in [false, true]:
+		var phone := Phone.new()
+		phone.apps = Phone.APPS.duplicate()
+		if with_debug:
+			phone.apps.append(Phone.DEBUG_APP)
+		for i in phone.apps.size():
+			var r := phone.icon_rect(i)
+			var under := Rect2(r.position.x, r.end.y, r.size.x, 7)
+			assert_true(Phone.SCREEN.encloses(r.merge(under)), "app %d and its label are on the screen (debug row: %s)" % [i, with_debug])
+			assert_gte(r.position.y - 2, Phone.SCREEN.position.y + 22, "below the place name")
+		phone.free()

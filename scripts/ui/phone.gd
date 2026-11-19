@@ -14,26 +14,80 @@ signal _maps_closed
 const SMALL_FONT := "res://assets/fonts/Silkscreen-Regular.ttf"
 const COLS := 3
 
-## [id, label, tile color, 8x8 glyph]. DEBUG is added in debug builds.
+## [id, label, tile color, 16x16 glyph]. DEBUG is added in debug builds.
+## Glyphs (2026-11-18, Brandon: icons were hard to tell apart; was 8x8 doubled): '#' white, '+' the tile color
+## darkened, 'o' a yellow highlight, '.' the tile. MAPS = location pin, CMDB = database, STACK = a
+## Forgeling, BAG = backpack, ID CARD = badge, SAVE = floppy, CONTROLS = gamepad, SETTINGS = gear,
+## FEEDBACK = speech bubble, DEBUG = bug.
 const APPS := [
-	["MAP", "MAPS", "2fa86a", ["..####..", ".#....#.", ".#.##.#.", ".#.##.#.", ".#....#.", "..#..#..", "...##...", "........"]],
-	["CMDB", "CMDB", "3c8ee0", [".######.", "#......#", ".######.", "#......#", ".######.", "#......#", ".######.", "........"]],
-	["STACK", "STACK", "e0703c", ["..#..#..", ".######.", "#.#..#.#", "#......#", "#.####.#", ".#....#.", "..####..", "........"]],
-	["BAG", "BAG", "b07a3c", ["...##...", "..#..#..", ".######.", "#......#", "#.####.#", "#......#", ".######.", "........"]],
-	["CARD", "ID CARD", "8b6fd6", ["........", "########", "#.##...#", "#.##.###", "#......#", "#.##.###", "########", "........"]],
-	["SAVE", "SAVE", "4c5a78", ["#######.", "#.###.##", "#.###..#", "#......#", "#.####.#", "#.####.#", "########", "........"]],
-	["CONTROLS", "CONTROLS", "d0a020", ["........", ".######.", "#.#...##", "###..#.#", "#.#.#..#", "#......#", ".##..##.", "........"]],
-	["OPTIONS", "SETTINGS", "7a8494", ["...##...", ".#.##.#.", "..####..", "###..###", "###..###", "..####..", ".#.##.#.", "...##..."]],
-	["FEEDBACK", "FEEDBACK", "d85a8a", [".######.", "#......#", "#.#.#.##", "#......#", ".######.", "..#.....", ".#......", "........"]],
+	["MAP", "MAPS", "2fa86a", [
+		"................", ".....######.....", "....########....", "...###....###...",
+		"...##......##...", "...##......##...", "...###....###...", "....########....",
+		".....######.....", "......####......", ".......##.......", ".......##.......",
+		"....++++++++....", "...++......++...", "....++++++++....", "................",
+	]],
+	["CMDB", "CMDB", "3c8ee0", [
+		"................", "....########....", "..############..", "..#++++++++++#..",
+		"..############..", "..##########o#..", "..############..", "..#++++++++++#..",
+		"..############..", "..##########o#..", "..############..", "..#++++++++++#..",
+		"..############..", "....########....", "................", "................",
+	]],
+	["STACK", "STACK", "e0703c", [
+		"................", ".......oo.......", ".......##.......", "....########....",
+		"...##########...", "...#++####++#...", "...#+o####+o#...", "...#++####++#...",
+		"...##########...", "...###++++###...", "...##########...", "....########....",
+		".....##..##.....", "....###..###....", "................", "................",
+	]],
+	["BAG", "BAG", "b07a3c", [
+		"................", "......####......", ".....##..##.....", "...##########...",
+		"..############..", "..#++++++++++#..", "..#++++oo++++#..", "..############..",
+		"..############..", "..###++++++###..", "..###+####+###..", "..###++++++###..",
+		"..############..", "...##########...", "................", "................",
+	]],
+	["CARD", "ID CARD", "8b6fd6", [
+		"................", "................", "................", ".##############.",
+		".#oooooooooooo#.", ".##############.", ".#+++#########..", ".#+++##++++++#..",
+		".#+++#########..", ".#+++##+++++##..", ".#+++#########..", ".##############.",
+		"................", "................", "................", "................",
+	]],
+	["SAVE", "SAVE", "4c5a78", [
+		"................", ".#############..", ".###+++++++####.", ".###++..+++####.",
+		".###++..+++####.", ".###+++++++####.", ".##############.", ".##..........##.",
+		".##.++++++++.##.", ".##..........##.", ".##.++++++++.##.", ".##..........##.",
+		".##############.", "................", "................", "................",
+	]],
+	["CONTROLS", "CONTROLS", "d0a020", [
+		"................", "................", "................", "...##########...",
+		"..############..", ".###+#######o##.", ".##+++####o##o#.", ".###+#######o##.",
+		".##############.", ".#####....#####.", ".####......####.", "..##........##..",
+		"................", "................", "................", "................",
+	]],
+	["OPTIONS", "SETTINGS", "7a8494", [
+		"................", ".......##.......", "...#..####..#...", "..###.####.###..",
+		"...##########...", "....###++###....", ".#####+..+#####.", ".####+....+####.",
+		".####+....+####.", ".#####+..+#####.", "....###++###....", "...##########...",
+		"..###.####.###..", "...#..####..#...", ".......##.......", "................",
+	]],
+	["FEEDBACK", "FEEDBACK", "d85a8a", [
+		"................", "................", "..############..", ".##############.",
+		".##############.", ".###++##++##++#.", ".###++##++##++#.", ".##############.",
+		".##############.", "..############..", "...###..........", "...##...........",
+		"...#............", "................", "................", "................",
+	]],
 ]
-const DEBUG_APP := ["DEBUG", "DEBUG", "b23a3a", [".#....#.", "..####..", ".#.##.#.", "#.####.#", ".######.", "#.####.#", "..#..#..", "........"]]
+const DEBUG_APP := ["DEBUG", "DEBUG", "b23a3a", [
+	"................", "....#......#....", ".....#....#.....", "......####......",
+	"....########....", ".#..##+##+##..#.", "..#.########.#..", "....##+##+##....",
+	".##.########.##.", "....##+##+##....", "..#.########.#..", ".#...######...#.",
+	"................", "................", "................", "................",
+]]
 
 # Portrait phone (home screen), in the 320x180 game view.
 const BODY := Rect2(104, 2, 112, 176)
 const SCREEN := Rect2(110, 16, 100, 148)
 const ICON := 24
-const GRID_ORIGIN := Vector2(114, 40)
-const CELL := Vector2(32, 28)
+const GRID_ORIGIN := Vector2(114, 41)
+const CELL := Vector2(32, 34)  # 24px icon, a 5px label under it, and a gap (30 when a 4th row needs room)
 # Landscape phone (Maps).
 const L_BODY := Rect2(2, 2, 316, 176)
 const L_SCREEN := Rect2(16, 6, 288, 170)
@@ -102,7 +156,8 @@ func move_selection(dx: int, dy: int) -> void:
 
 
 func icon_rect(i: int) -> Rect2:
-	var cell := GRID_ORIGIN + Vector2(i % COLS, i / COLS) * CELL
+	var pitch := Vector2(CELL.x, CELL.y if not _four_rows() else 30.0)
+	var cell := GRID_ORIGIN + Vector2(i % COLS, i / COLS) * pitch
 	return Rect2(cell + Vector2((CELL.x - ICON) / 2.0, 0), Vector2(ICON, ICON))
 
 
@@ -341,21 +396,68 @@ func _draw_home() -> void:
 	for i in apps.size():
 		var r := icon_rect(i)
 		var app: Array = apps[i]
+		var tile := Color(app[2])
 		if i == selected:
 			draw_rect(r.grow(2), ACCENT, false, 1.0)
-		draw_rect(r, Color(app[2]))
-		draw_rect(r, Color(app[2]).darkened(0.4), false, 1.0)
-		_draw_glyph(app[3], r.position + Vector2(4, 4), 2, Color.WHITE)
-	var label := String(apps[selected][1])
-	_text(Vector2(SCREEN.position.x, SCREEN.end.y - 6), label, SCREEN_TEXT, SCREEN.size.x, HORIZONTAL_ALIGNMENT_CENTER)
+		draw_rect(r, tile)
+		draw_rect(Rect2(r.position.x + 1, r.position.y + 1, r.size.x - 2, 1), tile.lightened(0.25))  # top light
+		draw_rect(r, tile.darkened(0.4), false, 1.0)
+		_draw_glyph(app[3], r.position + Vector2(4, 4), 1, {"#": Color.WHITE, "+": tile.darkened(0.45), "o": Color("ffd84a")})
+		var name_color := ACCENT if i == selected else Color(SCREEN_TEXT, 0.75)
+		draw_tiny_text(short_label(String(app[0]), String(app[1])), Vector2(r.get_center().x, r.end.y + (1 if _four_rows() else 2)), name_color)
+	# The selected app's full name at the bottom, when there's room (4 rows in debug builds fill it).
+	if not _four_rows():
+		var label := String(apps[selected][1])
+		_text(Vector2(SCREEN.position.x, SCREEN.end.y - 6), label, SCREEN_TEXT, SCREEN.size.x, HORIZONTAL_ALIGNMENT_CENTER)
 
 
-func _draw_glyph(rows: Array, at: Vector2, scale: int, color: Color) -> void:
+## Under-icon names, at most 6 letters so neighbors don't touch; the full name shows at the bottom.
+const SHORT_LABELS := {"CARD": "BADGE", "CONTROLS": "INPUT", "OPTIONS": "CONFIG", "FEEDBACK": "REPORT"}
+
+
+## Debug builds add a 4th row of apps; rows then pack tighter and the bottom name is dropped.
+func _four_rows() -> bool:
+	return ceili(apps.size() / float(COLS)) > 3
+
+
+static func short_label(id: String, label: String) -> String:
+	return SHORT_LABELS.get(id, label)
+
+
+## 3x5 pixel letters for the labels under the icons (Silkscreen is too wide to fit "SETTINGS" under a 24px icon).
+const TINY := {
+	"A": ["###", "#.#", "###", "#.#", "#.#"], "B": ["##.", "#.#", "##.", "#.#", "##."], "C": ["###", "#..", "#..", "#..", "###"],
+	"D": ["##.", "#.#", "#.#", "#.#", "##."], "E": ["###", "#..", "##.", "#..", "###"], "F": ["###", "#..", "##.", "#..", "#.."],
+	"G": ["###", "#..", "#.#", "#.#", "###"], "H": ["#.#", "#.#", "###", "#.#", "#.#"], "I": ["###", ".#.", ".#.", ".#.", "###"],
+	"K": ["#.#", "#.#", "##.", "#.#", "#.#"], "L": ["#..", "#..", "#..", "#..", "###"], "M": ["#.#", "###", "###", "#.#", "#.#"],
+	"N": ["##.", "#.#", "#.#", "#.#", "#.#"], "O": ["###", "#.#", "#.#", "#.#", "###"], "P": ["###", "#.#", "###", "#..", "#.."],
+	"R": ["##.", "#.#", "##.", "#.#", "#.#"], "S": ["###", "#..", "###", "..#", "###"], "T": ["###", ".#.", ".#.", ".#.", ".#."],
+	"U": ["#.#", "#.#", "#.#", "#.#", "###"], "V": ["#.#", "#.#", "#.#", "#.#", ".#."], "Y": ["#.#", "#.#", ".#.", ".#.", ".#."],
+	" ": ["...", "...", "...", "...", "..."],
+}
+
+
+## Width in px of `text` in the 3x5 letters (3 per letter, 1 between).
+static func tiny_width(text: String) -> int:
+	return maxi(0, text.length() * 4 - 1)
+
+
+## Draws `text` in 3x5 letters, centered on top_center.x.
+func draw_tiny_text(text: String, top_center: Vector2, color: Color) -> void:
+	var x := floorf(top_center.x - tiny_width(text) / 2.0)
+	for ch in text.to_upper():
+		var rows: Array = TINY.get(ch, TINY[" "])
+		_draw_glyph(rows, Vector2(x, top_center.y), 1, {"#": color})
+		x += 4
+
+
+## Draws a pixel glyph: each character of each row is looked up in `colors` ('.' or a missing key = skip).
+func _draw_glyph(rows: Array, at: Vector2, scale: int, colors: Dictionary) -> void:
 	for y in rows.size():
 		var row: String = rows[y]
 		for x in row.length():
-			if row[x] == "#":
-				draw_rect(Rect2(at + Vector2(x, y) * scale, Vector2(scale, scale)), color)
+			if colors.has(row[x]):
+				draw_rect(Rect2(at + Vector2(x, y) * scale, Vector2(scale, scale)), colors[row[x]])
 
 
 func _draw_maps() -> void:
