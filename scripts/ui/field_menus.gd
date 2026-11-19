@@ -361,7 +361,9 @@ func _type_name() -> String:
 	edit.gui_input.connect(func(e: InputEvent) -> void:
 		if e is InputEventKey and e.pressed and e.keycode == KEY_ESCAPE:
 			edit.accept_event()
-			cancel.call())
+			cancel.call()
+		else:
+			keep_typing_keys(edit, e))
 	# B / Circle (or X / Backspace while on the grid) backs out to the name list.
 	var back := NameEntryBack.new()
 	back.cancelled.connect(cancel)
@@ -423,6 +425,24 @@ func _letter_keys(rows: PackedStringArray, max_len: int, target: Control, done_l
 				target.set("text", String(target.get("text")).left(-1)))
 			add_key.call(row, done_label, 8.0 * done_label.length() + 6.0, on_done)
 	return box
+
+
+## Keys that are also ui_cancel (Backspace and X are the keyboard "B") make Godot's LineEdit stop editing
+## instead of typing. Feedback #4 (2026-11-19): "the backspace doesn't work" in the name box; X couldn't be typed
+## either. While a text box has focus, Backspace deletes and X types, like any other key.
+static func keep_typing_keys(edit: LineEdit, e: InputEvent) -> void:
+	var key := e as InputEventKey
+	if key == null or not key.pressed or key.keycode == KEY_ESCAPE or not key.is_action("ui_cancel"):
+		return
+	var col := edit.caret_column
+	if key.keycode == KEY_BACKSPACE or key.physical_keycode == KEY_BACKSPACE:
+		if col > 0:
+			edit.text = edit.text.left(col - 1) + edit.text.substr(col)
+			edit.caret_column = col - 1
+	elif key.unicode > 0 and (edit.max_length <= 0 or edit.text.length() < edit.max_length):
+		edit.text = edit.text.left(col) + char(key.unicode) + edit.text.substr(col)
+		edit.caret_column = col + 1
+	edit.accept_event()
 
 
 ## Turns ui_cancel that nothing else used (B on a gamepad, X/Backspace while on the grid) into "back".

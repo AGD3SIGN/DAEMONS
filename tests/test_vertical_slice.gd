@@ -283,3 +283,31 @@ func test_rolf_and_kalb_are_beatable_on_every_path() -> void:
 			assert_gte(at_ace_plus_2, 15, "%s, %s path at Lv%d should be winnable" % [boss, starter, ace + 2])
 			assert_gte(at_ace, 6, "%s, %s path at Lv%d should be possible" % [boss, starter, ace])
 	gut.p("Act 3 boss balance (no items, basic-AI player):\n" + "\n".join(report))
+
+
+## Feedback #4 (2026-11-19): on a keyboard, Backspace (and X, the other ui_cancel key) must edit the name box,
+## not end editing.
+func test_name_box_backspace_and_x_on_a_keyboard() -> void:
+	var edit := LineEdit.new()
+	edit.max_length = FieldMenus.NAME_MAX
+	add_child_autofree(edit)
+	edit.text = "ALE"
+	edit.caret_column = 3
+	var x := InputEventKey.new()
+	x.keycode = KEY_X
+	x.physical_keycode = KEY_X
+	x.unicode = 88
+	x.pressed = true
+	FieldMenus.keep_typing_keys(edit, x)
+	assert_eq(edit.text, "ALEX", "X types")
+	var bs := InputEventKey.new()
+	bs.keycode = KEY_BACKSPACE
+	bs.physical_keycode = KEY_BACKSPACE
+	bs.pressed = true
+	FieldMenus.keep_typing_keys(edit, bs)
+	FieldMenus.keep_typing_keys(edit, bs)
+	assert_eq(edit.text, "AL", "Backspace deletes")
+	assert_eq(edit.caret_column, 2)
+	edit.caret_column = 0
+	FieldMenus.keep_typing_keys(edit, bs)
+	assert_eq(edit.text, "AL", "nothing to delete at the start")
