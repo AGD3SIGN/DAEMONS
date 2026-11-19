@@ -34,3 +34,4 @@ Put a new object at the top of `updates` in data/whats_new.json with a new `id`,
 - **The seen id** is saved when the screen closes (OK or back), in settings.cfg ([news] last_seen_update).
 - No "view What's New" menu entry existed, so none was added.
 - Focus ring: drawn as a 3px ring 3px outside OK (rounded rects; no CSS outline in Godot).
+- **Scrollbar** (2026-11-18): a thin bar on the right of the list when it overflows, so players on short phone screens can see there is more. Not in the spec.
