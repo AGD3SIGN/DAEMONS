@@ -10,10 +10,18 @@
 // Phone keyboard (2026-11-16): the game calls window.daemonsTextInput(title, text, maxLength, placeholder) to
 // show a real text box over the page, so the phone's own keyboard can type (Feedback). The answer comes back as
 //   daemonsDeck("text", ok, value)     ok = false when cancelled
+// No copy/paste while playing (2026-11-18, Brandon: iOS kept popping up "Paste | Format" when tapping the
+// buttons): text selection, the long-press callout and copy/cut/paste are off everywhere except the typing box.
+// On touch screens Godot's hidden IME text box (a full-width contentEditable strip at the top of the page,
+// which iOS treats as a paste target) stays hidden; phones type through daemonsTextInput instead.
 // Copied next to index.html by tools/serve_web.sh and .github/workflows/web.yml.
 (function () {
   "use strict";
   const STYLE = `
+    html, body, canvas, #canvas { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none;
+      -webkit-tap-highlight-color: transparent; }
+    @media (pointer: coarse) { .ime { display: none !important; } }
+    #daemons-text textarea { -webkit-user-select: text; user-select: text; -webkit-touch-callout: default; }
     #daemons-deck { position: fixed; left: 0; right: 0; bottom: 0; display: none;
       background: linear-gradient(#22273f, #181c30); border-top: 3px solid #0d0f1c;
       touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
@@ -280,10 +288,19 @@
   window.daemonsTextInput = textInput;
   window.daemonsTextInputClose = closeTextInput;
 
+  // Selection, copy, cut, paste and the context menu only work inside the typing box.
+  function blockCopyPaste() {
+    const outsideTyping = (e) => !(e.target instanceof Element && e.target.closest("#daemons-text"));
+    for (const type of ["selectstart", "copy", "cut", "paste", "contextmenu"]) {
+      document.addEventListener(type, (e) => { if (outsideTyping(e)) e.preventDefault(); }, true);
+    }
+  }
+
   function start() {
     canvas = document.getElementById("canvas");
     if (!canvas) return;
     build();
+    blockCopyPaste();
     layout();
     window.addEventListener("resize", layout);
     window.addEventListener("orientationchange", () => setTimeout(layout, 200));
