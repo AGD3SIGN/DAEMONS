@@ -228,3 +228,49 @@ func test_icons_and_labels_fit() -> void:
 			assert_true(Phone.SCREEN.encloses(r.merge(under)), "app %d and its label are on the screen (debug row: %s)" % [i, with_debug])
 			assert_gte(r.position.y - 2, Phone.SCREEN.position.y + 22, "below the place name")
 		phone.free()
+
+
+## CONFIG > QUIT TO TITLE (2026-11-18): in-game only. CANCEL stays, SAVE & QUIT saves first, QUIT just leaves.
+func test_quit_to_title_from_config() -> void:
+	SaveManager.slot_paths = PackedStringArray(["user://test_quit_a.json", "user://test_quit_b.json"])
+	SaveManager.delete_saves()
+	await _open("route_1")
+	var menus: FieldMenus = world.field_menus
+	var left := []
+	world.quit_to_title_requested.connect(func() -> void: left.append(true))
+	for answer in [2, 0]:  # CANCEL, then SAVE & QUIT
+		var result := []
+		var run := func() -> void: result.append(await menus.options_screen())
+		run.call()
+		await wait_process_frames(2)
+		assert_has(menus.list._items, "QUIT TO TITLE", "offered in-game")
+		menus.list._finish("pick", menus.list._items.find("QUIT TO TITLE"))
+		await wait_process_frames(2)
+		assert_eq(menus.sub._items, PackedStringArray(["SAVE & QUIT", "QUIT", "CANCEL"]))
+		menus.sub._finish("pick", answer)
+		await wait_process_frames(3)
+		if answer == 2:
+			assert_eq(left, [], "CANCEL stays in the game")
+			assert_false(SaveManager.has_save())
+			menus.list._finish("cancel", 0)
+			await wait_process_frames(2)
+			assert_eq(result, [false])
+		else:
+			assert_eq(result, [true])
+			assert_eq(left, [true], "leaves for the title screen")
+			assert_true(SaveManager.has_save(), "saved first")
+	SaveManager.delete_saves()
+	SaveManager.slot_paths = SaveManager.SLOT_PATHS
+
+
+func test_title_screen_options_has_no_quit() -> void:
+	var menus := FieldMenus.new()
+	menus.theme = UiTheme.get_theme()
+	add_child_autofree(menus)
+	await wait_process_frames(1)
+	var run := func() -> void: await menus.options_screen()
+	run.call()
+	await wait_process_frames(2)
+	assert_does_not_have(menus.list._items, "QUIT TO TITLE")
+	menus.list._finish("cancel", 0)
+	await wait_process_frames(2)

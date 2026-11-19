@@ -105,7 +105,8 @@ func open_pause(start_app: String = "") -> void:
 			"CONTROLS":
 				await controls_screen()
 			"OPTIONS":
-				await options_screen()
+				if await options_screen():
+					return  # quit to the title screen
 			"FEEDBACK":
 				await feedback_screen()
 			"DEBUG":
@@ -514,7 +515,9 @@ func controls_screen() -> void:
 	list.close()
 
 
-func options_screen() -> void:
+## Returns true if the player chose QUIT TO TITLE (in-game only; the title screen's OPTIONS doesn't offer it).
+func options_screen() -> bool:
+	var in_game := world != null
 	var cursor := 0
 	while true:
 		var on_off := "ON" if Settings.battle_animations else "OFF"
@@ -528,21 +531,34 @@ func options_screen() -> void:
 			"LESS MOTION   < %s >" % ("ON" if Settings.reduced_motion else "OFF"),
 			"CONTROL HINTS < %s >" % ("ON" if Settings.control_hints else "OFF"),
 			"NEWS LINES    < %s >" % ("ON" if Settings.panel_scanlines else "OFF"),
-			"DONE",
 		])
-		list.allow_lr = true
-		list.describe = func(i: int) -> String: return ["How fast text types out.", "Background music (coming with the soundtrack).",
+		var help := ["How fast text types out.", "Background music (coming with the soundtrack).",
 			"Sound effects.", "Turn off to skip battle animations.",
 			"Phones/tablets: save when the app goes to the background.",
 			"Title screen scanlines and scan bar.", "Stops the title screen's bigger animations.",
 			"Shows which buttons open the menu and talk, in the top corner.",
-			"Scanlines over the What's New screen.", "Save and close."][i]
+			"Scanlines over the What's New screen."]
+		var quit_row := -1
+		if in_game:  # 2026-11-18, Brandon: a way back to the main menu
+			quit_row = rows.size()
+			rows.append("QUIT TO TITLE")
+			help.append("Back to the title screen. You can save first.")
+		var done_row := rows.size()
+		rows.append("DONE")
+		help.append("Save and close.")
+		list.allow_lr = true
+		list.describe = func(i: int) -> String: return help[i]
 		var r := await list.choose("OPTIONS   (left/right to change)", rows, [], cursor)
 		list.allow_lr = false
 		list.describe = Callable()
 		cursor = r["index"]
-		if r["action"] == "cancel" or (r["action"] == "pick" and cursor == 9):
+		if r["action"] == "cancel" or (r["action"] == "pick" and cursor == done_row):
 			break
+		if cursor == quit_row:
+			if r["action"] == "pick" and await quit_to_title():
+				Settings.save_settings()
+				return true
+			continue
 		var step := -1 if r["action"] == "left" else 1
 		match cursor:
 			0:
@@ -569,6 +585,27 @@ func options_screen() -> void:
 	Settings.apply()
 	Settings.save_settings()
 	list.close()
+	return false
+
+
+## QUIT TO TITLE: SAVE & QUIT, QUIT (unsaved progress is lost) or CANCEL. Returns true if the game is leaving.
+func quit_to_title() -> bool:
+	var normal_left := sub.offset_left
+	sub.offset_left = -146.0  # wide enough for "QUIT TO TITLE?" and "SAVE & QUIT"
+	var r := await sub.choose("QUIT TO TITLE?", PackedStringArray(["SAVE & QUIT", "QUIT", "CANCEL"]))
+	sub.close()
+	sub.offset_left = normal_left
+	if r["action"] != "pick" or r["index"] == 2:
+		return false
+	if r["index"] == 0:
+		var error := SaveManager.save_game()
+		if not error.is_empty():
+			await _say(error)
+			return false
+		AudioManager.play_sfx("confirm")
+	list.close()
+	await world.quit_to_title()
+	return true
 
 
 # --- Active Stack ------------------------------------------------------------

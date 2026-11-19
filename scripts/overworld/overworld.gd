@@ -11,6 +11,7 @@ extends Node2D
 signal battle_requested(config: Dictionary)
 signal map_loaded(map_id: String)
 signal demo_ended
+signal quit_to_title_requested
 
 const SCENE := "res://scenes/overworld/overworld.tscn"
 const DEFAULT_MAP := "onboarding_town"
@@ -321,6 +322,18 @@ func _encounter_flash() -> void:
 	await tween.finished
 	if not allow_scene_change:
 		_fade.color = Color(0, 0, 0, 0)
+
+
+## Pause > CONFIG > QUIT TO TITLE: fade out and go back to the title screen (saving is asked before this).
+func quit_to_title() -> void:
+	_busy = true
+	player.input_enabled = false
+	quit_to_title_requested.emit()
+	if not allow_scene_change:
+		return
+	await _fade_to(1.0)
+	GameState.clock_running = false
+	SceneRouter.goto(DemoEnd.TITLE)
 
 
 func warp_to(map_id: String, spawn_name: String = "default") -> void:
