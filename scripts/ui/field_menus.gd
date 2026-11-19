@@ -527,6 +527,7 @@ func options_screen() -> void:
 			"CRT EFFECTS   < %s >" % ("ON" if Settings.crt_effects else "OFF"),
 			"LESS MOTION   < %s >" % ("ON" if Settings.reduced_motion else "OFF"),
 			"CONTROL HINTS < %s >" % ("ON" if Settings.control_hints else "OFF"),
+			"NEWS LINES    < %s >" % ("ON" if Settings.panel_scanlines else "OFF"),
 			"DONE",
 		])
 		list.allow_lr = true
@@ -534,12 +535,13 @@ func options_screen() -> void:
 			"Sound effects.", "Turn off to skip battle animations.",
 			"Phones/tablets: save when the app goes to the background.",
 			"Title screen scanlines and scan bar.", "Stops the title screen's bigger animations.",
-			"Shows which buttons open the menu and talk, in the top corner.", "Save and close."][i]
+			"Shows which buttons open the menu and talk, in the top corner.",
+			"Scanlines over the What's New screen.", "Save and close."][i]
 		var r := await list.choose("OPTIONS   (left/right to change)", rows, [], cursor)
 		list.allow_lr = false
 		list.describe = Callable()
 		cursor = r["index"]
-		if r["action"] == "cancel" or (r["action"] == "pick" and cursor == 8):
+		if r["action"] == "cancel" or (r["action"] == "pick" and cursor == 9):
 			break
 		var step := -1 if r["action"] == "left" else 1
 		match cursor:
@@ -562,6 +564,8 @@ func options_screen() -> void:
 				Settings.reduced_motion = not Settings.reduced_motion
 			7:
 				Settings.control_hints = not Settings.control_hints
+			8:
+				Settings.panel_scanlines = not Settings.panel_scanlines
 	Settings.apply()
 	Settings.save_settings()
 	list.close()

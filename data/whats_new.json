@@ -1,15 +1,16 @@
 {
-  "note": "Shown once on the title screen after an update, newest first. Bump 'id' (any new string, the date works) for each player-facing update; only the newest entry is shown, at most 5 notes, about 70 characters each (test_whats_new checks they fit). New players don't see it.",
+  "note": "WHAT'S NEW screen (docs/whats-new-spec.md). Newest update first; only the newest is shown, once, to returning players. For each player-facing release add an entry at the top with a new id. Entries: one short sentence each, tag NEW / UI / BALANCE / MOVES / AI, optional credit line. Aim for 6 or fewer; past 8 the list scrolls. Plain ASCII apostrophes and quotes.",
   "updates": [
     {
       "id": "2026-11-18",
-      "title": "UPDATE - NOV 18",
-      "notes": [
-        "Battles remember each Forgeling's last move. Thanks for the idea!",
-        "Type Feedback with your phone's own keyboard.",
-        "Clearer battle text, and bigger battles on phones.",
-        "Beating stronger foes levels you up faster.",
-        "New moves for Pengwan and Munkboard. Dana and Ping play smarter."
+      "label": "UPDATE · NOV 18",
+      "entries": [
+        { "tag": "NEW", "text": "Battles remember each Forgeling's last move.", "credit": "Thanks for the idea!" },
+        { "tag": "NEW", "text": "Type Feedback with your phone's own keyboard." },
+        { "tag": "UI", "text": "Clearer battle text, and bigger battles on phones." },
+        { "tag": "BALANCE", "text": "Beating stronger foes levels you up faster." },
+        { "tag": "MOVES", "text": "New moves for Pengwan and Munkboard." },
+        { "tag": "AI", "text": "Dana and Ping play smarter." }
       ]
     }
   ]

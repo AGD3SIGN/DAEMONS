@@ -21,6 +21,7 @@ var autosave_on_suspend: bool = true  # mobile: save when the app goes to the ba
 var crt_effects: bool = true          # title screen scanlines + scan bar
 var reduced_motion: bool = false      # fewer moving things (the OS setting also counts, see wants_reduced_motion)
 var control_hints: bool = true        # overworld corner tag naming the MENU / TALK buttons (not on touch)
+var panel_scanlines: bool = false    # scanlines over the WHAT'S NEW panel (spec: off by default)
 var last_seen_update: String = ""     # newest data/whats_new.json id this player has seen (WhatsNew)
 
 
@@ -63,6 +64,7 @@ func save_settings() -> void:
 	cfg.set_value("options", "crt_effects", crt_effects)
 	cfg.set_value("options", "reduced_motion", reduced_motion)
 	cfg.set_value("options", "control_hints", control_hints)
+	cfg.set_value("options", "panel_scanlines", panel_scanlines)
 	cfg.set_value("news", "last_seen_update", last_seen_update)
 	cfg.save(path)
 
@@ -81,4 +83,5 @@ func load_settings() -> void:
 	control_hints = bool(cfg.get_value("options", "control_hints", control_hints))
 	crt_effects = bool(cfg.get_value("options", "crt_effects", crt_effects))
 	reduced_motion = bool(cfg.get_value("options", "reduced_motion", reduced_motion))
+	panel_scanlines = bool(cfg.get_value("options", "panel_scanlines", panel_scanlines))
 	last_seen_update = String(cfg.get_value("news", "last_seen_update", last_seen_update))

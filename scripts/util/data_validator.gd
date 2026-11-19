@@ -1088,7 +1088,8 @@ func _validate_level_caps(raw: Variant) -> void:
 
 # --- demo end ------------------------------------------------------------------
 
-## data/whats_new.json: "updates", newest first, each {id (unique), title, notes (1-6 lines)}.
+## data/whats_new.json: "updates", newest first, each {id (unique), label, entries: [{tag, text, credit?}]}.
+## An unknown tag is only a warning: the screen draws it gray (WhatsNew.tag_color).
 func _validate_whats_new(raw: Variant) -> void:
 	whats_new = {"updates": []}
 	if typeof(raw) != TYPE_DICTIONARY or typeof(raw.get("updates")) != TYPE_ARRAY:
@@ -1104,14 +1105,25 @@ func _validate_whats_new(raw: Variant) -> void:
 		if id.is_empty() or ids.has(id):
 			_err("whats_new", "update id '%s' is missing or used twice" % id)
 		ids[id] = true
-		_string(u, "title", "whats_new › " + id)
-		var notes: Variant = u.get("notes")
-		if typeof(notes) != TYPE_ARRAY or notes.is_empty() or notes.size() > WhatsNew.MAX_NOTES:
-			_err("whats_new › " + id, "'notes' must list 1 to %d lines" % WhatsNew.MAX_NOTES)
-		else:
-			for n: Variant in notes:
-				if typeof(n) != TYPE_STRING or String(n).is_empty() or String(n).length() > WhatsNew.MAX_NOTE_LENGTH:
-					_err("whats_new › " + id, "each note must be text up to %d characters" % WhatsNew.MAX_NOTE_LENGTH)
+		var where := "whats_new › " + id
+		_string(u, "label", where)
+		var entries: Variant = u.get("entries")
+		if typeof(entries) != TYPE_ARRAY or entries.is_empty() or entries.size() > WhatsNew.MAX_ENTRIES:
+			_err(where, "'entries' must list 1 to %d changes" % WhatsNew.MAX_ENTRIES)
+			continue
+		for e: Variant in entries:
+			if typeof(e) != TYPE_DICTIONARY:
+				_err(where, "each entry must be {tag, text, credit?}")
+				continue
+			var text: Variant = e.get("text")
+			if typeof(text) != TYPE_STRING or String(text).is_empty() or String(text).length() > WhatsNew.MAX_TEXT:
+				_err(where, "entry text must be one sentence up to %d characters" % WhatsNew.MAX_TEXT)
+			if typeof(e.get("tag")) != TYPE_STRING:
+				_err(where, "entry tag must be text (NEW, UI, BALANCE, MOVES, AI)")
+			elif not WhatsNew.TAG_COLORS.has(String(e["tag"]).to_upper()):
+				push_warning("%s: unknown tag '%s' shows gray" % [where, e["tag"]])
+			if e.has("credit") and (typeof(e["credit"]) != TYPE_STRING or String(e["credit"]).length() > WhatsNew.MAX_TEXT):
+				_err(where, "entry credit must be a short line of text")
 
 
 ## data/demo_end.json: "card" (lines shown big, in order), "credits" ([role, name] pairs), "thanks" (last line).

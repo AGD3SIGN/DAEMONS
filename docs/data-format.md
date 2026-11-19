@@ -334,8 +334,8 @@ beam covers you after a turn you're walked back to `send_to`.
 | move_npc to player | `{"cmd": "move_npc", "npc": "kevin_burst", "to": "player", "run": true}` (walks the shortest free path to a tile next to you; both turn to face each other. `"run"` doubles the speed, also works with `"path"`) |
 
 ## data/whats_new.json (2026-11-18)
-`{"updates": [{"id": "2026-11-18", "title": "UPDATE - NOV 18", "notes": ["...", ...]}, ...]}`, newest first.
-The title screen shows the newest update once (WHAT'S NEW popup) to players whose settings remember an older id,
-or who have a save but no id yet (played before the popup existed). Brand-new players are just marked up to date.
-For each player-facing release: add an entry at the top with a new id. 1-5 notes, up to 80 characters each;
-test_whats_new.gd checks they fit the panel. The seen id lives in settings.cfg ([news] last_seen_update).
+`{"updates": [{"id": "2026-11-18", "label": "UPDATE · NOV 18", "entries": [{"tag": "NEW", "text": "...",
+"credit": "..."}, ...]}, ...]}`, newest first. Tags: NEW, UI, BALANCE, MOVES, AI (unknown = gray + warning); credit
+is optional. 1-12 entries, text up to 80 characters. The title screen shows the newest update once to returning
+players (settings.cfg [news] last_seen_update); new players are just marked up to date. Screen details and the
+places the build differs from the design spec: docs/whats-new-spec.md.
