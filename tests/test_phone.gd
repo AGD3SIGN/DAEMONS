@@ -172,3 +172,35 @@ func test_saved_message_doesnt_linger_over_the_next_app() -> void:
 	await wait_until(func() -> bool: return world.is_idle(), 5.0)
 	SaveManager.delete_saves()
 	SaveManager.slot_paths = SaveManager.SLOT_PATHS
+
+
+## Upright phones (2026-11-18): the home screen grows to fill a tall view, and taps still hit the right app.
+func test_home_screen_grows_on_tall_views_and_taps_still_land() -> void:
+	var holder := Control.new()
+	holder.size = Vector2(320, 390)
+	add_child_autofree(holder)
+	var phone := Phone.new()
+	holder.add_child(phone)
+	await wait_process_frames(1)
+	assert_eq(phone.home_scale(), 2.0, "about twice as big on an upright phone")
+	var body := Rect2(phone.home_origin() + Phone.BODY.position * 2.0, Phone.BODY.size * 2.0)
+	assert_true(Rect2(Vector2.ZERO, holder.size).encloses(body), "the whole phone is on screen")
+	holder.size = Vector2(320, 180)
+	await wait_process_frames(1)
+	assert_eq(phone.home_scale(), 1.0, "desktop size unchanged")
+	assert_eq(phone.home_origin(), phone.view_offset(), "same place as before on desktop")
+	holder.size = Vector2(320, 390)
+	await wait_process_frames(1)
+	var picked := []
+	var run := func() -> void: picked.append(await phone.home())
+	run.call()
+	await wait_process_frames(1)
+	var target := phone.icon_rect(4).get_center() * phone.home_scale() + phone.home_origin()
+	phone.warp_mouse(target)
+	var click := InputEventMouseButton.new()
+	click.button_index = MOUSE_BUTTON_LEFT
+	click.pressed = true
+	click.position = target
+	phone._tap_home((target - phone.home_origin()) / phone.home_scale())
+	await wait_process_frames(2)
+	assert_eq(picked, [phone.apps[4][0]], "a tap on the scaled icon opens that app")

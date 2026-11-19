@@ -211,7 +211,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		elif event.is_action_pressed("ui_cancel") or event.is_action_pressed("menu"):
 			_pick("")
 		elif event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-			_tap_home(get_local_mouse_position() - view_offset())
+			_tap_home((get_local_mouse_position() - home_origin()) / home_scale())
 		else:
 			handled = false
 	else:
@@ -282,14 +282,28 @@ func view_offset() -> Vector2:
 	return ((size - BASE_VIEW) / 2.0).floor().max(Vector2.ZERO)
 
 
+## The home screen grows to fill tall views (2026-11-18, Brandon: the phone is small on a phone held upright):
+## the biggest quarter step that fits the body with a little margin, never smaller than 1.
+func home_scale() -> float:
+	var fit := minf((size.x - 8.0) / BODY.size.x, (size.y - 8.0) / BODY.size.y)
+	return clampf(floorf(fit * 4.0) / 4.0, 1.0, 4.0)
+
+
+## Where the home screen's (0, 0) lands, so the phone body is centered at home_scale().
+func home_origin() -> Vector2:
+	return (size / 2.0 - (BODY.position + BODY.size / 2.0) * home_scale()).floor()
+
+
 func _draw() -> void:
 	if mode.is_empty():
 		return
 	draw_rect(Rect2(Vector2.ZERO, size), Color(0, 0, 0, 0.45))  # dim the whole world, however wide
-	draw_set_transform(view_offset())
 	if mode == "home":
+		draw_set_transform(home_origin(), 0.0, Vector2.ONE * home_scale())
 		_draw_home()
-	elif mode == "maps":
+		return
+	draw_set_transform(view_offset())
+	if mode == "maps":
 		_draw_maps()
 
 
