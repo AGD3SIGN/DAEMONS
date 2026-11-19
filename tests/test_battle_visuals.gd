@@ -62,3 +62,16 @@ func test_a_miss_dodges_and_comes_back_and_hits_settle() -> void:
 		player._hit_flash(BattleState.FOE, strength)
 		await wait_seconds(0.4)
 		assert_eq(foe.position, Vector2.ZERO, "%s hit settles back in place" % strength)
+
+
+## Audit 2026-11-19: ten pairs of moves played the same animation, only recolored. Each move's sequence of effect
+## kinds (with glyph and where it plays) is now its own.
+func test_no_two_moves_share_an_animation() -> void:
+	var seen := {}
+	for move_id: String in DataRegistry.moves:
+		var shape := []
+		for step: Dictionary in DataRegistry.moves[move_id].get("fx", []):
+			shape.append([step["kind"], step.get("glyph", ""), step.get("on", "target")])
+		var key := str(shape)
+		assert_false(seen.has(key), "%s plays the same animation as %s" % [move_id, seen.get(key, "")])
+		seen[key] = move_id
