@@ -101,6 +101,7 @@ var feedback: Dictionary = {}      # Feedback form config (data/feedback.json)
 var balance: Dictionary = {}       # EXP rate and blackout penalty (data/balance.json)
 var region_map: Dictionary = {}    # phone Maps app layout (data/region_map.json)
 var demo_end: Dictionary = {}      # end-of-demo card and credits (data/demo_end.json)
+var whats_new: Dictionary = {}     # update notes for the title screen (data/whats_new.json)
 var level_caps: Array = []         # level cap per Certification count (data/level_caps.json)
 var demo_roster: Dictionary = {}   # demo areas + pending candidates (data/demo_roster.json)
 
@@ -138,6 +139,7 @@ func validate(raw: Dictionary) -> PackedStringArray:
 	_validate_demo_end(raw.get("demo_end"))
 	_validate_level_caps(raw.get("level_caps"))
 	_validate_demo_roster(raw.get("demo_roster"))
+	_validate_whats_new(raw.get("whats_new"))
 	return errors
 
 
@@ -1085,6 +1087,32 @@ func _validate_level_caps(raw: Variant) -> void:
 
 
 # --- demo end ------------------------------------------------------------------
+
+## data/whats_new.json: "updates", newest first, each {id (unique), title, notes (1-6 lines)}.
+func _validate_whats_new(raw: Variant) -> void:
+	whats_new = {"updates": []}
+	if typeof(raw) != TYPE_DICTIONARY or typeof(raw.get("updates")) != TYPE_ARRAY:
+		_err("whats_new", "must be an object with an 'updates' list")
+		return
+	whats_new = raw
+	var ids := {}
+	for u: Variant in raw["updates"]:
+		if typeof(u) != TYPE_DICTIONARY:
+			_err("whats_new", "each update must be an object")
+			continue
+		var id := str(u.get("id", ""))
+		if id.is_empty() or ids.has(id):
+			_err("whats_new", "update id '%s' is missing or used twice" % id)
+		ids[id] = true
+		_string(u, "title", "whats_new › " + id)
+		var notes: Variant = u.get("notes")
+		if typeof(notes) != TYPE_ARRAY or notes.is_empty() or notes.size() > WhatsNew.MAX_NOTES:
+			_err("whats_new › " + id, "'notes' must list 1 to %d lines" % WhatsNew.MAX_NOTES)
+		else:
+			for n: Variant in notes:
+				if typeof(n) != TYPE_STRING or String(n).is_empty() or String(n).length() > WhatsNew.MAX_NOTE_LENGTH:
+					_err("whats_new › " + id, "each note must be text up to %d characters" % WhatsNew.MAX_NOTE_LENGTH)
+
 
 ## data/demo_end.json: "card" (lines shown big, in order), "credits" ([role, name] pairs), "thanks" (last line).
 func _validate_demo_end(raw: Variant) -> void:

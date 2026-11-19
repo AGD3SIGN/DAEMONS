@@ -1,0 +1,16 @@
+{
+  "note": "Shown once on the title screen after an update, newest first. Bump 'id' (any new string, the date works) for each player-facing update; only the newest entry is shown, at most 5 notes, about 70 characters each (test_whats_new checks they fit). New players don't see it.",
+  "updates": [
+    {
+      "id": "2026-11-18",
+      "title": "UPDATE - NOV 18",
+      "notes": [
+        "Battles remember each Forgeling's last move. Thanks for the idea!",
+        "Type Feedback with your phone's own keyboard.",
+        "Clearer battle text, and bigger battles on phones.",
+        "Beating stronger foes levels you up faster.",
+        "New moves for Pengwan and Munkboard. Dana and Ping play smarter."
+      ]
+    }
+  ]
+}

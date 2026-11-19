@@ -332,3 +332,10 @@ beam covers you after a turn you're walked back to `send_to`.
 | 4 Facilities | Power budget | dark room, 7 breakers, `load` counter, over 12 kW trips back to Ransom's state; servers off crashes | servers + cooling + door on, rig off |
 | 5 SecOps | Stealth + forensics | turning cameras, 3 log printouts, name the account (svc_backup); wrong answer re-shreds the logs | sec_found |
 | move_npc to player | `{"cmd": "move_npc", "npc": "kevin_burst", "to": "player", "run": true}` (walks the shortest free path to a tile next to you; both turn to face each other. `"run"` doubles the speed, also works with `"path"`) |
+
+## data/whats_new.json (2026-11-18)
+`{"updates": [{"id": "2026-11-18", "title": "UPDATE - NOV 18", "notes": ["...", ...]}, ...]}`, newest first.
+The title screen shows the newest update once (WHAT'S NEW popup) to players whose settings remember an older id,
+or who have a save but no id yet (played before the popup existed). Brand-new players are just marked up to date.
+For each player-facing release: add an entry at the top with a new id. 1-5 notes, up to 80 characters each;
+test_whats_new.gd checks they fit the panel. The seen id lives in settings.cfg ([news] last_seen_update).

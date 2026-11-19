@@ -5,8 +5,11 @@ extends Node
 
 const PATH := "user://settings.cfg"
 
-## Tests point this elsewhere so they never touch real settings.
+## Tests point this elsewhere so they never touch real settings (a GUT run starts on TEST_PATH by itself).
+const TEST_PATH := "user://test_settings.cfg"
 var path: String = PATH
+## True while the GUT test runner is running (godot -s addons/gut/gut_cmdln.gd ...).
+var under_test: bool = false
 const TEXT_SPEEDS := {"slow": 30.0, "mid": 60.0, "fast": 120.0, "instant": 0.0}
 const TEXT_SPEED_ORDER: PackedStringArray = ["slow", "mid", "fast", "instant"]
 
@@ -18,9 +21,13 @@ var autosave_on_suspend: bool = true  # mobile: save when the app goes to the ba
 var crt_effects: bool = true          # title screen scanlines + scan bar
 var reduced_motion: bool = false      # fewer moving things (the OS setting also counts, see wants_reduced_motion)
 var control_hints: bool = true        # overworld corner tag naming the MENU / TALK buttons (not on touch)
+var last_seen_update: String = ""     # newest data/whats_new.json id this player has seen (WhatsNew)
 
 
 func _ready() -> void:
+	under_test = " ".join(OS.get_cmdline_args()).contains("gut_cmdln")
+	if under_test:
+		path = TEST_PATH
 	load_settings()
 	apply()
 
@@ -56,6 +63,7 @@ func save_settings() -> void:
 	cfg.set_value("options", "crt_effects", crt_effects)
 	cfg.set_value("options", "reduced_motion", reduced_motion)
 	cfg.set_value("options", "control_hints", control_hints)
+	cfg.set_value("news", "last_seen_update", last_seen_update)
 	cfg.save(path)
 
 
@@ -73,3 +81,4 @@ func load_settings() -> void:
 	control_hints = bool(cfg.get_value("options", "control_hints", control_hints))
 	crt_effects = bool(cfg.get_value("options", "crt_effects", crt_effects))
 	reduced_motion = bool(cfg.get_value("options", "reduced_motion", reduced_motion))
+	last_seen_update = String(cfg.get_value("news", "last_seen_update", last_seen_update))

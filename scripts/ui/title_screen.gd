@@ -66,6 +66,16 @@ func _ready() -> void:
 	vertical = InputPrompts.scheme == "touch"
 	InputPrompts.scheme_changed.connect(_on_scheme_changed)
 	_process(0.0)
+	_show_whats_new.call_deferred()
+
+
+## After an update, a WHAT'S NEW popup lists the changes once (data/whats_new.json). The menu waits for it.
+func _show_whats_new() -> void:
+	if Settings.under_test:
+		return  # tests drive the title screen directly; test_whats_new.gd covers the popup
+	_busy = true
+	await WhatsNew.show_if_new(self)
+	_busy = false
 
 
 # --- setup -------------------------------------------------------------------
