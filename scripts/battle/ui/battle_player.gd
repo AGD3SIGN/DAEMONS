@@ -84,6 +84,9 @@ func _play_event(e: Dictionary) -> void:
 			await _say(text, false)
 			await _anim_exit(side)
 			_panel(side).visible = false
+		"move_missed":
+			await _anim_dodge(BattleState.opponent(side))
+			await _say(text)
 		"move_used":
 			await _say(text, false)
 			var category := String(DataRegistry.get_move(String(e.get("move", ""))).get("category", "physical"))
@@ -93,7 +96,7 @@ func _play_event(e: Dictionary) -> void:
 			_release_pose(side)
 		"damage":
 			_hold_pose(side, "hurt")
-			_hit_flash(side)
+			_hit_flash(side, hit_strength(e))
 			await _panel(side).animate_uptime(int(e["uptime"]), int(e["max_uptime"]))
 			_release_pose(side)
 			await _say(text)
@@ -417,16 +420,60 @@ func _anim_lunge(side: int) -> void:
 	await t.finished
 
 
-## Blink + shake. Not awaited: runs while the bar drains. Tweens die with the node, so it's safe.
-func _hit_flash(side: int) -> void:
+## How hard a hit lands, for the blink and shake (2026-11-19 audit: crits and super-effective hits looked like any
+## other hit). "crit" beats "super"; "weak" is a resisted hit; status damage and the like are "normal".
+static func hit_strength(e: Dictionary) -> String:
+	if e.get("critical", false):
+		return "crit"
+	var eff := float(e.get("effectiveness", 1.0))
+	if eff > 1.0:
+		return "super"
+	if eff > 0.0 and eff < 1.0:
+		return "weak"
+	return "normal"
+
+
+## Blink + shake, scaled to the hit. Not awaited: runs while the bar drains. Tweens die with the node, so it's safe.
+##   weak: two soft blinks, a 1px nudge      normal: three blinks, a 3px shake
+##   super: hard shake, a quick white flash  crit: bigger shake with a jolt, a stronger flash and a burst of sparks
+func _hit_flash(side: int, strength: String = "normal") -> void:
 	var s := _sprite(side)
+	var blinks := {"weak": 2, "normal": 3, "super": 4, "crit": 5}[strength] as int
+	var shake_x: Array = {"weak": [1.0, -1.0, 0.0], "normal": [3.0, -3.0, 2.0, 0.0],
+		"super": [6.0, -6.0, 4.0, -3.0, 0.0], "crit": [8.0, -8.0, 6.0, -5.0, 3.0, 0.0]}[strength]
 	var blink := _tween()
-	for i in 3:
-		blink.tween_property(s, "modulate:a", 0.15, 0.05 * _ts())
+	for i in blinks:
+		blink.tween_property(s, "modulate:a", 0.4 if strength == "weak" else 0.15, 0.05 * _ts())
 		blink.tween_property(s, "modulate:a", 1.0, 0.05 * _ts())
 	var shake := _tween()
-	for x in [3.0, -3.0, 2.0, 0.0]:
+	for x: float in shake_x:
 		shake.tween_property(s, "position:x", x, 0.04 * _ts())
+	if strength == "crit":
+		var jolt := _tween()
+		jolt.tween_property(s, "position:y", -6.0, 0.05 * _ts())
+		jolt.tween_property(s, "position:y", 0.0, 0.12 * _ts()).set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_OUT)
+	if (strength == "super" or strength == "crit") and _ts() > 0.0:
+		view.fx.time_scale = _ts()
+		var at := _sprite_center(side)
+		var steps: Array = [{"kind": "flash", "color": "#ffffff", "alpha": 0.45 if strength == "crit" else 0.25, "parallel": true}]
+		if strength == "crit":
+			steps.append({"kind": "burst", "color": "#ffd84a", "count": 14, "radius": 26, "size": 3})
+		view.fx.play(steps, at, at, Color.WHITE)
+
+
+## A miss: the target hops aside and back, leaving a faint afterimage.
+func _anim_dodge(side: int) -> void:
+	if _ts() <= 0.0:
+		return
+	var s := _sprite(side)
+	var away := -14.0 if side == BattleState.PLAYER else 14.0
+	var t := _tween()
+	t.tween_property(s, "position:x", away, 0.08 * _ts()).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	t.parallel().tween_property(s, "modulate:a", 0.45, 0.08 * _ts())
+	t.tween_interval(0.08 * _ts())
+	t.tween_property(s, "position:x", 0.0, 0.14 * _ts()).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
+	t.parallel().tween_property(s, "modulate:a", 1.0, 0.14 * _ts())
+	await t.finished
 
 
 func _anim_faint(side: int) -> void:

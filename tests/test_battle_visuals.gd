@@ -32,3 +32,33 @@ func test_looping_shows_while_it_lasts() -> void:
 	await player._play_event({"type": "looping_ended", "side": BattleState.FOE, "daemon": "Dustbunny"})
 	assert_false(aura.looping, "off when it snaps out of it")
 	await wait_for_signal(scene.finished, 30.0)
+
+
+func test_hits_are_scaled_by_how_hard_they_land() -> void:
+	assert_eq(BattlePlayer.hit_strength({"critical": true, "effectiveness": 0.5}), "crit", "a crit beats a resist")
+	assert_eq(BattlePlayer.hit_strength({"critical": false, "effectiveness": 2.0}), "super")
+	assert_eq(BattlePlayer.hit_strength({"effectiveness": 0.5}), "weak")
+	assert_eq(BattlePlayer.hit_strength({"effectiveness": 1.0}), "normal")
+	assert_eq(BattlePlayer.hit_strength({"source": "looping"}), "normal")
+
+
+func test_a_miss_dodges_and_comes_back_and_hits_settle() -> void:
+	var config := {"foe": [["dustbunny", 5]], "player_stack": [DaemonInstance.create("pingo", 5, RandomNumberGenerator.new())],
+		"items": {}, "auto": true, "time_scale": 0.0, "seed": 1}
+	var scene: BattleScene = load(BattleScene.SCENE).instantiate()
+	scene.setup(config)
+	add_child_autofree(scene)
+	await wait_for_signal(scene.finished, 30.0)  # let the auto battle finish so nothing else moves the sprite
+	scene.time_scale = 0.05
+	var player: BattlePlayer = scene._player
+	var foe := scene.foe_sprite
+	foe.visible = true
+	foe.position = Vector2.ZERO
+	foe.modulate = Color.WHITE
+	await player._anim_dodge(BattleState.FOE)
+	assert_eq(foe.position.x, 0.0, "back on its pad")
+	assert_almost_eq(foe.modulate.a, 1.0, 0.01)
+	for strength in ["weak", "normal", "super", "crit"]:
+		player._hit_flash(BattleState.FOE, strength)
+		await wait_seconds(0.4)
+		assert_eq(foe.position, Vector2.ZERO, "%s hit settles back in place" % strength)
