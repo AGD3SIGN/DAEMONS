@@ -2,6 +2,18 @@
   "note": "WHAT'S NEW screen (docs/whats-new-spec.md). Newest update first; only the newest is shown, once, to returning players. For each player-facing release add an entry at the top with a new id. Entries: one short sentence each, tag NEW / UI / BALANCE / MOVES / AI, optional credit line. Aim for 6 or fewer; past 8 the list scrolls. Plain ASCII apostrophes and quotes.",
   "updates": [
     {
+      "id": "2026-11-19",
+      "label": "UPDATE · NOV 19",
+      "entries": [
+        { "tag": "NEW", "text": "Quit to the title from the phone's CONFIG app." },
+        { "tag": "UI", "text": "Clearer phone icons; bigger menus on mobile." },
+        { "tag": "UI", "text": "Crits, misses and weak hits look different." },
+        { "tag": "UI", "text": "Hung and Looping show; fleeing foes glitch out." },
+        { "tag": "MOVES", "text": "Ten moves got their own animations." },
+        { "tag": "UI", "text": "Backspace works in the name box on keyboards.", "credit": "Thanks for the report!" }
+      ]
+    },
+    {
       "id": "2026-11-18",
       "label": "UPDATE · NOV 18",
       "entries": [

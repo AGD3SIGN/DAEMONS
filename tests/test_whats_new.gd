@@ -66,8 +66,16 @@ func test_who_sees_it() -> void:
 	assert_true(WhatsNew.pending([], "", true).is_empty())
 
 
+## The Nov 18 notes (the spec's reference content).
+func _nov_18() -> Dictionary:
+	for u: Dictionary in DataRegistry.whats_new["updates"]:
+		if u["id"] == "2026-11-18":
+			return u
+	return {}
+
+
 func test_nov_18_entries_come_from_data_with_tag_colors_and_credit() -> void:
-	var update: Dictionary = DataRegistry.whats_new["updates"][0]
+	var update: Dictionary = _nov_18()
 	var entries: Array = update["entries"]
 	assert_eq(entries.size(), 6)
 	assert_eq(entries.map(func(e: Dictionary) -> String: return e["tag"]), ["NEW", "NEW", "UI", "BALANCE", "MOVES", "AI"])
@@ -75,7 +83,7 @@ func test_nov_18_entries_come_from_data_with_tag_colors_and_credit() -> void:
 	assert_eq(WhatsNew.tag_color("NEW"), Color("0E6B5C"))
 	assert_eq(WhatsNew.tag_color("BALANCE"), Color("A3470A"))
 	assert_eq(WhatsNew.tag_color("mystery", false), Color("3A3F4B"), "unknown tags fall back to tag-ai gray")
-	var screen := _screen(Vector2(320, 180))
+	var screen := _screen(Vector2(320, 180), update)
 	assert_eq(screen._rows.size(), 6)
 	assert_eq((screen._rows[0]["credit"] as PackedStringArray).size(), 1, "the credit sub-line on entry 1")
 	assert_eq((screen._rows[1]["credit"] as PackedStringArray).size(), 0)
@@ -94,7 +102,7 @@ func test_log_line_counts_entries_and_the_cursor_blinks() -> void:
 
 
 func test_desktop_layout_fits_with_a_tag_column() -> void:
-	var screen := _screen(Vector2(320, 180))
+	var screen := _screen(Vector2(320, 180), _nov_18())
 	assert_false(screen.layout.phone)
 	assert_eq(screen.layout.panel_w, 860.0)
 	var panel := screen.get_node("Stage/Panel") as Control
@@ -227,3 +235,17 @@ func test_new_players_are_marked_up_to_date_quietly() -> void:
 	assert_false(await WhatsNew.show_if_new(self))
 	assert_eq(Settings.last_seen_update, "b")
 	assert_null(find_child("WhatsNew", true, false))
+
+
+## Every shipped update is valid and its newest entry is the one the title screen shows.
+func test_shipped_updates_are_newest_first_and_fit() -> void:
+	var updates: Array = DataRegistry.whats_new["updates"]
+	assert_eq(updates[0]["id"], "2026-11-19", "the newest update is shown")
+	for u: Dictionary in updates:
+		for desktop in [true, false]:
+			var screen := _screen(Vector2(320, 180) if desktop else Vector2(180, 390), u)
+			var panel := screen.get_node("Stage/Panel") as Control
+			assert_true(Rect2(Vector2.ZERO, screen.layout.frame).encloses(Rect2(panel.position, panel.size)),
+				"%s fits (%s)" % [u["id"], "desktop" if desktop else "phone"])
+			if desktop:
+				assert_eq(screen.max_scroll(), 0.0, "%s needs no scrolling on desktop" % u["id"])
