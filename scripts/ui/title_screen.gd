@@ -52,6 +52,7 @@ var _overlay: ColorRect
 var _sprite_label: Control
 var _options: FieldMenus
 var _boot_lines := PackedStringArray()
+var _view := Rect2(Vector2.ZERO, S.FRAME)   # the visible area in frame px (wider/taller than the frame)
 var _version_text := ""
 
 
@@ -222,6 +223,7 @@ func _process(delta: float) -> void:
 	_backdrop.motion = _motion
 	_backdrop.accent = accent
 	_backdrop.view = view
+	_view = view
 	_backdrop.queue_redraw()
 	_hero.time = _time
 	_hero.motion = _motion
@@ -361,7 +363,24 @@ func _draw_star(top_left: Vector2, size_px: int, c: Color) -> void:
 
 
 func prompt_line_h() -> float:
-	return _line_h(_display, S.PROMPT_SIZE)
+	return _line_h(_display, prompt_size())
+
+
+## True on a touch screen held upright: the frame is tiny there, so the menu and prompt are drawn bigger.
+func portrait_touch() -> bool:
+	return vertical and size.y > size.x
+
+
+func menu_size() -> int:
+	return S.MENU_SIZE_PORTRAIT if portrait_touch() else S.MENU_SIZE
+
+
+func menu_item_h() -> float:
+	return S.MENU_ITEM_H_PORTRAIT if portrait_touch() else S.MENU_ITEM_H
+
+
+func prompt_size() -> int:
+	return S.PROMPT_SIZE_PORTRAIT if portrait_touch() else S.PROMPT_SIZE
 
 
 ## Hit/draw boxes for the menu items, in frame px.
@@ -369,14 +388,17 @@ func menu_rects() -> Array[Rect2]:
 	var rects: Array[Rect2] = []
 	var top := S.PROMPT_TOP + prompt_line_h() + S.MENU_GAP
 	if vertical:
-		# Phones: one column of 44 px rows, just under PRESS START (pushed up if a debug row won't fit).
-		top = minf(S.PROMPT_TOP + prompt_line_h() + 2.0, S.FRAME.y - items.size() * S.MENU_ITEM_H)
+		# Touch: one column of rows just under PRESS START. Upright phones can use the floor below the frame;
+		# otherwise the rows are pushed up if they wouldn't fit.
+		var row_h := menu_item_h()
+		var bottom := maxf(S.FRAME.y, _view.end.y - 24.0) if portrait_touch() else S.FRAME.y
+		top = minf(S.PROMPT_TOP + prompt_line_h() + 2.0, bottom - items.size() * row_h)
 		var w := 0.0
 		for item in items:
-			w = maxf(w, _text_w(_display, item, S.MENU_SIZE) + S.MENU_PAD_X * 2.0)
-		w += 40.0  # room for the arrow inside the row
+			w = maxf(w, _text_w(_display, item, menu_size()) + S.MENU_PAD_X * 2.0)
+		w += 40.0 * menu_size() / S.MENU_SIZE  # room for the arrow inside the row
 		for i in items.size():
-			rects.append(Rect2((S.FRAME.x - w) / 2.0, top + i * S.MENU_ITEM_H, w, S.MENU_ITEM_H))
+			rects.append(Rect2((S.FRAME.x - w) / 2.0, top + i * row_h, w, row_h))
 		return rects
 	var widths: Array[float] = []
 	var total := 0.0
@@ -395,33 +417,36 @@ func menu_rects() -> Array[Rect2]:
 func _draw_prompt_and_menu() -> void:
 	var prompt: String = InputPrompts.start_prompt(DataRegistry.title_screen.get("prompt", "PRESS START"))
 	if attract and fposmod(_time / S.T_BLINK_PROMPT, 1.0) < 0.5:
-		var w := _text_w(_display, prompt, S.PROMPT_SIZE)
-		var at := Vector2((S.FRAME.x - w) / 2.0, S.PROMPT_TOP + _display.get_ascent(S.PROMPT_SIZE))
-		TitleLogo.glow_text(_fg, _display, at, prompt, S.PROMPT_SIZE, Color(S.AMBER, 0.7), S.PROMPT_GLOW)
-		_fg.draw_string(_display, at, prompt, HORIZONTAL_ALIGNMENT_LEFT, -1, S.PROMPT_SIZE, S.AMBER)
+		var ps := prompt_size()
+		var w := _text_w(_display, prompt, ps)
+		var at := Vector2((S.FRAME.x - w) / 2.0, S.PROMPT_TOP + _display.get_ascent(ps))
+		TitleLogo.glow_text(_fg, _display, at, prompt, ps, Color(S.AMBER, 0.7), S.PROMPT_GLOW)
+		_fg.draw_string(_display, at, prompt, HORIZONTAL_ALIGNMENT_LEFT, -1, ps, S.AMBER)
 	var rects := menu_rects()
+	var ms := menu_size()
+	var k := float(ms) / S.MENU_SIZE  # arrow scale
 	for i in items.size():
 		var r := rects[i]
 		var text := items[i]
-		var tw := _text_w(_display, text, S.MENU_SIZE)
+		var tw := _text_w(_display, text, ms)
 		var tx := r.position.x + (r.size.x - tw) / 2.0 if vertical else r.position.x + S.MENU_PAD_X
-		var asc := _display.get_ascent(S.MENU_SIZE)
-		var at := Vector2(tx, r.position.y + (r.size.y - _line_h(_display, S.MENU_SIZE)) / 2.0 + asc)
+		var asc := _display.get_ascent(ms)
+		var at := Vector2(tx, r.position.y + (r.size.y - _line_h(_display, ms)) / 2.0 + asc)
 		if i == selected:
-			TitleLogo.glow_text(_fg, _display, at, text, S.MENU_SIZE, accent, S.MENU_GLOW)
-			_fg.draw_string(_display, at, text, HORIZONTAL_ALIGNMENT_LEFT, -1, S.MENU_SIZE, S.TEXT_HI)
+			TitleLogo.glow_text(_fg, _display, at, text, ms, accent, S.MENU_GLOW)
+			_fg.draw_string(_display, at, text, HORIZONTAL_ALIGNMENT_LEFT, -1, ms, S.TEXT_HI)
 			var p := fposmod(_motion / S.T_ARROW, 1.0)
-			var nudge := 6.0 * (S.ease_in_out(p * 2.0) if p < 0.5 else S.ease_in_out(2.0 - p * 2.0))
-			var arrow_at := Vector2(tx - S.ARROW_GAP - 10.0 + nudge, r.get_center().y - 8.0)
+			var nudge := 6.0 * k * (S.ease_in_out(p * 2.0) if p < 0.5 else S.ease_in_out(2.0 - p * 2.0))
+			var arrow_at := Vector2(tx - (S.ARROW_GAP + 10.0) * k + nudge, r.get_center().y - 8.0 * k)
 			var pts := PackedVector2Array()
 			for v in S.ARROW:
-				pts.append(v + arrow_at)
+				pts.append(v * k + arrow_at)
 			_fg.draw_colored_polygon(pts, S.AMBER)
 			if InputPrompts.scheme == "keyboard":
 				_draw_focus_ring(r.grow(2.0))
 		else:
 			var c := S.TEXT_DIM if enabled[i] else Color(S.TEXT_DIM, 0.5)
-			_fg.draw_string(_display, at, text, HORIZONTAL_ALIGNMENT_LEFT, -1, S.MENU_SIZE, c)
+			_fg.draw_string(_display, at, text, HORIZONTAL_ALIGNMENT_LEFT, -1, ms, c)
 
 
 func _draw_focus_ring(r: Rect2) -> void:

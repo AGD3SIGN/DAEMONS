@@ -212,3 +212,22 @@ func test_title_card_shows_the_cmdb_number() -> void:
 	assert_eq(T.cmdb_number({"id": "not_a_species_yet", "number": "000"}), "000", "fallback for a title-only legendary")
 	var title := _title()
 	assert_string_contains(" ".join(title.card_lines().slice(3).map(func(l: Array) -> String: return l[3])), "No. " + number)
+
+
+## Phones held upright (2026-11-18): the stacked touch menu is drawn much bigger and still fits on screen.
+func test_upright_phone_menu_is_bigger_and_fits() -> void:
+	var saved := InputPrompts.scheme
+	InputPrompts.scheme = "touch"
+	var holder := Control.new()
+	holder.size = Vector2(180, 300)
+	add_child_autofree(holder)
+	var title: Control = load("res://scenes/ui/title_screen.tscn").instantiate()
+	holder.add_child(title)
+	title.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	await wait_process_frames(3)
+	assert_true(title.portrait_touch())
+	assert_gt(title.menu_size(), (load("res://scripts/ui/title/title_style.gd") as GDScript).MENU_SIZE * 2, "much bigger than the desktop menu")
+	var visible: Rect2 = title._view
+	for r: Rect2 in title.menu_rects():
+		assert_true(visible.encloses(r), "menu row %s is on screen" % r)
+	InputPrompts.scheme = saved

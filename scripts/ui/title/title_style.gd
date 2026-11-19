@@ -75,6 +75,11 @@ const MENU_GAP := 10.0                    # between PRESS START and the menu row
 const MENU_SIZE := 16
 const MENU_ITEM_GAP := 28.0
 const MENU_ITEM_H := 44.0
+## Phones held upright (2026-11-18, Brandon: the menu is too small to read on mobile). The 1280x720 frame is
+## shown at ~0.3x there, so the stacked touch menu and PRESS START get their own, bigger sizes.
+const MENU_SIZE_PORTRAIT := 40
+const MENU_ITEM_H_PORTRAIT := 76.0
+const PROMPT_SIZE_PORTRAIT := 30
 const MENU_PAD_X := 12.0
 const MENU_GLOW := 10.0
 const ARROW_GAP := 10.0
