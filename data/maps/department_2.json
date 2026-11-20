@@ -76,7 +76,7 @@
       "look": {
         "shirt": "#20a0a0",
         "hair": "#202020",
-        "sprite": "tech_tina"
+        "sprite": "net_admin_nia"
       }
     },
     {
@@ -89,7 +89,7 @@
       "look": {
         "shirt": "#20a0a0",
         "hair": "#e0a040",
-        "sprite": "tech_theo"
+        "sprite": "packet_pat"
       }
     },
     {
@@ -102,7 +102,8 @@
       "dialogue": "ping",
       "look": {
         "shirt": "#1060a0",
-        "hair": "#101010"
+        "hair": "#101010",
+        "sprite": "ping_okoro"
       }
     }
   ]

@@ -89,7 +89,7 @@
       "look": {
         "shirt": "#505860",
         "hair": "#c06030",
-        "sprite": "phisher_pete"
+        "sprite": "phisher_phoebe"
       }
     },
     {
@@ -102,7 +102,7 @@
       "look": {
         "shirt": "#505860",
         "hair": "#202020",
-        "sprite": "phisher_pete"
+        "sprite": "phisher_phineas"
       }
     },
     {
@@ -115,7 +115,8 @@
       "hide_if_flag": "trainer_brute_basement",
       "look": {
         "shirt": "#303030",
-        "hair": "#806020"
+        "hair": "#806020",
+        "sprite": "exploit_kit_brute"
       }
     },
     {

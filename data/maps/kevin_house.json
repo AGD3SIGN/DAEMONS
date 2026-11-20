@@ -47,7 +47,8 @@
       "dialogue": "kevins_mom",
       "look": {
         "shirt": "#40a080",
-        "hair": "#202020"
+        "hair": "#202020",
+        "sprite": "kevins_mom"
       }
     },
     {

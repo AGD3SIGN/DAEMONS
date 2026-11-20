@@ -127,7 +127,8 @@
       "hide_if_flag": "patch_gate_open",
       "look": {
         "shirt": "#404858",
-        "hair": "#202020"
+        "hair": "#202020",
+        "sprite": "gate_guard"
       }
     },
     {
@@ -166,7 +167,8 @@
       "dialogue": "patch_angler",
       "look": {
         "shirt": "#4060a0",
-        "hair": "#603018"
+        "hair": "#603018",
+        "sprite": "angler"
       }
     },
     {

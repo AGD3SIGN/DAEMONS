@@ -94,7 +94,8 @@
       "hide_if_flag": "trainer_brute_dc",
       "look": {
         "shirt": "#303030",
-        "hair": "#806020"
+        "hair": "#806020",
+        "sprite": "exploit_kit_brute"
       }
     },
     {

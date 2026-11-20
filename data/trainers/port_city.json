@@ -73,7 +73,7 @@
   },
   "phisher_phil": {
     "name": "Phisher Phil",
-    "sprite": "phisher_pete",
+    "sprite": "phisher_phil",
     "team": [
       [
         "spigeon",
@@ -97,7 +97,7 @@
   },
   "net_admin_nia": {
     "name": "Net Admin Nia",
-    "sprite": "tech_tina",
+    "sprite": "net_admin_nia",
     "team": [
       [
         "spinode",
@@ -117,7 +117,7 @@
   },
   "packet_pat": {
     "name": "Packet Pat",
-    "sprite": "tech_theo",
+    "sprite": "packet_pat",
     "team": [
       [
         "cablesnake",
@@ -156,6 +156,7 @@
     "cert": "networking",
     "intro": "Ping Okoro, Networking. I keep this harbor talking. Today someone cut our best line. Let's see if you're a better one.",
     "defeat": "Zero packet loss. You've earned the Networking Cert.",
-    "after": "Ransom came in through Port 443. Whoever fixes that will need friends in every department. Start with the Basement, once Facilities reopens it."
+    "after": "Ransom came in through Port 443. Whoever fixes that will need friends in every department. Start with the Basement, once Facilities reopens it.",
+    "sprite": "ping_okoro"
   }
 }

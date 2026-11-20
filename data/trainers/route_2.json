@@ -1,7 +1,7 @@
 {
   "lineworker_lou": {
     "name": "Lineworker Lou",
-    "sprite": "courier",
+    "sprite": "lineworker_lou",
     "team": [
       [
         "tieweaver",
@@ -21,7 +21,7 @@
   },
   "gamer_gabe": {
     "name": "Gamer Gabe",
-    "sprite": "kid",
+    "sprite": "gamer_gabe",
     "team": [
       [
         "pixelsier",
@@ -37,7 +37,7 @@
   },
   "phisher_phyllis": {
     "name": "Phisher Phyllis",
-    "sprite": "phisher_pete",
+    "sprite": "phisher_phyllis",
     "team": [
       [
         "spigeon",

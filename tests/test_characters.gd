@@ -76,7 +76,24 @@ func test_every_character_sheet_is_20x28_and_small_palette() -> void:
 					colors[img.get_pixel(x, y).to_rgba32()] = true
 		var limit := 16 if battle else 12
 		assert_lte(colors.size(), limit, "%s uses %d colors; run the polish pass with --colors %d" % [f, colors.size(), limit])
-	assert_eq(count, 18)
+	assert_eq(count, 33, "18 + 15 imported 2026-11-19 (Ping, the Brute, Route 2 / Port City / Dept 2 / Basement trainers, townsfolk)")
+
+
+## Every sprite a map NPC or a trainer names has art, so nobody falls back to a placeholder by typo.
+func test_every_named_character_sprite_exists() -> void:
+	var names := {}
+	for t: Dictionary in DataRegistry.trainers.values():
+		if not String(t.get("sprite", "")).is_empty():
+			names[t["sprite"]] = "trainer"
+	for file in DirAccess.get_files_at("res://data/maps/"):
+		if file.ends_with(".json"):
+			var text := FileAccess.get_file_as_string("res://data/maps/" + file)
+			var re := RegEx.create_from_string("\"sprite\": \"([a-z0-9_]+)\"")
+			for m in re.search_all(text):
+				names[m.get_string(1)] = file
+	assert_gt(names.size(), 20)
+	for id: String in names:
+		assert_true(ResourceLoader.exists(CharacterSprites.ART_DIR + id + ".png"), "%s (used in %s) has art" % [id, names[id]])
 
 
 func test_every_character_has_battle_art_and_the_intro_uses_it() -> void:

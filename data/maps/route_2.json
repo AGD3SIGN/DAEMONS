@@ -121,7 +121,7 @@
       "look": {
         "shirt": "#e08020",
         "hair": "#503020",
-        "sprite": "courier"
+        "sprite": "lineworker_lou"
       }
     },
     {
@@ -134,7 +134,7 @@
       "look": {
         "shirt": "#6040c0",
         "hair": "#202020",
-        "sprite": "kid"
+        "sprite": "gamer_gabe"
       }
     },
     {
@@ -147,7 +147,7 @@
       "look": {
         "shirt": "#505860",
         "hair": "#303030",
-        "sprite": "phisher_pete"
+        "sprite": "phisher_phyllis"
       }
     },
     {
@@ -159,7 +159,8 @@
       "dialogue": "route_2_worker",
       "look": {
         "shirt": "#f0c020",
-        "hair": "#202020"
+        "hair": "#202020",
+        "sprite": "route_2_worker"
       }
     },
     {

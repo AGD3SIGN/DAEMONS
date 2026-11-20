@@ -73,7 +73,7 @@
   },
   "phisher_phoebe": {
     "name": "Phisher Phoebe",
-    "sprite": "phisher_pete",
+    "sprite": "phisher_phoebe",
     "team": [
       [
         "wormby",
@@ -93,7 +93,7 @@
   },
   "phisher_phineas": {
     "name": "Phisher Phineas",
-    "sprite": "phisher_pete",
+    "sprite": "phisher_phineas",
     "team": [
       [
         "ramster",
@@ -132,7 +132,8 @@
     "sight": 3,
     "intro": "Password. Password. Password! I try them ALL. Then I try them all AGAIN.",
     "defeat": "Locked out. Locked out. LOCKED OUT.",
-    "after": "Zed's gonna hear about this. Zed. Zed. Zed."
+    "after": "Zed's gonna hear about this. Zed. Zed. Zed.",
+    "sprite": "exploit_kit_brute"
   },
   "scrum_master_sid": {
     "name": "Scrum Master Sid",
@@ -278,7 +279,8 @@
     "sight": 3,
     "intro": "YOU again. Again. AGAIN. This time I brought a bigger dictionary!",
     "defeat": "Account locked. Locked. Locked.",
-    "after": "Just go. Go. Go."
+    "after": "Just go. Go. Go.",
+    "sprite": "exploit_kit_brute"
   },
   "zed_dc": {
     "name": "Exploit Kit Zed",

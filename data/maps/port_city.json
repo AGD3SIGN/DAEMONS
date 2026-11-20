@@ -234,7 +234,8 @@
       "hide_if_flag": "basement_open",
       "look": {
         "shirt": "#404858",
-        "hair": "#c0c0c0"
+        "hair": "#c0c0c0",
+        "sprite": "basement_guard"
       }
     },
     {
@@ -247,7 +248,7 @@
       "look": {
         "shirt": "#505860",
         "hair": "#202020",
-        "sprite": "phisher_pete"
+        "sprite": "phisher_phil"
       }
     },
     {
