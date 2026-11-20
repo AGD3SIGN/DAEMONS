@@ -407,3 +407,37 @@ func test_phones_held_upright_get_the_tall_battle_layout() -> void:
 	var before := BattleScene.frame_scale(phone)
 	var now := BattleScene.frame_scale(phone, tall.frame, tall.allow_fractional)
 	assert_gt(now / before, 1.6)
+
+
+# --- trainer battle poses (2026-11-19) -------------------------------------------
+
+func test_trainer_poses_come_from_pose_art() -> void:
+	for pose in ["challenge", "confident", "defeated"]:
+		var tex := BattleScene.trainer_pose("ping_okoro", pose) as AtlasTexture
+		assert_not_null(tex, pose)
+		assert_eq(tex.region.size, BattleScene.POSE_SIZE)
+		assert_eq(tex.region.position.x, BattleScene.POSE_SIZE.x * BattleScene.POSES.find(pose))
+	assert_null(BattleScene.trainer_pose("ping_okoro", "dancing"))
+	assert_null(BattleScene.trainer_pose("no_such_trainer", "challenge"), "no pose art: the standing figure is used")
+
+
+func test_a_beaten_trainer_comes_back_defeated_and_a_winner_gloats() -> void:
+	var strong: Array[DaemonInstance] = [_daemon("mainmunk", 60)]
+	var won := await _run_battle({"foe": [["pingo", 2]], "player_stack": strong, "items": {},
+		"trainer_name": "Ping", "trainer_sprite": "ping_okoro"})
+	assert_eq(won.result["outcome"], "player_won")
+	assert_true(won.foe_trainer.visible, "the trainer is back for their closing line")
+	assert_eq((won.foe_trainer.texture as AtlasTexture).region.position.x, BattleScene.POSE_SIZE.x * 2, "defeated pose")
+	assert_eq(won.foe_trainer.size, BattleScene.POSE_SIZE, "drawn at the pose's own size")
+	assert_false(won.foe_sprite.visible)
+	var weak: Array[DaemonInstance] = [_daemon("pingo", 2)]
+	var lost := await _run_battle({"foe": [["mainmunk", 60]], "player_stack": weak, "items": {},
+		"trainer_name": "Brute", "trainer_sprite": "exploit_kit_brute", "story": true})
+	assert_eq(lost.result["outcome"], "player_lost")
+	assert_eq((lost.foe_trainer.texture as AtlasTexture).region.position.x, BattleScene.POSE_SIZE.x, "confident pose")
+	var plain := await _run_battle({"foe": [["pingo", 2]], "player_stack": [_daemon("mainmunk", 60)] as Array[DaemonInstance],
+		"items": {}, "trainer_name": "Theo", "trainer_sprite": "tech_theo"})
+	assert_true(plain.foe_trainer.visible, "no pose art yet: the standing figure comes back instead")
+	assert_eq(plain.foe_trainer.size, BattleScene.TRAINER_SIZE)
+	var wild := await _run_battle({"foe": [["pingo", 2]], "player_stack": [_daemon("mainmunk", 60)] as Array[DaemonInstance], "items": {}})
+	assert_false(wild.foe_trainer.visible, "wild battles have no trainer")

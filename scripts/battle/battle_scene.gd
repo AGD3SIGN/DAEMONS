@@ -41,6 +41,9 @@ const FOE_BOB := 6.0                           # wild Daemon bobs 6 px over 2.4 
 const FOE_BOB_TIME := 2.4
 ## Trainer figures in the battle intro (and one frame of <id>_battle.png).
 const TRAINER_SIZE := Vector2(48, 72)
+## Battle poses (<id>_poses.png, made by import_character.gd --poses): three 64x72 frames.
+const POSE_SIZE := Vector2(64, 72)
+const POSES: PackedStringArray = ["challenge", "confident", "defeated"]
 const UPGRADE_BG := Color("181c30")
 
 var config: Dictionary = {}
@@ -352,8 +355,12 @@ func _after_battle() -> void:
 	match state.outcome:
 		"player_won":
 			AudioManager.play_music("victory")
+			if not state.is_wild:
+				await _player.foe_trainer_returns("defeated")
 			await _trainer_rewards()
 		"player_lost":
+			if not state.is_wild:
+				await _player.foe_trainer_returns("confident")
 			if config.get("story", false):
 				await _story_loss()
 			else:
@@ -538,6 +545,18 @@ static func trainer_frame(sprite_id: String, from_behind: bool) -> Texture2D:
 	var h := CharacterSprites.frame_height(sheet)
 	atlas.atlas = sheet
 	atlas.region = Rect2(0, (1 if from_behind else 0) * h, CharacterSprites.frame_width(sheet), h)
+	return atlas
+
+
+## A trainer's battle pose ("challenge" at the start, "confident" when you lose, "defeated" when you win)
+## from <id>_poses.png, or null if they don't have pose art yet.
+static func trainer_pose(sprite_id: String, pose: String) -> Texture2D:
+	var path := CharacterSprites.ART_DIR + sprite_id + "_poses.png"
+	if sprite_id.is_empty() or not pose in POSES or not ResourceLoader.exists(path):
+		return null
+	var atlas := AtlasTexture.new()
+	atlas.atlas = load(path)
+	atlas.region = Rect2(POSE_SIZE.x * POSES.find(pose), 0, POSE_SIZE.x, POSE_SIZE.y)
 	return atlas
 
 

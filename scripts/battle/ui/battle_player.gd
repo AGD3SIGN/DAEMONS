@@ -358,14 +358,13 @@ func _anim_trainers_in() -> void:
 	if _ts() <= 0.0 or view.player_trainer == null:
 		return
 	var frames := [BattleScene.trainer_frame(String(view.config.get("player_sprite", "player")), true),
-		null if state.is_wild else BattleScene.trainer_frame(String(view.config.get("trainer_sprite", "")), false)]
+		null if state.is_wild else _foe_figure("challenge")]
 	var t := _tween().set_parallel(true)
 	for side in 2:
 		if frames[side] == null:
 			continue
 		var fig := _trainer(side)
-		var rest: Vector2 = fig.get_meta("rest")
-		fig.texture = frames[side]
+		var rest := _show_figure(fig, frames[side])
 		fig.position = rest + Vector2(-160.0 if side == BattleState.PLAYER else 160.0, 0)
 		fig.visible = true
 		t.tween_property(fig, "position", rest, 0.45 * _ts()).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
@@ -374,6 +373,48 @@ func _anim_trainers_in() -> void:
 		await t.finished
 	else:
 		t.kill()
+
+
+## The foe trainer's figure for a moment of the battle: their pose if they have pose art, otherwise the
+## standing figure.
+func _foe_figure(pose: String) -> Texture2D:
+	var sprite_id := String(view.config.get("trainer_sprite", ""))
+	var posed := BattleScene.trainer_pose(sprite_id, pose)
+	return posed if posed != null else BattleScene.trainer_frame(sprite_id, false)
+
+
+## Puts a texture on a trainer figure at its own size, feet still centered on the platform; returns the
+## figure's resting position.
+func _show_figure(fig: TextureRect, tex: Texture2D) -> Vector2:
+	var base: Vector2 = fig.get_meta("rest")
+	fig.texture = tex
+	fig.size = tex.get_size()
+	return base - Vector2((fig.size.x - BattleScene.TRAINER_SIZE.x) / 2.0, 0)
+
+
+## After the last Forgeling falls (2026-11-19): the foe trainer slides back in, "defeated" when you win or
+## "confident" when you lose, for their closing line. Their Forgeling and card step aside first.
+func foe_trainer_returns(pose: String) -> void:
+	var fig := view.foe_trainer
+	if fig == null or state.is_wild:
+		return
+	var tex := _foe_figure(pose)
+	if tex == null:
+		return
+	view.foe_panel.visible = false
+	if _sprite(BattleState.FOE).visible and _ts() > 0.0:
+		await _anim_exit(BattleState.FOE)
+	_sprite(BattleState.FOE).visible = false
+	var rest := _show_figure(fig, tex)
+	fig.visible = true
+	_trainer_up[BattleState.FOE] = true
+	if _ts() <= 0.0:
+		fig.position = rest
+		return
+	fig.position = rest + Vector2(160.0, 0)
+	var t := _tween()
+	t.tween_property(fig, "position", rest, 0.4 * _ts()).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	await t.finished
 
 
 ## Just before a side's first Daemon comes out, its trainer steps off screen.
