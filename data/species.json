@@ -132,7 +132,7 @@
     ],
     "evolutions": [],
     "cmdb": { "category": "Pigeon / Botnet", "entry": "One pigeon, ten thousand followers. When it coos, every inbox in the valley fills at once." } },
-  { "id": "cablesnake", "number": 14, "name": "Cablesnake", "demo": true, "types": ["network"], "art": { "flip_back": true }, "corrupted": { "sprite_front": "assets/sprites/hexforged/corrupted/cablesnake_front.png", "name_prefix": "ERR::", "add_type": "Malware", "stat_mods": { "throughput": 1.10, "encryption": 0.90 } },
+  { "id": "cablesnake", "number": 14, "name": "Cablesnake", "demo": true, "types": ["network"], "corrupted": { "sprite_front": "assets/sprites/hexforged/corrupted/cablesnake_front.png", "name_prefix": "ERR::", "add_type": "Malware", "stat_mods": { "throughput": 1.10, "encryption": 0.90 } },
     "base_stats": { "uptime": 45, "throughput": 60, "hardening": 45, "compute": 40, "encryption": 45, "bandwidth": 65 },
     "growth_rate": "slow", "catch_rate": 190, "base_exp": 58, "log_yield": { "bandwidth": 1 },
     "learnset": [
@@ -141,7 +141,7 @@
     ],
     "evolutions": [ { "to": "patchviper", "trigger": "level", "level": 24 } ],
     "cmdb": { "category": "Snake / Ethernet Run", "entry": "Lives in cable tangles and is often mistaken for one. Bites when unplugged." } },
-  { "id": "patchviper", "number": 15, "name": "Patchviper", "demo": true, "types": ["network"], "art": { "flip_back": true },
+  { "id": "patchviper", "number": 15, "name": "Patchviper", "demo": true, "types": ["network"],
     "base_stats": { "uptime": 70, "throughput": 90, "hardening": 70, "compute": 65, "encryption": 70, "bandwidth": 95 },
     "growth_rate": "slow", "catch_rate": 90, "base_exp": 155, "log_yield": { "throughput": 2 },
     "learnset": [
@@ -361,7 +361,7 @@
     ],
     "evolutions": [],
     "cmdb": { "category": "Spider / World Wide Web", "entry": "Its web spans the whole valley, and every strand carries traffic. It feels a new device join from miles away." } },
-  { "id": "calfiber", "number": 44, "name": "Calfiber", "demo": false, "types": ["network"],
+  { "id": "calfiber", "number": 44, "name": "Calfiber", "demo": false, "types": ["network"], "art": { "flip_back": true },
     "base_stats": { "uptime": 65, "throughput": 55, "hardening": 50, "compute": 55, "encryption": 50, "bandwidth": 45 },
     "growth_rate": "slow", "catch_rate": 120, "base_exp": 66, "log_yield": { "uptime": 1 },
     "learnset": [

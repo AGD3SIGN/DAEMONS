@@ -109,9 +109,13 @@ func test_back_view_flip_faces_the_foe() -> void:
 	assert_true(DaemonSprites.flip_back("chipmunk"))
 	# 2026-11-15 (Brandon: "Glowbit is turned the wrong way"): every back view was checked; these also lead
 	# with their head to the left (tail / battery on the right) and are mirrored so they face the foe.
-	for id in ["glowbit", "scriptfly", "compilume", "cablesnake", "patchviper"]:
+	for id in ["glowbit", "scriptfly", "compilume", "calfiber"]:
 		assert_true(DaemonSprites.flip_back(id), id)
-	assert_false(DaemonSprites.flip_back("pingo"))
+	# 2026-11-19 (Brandon: "cablesnake is faced the wrong way"): every back view re-checked side by side.
+	# The snakes' back views already turn their heads toward the foe, so mirroring them made them look away;
+	# Calfiber's leads with its head on the left and is now mirrored.
+	for id in ["pingo", "cablesnake", "patchviper"]:
+		assert_false(DaemonSprites.flip_back(id), id)
 	var team: Array[DaemonInstance] = [_daemon("chipmunk", 12)]
 	var scene := await _run_battle({"foe": [["pingo", 5]], "player_stack": team, "items": {}})
 	assert_true(scene.player_sprite.flip_h, "player's Chipmunk mirrored")
