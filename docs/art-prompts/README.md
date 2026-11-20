@@ -24,7 +24,7 @@ Sheet layout: 1024x1024, invisible 4x4 grid of 256x256 cells, each sprite 64x64 
 ## Files
 
 - [Chipmunk → Munkboard → Mainmunk](01-chipmunk-line.md)
-- [Pingo → Pengwan → Emperoute](02-pingo-line.md)
+- [Pingo → Pengwan → Gatewaddle](02-pingo-line.md)
 - [Glowbit → Scriptfly → Compilume](03-firefly-line.md)
 - [Wormby → Wormhole](04-wormby-line.md)
 - [Spigeon → Botgeon](05-pigeon-line.md)

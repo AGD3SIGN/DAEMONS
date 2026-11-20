@@ -99,7 +99,7 @@ Draft type chart (attacker → defender; 2 = super effective, ½ = resisted, 0 =
 | Line | Type | Concept |
 |---|---|---|
 | **Chipmunk → Munkboard → Mainmunk** | Hardware (starter) | small chipmunk build + CPU heatsink (heatsink cheeks, fan tail) → full-size chipmunk + motherboard (copper-trace stripes, RAM-stick cheek pouches) → huge enterprise chipmunk + mainframe (server-cabinet chest, cable mane, twin-fan tail) |
-| **Pingo → Pengwan → Emperoute** | Network (starter) | small round penguin + home router (2 antennas, belly LEDs) → full-size penguin + office switch (antenna crown, port-panel belly) → emperor penguin + internet backbone (satellite-dish crest, fiber-optic cape) |
+| **Pingo → Pengwan → Gatewaddle** (Gatewaddle was Emperoute until 2026-11-19; its id stays `emperoute`) | Network (starter) | small round penguin + home router (2 antennas, belly LEDs) → full-size penguin + office switch (antenna crown, port-panel belly) → emperor penguin + internet backbone (satellite-dish crest, fiber-optic cape) |
 | **Glowbit → Scriptfly → Compilume** | Software (starter) | small firefly whose tail blinks like a cursor (`>_` face) → full-size firefly with code-window wings that writes script in the air → giant firefly whose abdomen is a build-progress bar |
 | **Wormby → Wormhole** | Malware | worm that tunnels through cables → space-warping worm |
 | **Spigeon → Botgeon** | Malware | scruffy pigeon with envelope wings, stuffed with junk mail → huge pigeon commanding a botnet (dish feathers, "!!!" crest) |

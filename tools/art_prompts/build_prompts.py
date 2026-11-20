@@ -176,7 +176,7 @@ LINES = [
         ],
     ),
     dict(
-        file="02-pingo-line", title="Pingo → Pengwan → Emperoute", type="Network", ground="feet",
+        file="02-pingo-line", title="Pingo → Pengwan → Gatewaddle", type="Network", ground="feet",
         palette="#1B2A44 outline | #3C8EE0 body | #2A64A8 body shadow | #7DB8F0 body highlight |\n"
                 "#F4F8FC belly | #C8D4E0 belly shadow | #F2A23A beak/feet | #C8702A beak/feet shadow |\n"
                 "#9AA4B4 antenna/metal | #5A6474 metal shadow | #5CE07A LED green | #F2C63A LED amber/gold |\n"
@@ -231,7 +231,7 @@ LINES = [
                           "the viewer's left.",
                   back="back of the head with the antenna crown, sleek back, cable cuffs on the flippers.",
                   check="Antenna crown, port-panel belly, cable cuffs, orange beak and feet wherever visible."),
-            stage(name="Emperoute", n=3, of=3,
+            stage(name="Gatewaddle", n=3, of=3,
                   concept="the SAME penguin as a towering emperor penguin, fused with the internet "
                           "backbone. Regal and calm; it carries the whole valley's traffic.",
                   body="tall and majestic emperor-penguin build, broad chest, long flippers, upright posture.",

@@ -238,7 +238,7 @@ battle's Cert (stack and racks; corrupted ones wait until cleaned).
 - Chipmunk → Munkboard (level: Lv 16)
 - Munkboard → Mainmunk (level: Lv 34)
 - Pingo → Pengwan (level: Lv 16)
-- Pengwan → Emperoute (level: Lv 34)
+- Pengwan → Gatewaddle (level: Lv 34)
 - Glowbit → Scriptfly (level: Lv 16)
 - Scriptfly → Compilume (level: Lv 34)
 - Wormby → Wormhole (level: Lv 22)

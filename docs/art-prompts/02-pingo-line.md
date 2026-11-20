@@ -1,4 +1,4 @@
-# Pingo → Pengwan → Emperoute
+# Pingo → Pengwan → Gatewaddle
 
 Paste one stage per image. Generate and approve each stage before the next.
 
@@ -161,7 +161,7 @@ Row 4 - SPECIAL (front view):
 - No text, labels, numbers, grid lines, borders or extra characters. Flat #FF00FF background everywhere.
 ````
 
-## Emperoute (Stage 3 of 3)
+## Gatewaddle (Stage 3 of 3)
 
 Attach the approved Pingo and Pengwan sheet(s) first.
 
@@ -193,7 +193,7 @@ ATTACHED: the approved sprite sheet(s) for Pingo and Pengwan (the earlier stage(
 - 100% original: it must not resemble any existing game, cartoon or mascot character.
 
 == CREATURE BIBLE ==
-Name: Emperoute. Stage 3 of 3 (final form). Type: Network.
+Name: Gatewaddle. Stage 3 of 3 (final form). Type: Network.
 Concept: the SAME penguin as a towering emperor penguin, fused with the internet backbone. Regal and calm; it carries the whole valley's traffic.
 Body: tall and majestic emperor-penguin build, broad chest, long flippers, upright posture.
 Size: body height about 85% of the cell (about 54 of the 64 art pixels), same size in every frame.

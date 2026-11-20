@@ -57,7 +57,7 @@
     ],
     "evolutions": [ { "to": "emperoute", "trigger": "level", "level": 34 } ],
     "cmdb": { "category": "Penguin / Network Switch", "entry": "Waddles the halls keeping every port in line. Knows exactly which desk each cable goes to." } },
-  { "id": "emperoute", "number": 6, "name": "Emperoute", "demo": true, "types": ["network"],
+  { "id": "emperoute", "number": 6, "name": "Gatewaddle", "demo": true, "types": ["network"],
     "base_stats": { "uptime": 82, "throughput": 86, "hardening": 100, "compute": 88, "encryption": 96, "bandwidth": 78 },
     "growth_rate": "medium_slow", "catch_rate": 45, "base_exp": 239, "log_yield": { "hardening": 3 },
     "learnset": [
