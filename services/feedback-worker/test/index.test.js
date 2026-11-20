@@ -15,7 +15,7 @@ function fakeKV() {
 
 function env(overrides = {}) {
   return { FEEDBACK_KV: fakeKV(), GITHUB_REPO: "AGD3SIGN/daemons-feedback", GITHUB_TOKEN: "tok", TURNSTILE_SECRET: "sec",
-    TURNSTILE_SITE_KEY: "site-key-123", ALLOWED_ORIGINS: "https://agd3sign.github.io", ...overrides };
+    TURNSTILE_SITE_KEY: "site-key-123", ALLOWED_ORIGINS: "https://agd3sign.github.io,https://html-classic.itch.zone", ...overrides };
 }
 
 const BASE = "https://feedback.example.workers.dev";
@@ -112,10 +112,12 @@ test("issue titles are short and context only keeps known keys", () => {
   assert.deepEqual(cleanContext({ map: "port_city", x: 4, evil: "<b>", platform: "toaster" }), { map: "port_city", x: 4 });
 });
 
-test("CORS only for the web build's origin", async () => {
+test("CORS only for the web build's origins (GitHub Pages and itch.io)", async () => {
   const e = env();
   const ok = await worker.fetch(post("/drafts", good, { Origin: "https://agd3sign.github.io" }), e);
   assert.equal(ok.headers.get("Access-Control-Allow-Origin"), "https://agd3sign.github.io");
+  const itch = await worker.fetch(post("/drafts", good, { Origin: "https://html-classic.itch.zone", "CF-Connecting-IP": "9.9.9.9" }), e);
+  assert.equal(itch.headers.get("Access-Control-Allow-Origin"), "https://html-classic.itch.zone");
   const other = await worker.fetch(post("/drafts", good, { Origin: "https://evil.example", "CF-Connecting-IP": "5.6.7.8" }), e);
   assert.equal(other.headers.get("Access-Control-Allow-Origin"), null);
 });

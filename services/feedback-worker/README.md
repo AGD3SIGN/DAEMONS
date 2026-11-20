@@ -49,8 +49,8 @@ Run from `services/feedback-worker/`.
    (must start with `https://`), run the tests, commit. Until then the game says
    "Feedback isn't set up in this build yet."
 
-If the web build is served from somewhere other than `https://agd3sign.github.io`, add that origin to
-`ALLOWED_ORIGINS` in `wrangler.toml`.
+The web build is served from `https://agd3sign.github.io` and itch.io (`https://html-classic.itch.zone`). If it's
+served from anywhere else, add that origin to `ALLOWED_ORIGINS` in `wrangler.toml` and run `npm run deploy`.
 
 ## Day to day
 
