@@ -172,6 +172,7 @@ func test_autosave_on_suspend_only_when_safe() -> void:
 	var rng := RandomNumberGenerator.new()
 	GameState.add_daemon(DaemonInstance.create("pingo", 8, rng, 1))
 	GameState.flags["got_starter"] = true
+	GameState.flags["kevin_left_help_desk"] = true  # past Kevin's scene after the first fight
 	SceneRouter.params = {"map": "onboarding_town"}
 	var world: Overworld = load(Overworld.SCENE).instantiate()
 	add_child_autofree(world)

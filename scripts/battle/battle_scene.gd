@@ -109,7 +109,8 @@ static func trainer_config(trainer_id: String) -> Dictionary:
 	var music := "battle_boss" if t.has("cert") else ("battle_rival" if t.get("story", false) else "battle_trainer")
 	return {"foe": t["team"], "wild": false, "trainer_name": t["name"], "ai": t["ai"], "trainer_id": trainer_id,
 		"prize": int(t["prize"]), "defeat_text": t["defeat"], "cert": t.get("cert", ""),
-		"story": t.get("story", false), "music": t.get("music", music), "trainer_sprite": t.get("sprite", "")}
+		"story": t.get("story", false), "music": t.get("music", music), "trainer_sprite": t.get("sprite", ""),
+		"done_flag": t.get("done_flag", "")}
 
 
 static func trainer_flag(trainer_id: String) -> String:
@@ -392,6 +393,7 @@ func _trainer_rewards() -> void:
 	if trainer_id.is_empty():
 		return
 	GameState.flags[trainer_flag(trainer_id)] = true
+	_set_done_flag()
 	var defeat: String = config.get("defeat_text", "")
 	if not defeat.is_empty():
 		await text_box.show_text("%s: %s" % [trainer_name, defeat])
@@ -409,11 +411,20 @@ func _trainer_rewards() -> void:
 			await text_box.show_text("%s upgraded into %s!" % [pair[0], pair[1]])
 
 
+## A trainer's optional "done_flag" is set once the battle is over, won or (story battles) lost, so one
+## scene can follow every version of a fight (Kevin's three counter-starter teams share "kevin_rival_1_done").
+func _set_done_flag() -> void:
+	var flag: String = config.get("done_flag", "")
+	if not flag.is_empty():
+		GameState.flags[flag] = true
+
+
 ## Story battles (rival fights) don't black out: the story goes on either way.
 func _story_loss() -> void:
 	var trainer_id: String = config.get("trainer_id", "")
 	if not trainer_id.is_empty():
 		GameState.flags[trainer_flag(trainer_id)] = true
+	_set_done_flag()
 	GameState.heal_stack()
 	var defeat: String = config.get("defeat_text", "")
 	if not defeat.is_empty():

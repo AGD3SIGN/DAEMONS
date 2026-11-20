@@ -84,13 +84,22 @@ func disappear() -> void:
 
 ## Directions to a free tile next to the player (shortest walk), or [] if there's no way.
 func path_to_player() -> Array:
-	var goal := world.player.cell
+	return _path_to(world.player.cell, true)
+
+
+## Directions back to where this NPC started on the map (move_npc "to": "home"), or [] if there's no way.
+func path_home() -> Array:
+	return _path_to(home, false)
+
+
+## Shortest walk to goal (or, with beside, to a free tile next to it), never through the player.
+func _path_to(goal: Vector2i, beside: bool) -> Array:
 	var dirs := {Vector2i.UP: "up", Vector2i.DOWN: "down", Vector2i.LEFT: "left", Vector2i.RIGHT: "right"}
 	var came_from := {cell: null}
 	var queue: Array[Vector2i] = [cell]
 	while not queue.is_empty():
 		var at: Vector2i = queue.pop_front()
-		if (at - goal).length_squared() == 1:
+		if (beside and (at - goal).length_squared() == 1) or (not beside and at == goal):
 			var path: Array = []
 			while came_from[at] != null:
 				var prev: Vector2i = came_from[at]
@@ -99,7 +108,7 @@ func path_to_player() -> Array:
 			return path
 		for d: Vector2i in dirs:
 			var next := at + d
-			if came_from.has(next) or next == goal:
+			if came_from.has(next) or next == world.player.cell or (beside and next == goal):
 				continue
 			var blocker: Variant = world.map.occupied.get(next)
 			if not world.map.is_walkable(next) or (blocker != null and blocker != self):

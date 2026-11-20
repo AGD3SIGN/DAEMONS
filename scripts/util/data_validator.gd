@@ -550,8 +550,8 @@ func _validate_command(step: Dictionary, where: String) -> void:
 		"move_npc":
 			_string(step, "npc", where)
 			if step.has("to"):
-				if step["to"] != "player":
-					_err(where, "'to' can only be \"player\"")
+				if not step["to"] in ["player", "home"]:
+					_err(where, "'to' can only be \"player\" or \"home\"")
 				return
 			var path: Variant = step.get("path")
 			if typeof(path) != TYPE_ARRAY or path.is_empty():

@@ -418,5 +418,126 @@
       "speaker": "Kevin",
       "text": "Hurry up! I've got a calendar invite for this battle. I set it to repeat daily. Forever."
     }
+  ],
+  "kevin_after_rival_1": [
+    {
+      "if_flag": "kevin_rival_1_done",
+      "then": [
+        {
+          "cmd": "show_npc",
+          "npc": "kevin_burst",
+          "facing": "up"
+        },
+        {
+          "cmd": "move_npc",
+          "npc": "kevin_burst",
+          "to": "player",
+          "run": true
+        },
+        {
+          "speaker": "Kevin",
+          "text": "Okay. Next time I'm CC'ing my lawyer. And my mom."
+        },
+        {
+          "speaker": "Kevin",
+          "text": "Whatever. I'm heading up Route 1 to Patch Town to get the first cert. I'll reply-all when I have it. You'll know."
+        },
+        {
+          "cmd": "move_npc",
+          "npc": "kevin_burst",
+          "to": "home",
+          "run": true
+        },
+        {
+          "cmd": "hide_npc",
+          "npc": "kevin_burst"
+        },
+        {
+          "text": "Kevin left. You can hear him replying-all from the parking lot."
+        },
+        {
+          "speaker": "Marge",
+          "text": "He's sent me eleven emails today. Seven of them just say \"Thanks!\""
+        },
+        {
+          "speaker": "Marge",
+          "text": "Anyway. Your first assignment, {player}: head north up Route 1 to Patch Town."
+        },
+        {
+          "speaker": "Marge",
+          "text": "The Desktop Support department there runs certification trials. Earn your first cert."
+        },
+        {
+          "if_flag": "got_manager_keys",
+          "then": [],
+          "else": [
+            {
+              "speaker": "Marge",
+              "text": "Take these. Company property, so try not to lose them."
+            },
+            {
+              "cmd": "give_item",
+              "item": "thumb_drive",
+              "count": 5
+            },
+            {
+              "cmd": "set_flag",
+              "flag": "got_manager_keys"
+            },
+            {
+              "speaker": "Marge",
+              "text": "Use Thumb Drives on weakened wild Forgelings. Quarantine them, don't fight them all."
+            }
+          ]
+        },
+        {
+          "cmd": "set_flag",
+          "flag": "kevin_left_help_desk"
+        }
+      ],
+      "else": [
+        {
+          "cmd": "show_npc",
+          "npc": "kevin_burst",
+          "facing": "up"
+        },
+        {
+          "cmd": "move_npc",
+          "npc": "kevin_burst",
+          "to": "player",
+          "run": true
+        },
+        {
+          "speaker": "Kevin",
+          "text": "Wait, where were we? Oh right. I was about to win."
+        },
+        {
+          "if_flag": "starter_chipmunk",
+          "then": [
+            {
+              "cmd": "start_battle",
+              "trainer": "kevin_rival_1_pingo"
+            }
+          ],
+          "else": [
+            {
+              "if_flag": "starter_pingo",
+              "then": [
+                {
+                  "cmd": "start_battle",
+                  "trainer": "kevin_rival_1_glowbit"
+                }
+              ],
+              "else": [
+                {
+                  "cmd": "start_battle",
+                  "trainer": "kevin_rival_1_chipmunk"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
   ]
 }

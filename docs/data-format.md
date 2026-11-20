@@ -133,6 +133,7 @@ Every file is an object of `dialogue id → list of steps`. Ids must be unique a
 | yes/no | `{"choice": "Heal your Forgelings?", "yes": [steps], "no": [steps]}` |
 | flag check | `{"if_flag": "got_coffee", "then": [steps], "else": [steps]}` |
 | set_flag | `{"cmd": "set_flag", "flag": "met_kevin", "value": true}` |
+| move_npc to a spot | `{"cmd": "move_npc", "npc": "kevin_burst", "to": "player", "run": true}` (next to you) or `"to": "home"` (back where they started) |
 | give_item | `{"cmd": "give_item", "item": "coffee", "count": 3}` |
 | give_daemon | `{"cmd": "give_daemon", "species": "dustbunny", "level": 5}` |
 | heal_party | `{"cmd": "heal_party"}` |
@@ -296,7 +297,7 @@ Options live separately in user://settings.cfg.
 **Maps:** optional `"music": "town"` (track id, see AudioManager) and `"tint": "#7c88bc"` (darkens the map, e.g. the Wi-Fi Dead Zone), and `"battle_zone"`: `server_floor` (default), `coolant_loop` or `overheat`, the battle arena palette for fights in that area.
 **Laser doors:** `{"type": "barrier", "x": 7, "y": 9, "open_flags": ["port_1", "port_3"], "closed_flags": ["port_2"]}` blocks its tile until every open flag is set and no closed flag is. Re-checked after every dialogue.
 **Arrival triggers:** a trigger zone on a spawn point runs when you arrive there (cutscenes).
-**Trainers:** `"story": true` (rival fights: losing doesn't black out, the story continues). Music is picked automatically: battle_boss (has a cert), battle_rival (story), battle_trainer.
+**Trainers:** `"story": true` (rival fights: losing doesn't black out, the story continues). `"done_flag": "x"` sets flag x once the fight is over (a win, or a story loss), so one scene can follow every version of a fight. Music is picked automatically: battle_boss (has a cert), battle_rival (story), battle_trainer.
 
 | dialogue command | example |
 |---|---|

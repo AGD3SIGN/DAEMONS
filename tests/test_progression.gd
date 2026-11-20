@@ -134,6 +134,7 @@ func test_losing_the_rival_battle_is_not_a_black_out() -> void:
 	assert_eq(GameState.location["map"], "help_desk", "you stay where you were")
 	assert_eq(weak.current_uptime, weak.max_uptime(), "patched up")
 	assert_true(GameState.flags.get("trainer_kevin_rival_1_pingo", false), "the story moves on")
+	assert_true(GameState.flags.get("kevin_rival_1_done", false), "and Kevin's scene after the fight can play")
 
 
 # --- battle results ----------------------------------------------------------
@@ -148,6 +149,16 @@ func test_winning_pays_the_prize_and_marks_the_trainer() -> void:
 	assert_eq(scene.result["outcome"], "player_won")
 	assert_eq(GameState.credits, 260)
 	assert_true(GameState.flags.get("trainer_intern_ian", false))
+
+
+func test_winning_sets_the_trainers_done_flag() -> void:
+	var team: Array[DaemonInstance] = [_daemon("munkboard", 30)]
+	var config := BattleScene.trainer_config("kevin_rival_1_glowbit")
+	config["player_stack"] = team
+	config["items"] = {}
+	var scene := await _battle(config)
+	assert_eq(scene.result["outcome"], "player_won")
+	assert_true(GameState.flags.get("kevin_rival_1_done", false))
 
 
 func test_bosses_can_award_a_certification() -> void:
@@ -410,6 +421,14 @@ func test_v2_saves_rescale_build_quality_and_logs() -> void:
 	assert_eq(data["credits"], 5, "everything else untouched")
 	var d := DaemonInstance.from_dict(data["stack"][0])
 	assert_eq(d.build_quality["compute"], 15)
+
+
+func test_v4_saves_that_already_fought_kevin_skip_the_rematch() -> void:
+	var out := SaveManager.migrate({"flags": {"trainer_kevin_rival_1_glowbit": true}}, 4)
+	assert_true(out["flags"].get("kevin_rival_1_done", false))
+	out = SaveManager.migrate({"flags": {"got_starter": true}}, 4)
+	assert_false(out["flags"].has("kevin_rival_1_done"), "not fought yet: the fight still comes")
+	assert_eq(SaveManager.migrate({"credits": 1}, 4), {"credits": 1}, "no flags, no change")
 
 
 func test_v3_saves_rename_the_corrupted_status_to_infected() -> void:

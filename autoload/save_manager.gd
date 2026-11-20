@@ -5,7 +5,7 @@ extends Node
 ##
 ## File shape: {"version": 1, "save_count": 7, "saved_at": unix, "checksum": sha256, "data": {...}}
 
-const SAVE_VERSION := 4
+const SAVE_VERSION := 5
 ## v2 (2026-11-08): evolution lines redesigned so each keeps the same animal; old species ids renamed.
 const V2_SPECIES_RENAMES := {
 	"motherboar": "munkboard", "mainframe": "mainmunk", "routeroo": "pengwan", "meshkraken": "emperoute",
@@ -144,7 +144,19 @@ func migrate(data: Dictionary, from_version: int) -> Dictionary:
 		out = _rescale_daemons(out)
 	if from_version < 4:
 		out = _rename_status(out, "corrupted", "infected")
+	if from_version < 5:
+		out = _mark_kevin_fight_done(out)
 	return out
+
+
+## v4 -> v5 (2026-11-20): Kevin's first fight now sets "kevin_rival_1_done" (any of his three teams), which
+## the scene after it waits for. Saves that already beat (or lost to) him get the flag so he doesn't rematch.
+static func _mark_kevin_fight_done(data: Dictionary) -> Dictionary:
+	var flags: Dictionary = data.get("flags", {})
+	for team in ["pingo", "glowbit", "chipmunk"]:
+		if flags.get("trainer_kevin_rival_1_" + team, false):
+			flags["kevin_rival_1_done"] = true
+	return data
 
 
 ## v3 -> v4 (2026-11-15): the poison-style status "corrupted" is now "infected" (corrupted Forgelings are a

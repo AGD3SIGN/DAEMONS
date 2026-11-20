@@ -100,6 +100,13 @@
       "y": 7,
       "dialogue": "manager_starter",
       "unless_flag": "got_starter"
+    },
+    {
+      "type": "trigger",
+      "x": 1, "y": 2, "w": 11, "h": 6,
+      "dialogue": "kevin_after_rival_1",
+      "requires_flag": "got_starter",
+      "unless_flag": "kevin_left_help_desk"
     }
   ],
   "music": "help_desk"

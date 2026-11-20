@@ -240,6 +240,8 @@ func _collect_dialogue_facts() -> void:
 			if e.has("trainer"):
 				_trainers_used[e["trainer"]] = true
 				_flags_set[BattleScene.trainer_flag(e["trainer"])] = "beating %s" % e["trainer"]
+				if DataRegistry.trainers[e["trainer"]].has("done_flag"):
+					_flags_set[DataRegistry.trainers[e["trainer"]]["done_flag"]] = "fighting %s" % e["trainer"]
 				var cert: String = DataRegistry.trainers[e["trainer"]].get("cert", "")
 				if not cert.is_empty():
 					_certs_given[cert] = true
@@ -277,6 +279,8 @@ func _scan_steps(steps: Array, where: String) -> void:
 				if step.has("trainer"):
 					_trainers_used[step["trainer"]] = true
 					_flags_set[BattleScene.trainer_flag(step["trainer"])] = where
+					if DataRegistry.trainers.get(step["trainer"], {}).has("done_flag"):
+						_flags_set[DataRegistry.trainers[step["trainer"]]["done_flag"]] = where
 		for branch in ["yes", "no", "then", "else", "cancel"]:
 			if step.has(branch):
 				_scan_steps(step[branch], where)

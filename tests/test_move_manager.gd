@@ -9,6 +9,7 @@ var world: Overworld
 func before_each() -> void:
 	GameState.reset()
 	GameState.flags["got_starter"] = true
+	GameState.flags["kevin_left_help_desk"] = true  # past Kevin's scene after the first fight
 	GameState.location = {"map": "port_city", "x": 17, "y": 12, "facing": "up"}
 
 

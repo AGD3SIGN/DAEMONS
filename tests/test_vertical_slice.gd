@@ -81,6 +81,7 @@ func test_patch_town_gate_needs_the_cert() -> void:
 func test_music_hooks_and_dead_zone_tint() -> void:
 	GameState.add_daemon(_daemon("pingo", 12))
 	GameState.flags["got_starter"] = true
+	GameState.flags["kevin_left_help_desk"] = true  # past Kevin's scene after the first fight
 	_open("onboarding_town")
 	assert_eq(AudioManager.current_music, "town")
 	world.load_map("route_1")

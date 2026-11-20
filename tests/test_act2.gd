@@ -12,6 +12,7 @@ func before_each() -> void:
 	rng.seed = 9
 	GameState.add_daemon(DaemonInstance.create("chipmunk", 16, rng, 1))
 	GameState.flags["got_starter"] = true
+	GameState.flags["kevin_left_help_desk"] = true  # past Kevin's scene after the first fight
 
 
 func after_each() -> void:

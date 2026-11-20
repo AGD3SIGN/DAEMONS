@@ -22,6 +22,8 @@ extends RefCounted
 ##   {"cmd": "demo_teaser"}                          the Port City teaser battle (glitched, uncatchable, flees)
 ##   {"cmd": "end_demo"}                              sets demo_complete, saves, rolls the end card + credits
 ##   {"cmd": "move_npc", "npc": "kid", "path": ["left", "right"]}   npc "self" = whoever is talking
+##        or "to": "player" (walk up to the player) / "to": "home" (walk back to where they started); "run": true
+##   {"cmd": "show_npc", "npc": "kevin_burst", "facing": "up"}  /  {"cmd": "hide_npc", "npc": "kevin_burst"}
 ##   {"cmd": "open_shop", "stock": ["coffee", "thumb_drive"]}   Supply Closet buy/sell
 ##   {"cmd": "open_rack"}                                         Server Rack storage
 ##   {"cmd": "name_player"}                                       pick or type the player's name
@@ -160,6 +162,8 @@ func _command(step: Dictionary) -> void:
 					await who.move_path(who.path_to_player(), run)
 					who.face(world.player.cell - who.cell)
 					world.player.face(who.cell - world.player.cell)
+				elif step.get("to", "") == "home":
+					await who.move_path(who.path_home(), run)
 				else:
 					await who.move_path(step["path"], run)
 		"show_npc":

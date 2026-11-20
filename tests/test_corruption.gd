@@ -145,6 +145,7 @@ func test_wild_battle_spawns_err_version() -> void:
 
 func test_help_desk_cleans_it_end_to_end() -> void:
 	GameState.flags["got_starter"] = true
+	GameState.flags["kevin_left_help_desk"] = true  # past Kevin's scene after the first fight
 	GameState.add_daemon(_d("pingo", 10))
 	GameState.add_daemon(_d("cablesnake", 9, true))
 	SceneRouter.params = {"map": "help_desk", "spawn": "default"}

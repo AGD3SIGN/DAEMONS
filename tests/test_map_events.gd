@@ -99,6 +99,7 @@ func test_help_desk_heals_across_the_counter() -> void:
 	chipmunk.current_uptime = 1
 	chipmunk.status = "infected"
 	GameState.flags["got_starter"] = true  # skip the starter cutscene (Kevin would stand in the way)
+	GameState.flags["kevin_left_help_desk"] = true  # past Kevin's scene after the first fight
 	_open("onboarding_town", "from_help_desk")
 	await world.player.try_step(Vector2i.UP)  # through the door
 	await wait_until(func() -> bool: return world.map.map_id == "help_desk" and world.is_idle(), 5.0)
@@ -152,6 +153,7 @@ func test_town_exit_is_blocked_until_you_have_a_starter() -> void:
 	assert_true(_logged("Cable tangles without a Forgeling?"))
 	assert_eq(world.player.cell, Vector2i(14, 5), "walked back down")
 	GameState.flags["got_starter"] = true
+	GameState.flags["kevin_left_help_desk"] = true  # past Kevin's scene after the first fight
 	var lines := world.dialogue_log.size()
 	await world.player.try_step(Vector2i.UP)
 	await _wait_idle()
@@ -208,12 +210,65 @@ func test_manager_gives_a_starter_and_kevin_counter_picks() -> void:
 
 func test_kevin_stays_hidden_by_the_door_on_later_visits() -> void:
 	GameState.flags["got_starter"] = true
+	GameState.flags["kevin_left_help_desk"] = true  # past Kevin's scene after the first fight
 	_open("help_desk")
 	await wait_process_frames(2)
 	var kevin := world.find_npc("kevin_burst")
 	assert_false(kevin.visible)
 	assert_false(world.map.occupied.has(kevin.cell), "not solid while hidden")
 	assert_false(kevin.can_interact())
+
+
+## Feedback #5: after the first fight Kevin used to just vanish. Coming back from the battle (to the spot
+## where it started), Kevin walks up, says his piece, runs out the door, and Marge gives the first assignment.
+func test_after_the_first_fight_kevin_leaves_and_marge_sends_you_to_patch_town() -> void:
+	GameState.flags["got_starter"] = true
+	GameState.flags["starter_chipmunk"] = true
+	GameState.flags["kevin_rival_1_done"] = true
+	GameState.location = {"map": "help_desk", "x": 8, "y": 6, "facing": "up"}
+	SceneRouter.params = {}
+	world = load(Overworld.SCENE).instantiate()
+	world.allow_scene_change = false
+	world.auto_advance_text = true
+	world.auto_choice = true
+	watch_signals(world)
+	add_child_autofree(world)
+	world.set_time_scale(0.0)
+	await wait_until(func() -> bool: return GameState.flags.get("kevin_left_help_desk", false) and world.is_idle(), 10.0)
+	assert_true(_logged("CC'ing my lawyer"), "Kevin had the last word")
+	assert_true(_logged("Patch Town"), "and Marge gave the first assignment")
+	var kevin := world.find_npc("kevin_burst")
+	assert_eq(kevin.cell, kevin.home, "Kevin ran back out the door")
+	assert_true(kevin.off_map and not kevin.visible, "and is gone")
+	assert_false(world.map.occupied.has(kevin.cell))
+	assert_eq(GameState.bag.get("thumb_drive", 0), 5, "Marge handed over the Thumb Drives")
+	assert_true(GameState.flags.get("got_manager_keys", false))
+	assert_signal_not_emitted(world, "battle_requested")
+	assert_eq(world.player.cell, Vector2i(8, 6), "you didn't move")
+	await world.player.try_step(Vector2i.LEFT)
+	await _wait_idle()
+	assert_eq(world.dialogue_log.filter(func(l: String) -> bool: return "CC'ing my lawyer" in l).size(), 1, "only once")
+
+
+func test_kevin_comes_back_for_the_fight_if_it_never_finished() -> void:
+	GameState.flags["got_starter"] = true
+	GameState.flags["starter_pingo"] = true
+	SceneRouter.params = {"map": "help_desk"}
+	world = load(Overworld.SCENE).instantiate()
+	world.allow_scene_change = false
+	world.auto_advance_text = true
+	watch_signals(world)
+	add_child_autofree(world)
+	world.set_time_scale(0.0)
+	await wait_until(func() -> bool: return world.is_idle(), 10.0)
+	assert_signal_emitted(world, "battle_requested")
+	assert_eq(get_signal_parameters(world, "battle_requested")[0]["trainer_id"], "kevin_rival_1_glowbit")
+	assert_false(GameState.flags.get("kevin_left_help_desk", false))
+
+
+func test_every_kevin_team_shares_the_fight_done_flag() -> void:
+	for team in ["pingo", "glowbit", "chipmunk"]:
+		assert_eq(BattleScene.trainer_config("kevin_rival_1_" + team)["done_flag"], "kevin_rival_1_done", team)
 
 
 func test_returns_to_saved_location() -> void:

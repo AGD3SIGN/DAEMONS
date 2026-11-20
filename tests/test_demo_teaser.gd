@@ -71,6 +71,7 @@ func test_demo_build_ends_on_thanks_for_playing() -> void:
 
 func _open_port_city_from_the_department() -> void:
 	GameState.flags["got_starter"] = true
+	GameState.flags["kevin_left_help_desk"] = true  # past Kevin's scene after the first fight
 	GameState.flags["port_city_arrived"] = true
 	GameState.active_stack.assign(_team())
 	SceneRouter.params = {"map": "port_city", "spawn": "from_department"}

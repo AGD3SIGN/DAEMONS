@@ -203,6 +203,7 @@ func test_deposit_through_the_server_rack_menu() -> void:
 	GameState.add_daemon(_daemon("chipmunk", 12))
 	GameState.add_daemon(_daemon("dustbunny", 4))
 	GameState.flags["got_starter"] = true  # skip the manager's arrival cutscene
+	GameState.flags["kevin_left_help_desk"] = true  # past Kevin's scene after the first fight
 	_open("help_desk")
 	var done := [false]
 	var flow := func() -> void:
@@ -226,6 +227,7 @@ func test_deposit_through_the_server_rack_menu() -> void:
 func test_buy_through_the_supply_closet() -> void:
 	GameState.credits = 500
 	GameState.flags["got_starter"] = true
+	GameState.flags["kevin_left_help_desk"] = true  # past Kevin's scene after the first fight
 	_open("help_desk")
 	var done := [false]
 	var flow := func() -> void:
