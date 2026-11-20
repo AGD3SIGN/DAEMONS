@@ -383,13 +383,13 @@ func _foe_figure(pose: String) -> Texture2D:
 	return posed if posed != null else BattleScene.trainer_frame(sprite_id, false)
 
 
-## Puts a texture on a trainer figure at its own size, feet still centered on the platform; returns the
-## figure's resting position.
+## Puts a texture on a trainer figure at its own size, feet still centered on the same spot of the platform
+## (whole pixels: frame sizes are even); returns the figure's resting position.
 func _show_figure(fig: TextureRect, tex: Texture2D) -> Vector2:
 	var base: Vector2 = fig.get_meta("rest")
 	fig.texture = tex
 	fig.size = tex.get_size()
-	return base - Vector2((fig.size.x - BattleScene.TRAINER_SIZE.x) / 2.0, 0)
+	return base - Vector2((fig.size.x - BattleScene.TRAINER_SIZE.x) / 2.0, fig.size.y - BattleScene.TRAINER_SIZE.y)
 
 
 ## After the last Forgeling falls (2026-11-19): the foe trainer slides back in, "defeated" when you win or

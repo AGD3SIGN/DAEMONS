@@ -68,7 +68,7 @@ func test_every_character_sheet_is_24x28_and_small_palette() -> void:
 		var battle := f.ends_with("_battle.png") or f.ends_with("_poses.png")
 		count += 0 if battle else 1
 		var img := Image.load_from_file(ProjectSettings.globalize_path("res://assets/sprites/characters/" + f))
-		var want := Vector2i(192, 72) if f.ends_with("_poses.png") else (Vector2i(96, 72) if battle else Vector2i(72, 112))
+		var want := Vector2i(216, 80) if f.ends_with("_poses.png") else (Vector2i(96, 72) if battle else Vector2i(72, 112))
 		assert_eq(img.get_size(), want, f)
 		var colors := {}
 		for y in img.get_height():

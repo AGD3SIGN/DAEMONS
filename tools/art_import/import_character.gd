@@ -18,7 +18,7 @@ extends SceneTree
 ## straight from the source so faces keep their detail (the walking frame scaled up loses it).
 ##
 ## Battle poses (2026-11-19): a trainer's <id>_battle_poses.png (3 poses in a row: challenge / pointing,
-## confident / arms crossed, defeated) becomes <id>_poses.png, three 64x72 frames on one scale, feet on the
+## confident / arms crossed, defeated) becomes <id>_poses.png, three 72x80 frames on one scale, feet on the
 ## bottom. Run the polish pass on it with --colors 16 afterwards.
 ##   godot --headless -s tools/art_import/import_character.gd -- --poses <source image> <id>
 ##   godot --headless -s tools/art_import/import_character.gd -- --poses-all
@@ -35,7 +35,7 @@ const COLS := 3
 const ROWS := 4
 ## Battle poses (<id>_poses.png): challenge, confident, defeated, side by side. Wider than the standing
 ## figure so a pointing arm fits.
-const POSE_FRAME := Vector2i(64, 72)
+const POSE_FRAME := Vector2i(72, 80)
 const POSE_COUNT := 3
 const POSES_SUFFIX := "_battle_poses"
 

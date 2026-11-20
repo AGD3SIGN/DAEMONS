@@ -429,6 +429,10 @@ func test_a_beaten_trainer_comes_back_defeated_and_a_winner_gloats() -> void:
 	assert_true(won.foe_trainer.visible, "the trainer is back for their closing line")
 	assert_eq((won.foe_trainer.texture as AtlasTexture).region.position.x, BattleScene.POSE_SIZE.x * 2, "defeated pose")
 	assert_eq(won.foe_trainer.size, BattleScene.POSE_SIZE, "drawn at the pose's own size")
+	var rest: Vector2 = won.foe_trainer.get_meta("rest")
+	assert_eq(won.foe_trainer.position + won.foe_trainer.size, rest + BattleScene.TRAINER_SIZE + (BattleScene.POSE_SIZE - BattleScene.TRAINER_SIZE) / 2.0 * Vector2(1, 0),
+		"feet on the same spot as the standing figure's")
+	assert_eq(won.foe_trainer.position, won.foe_trainer.position.round(), "on whole pixels")
 	assert_false(won.foe_sprite.visible)
 	var weak: Array[DaemonInstance] = [_daemon("pingo", 2)]
 	var lost := await _run_battle({"foe": [["mainmunk", 60]], "player_stack": weak, "items": {},

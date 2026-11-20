@@ -41,8 +41,9 @@ const FOE_BOB := 6.0                           # wild Daemon bobs 6 px over 2.4 
 const FOE_BOB_TIME := 2.4
 ## Trainer figures in the battle intro (and one frame of <id>_battle.png).
 const TRAINER_SIZE := Vector2(48, 72)
-## Battle poses (<id>_poses.png, made by import_character.gd --poses): three 64x72 frames.
-const POSE_SIZE := Vector2(64, 72)
+## Battle poses (<id>_poses.png, made by import_character.gd --poses): three 72x80 frames. Taller than the
+## standing figure so the poses keep the source art's detail (faces lost rows at 72 tall).
+const POSE_SIZE := Vector2(72, 80)
 const POSES: PackedStringArray = ["challenge", "confident", "defeated"]
 const UPGRADE_BG := Color("181c30")
 
