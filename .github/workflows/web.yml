@@ -71,6 +71,17 @@ jobs:
           cp web/touch_deck.js build/web/
           touch build/web/.nojekyll
 
+      # The same build as a zip for itch.io ("HEXFORGED-web-itch" under the run's Artifacts). Download it,
+      # unzip once (GitHub wraps artifacts in a zip), and upload the inner hexforged-web.zip to itch.io as HTML.
+      - name: Zip for itch.io
+        run: cd build/web && zip -qr ../hexforged-web.zip . -x .nojekyll
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: HEXFORGED-web-itch
+          path: build/hexforged-web.zip
+          retention-days: 30
+
       - uses: actions/upload-pages-artifact@v3
         with:
           path: build/web
