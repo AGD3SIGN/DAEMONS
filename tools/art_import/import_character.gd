@@ -1,7 +1,9 @@
 extends SceneTree
 ## Turns an AI-generated overworld character sheet into the game's walking sheet:
 ## assets/sprites/characters/<id>.png, 3 frames (stand, step A, step B) x 4 rows (down, up, left, right)
-## of 20x28, standing on the bottom of each frame (centered on its 16x16 tile, 2 px wider each side and 12 px taller).
+## of 24x28, standing on the bottom of each frame (centered on its 16x16 tile, 4 px wider each side and 12 px taller).
+## Characters are sized to fit 20x28 (FIT); the 2 spare px each side hold props like fishing rods, since each
+## frame is centered on the body rather than the drawing (see _body_x).
 ##
 ##   godot --headless -s tools/art_import/import_character.gd -- <source image> <id>
 ##   godot --headless -s tools/art_import/import_character.gd -- --all
@@ -14,19 +16,42 @@ extends SceneTree
 ## so walking doesn't jitter.
 ## Also writes <id>_battle.png: the front and back standing poses at 48x72 for the battle intro, sampled
 ## straight from the source so faces keep their detail (the walking frame scaled up loses it).
+##
+## Battle poses (2026-11-19): a trainer's <id>_battle_poses.png (3 poses in a row: challenge / pointing,
+## confident / arms crossed, defeated) becomes <id>_poses.png, three 64x72 frames on one scale, feet on the
+## bottom. Run the polish pass on it with --colors 16 afterwards.
+##   godot --headless -s tools/art_import/import_character.gd -- --poses <source image> <id>
+##   godot --headless -s tools/art_import/import_character.gd -- --poses-all
 
 const ImportSheet := preload("res://tools/art_import/import_sheet.gd")
 const OUT_DIR := "res://assets/sprites/characters/"
 const SRC_DIR := "res://art_src/characters/"
-const FRAME := Vector2i(20, 28)
+const FRAME := Vector2i(24, 28)
+## The size a character is scaled to fit (its biggest pose); FRAME adds room around it for props.
+const FIT := Vector2i(20, 28)
 ## Battle intro figure (<id>_battle.png): front + back, side by side.
 const BATTLE_FRAME := Vector2i(48, 72)
 const COLS := 3
 const ROWS := 4
+## Battle poses (<id>_poses.png): challenge, confident, defeated, side by side. Wider than the standing
+## figure so a pointing arm fits.
+const POSE_FRAME := Vector2i(64, 72)
+const POSE_COUNT := 3
+const POSES_SUFFIX := "_battle_poses"
 
 
 func _init() -> void:
 	var args := OS.get_cmdline_user_args()
+	if args.size() == 1 and args[0] == "--poses-all":
+		var failed := 0
+		for pair: Array in find_pose_sources(ProjectSettings.globalize_path(SRC_DIR)):
+			if not import_poses(pair[0], pair[1]).is_empty():
+				failed += 1
+		quit(1 if failed > 0 else 0)
+		return
+	if args.size() == 3 and args[0] == "--poses":
+		quit(0 if import_poses(args[1], args[2]).is_empty() else 1)
+		return
 	if args.size() == 1 and args[0] == "--all":
 		var failed := 0
 		for pair: Array in ImportSheet.find_sources(ProjectSettings.globalize_path(SRC_DIR)):
@@ -41,6 +66,25 @@ func _init() -> void:
 	quit(0 if import_character(args[0], args[1]).is_empty() else 1)
 
 
+## Every art_src/characters/**/<id>_battle_poses.png as [path, id].
+static func find_pose_sources(dir: String) -> Array:
+	var out := []
+	for sub in DirAccess.get_directories_at(dir):
+		out.append_array(find_pose_sources(dir.path_join(sub)))
+	for file in DirAccess.get_files_at(dir):
+		if file.get_basename().ends_with(POSES_SUFFIX) and file.get_extension().to_lower() in ["png", "webp"]:
+			out.append([dir.path_join(file), file.get_basename().trim_suffix(POSES_SUFFIX)])
+	return out
+
+
+## Cuts the three battle poses out of a pose sheet into <id>_poses.png.
+static func import_poses(source: String, id: String) -> String:
+	var poses := _cut_poses(source, POSE_COUNT, 1)
+	if poses.is_empty():
+		return "no art"
+	return _save(_defringe(_sample(poses, POSE_FRAME, [0, 1, 2], POSE_COUNT, Vector2i.ZERO, true)), OUT_DIR + id + "_poses.png", source)
+
+
 static func import_character(source: String, id: String) -> String:
 	var poses := _cut_poses(source)
 	if poses.is_empty():
@@ -48,11 +92,12 @@ static func import_character(source: String, id: String) -> String:
 	var all: Array[int] = []
 	for i in COLS * ROWS:
 		all.append(i)
-	var out := _sample(poses, FRAME, all, COLS)
+	var out := _sample(poses, FRAME, all, COLS, FIT, true)
 	var err := _save(out, OUT_DIR + id + ".png", source)
 	if not err.is_empty():
 		return err
 	# Battle intro figure: the front (down, stand) and back (up, stand) poses at battle size.
+	# Single standing poses that never turn: centered on the drawing, so nothing gets cut off.
 	return _save(_defringe(_sample(poses, BATTLE_FRAME, [0, COLS], 2)), OUT_DIR + id + "_battle.png", source)
 
 
@@ -96,8 +141,9 @@ static func _save(img: Image, path: String, source: String) -> String:
 	return ""
 
 
-## Cuts the 3x4 pose grid out of a source sheet: {"cells", "masks", "boxes"} (empty on failure).
-static func _cut_poses(source: String) -> Dictionary:
+## Cuts a cols x rows pose grid (the 3x4 walking grid by default) out of a source sheet:
+## {"cells", "masks", "boxes"} (empty on failure).
+static func _cut_poses(source: String, cols: int = COLS, rows: int = ROWS) -> Dictionary:
 	var src := Image.load_from_file(source)
 	if src == null or src.is_empty():
 		printerr("Can't read ", source)
@@ -108,13 +154,13 @@ static func _cut_poses(source: String) -> Dictionary:
 	var magenta := not transparent and ImportSheet._is_magenta(bg)
 	# Find the pose grid from the gaps in the art, then cut out each pose and box its art.
 	var full_mask := ImportSheet.clear_mask(src, bg, magenta, transparent)
-	var xs := _cuts(full_mask, src.get_width(), src.get_height(), true, COLS)
-	var ys := _cuts(full_mask, src.get_width(), src.get_height(), false, ROWS)
+	var xs := _cuts(full_mask, src.get_width(), src.get_height(), true, cols)
+	var ys := _cuts(full_mask, src.get_width(), src.get_height(), false, rows)
 	var cells: Array[Image] = []
 	var masks: Array[PackedByteArray] = []
 	var boxes: Array[Rect2i] = []
-	for row in ROWS:
-		for col in COLS:
+	for row in rows:
+		for col in cols:
 			var rect := Rect2i(xs[col], ys[row], xs[col + 1] - xs[col], ys[row + 1] - ys[row])
 			var img := src.get_region(rect)
 			var mask := PackedByteArray()
@@ -135,19 +181,23 @@ static func _cut_poses(source: String) -> Dictionary:
 
 
 ## Samples the chosen poses into frames of `frame` size, `cols` frames per row. One scale for every
-## frame (the biggest pose fits, 1 px spare at the top); feet on the bottom row, centered on the art.
-static func _sample(poses: Dictionary, frame: Vector2i, which: Array, cols: int) -> Image:
+## frame (the biggest pose fits `fit`, default the frame, 1 px spare at the top); feet on the bottom row,
+## centered on the body (body = true: poses that must line up with each other) or on the drawing.
+static func _sample(poses: Dictionary, frame: Vector2i, which: Array, cols: int, fit: Vector2i = Vector2i.ZERO,
+		body: bool = false) -> Image:
 	var cells: Array[Image] = poses["cells"]
 	var masks: Array[PackedByteArray] = poses["masks"]
 	var boxes: Array[Rect2i] = poses["boxes"]
 	var biggest: Vector2i = poses["biggest"]
-	var step := maxf(biggest.x / float(frame.x), biggest.y / float(frame.y - 1))
+	var size := frame if fit == Vector2i.ZERO else fit
+	var step := maxf(biggest.x / float(size.x), biggest.y / float(size.y - 1))
 	var rows := ceili(which.size() / float(cols))
 	var out := Image.create(frame.x * cols, frame.y * rows, false, Image.FORMAT_RGBA8)
 	for n in which.size():
 		var i: int = which[n]
 		var b := boxes[i]
-		var feet := Vector2(b.position.x + b.size.x / 2.0, b.end.y)
+		var across := _body_x(masks[i], cells[i].get_width(), b) if body else b.position.x + b.size.x / 2.0
+		var feet := Vector2(across, b.end.y)
 		var origin := feet - Vector2(frame.x / 2.0, frame.y) * step  # source point for frame pixel (0,0)
 		var w := cells[i].get_width()
 		for fy in frame.y:
@@ -160,6 +210,30 @@ static func _sample(poses: Dictionary, frame: Vector2i, which: Array, cols: int)
 				if c.a > 0.0:
 					out.set_pixel((n % cols) * frame.x + fx, (n / cols) * frame.y + fy, c)
 	return out
+
+
+## Where the body is, across: the median column of the art's pixels in the torso band (30% to 65% of the
+## way down the art; above it hair and ponytails trail behind a side view). Centering on the art's bounding box let anything sticking out (a fishing rod, an
+## antenna, a pointing arm, a swinging leg) push the body sideways, so a character shifted a few pixels
+## when it turned or took a step (2026-11-19, Brandon: "the characters are slightly off"). The median
+## ignores thin props; the band skips hair, legs and dangling hooks.
+static func _body_x(mask: PackedByteArray, w: int, b: Rect2i) -> float:
+	var counts := PackedInt32Array()
+	counts.resize(b.size.x)
+	var total := 0
+	for y in range(b.position.y + int(b.size.y * 0.3), b.position.y + int(b.size.y * 0.65)):
+		for x in range(b.position.x, b.end.x):
+			if mask[y * w + x] == 0:
+				counts[x - b.position.x] += 1
+				total += 1
+	if total == 0:
+		return b.position.x + b.size.x / 2.0
+	var seen := 0
+	for i in counts.size():
+		seen += counts[i]
+		if seen * 2 >= total:
+			return b.position.x + i + 0.5
+	return b.position.x + b.size.x / 2.0
 
 
 ## Cut positions (count + 1 values, from 0 to the image edge) that split the art into `count` columns

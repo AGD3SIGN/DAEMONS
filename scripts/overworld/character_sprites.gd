@@ -1,7 +1,7 @@
 class_name CharacterSprites
 extends RefCounted
 ## Overworld character sheets: 3 frames (idle, step A, step B) x 4 rows (down, up, left, right).
-## Real art: assets/sprites/characters/<id>.png, 20x28 frames (made by tools/art_import/import_character.gd);
+## Real art: assets/sprites/characters/<id>.png, 24x28 frames (made by tools/art_import/import_character.gd);
 ## without art, a 16x16 placeholder is drawn from shirt and hair colors. Frames stand on the bottom of the
 ## 16x16 tile, so taller art reaches up into the tile above (see place()).
 

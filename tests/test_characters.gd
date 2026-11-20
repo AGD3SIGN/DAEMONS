@@ -18,13 +18,13 @@ func test_importer_finds_poses_off_an_even_grid() -> void:
 	src.save_png(path)
 	assert_eq(ImportCharacter.import_character(path, "zz_test"), "")
 	var out := Image.load_from_file(ProjectSettings.globalize_path("res://assets/sprites/characters/zz_test.png"))
-	assert_eq(out.get_size(), Vector2i(60, 112))
+	assert_eq(out.get_size(), Vector2i(72, 112))
 	for i in 12:
-		var c := out.get_pixel((i % 3) * 20 + 10, (i / 3) * 28 + 16)
+		var c := out.get_pixel((i % 3) * 24 + 12, (i / 3) * 28 + 16)
 		var want := Color.from_hsv(i / 16.0, 0.7, 0.9)
 		assert_almost_eq(Vector3(c.r, c.g, c.b), Vector3(want.r, want.g, want.b), Vector3.ONE * 0.02,
 			"frame %d holds pose %d, whole" % [i, i])
-		assert_gt(out.get_pixel((i % 3) * 20 + 10, (i / 3) * 28 + 27).a, 0.5, "frame %d: feet on the bottom row" % i)
+		assert_gt(out.get_pixel((i % 3) * 24 + 12, (i / 3) * 28 + 27).a, 0.5, "frame %d: feet on the bottom row" % i)
 	assert_eq(out.get_pixel(0, 0).a, 0.0, "background removed")
 	DirAccess.remove_absolute(ProjectSettings.globalize_path("res://assets/sprites/characters/zz_test.png"))
 	DirAccess.remove_absolute(ProjectSettings.globalize_path("res://assets/sprites/characters/zz_test_battle.png"))
@@ -40,9 +40,9 @@ func test_npcs_with_art_use_it_and_stand_on_their_tile() -> void:
 	var kevin: NpcEvent = world.find_npc("kevin")
 	assert_eq(kevin.sprite_id, "kevin")
 	var sprite: Sprite2D = kevin._sprite
-	assert_eq(sprite.texture.get_size(), Vector2(60, 112), "Kevin's own art")
-	assert_eq(sprite.offset, Vector2(-2, -12), "20x28 frame centered on the 16 px tile, feet on it")
-	assert_eq(world.player._sprite.offset, Vector2(-2, -12), "the player too")
+	assert_eq(sprite.texture.get_size(), Vector2(72, 112), "Kevin's own art")
+	assert_eq(sprite.offset, Vector2(-4, -12), "24x28 frame centered on the 16 px tile, feet on it")
+	assert_eq(world.player._sprite.offset, Vector2(-4, -12), "the player too")
 	SceneRouter.params = {}
 
 
@@ -59,16 +59,17 @@ func test_lower_characters_draw_in_front() -> void:
 	SceneRouter.params = {}
 
 
-func test_every_character_sheet_is_20x28_and_small_palette() -> void:
+func test_every_character_sheet_is_24x28_and_small_palette() -> void:
 	var files := DirAccess.get_files_at("res://assets/sprites/characters/")
 	var count := 0
 	for f in files:
 		if f.get_extension() != "png":
 			continue
-		var battle := f.ends_with("_battle.png")
+		var battle := f.ends_with("_battle.png") or f.ends_with("_poses.png")
 		count += 0 if battle else 1
 		var img := Image.load_from_file(ProjectSettings.globalize_path("res://assets/sprites/characters/" + f))
-		assert_eq(img.get_size(), Vector2i(96, 72) if battle else Vector2i(60, 112), f)
+		var want := Vector2i(192, 72) if f.ends_with("_poses.png") else (Vector2i(96, 72) if battle else Vector2i(72, 112))
+		assert_eq(img.get_size(), want, f)
 		var colors := {}
 		for y in img.get_height():
 			for x in img.get_width():
@@ -99,7 +100,7 @@ func test_every_named_character_sprite_exists() -> void:
 func test_every_character_has_battle_art_and_the_intro_uses_it() -> void:
 	# The battle intro used the small walking frame scaled up 3x, which lost the faces.
 	for file in DirAccess.get_files_at(CharacterSprites.ART_DIR):
-		if not file.ends_with(".png") or file.ends_with("_battle.png"):
+		if not file.ends_with(".png") or file.ends_with("_battle.png") or file.ends_with("_poses.png"):
 			continue
 		var battle := CharacterSprites.ART_DIR + file.get_basename() + "_battle.png"
 		assert_true(ResourceLoader.exists(battle), file + " has battle art (import_character.gd)")
@@ -108,3 +109,33 @@ func test_every_character_has_battle_art_and_the_intro_uses_it() -> void:
 		assert_string_ends_with(frame.atlas.resource_path, "kevin_battle.png")
 		assert_eq(frame.region.size, BattleScene.TRAINER_SIZE, "drawn 1:1, no blocky scaling")
 	assert_eq(BattleScene.trainer_frame("kevin", true).region.position.x, BattleScene.TRAINER_SIZE.x, "back is the second frame")
+
+
+## 2026-11-19 (Brandon: "keep pixel perfect alignment, sometimes the characters look slightly off"): frames
+## were centered on the whole drawing, so a fishing rod or antenna pushed the body sideways and a character
+## jumped up to 5 px when it turned. Frames are centered on the body now: it stays within 1 px.
+func test_characters_stay_put_when_they_turn_and_step() -> void:
+	for f in DirAccess.get_files_at(CharacterSprites.ART_DIR):
+		if not f.ends_with(".png") or f.ends_with("_battle.png") or f.ends_with("_poses.png") or f.begins_with("zz_"):
+			continue
+		var img := Image.load_from_file(ProjectSettings.globalize_path(CharacterSprites.ART_DIR + f))
+		var fw := img.get_width() / 3
+		var stands := []
+		for r in 4:
+			var xs := []
+			for c in 3:
+				xs.append(_torso_x(img, c * fw, r * 28, fw))
+			assert_lte(xs.max() - xs.min(), 1.0, "%s doesn't slide while stepping (row %d)" % [f, r])
+			stands.append(xs[0])
+		assert_lte(stands.max() - stands.min(), 1.0, "%s stays on its tile when it turns: %s" % [f, stands])
+
+
+## Middle opaque column of the torso rows (9-19) of one frame.
+func _torso_x(img: Image, x0: int, y0: int, w: int) -> float:
+	var xs := []
+	for y in range(9, 20):
+		for x in w:
+			if img.get_pixel(x0 + x, y0 + y).a > 0.5:
+				xs.append(x)
+	xs.sort()
+	return xs[xs.size() / 2] if not xs.is_empty() else 0.0
