@@ -436,7 +436,7 @@ func test_a_beaten_trainer_comes_back_defeated_and_a_winner_gloats() -> void:
 	assert_eq(lost.result["outcome"], "player_lost")
 	assert_eq((lost.foe_trainer.texture as AtlasTexture).region.position.x, BattleScene.POSE_SIZE.x, "confident pose")
 	var plain := await _run_battle({"foe": [["pingo", 2]], "player_stack": [_daemon("mainmunk", 60)] as Array[DaemonInstance],
-		"items": {}, "trainer_name": "Theo", "trainer_sprite": "tech_theo"})
+		"items": {}, "trainer_name": "Leo", "trainer_sprite": "courier"})
 	assert_true(plain.foe_trainer.visible, "no pose art yet: the standing figure comes back instead")
 	assert_eq(plain.foe_trainer.size, BattleScene.TRAINER_SIZE)
 	var wild := await _run_battle({"foe": [["pingo", 2]], "player_stack": [_daemon("mainmunk", 60)] as Array[DaemonInstance], "items": {}})
