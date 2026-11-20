@@ -88,6 +88,7 @@ func _play_event(e: Dictionary) -> void:
 			await _anim_dodge(BattleState.opponent(side))
 			await _say(text)
 		"move_used":
+			_last_move[side] = String(e.get("move", ""))
 			await _say(text, false)
 			var category := String(DataRegistry.get_move(String(e.get("move", ""))).get("category", "physical"))
 			_hold_pose(side, "attack" if category == "physical" else "special")
@@ -95,6 +96,10 @@ func _play_event(e: Dictionary) -> void:
 			await _play_move_fx(side, String(e.get("move", "")))
 			_release_pose(side)
 		"damage":
+			# Multi-hit moves: the attacker lunges and plays the move's effect again for every hit after
+			# the first, so Double Click visibly clicks twice (2026-11-19, Brandon).
+			if int(e.get("hit", 1)) > 1 and String(e.get("source", "")) == "move":
+				await _replay_attack(BattleState.opponent(side))
 			_hold_pose(side, "hurt")
 			_hit_flash(side, hit_strength(e))
 			await _panel(side).animate_uptime(int(e["uptime"]), int(e["max_uptime"]))
@@ -204,8 +209,24 @@ func _play_level_up(e: Dictionary, text: String) -> void:
 
 # --- move effects ----------------------------------------------------------------
 
+## The move each side used last (for replaying a multi-hit move's attack on every hit).
+var _last_move := {}
+## How many attack animations have played (counted for the multi-hit tests).
+var attacks_played := 0
+
+
+## One more swing of the side's last move: attack pose, lunge and the move's effect.
+func _replay_attack(attacker: int) -> void:
+	var move_id := String(_last_move.get(attacker, ""))
+	var category := String(DataRegistry.get_move(move_id).get("category", "physical"))
+	_hold_pose(attacker, "attack" if category == "physical" else "special")
+	await _anim_lunge(attacker)
+	await _play_move_fx(attacker, move_id)
+	_release_pose(attacker)
+
 ## The move's own effect (data/moves.json "fx"), drawn from the user to the target.
 func _play_move_fx(side: int, move_id: String) -> void:
+	attacks_played += 1
 	var move := DataRegistry.get_move(move_id)
 	var steps: Array = move.get("fx", [])
 	if steps.is_empty() or _ts() <= 0.0:

@@ -488,7 +488,7 @@ static func _resolve_move(state: BattleState, side: int, move: Dictionary, event
 			var roll := state.rng.randi_range(ROLL_MIN, ROLL_MAX)
 			var damage := calc_damage(state, side, move, critical, roll)
 			ctx["damage"] = int(ctx["damage"]) + _apply_damage(state, target_side, damage, events,
-				{"critical": critical, "effectiveness": effectiveness, "source": "move"})
+				{"critical": critical, "effectiveness": effectiveness, "source": "move", "hit": i + 1})
 			landed += 1
 		if hits > 1:
 			events.append(_ev("hit_count", {"count": landed}))

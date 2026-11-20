@@ -75,3 +75,25 @@ func test_no_two_moves_share_an_animation() -> void:
 		var key := str(shape)
 		assert_false(seen.has(key), "%s plays the same animation as %s" % [move_id, seen.get(key, "")])
 		seen[key] = move_id
+
+
+## 2026-11-19 (Brandon): multi-hit moves swing and land once per hit, not one swing then a row of flashes.
+func test_multi_hit_moves_swing_once_per_hit() -> void:
+	var config := {"foe": [["dustbunny", 5]], "player_stack": [DaemonInstance.create("pingo", 5, RandomNumberGenerator.new())],
+		"items": {}, "auto": true, "time_scale": 0.0, "seed": 1}
+	var scene: BattleScene = load(BattleScene.SCENE).instantiate()
+	scene.setup(config)
+	add_child_autofree(scene)
+	await wait_for_signal(scene.finished, 30.0)
+	var player: BattlePlayer = scene._player
+	player._active[BattleState.FOE] = 0
+	var before := player.attacks_played
+	await player._play_event({"type": "move_used", "side": BattleState.PLAYER, "user": "Pingo", "move": "double_click",
+		"move_name": "Double Click"})
+	for hit in [1, 2]:
+		await player._play_event({"type": "damage", "side": BattleState.FOE, "daemon": "Dustbunny", "amount": 1,
+			"uptime": 10 - hit, "max_uptime": 20, "critical": false, "effectiveness": 1.0, "source": "move", "hit": hit})
+	assert_eq(player.attacks_played - before, 2, "Double Click's attack plays for both hits")
+	await player._play_event({"type": "damage", "side": BattleState.FOE, "daemon": "Dustbunny", "amount": 1,
+		"uptime": 5, "max_uptime": 20, "critical": false, "effectiveness": 1.0, "source": "status"})
+	assert_eq(player.attacks_played - before, 2, "damage that isn't a move hit doesn't replay an attack")

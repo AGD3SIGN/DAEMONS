@@ -125,6 +125,8 @@ func test_multi_hit() -> void:
 	var events := BattleSim.run_turn(_battle([bunny], [tank]), _fight(bunny, "double_click"), _fight(tank, "uptime_streak"))
 	assert_eq(_of(events, "hit_count")[0]["count"], 2)
 	assert_eq(_of(events, "damage").size(), 2)
+	assert_eq(_of(events, "damage").map(func(e: Dictionary) -> int: return e["hit"]), [1, 2],
+		"each hit is numbered so the battle screen can animate it")
 	var counts := {}
 	for seed_value in range(1, 41):
 		bunny = _daemon("dustbunny", 20)
