@@ -162,7 +162,7 @@ static func validate_action(state: BattleState, side: int, action: BattleAction)
 			return _validate_item(state, side, action)
 		BattleAction.Kind.RUN:
 			if not state.is_wild:
-				return "you can't run from a trainer battle"
+				return "you can't walk away from an open ticket"
 	return ""
 
 
@@ -736,7 +736,7 @@ static func _award_exp(state: BattleState, events: Array[Dictionary]) -> void:
 				state.leveled_up[i] = true
 
 
-## Level-gap EXP scaling (2026-11-16, from the balance research: Pokémon Gen 5 does the same):
+## Level-gap EXP scaling (2026-11-16, from the balance research: several classic creature collectors do the same):
 ##   ((2 * foe + offset) / (foe + mine + offset)) ^ power      power/offset from balance.json "exp_scaling"
 ## Same level = x1. A Lv8 beating a Lv12 gets x1.37; a Lv14 beating a Lv10 gets x0.73. A new catch catches up
 ## fast and over-leveling slows down, so nobody has to grind, and the fights themselves stay as hard.
@@ -791,7 +791,7 @@ static func _validate_item(state: BattleState, side: int, action: BattleAction) 
 	var effect: String = item["effect"]["id"]
 	if effect == "capture":
 		if not state.is_wild:
-			return "you can't Quarantine another trainer's Forgeling"
+			return "you can't Quarantine another tech's Forgeling"
 		if side != BattleState.PLAYER:
 			return "only the player can use Quarantine Keys"
 		var foe := state.sides[BattleState.opponent(side)].active()

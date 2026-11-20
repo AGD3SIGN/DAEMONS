@@ -15,7 +15,7 @@ HEXFORGED is a GBA-era, top-down, turn-based monster collector where you start a
 | Genre | Turn-based monster-collecting RPG, top-down, GBA-era pixel art |
 | Core fantasy | Zero-to-hero: the lowest person on the org chart saves the whole valley |
 | Story goal | Fun, mysterious and challenging; the story is a reason to keep playing, not a wrapper |
-| Tone | The Office (quick one-liners, awkward workplace humor) + The IT Crowd (tech absurdity) on top of Pokémon-style gameplay |
+| Tone | The Office (quick one-liners, awkward workplace humor) + The IT Crowd (tech absurdity) on top of classic creature-collector gameplay |
 | Tagline | FUSE is cut (no fusing mechanic). Suggested: **CATCH · CLEAN · RESTORE**. Alternatives: CATCH · PATCH · RESTORE, CATCH · TRAIN · REBOOT, "Have you tried turning it off and on again?" |
 
 **Hook that sets it apart:** the creatures aren't wild animals. Every Forgeling was compiled for a job and lives inside the system it runs. Corruption is a broken computer, and cleaning corrupted creatures is how you heal the valley.

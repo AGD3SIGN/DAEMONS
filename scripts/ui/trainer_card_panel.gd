@@ -18,7 +18,7 @@ func _ready() -> void:
 	offset_right = -6
 	offset_bottom = -6
 	var title := Label.new()
-	title.text = "TRAINER CARD - ROOT VALLEY IT"
+	title.text = "EMPLOYEE BADGE - ROOT VALLEY IT"
 	title.position = Vector2(8, 6)
 	add_child(title)
 	_info = Label.new()

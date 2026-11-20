@@ -221,7 +221,7 @@ func test_invalid_actions_are_rejected_without_playing_the_turn() -> void:
 
 func test_cant_run_from_trainers() -> void:
 	var state := _battle([_daemon("pingo", 20)], [_daemon("dustbunny", 20)], false)
-	_assert_invalid(state, BattleAction.run(), "trainer")
+	_assert_invalid(state, BattleAction.run(), "open ticket")
 
 
 # --- determinism -------------------------------------------------------------

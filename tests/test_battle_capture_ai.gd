@@ -90,7 +90,7 @@ func test_capture_odds() -> void:
 
 func test_capture_only_in_wild_battles_for_the_player() -> void:
 	var state := _battle([_daemon("pingo", 20)], [_daemon("dustbunny", 5)], false, {"thumb_drive": 1})
-	assert_string_contains(BattleSim.validate_action(state, 0, BattleAction.item("thumb_drive", 0)), "another trainer")
+	assert_string_contains(BattleSim.validate_action(state, 0, BattleAction.item("thumb_drive", 0)), "another tech")
 	state = _battle([_daemon("pingo", 20)], [_daemon("dustbunny", 5)])
 	state.sides[1].items = {"thumb_drive": 1}
 	assert_string_contains(BattleSim.validate_action(state, 1, BattleAction.item("thumb_drive", 0)), "only the player")
