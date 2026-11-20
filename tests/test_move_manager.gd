@@ -134,7 +134,7 @@ func test_offer_move_replaces_the_chosen_slot_after_confirming() -> void:
 func test_moves_screen_and_overclock_chip_offer() -> void:
 	var source := FileAccess.get_file_as_string("res://scripts/ui/field_menus.gd")
 	assert_string_contains(source, "[\"SUMMARY\", \"MOVES\", \"SWAP\", \"ITEM\", \"CANCEL\"]")
-	var d := _make("chipmunk", 12)  # full slots; Lv13 brings double_click
+	var d := _make("chipmunk", 12)  # full slots; Lv13 brings twin_fans
 	GameState.bag["overclock_chip"] = 1
 	var result := ItemUse.use_on("overclock_chip", d)
-	assert_eq(result["pending_moves"], ["double_click"], "the field menu gets to ask")
+	assert_eq(result["pending_moves"], ["twin_fans"], "the field menu gets to ask")

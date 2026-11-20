@@ -122,14 +122,14 @@ func test_type_immunity_means_no_damage() -> void:
 func test_multi_hit() -> void:
 	var bunny := _daemon("dustbunny", 20)
 	var tank := _daemon("mainmunk", 50)
-	var events := BattleSim.run_turn(_battle([bunny], [tank]), _fight(bunny, "double_click"), _fight(tank, "defrag"))
+	var events := BattleSim.run_turn(_battle([bunny], [tank]), _fight(bunny, "double_click"), _fight(tank, "uptime_streak"))
 	assert_eq(_of(events, "hit_count")[0]["count"], 2)
 	assert_eq(_of(events, "damage").size(), 2)
 	var counts := {}
 	for seed_value in range(1, 41):
 		bunny = _daemon("dustbunny", 20)
 		tank = _daemon("mainmunk", 50)
-		events = BattleSim.run_turn(_battle([bunny], [tank], true, seed_value), _fight(bunny, "keyboard_smash"), _fight(tank, "defrag"))
+		events = BattleSim.run_turn(_battle([bunny], [tank], true, seed_value), _fight(bunny, "keyboard_smash"), _fight(tank, "uptime_streak"))
 		if _of(events, "move_missed").is_empty():
 			var count: int = _of(events, "hit_count")[0]["count"]
 			assert_between(count, 2, 5)
@@ -177,7 +177,7 @@ func test_stat_change_on_foe() -> void:
 	var chipmunk := _daemon("chipmunk", 20)
 	var pingo := _daemon("pingo", 20)
 	var state := _battle([chipmunk], [pingo])
-	var events := BattleSim.run_turn(state, _fight(chipmunk, "screen_glare"), _fight(pingo, "bandwidth_hog"))
+	var events := BattleSim.run_turn(state, _fight(chipmunk, "cheek_flash"), _fight(pingo, "bandwidth_hog"))
 	assert_eq(state.sides[1].stages["accuracy"], -1)
 	assert_eq(_of(events, "stat_changed")[0]["side"], 1)
 
@@ -290,7 +290,7 @@ func test_drain_heals_half_the_damage() -> void:
 	var glowbit := _daemon("glowbit", 20)
 	var bunny := _daemon("dustbunny", 20)
 	glowbit.current_uptime = 1
-	var events := BattleSim.run_turn(_battle([glowbit], [bunny]), _fight(glowbit, "code_injection"), _fight(bunny, "screen_glare"))
+	var events := BattleSim.run_turn(_battle([glowbit], [bunny]), _fight(glowbit, "code_injection"), _fight(bunny, "dust_cloud"))
 	var dealt: int = _of(events, "damage")[0]["amount"]
 	assert_eq(_of(events, "drain")[0]["amount"], maxi(1, dealt / 2))
 
@@ -310,9 +310,9 @@ func test_heal_move() -> void:
 	var bunny := _daemon("dustbunny", 20)
 	glowbit.current_uptime -= 20
 	var state := _battle([glowbit], [bunny])
-	var events := BattleSim.run_turn(state, _fight(glowbit, "patch_up"), _fight(bunny, "screen_glare"))
+	var events := BattleSim.run_turn(state, _fight(glowbit, "patch_up"), _fight(bunny, "dust_cloud"))
 	assert_eq(_of(events, "heal")[0]["amount"], 20)
-	events = BattleSim.run_turn(state, _fight(glowbit, "patch_up"), _fight(bunny, "screen_glare"))
+	events = BattleSim.run_turn(state, _fight(glowbit, "patch_up"), _fight(bunny, "dust_cloud"))
 	assert_eq(_of(events, "move_failed")[0]["reason"], "full_uptime")
 
 

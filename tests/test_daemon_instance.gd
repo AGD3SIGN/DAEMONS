@@ -114,10 +114,10 @@ func test_create_fills_everything_in_range() -> void:
 	assert_true(DataRegistry.config_profiles.has(d.config_profile))
 	for stat in DaemonInstance.STATS:
 		assert_between(int(d.build_quality[stat]), 0, 15, stat)
-	# Learned by 15: bump, heatsink_slam, screen_glare, chassis_guard, double_click -> keeps the last 4.
+	# Learned by 15: bump, heatsink_slam, cheek_flash, chassis_guard, twin_fans -> keeps the last 4.
 	var ids := d.moves.map(func(m: Dictionary) -> String: return m["id"])
-	assert_eq(ids, ["heatsink_slam", "screen_glare", "chassis_guard", "double_click"])
-	assert_eq(d.moves[1]["pp"], 20, "screen_glare, full Cycles")
+	assert_eq(ids, ["heatsink_slam", "cheek_flash", "chassis_guard", "twin_fans"])
+	assert_eq(d.moves[1]["pp"], 20, "cheek_flash, full Cycles")
 
 
 # --- levelling & moves -------------------------------------------------------
@@ -140,11 +140,11 @@ func test_full_move_slots_ask_the_player() -> void:
 	var d := _make("chipmunk", 12)
 	assert_eq(d.moves.size(), 4)
 	var events := d.level_up()
-	assert_eq(events[-1], {"type": "move_learn_pending", "move": "double_click"})
-	assert_false(d.knows_move("double_click"))
-	assert_true(d.learn_move("double_click", 0))
-	assert_eq(d.moves[0]["id"], "double_click")
-	assert_false(d.learn_move("double_click", 1), "can't learn a move twice")
+	assert_eq(events[-1], {"type": "move_learn_pending", "move": "twin_fans"})
+	assert_false(d.knows_move("twin_fans"))
+	assert_true(d.learn_move("twin_fans", 0))
+	assert_eq(d.moves[0]["id"], "twin_fans")
+	assert_false(d.learn_move("twin_fans", 1), "can't learn a move twice")
 
 
 func test_level_cap() -> void:
@@ -223,10 +223,11 @@ func test_config_profiles_data() -> void:
 
 
 func test_starters_begin_with_bump_and_a_move_of_their_own_type() -> void:
+	var glare := {"chipmunk": "cheek_flash", "pingo": "status_leds"}  # each line's own accuracy-lowering move
 	for pair: Array in [["chipmunk", "heatsink_slam"], ["pingo", "ping"], ["glowbit", "code_injection"]]:
 		var d := _make(pair[0], 5)
 		var ids := d.moves.map(func(m: Dictionary) -> String: return m["id"])
 		assert_eq(ids, ["bump", pair[1]], "%s: Bump + its typed move (player feedback: early fights were too hard)" % pair[0])
 		if pair[0] != "glowbit":  # Glowbit has Infinite Loop instead (keeps Code Injection at higher levels)
 			var events := d.level_up()
-			assert_eq(events[-1], {"type": "move_learned", "move": "screen_glare"}, "Screen Glare comes at Lv6")
+			assert_eq(events[-1], {"type": "move_learned", "move": glare[pair[0]]}, "its glare move comes at Lv6")

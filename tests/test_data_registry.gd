@@ -47,7 +47,7 @@ func test_real_data_has_no_errors() -> void:
 
 func test_expected_counts() -> void:
 	assert_eq(DataRegistry.types.size(), 12)
-	assert_eq(DataRegistry.moves.size(), 56, "55 learnable + Force Quit (Hotkey Macro and Tether added 2026-11-16)")
+	assert_eq(DataRegistry.moves.size(), 148, "147 learnable + Force Quit (2026-11-19: every upgrade line got its own moves)")
 	assert_eq(DataRegistry.species.size(), 47, "22 + Pyrewall + 13 Hardware + 7 Network expansion + 4 Network/Cloud singles")
 	assert_eq(DataRegistry.items.size(), 12)
 
@@ -210,3 +210,25 @@ func test_network_expansion_lines() -> void:
 				assert_eq(evos[0]["to"], line[i + 1])
 			else:
 				assert_true(evos.is_empty())
+
+
+## 2026-11-19 (Brandon: "I would like each forgeling to have their own attacks"): every upgrade line has its own
+## moves. Bump is the only move two lines may share.
+func test_each_upgrade_line_has_its_own_moves() -> void:
+	var parent := {}
+	for id: String in DataRegistry.species:
+		for ev: Dictionary in DataRegistry.species[id].get("evolutions", []):
+			parent[ev["to"]] = id
+	var owner := {}
+	for id: String in DataRegistry.species:
+		var root := id
+		while parent.has(root):
+			root = parent[root]
+		for entry: Dictionary in DataRegistry.species[id]["learnset"]:
+			var move: String = entry["move"]
+			if move == "bump":
+				continue
+			assert_true(String(owner.get(move, root)) == root,
+				"%s is learned by the %s line and the %s line" % [move, owner.get(move, ""), root])
+			owner[move] = root
+	assert_eq(owner.size(), DataRegistry.moves.size() - 2, "every move but Bump and Force Quit belongs to a line")
