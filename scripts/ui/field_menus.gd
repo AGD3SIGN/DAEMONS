@@ -557,13 +557,17 @@ func options_screen() -> bool:
 			"LESS MOTION   < %s >" % ("ON" if Settings.reduced_motion else "OFF"),
 			"CONTROL HINTS < %s >" % ("ON" if Settings.control_hints else "OFF"),
 			"NEWS LINES    < %s >" % ("ON" if Settings.panel_scanlines else "OFF"),
+			"SHAKE & FLASH < %s >" % ("ON" if Settings.shake_flash else "OFF"),
+			"RUN BUTTON    < %s >" % ("TOGGLE" if Settings.run_toggle else "HOLD"),
 		])
 		var help := ["How fast text types out.", "Background music (coming with the soundtrack).",
 			"Sound effects.", "Turn off to skip battle animations.",
 			"Phones/tablets: save when the app goes to the background.",
 			"Title screen scanlines and scan bar.", "Stops the title screen's bigger animations.",
 			"Shows which buttons open the menu and talk, in the top corner.",
-			"Scanlines over the What's New screen."]
+			"Scanlines over the What's New screen.",
+			"Screen shake and bright flashes. Turn off for calm versions.",
+			"HOLD: hold to run. TOGGLE: press once to run, again to walk."]
 		var quit_row := -1
 		if in_game:  # 2026-11-18, Brandon: a way back to the main menu
 			quit_row = rows.size()
@@ -608,6 +612,10 @@ func options_screen() -> bool:
 				Settings.control_hints = not Settings.control_hints
 			8:
 				Settings.panel_scanlines = not Settings.panel_scanlines
+			9:
+				Settings.shake_flash = not Settings.shake_flash
+			10:
+				Settings.run_toggle = not Settings.run_toggle
 	Settings.apply()
 	Settings.save_settings()
 	list.close()

@@ -84,11 +84,11 @@ func sees(target: Vector2i) -> bool:
 
 
 func flash() -> void:
-	_flash = 1.0
+	_flash = 0.35 if Settings.calm_effects() else 1.0  # SHAKE & FLASH off: a dim glow, no flicker
 	var tween := create_tween()
 	tween.tween_property(self, "_flash", 0.0, 0.5 * (world.time_scale if world != null else 1.0))
 	tween.tween_callback(queue_redraw)
-	for i in 6:
+	for i in (1 if Settings.calm_effects() else 6):
 		await get_tree().create_timer(0.08 * (world.time_scale if world != null else 1.0)).timeout
 		queue_redraw()
 

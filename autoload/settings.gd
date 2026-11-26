@@ -22,6 +22,8 @@ var crt_effects: bool = true          # title screen scanlines + scan bar
 var reduced_motion: bool = false      # fewer moving things (the OS setting also counts, see wants_reduced_motion)
 var control_hints: bool = true        # overworld corner tag naming the MENU / TALK buttons (not on touch)
 var panel_scanlines: bool = false    # scanlines over the WHAT'S NEW panel (spec: off by default)
+var shake_flash: bool = true          # screen shake and bright flashes (GDD §9 accessibility: can be turned off)
+var run_toggle: bool = false          # RUN BUTTON: false = hold to run, true = tap to run, tap again to walk
 var last_seen_update: String = ""     # newest data/whats_new.json id this player has seen (WhatsNew)
 
 
@@ -42,6 +44,11 @@ func _os_reduced_motion() -> bool:
 	if OS.has_feature("web"):
 		return bool(JavaScriptBridge.eval("window.matchMedia('(prefers-reduced-motion: reduce)').matches", true))
 	return false
+
+
+## Off: no screen shake, no bright or rapid flashes (hits, encounters, upgrades, cameras use calm versions).
+func calm_effects() -> bool:
+	return not shake_flash
 
 
 ## Characters per second for typewriter text (0 = show instantly).
@@ -65,6 +72,8 @@ func save_settings() -> void:
 	cfg.set_value("options", "reduced_motion", reduced_motion)
 	cfg.set_value("options", "control_hints", control_hints)
 	cfg.set_value("options", "panel_scanlines", panel_scanlines)
+	cfg.set_value("options", "shake_flash", shake_flash)
+	cfg.set_value("options", "run_toggle", run_toggle)
 	cfg.set_value("news", "last_seen_update", last_seen_update)
 	cfg.save(path)
 
@@ -84,4 +93,6 @@ func load_settings() -> void:
 	crt_effects = bool(cfg.get_value("options", "crt_effects", crt_effects))
 	reduced_motion = bool(cfg.get_value("options", "reduced_motion", reduced_motion))
 	panel_scanlines = bool(cfg.get_value("options", "panel_scanlines", panel_scanlines))
+	shake_flash = bool(cfg.get_value("options", "shake_flash", shake_flash))
+	run_toggle = bool(cfg.get_value("options", "run_toggle", run_toggle))
 	last_seen_update = String(cfg.get_value("news", "last_seen_update", last_seen_update))

@@ -84,7 +84,11 @@ func _run_step(box: Control, s: Dictionary, user: Vector2, target: Vector2, type
 		"fall": await _drift(box, at, color, int(s.get("count", 6)), String(s.get("glyph", "square")), float(s.get("spread", 16)), 1)
 		"orbit": await _orbit(box, at, color, int(s.get("count", 6)), float(s.get("radius", 18)), float(s.get("turns", 1.5)))
 		"glitch": await _glitch(box, at, color, int(s.get("count", 12)))
-		"flash": await _screen(box, color, float(s.get("alpha", 0.6)), 0.08, 0.25)
+		"flash":
+			if Settings.calm_effects():  # a soft, slow tint instead of a bright flash
+				await _screen(box, color, minf(float(s.get("alpha", 0.6)), 0.12), 0.2, 0.4)
+			else:
+				await _screen(box, color, float(s.get("alpha", 0.6)), 0.08, 0.25)
 		"dim": await _screen(box, Color.BLACK, float(s.get("alpha", 0.6)), 0.15, 0.45)
 		"cover": await _cover(box, at, color)
 		"shield": await _shield(box, at, color)

@@ -1,6 +1,7 @@
 class_name PlayerController
 extends Node2D
-## The player on the overworld grid. One tile per step, tweened: walk 4 tiles/sec, run 8 (hold run).
+## The player on the overworld grid. One tile per step, tweened: walk 4 tiles/sec, run 8 (hold run, or tap it
+## with RUN BUTTON set to TOGGLE).
 ## A quick tap turns in place; holding walks. Walls bump (with a sound), ledges hop down only.
 ## Movement asks the MapView, which reads TileSet custom data. The camera follows and stays inside
 ## the map. Input goes through the move_* / run actions, so keyboard, gamepad and touch all work.
@@ -86,7 +87,29 @@ func _process(delta: float) -> void:
 	if _turn_timer > 0.0:
 		_turn_timer -= delta
 		return
-	try_step(dir, Input.is_action_pressed("run"))
+	try_step(dir, is_running())
+
+
+## RUN BUTTON option: HOLD runs while the button is held. TOGGLE: a keyboard or controller press switches running
+## on until the next press. Touch controls send their own run state (the web deck's RUN pill already toggles),
+## so they work the same in both modes.
+var run_latched := false
+var _touch_run := false
+
+
+func is_running() -> bool:
+	if not Settings.run_toggle:
+		return Input.is_action_pressed("run")
+	return run_latched or _touch_run
+
+
+func _input(event: InputEvent) -> void:
+	if not event.is_action("run"):
+		return
+	if event is InputEventAction:
+		_touch_run = event.is_pressed()
+	elif Settings.run_toggle and event.is_pressed() and not event.is_echo():
+		run_latched = not run_latched
 
 
 ## Tries one step. Returns "moved", "hopped" or "bumped" once the move finishes.

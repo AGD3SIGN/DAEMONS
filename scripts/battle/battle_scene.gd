@@ -462,11 +462,13 @@ func _play_upgrade(d: DaemonInstance, index: int, target: String) -> void:
 	await text_box.show_text("Your %s is upgrading!" % d.display_name())
 	var interval := 0.45
 	var cancelled := false
-	for i in 16:
+	var calm := Settings.calm_effects()  # SHAKE & FLASH off: slow swaps, no bright white
+	for i in (6 if calm else 16):
 		_upgrade_sprite.texture = new_texture if i % 2 == 1 else old_texture
-		_upgrade_sprite.self_modulate = Color(6, 6, 6)
+		_upgrade_sprite.self_modulate = Color.WHITE if calm else Color(6, 6, 6)
 		await get_tree().create_timer(interval * time_scale).timeout
-		interval = maxf(0.06, interval * 0.82)
+		if not calm:
+			interval = maxf(0.06, interval * 0.82)
 		if _upgrade_cancel:
 			cancelled = true
 			break
@@ -478,7 +480,7 @@ func _play_upgrade(d: DaemonInstance, index: int, target: String) -> void:
 		_upgrade_overlay.visible = false
 		return
 	var flash := create_tween()
-	flash.tween_property(_upgrade_overlay, "color", Color.WHITE, 0.15 * time_scale)
+	flash.tween_property(_upgrade_overlay, "color", UPGRADE_BG if Settings.calm_effects() else Color.WHITE, 0.15 * time_scale)
 	flash.tween_property(_upgrade_overlay, "color", UPGRADE_BG, 0.35 * time_scale)
 	_upgrade_sprite.texture = new_texture
 	await flash.finished

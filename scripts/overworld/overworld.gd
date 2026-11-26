@@ -318,7 +318,7 @@ func start_wild_battle(species_id: String, level: int, corrupted: bool = false) 
 ## White flashes, then black, like stumbling into something in tall grass.
 func _encounter_flash() -> void:
 	var tween := create_tween()
-	for i in 3:
+	for i in (0 if Settings.calm_effects() else 3):  # SHAKE & FLASH off: straight to the fade
 		tween.tween_property(_fade, "color", Color(1, 1, 1, 0.8), 0.08 * time_scale)
 		tween.tween_property(_fade, "color", Color(1, 1, 1, 0.0), 0.08 * time_scale)
 	tween.tween_property(_fade, "color", Color(0, 0, 0, 1), 0.25 * time_scale)

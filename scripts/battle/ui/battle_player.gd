@@ -500,6 +500,11 @@ static func hit_strength(e: Dictionary) -> String:
 ##   super: hard shake, a quick white flash  crit: bigger shake with a jolt, a stronger flash and a burst of sparks
 func _hit_flash(side: int, strength: String = "normal") -> void:
 	var s := _sprite(side)
+	if Settings.calm_effects():  # SHAKE & FLASH off: one soft dip, no shake, no white flash
+		var dip := _tween()
+		dip.tween_property(s, "modulate:a", 0.6, 0.1 * _ts())
+		dip.tween_property(s, "modulate:a", 1.0, 0.2 * _ts())
+		return
 	var blinks := {"weak": 2, "normal": 3, "super": 4, "crit": 5}[strength] as int
 	var shake_x: Array = {"weak": [1.0, -1.0, 0.0], "normal": [3.0, -3.0, 2.0, 0.0],
 		"super": [6.0, -6.0, 4.0, -3.0, 0.0], "crit": [8.0, -8.0, 6.0, -5.0, 3.0, 0.0]}[strength]
