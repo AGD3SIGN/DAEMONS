@@ -619,5 +619,90 @@
         }
       ]
     }
+  ],
+  "sticky_note_321": [
+    {
+      "text": "A sticky note on the old server rack, faded yellow. It says: 3-2-1!!! DON'T FORGET."
+    },
+    {
+      "text": "The rest is a coffee ring."
+    },
+    {
+      "if_flag": "read_321_note",
+      "then": [],
+      "else": [
+        {
+          "text": "You've definitely heard of the 3-2-1 rule. You can't remember what it's for. Nobody can."
+        },
+        {
+          "cmd": "set_flag",
+          "flag": "read_321_note"
+        }
+      ]
+    }
+  ],
+  "tape_label_1": [
+    {
+      "if_flag": "found_tape_label_1",
+      "then": [
+        {
+          "text": "The box of old backup tapes. BACKUP - DO NOT REUSE. TESTED FRIDAYS."
+        }
+      ],
+      "else": [
+        {
+          "text": "Behind the binders there's a dusty box of old backup tapes."
+        },
+        {
+          "text": "One has a label in neat block capitals: BACKUP - DO NOT REUSE. TESTED FRIDAYS."
+        },
+        {
+          "text": "Whoever wrote it pressed hard enough to dent the plastic. Nobody's touched these in years."
+        },
+        {
+          "cmd": "set_flag",
+          "flag": "found_tape_label_1"
+        }
+      ]
+    }
+  ],
+  "mom_printer": [
+    {
+      "if_flag": "fixed_mom_printer",
+      "then": [
+        {
+          "text": "Mom's printer. It's quiet. Suspiciously quiet."
+        }
+      ],
+      "else": [
+        {
+          "text": "Mom's printer. The tray holds a neat stack of perfectly blank pages, one for every morning this month."
+        },
+        {
+          "choice": "Turn it off and on again?",
+          "yes": [
+            {
+              "text": "You turn it off. You count to ten. You turn it back on."
+            },
+            {
+              "cmd": "sfx",
+              "id": "confirm"
+            },
+            {
+              "text": "The print queue clears. One job was set to repeat every day at 6:00:00. Owner: SYSTEM. Weird, but it's gone now."
+            },
+            {
+              "cmd": "set_flag",
+              "flag": "fixed_mom_printer"
+            }
+          ],
+          "no": [
+            {
+              "text": "You leave it alone. It hums at you."
+            }
+          ]
+        }
+      ]
+    }
   ]
 }

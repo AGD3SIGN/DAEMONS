@@ -107,7 +107,9 @@
       "dialogue": "kevin_after_rival_1",
       "requires_flag": "got_starter",
       "unless_flag": "kevin_left_help_desk"
-    }
+    },
+    {"type": "sign", "x": 11, "y": 2, "dialogue": "sticky_note_321"},
+    {"type": "sign", "x": 1, "y": 6, "dialogue": "tape_label_1"}
   ],
   "music": "help_desk"
 }

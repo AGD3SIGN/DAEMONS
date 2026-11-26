@@ -67,7 +67,8 @@
       "y": 4,
       "dialogue": "intro_wake",
       "once_flag": "intro_done"
-    }
+    },
+    {"type": "sign", "x": 4, "y": 3, "dialogue": "mom_printer"}
   ],
   "music": "town"
 }

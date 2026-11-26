@@ -196,3 +196,56 @@ func test_reading_a_ticket() -> void:
 	assert_true(lines.any(func(l: String) -> bool: return l.begins_with("TIP: ")))
 	GameState.tickets["onb_catch"] = "resolved"
 	assert_eq(FieldMenus.ticket_lines("onb_catch")[-1], "STATUS: Resolved.")
+
+
+# --- Act 1 side tickets ------------------------------------------------------
+
+func _place(cell: Vector2i, facing: Vector2i) -> void:
+	world.player.setup(world.map, cell, facing)
+
+
+func test_the_321_ticket_opens_after_kevin_leaves_and_the_sticky_note_closes_it() -> void:
+	GameState.add_daemon(_daemon("pingo", 5))
+	GameState.flags["got_starter"] = true
+	GameState.flags["kevin_left_help_desk"] = true
+	_open("help_desk")
+	await wait_until(func() -> bool: return GameState.tickets.get("tkt_321") == "open" and world.is_idle(), 5.0)
+	assert_true(_logged("New ticket #3021 from Accounting"))
+	_place(Vector2i(11, 3), Vector2i.UP)
+	await world.interact()
+	await wait_until(func() -> bool: return world.is_idle(), 5.0)
+	assert_true(_logged("3-2-1!!! DON'T FORGET."))
+	assert_eq(GameState.tickets["tkt_321"], "resolved")
+	assert_eq(GameState.credits, 150)
+
+
+func test_the_first_tape_label_is_on_the_help_desk_bookshelf() -> void:
+	GameState.add_daemon(_daemon("pingo", 5))
+	GameState.flags["got_starter"] = true
+	GameState.flags["kevin_left_help_desk"] = true
+	_open("help_desk")
+	await wait_until(func() -> bool: return world.is_idle(), 5.0)
+	_place(Vector2i(1, 5), Vector2i.DOWN)
+	await world.interact()
+	assert_true(_logged("TESTED FRIDAYS"))
+	assert_true(GameState.flags.get("found_tape_label_1", false))
+
+
+func test_moms_printer_ticket_comes_after_your_first_wild_win_and_a_reboot_fixes_it() -> void:
+	GameState.add_daemon(_daemon("pingo", 5))
+	GameState.flags["got_starter"] = true
+	GameState.flags["kevin_left_help_desk"] = true
+	GameState.flags["got_mom_coffee"] = true
+	Progress.collect()
+	assert_false(GameState.tickets.has("tkt_printer"), "not before you've been out working")
+	Progress.count("wild_wins")
+	Progress.collect()
+	assert_eq(GameState.tickets.get("tkt_printer"), "open")
+	_open("player_house")
+	await wait_until(func() -> bool: return world.is_idle(), 5.0)
+	_place(Vector2i(4, 4), Vector2i.UP)
+	await world.interact()
+	await wait_until(func() -> bool: return world.is_idle(), 5.0)
+	assert_true(_logged("6:00:00"))
+	assert_eq(GameState.tickets["tkt_printer"], "resolved")
+	assert_eq(GameState.bag.get("coffee", 0), 3)
