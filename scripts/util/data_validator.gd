@@ -880,6 +880,8 @@ func _validate_species(s: Dictionary, where: String) -> void:
 		if total > 3:
 			_err(where + " › log_yield", "total is %d, max is 3" % total)
 
+	if s.has("art_pending") and typeof(s["art_pending"]) != TYPE_BOOL:
+		_err(where, "'art_pending' must be true or false (true = no sprite sheet yet; a placeholder is drawn)")
 	if s.has("legendary") and typeof(s["legendary"]) != TYPE_BOOL:
 		_err(where, "'legendary' must be true or false")
 	if s.has("art"):

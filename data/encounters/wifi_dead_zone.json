@@ -67,6 +67,12 @@
         "min": 11,
         "max": 13,
         "weight": 8
+      },
+      {
+        "species": "cumulonimbyte",
+        "min": 10,
+        "max": 14,
+        "weight": 6
       }
     ]
   }

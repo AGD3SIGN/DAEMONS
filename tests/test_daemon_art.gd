@@ -16,7 +16,23 @@ func test_sheet_poses_come_from_the_right_cells() -> void:
 
 func test_every_daemon_has_art() -> void:
 	for species_id: String in DataRegistry.species:
+		if DataRegistry.species[species_id].get("art_pending", false):
+			assert_false(DaemonSprites.has_sheet(species_id), species_id + " has art now: remove its art_pending")
+			continue
 		assert_true(DaemonSprites.has_sheet(species_id), species_id + " has a sprite sheet")
+
+
+## Forgelings built before their art (a placeholder blob is drawn). Keep this list short and known: the prompts
+## are in docs/art-prompts/10-demo-singles.md.
+func test_only_the_new_demo_singles_wait_for_art() -> void:
+	var pending := []
+	for species_id: String in DataRegistry.species:
+		if DataRegistry.species[species_id].get("art_pending", false):
+			pending.append(species_id)
+			assert_not_null(DaemonSprites.front(species_id), species_id + " still draws (placeholder)")
+	pending.sort()
+	assert_true(pending.size() <= 3 and pending.all(func(id: String) -> bool: return id in ["captchat", "cumulonimbyte", "phishgill"]),
+		"art pending: %s" % str(pending))
 
 
 func test_importer_keys_out_magenta_and_keeps_a_white_belly() -> void:
@@ -94,6 +110,8 @@ func test_import_all_finds_sheets_in_character_folders() -> void:
 func test_sheets_are_polished_to_a_small_palette() -> void:
 	# Polish pass (tools/art_import/polish_sheet.py): GBA-style art uses a handful of colors per Daemon.
 	for species_id: String in DataRegistry.species:
+		if DataRegistry.species[species_id].get("art_pending", false):
+			continue
 		var img := Image.load_from_file(ProjectSettings.globalize_path("res://assets/sprites/daemons/%s_sheet.png" % species_id))
 		var colors := {}
 		for y in img.get_height():

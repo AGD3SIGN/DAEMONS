@@ -37,6 +37,12 @@
         "min": 12,
         "max": 14,
         "weight": 20
+      },
+      {
+        "species": "phishgill",
+        "min": 12,
+        "max": 14,
+        "weight": 15
       }
     ]
   }
