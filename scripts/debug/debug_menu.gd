@@ -44,6 +44,7 @@ func _ready() -> void:
 	var first: CursorButton = null
 	for entry: Array in [
 		["Overworld: Onboarding Town", func() -> void: SceneRouter.goto(Overworld.SCENE, {"map": "onboarding_town"})],
+		["Overworld: after Kevin's first fight", _after_kevin],
 		["Wild battle: Dustbunny Lv5", _wild_dustbunny],
 		["Wild battle: random", _wild_random],
 		["Trainer battle: Kevin", _kevin],
@@ -93,6 +94,20 @@ func _kevin() -> void:
 
 func _kevin_auto() -> void:
 	_battle({"foe": KEVIN, "wild": false, "trainer_name": "Kevin", "ai": "smart", "auto": true})
+
+
+## Jumps to the Help Desk right after the starter battle: Kevin's scene, Marge's training offer and the
+## onboarding tickets play from here (a fresh run with a Lv 8 Pingo).
+func _after_kevin() -> void:
+	GameState.reset()
+	var rng := RandomNumberGenerator.new()
+	rng.randomize()
+	GameState.add_daemon(DaemonInstance.create("pingo", 8, rng, 1))
+	for flag in ["got_starter", "starter_pingo", "kevin_rival_1_done", "trainer_kevin_rival_1_glowbit"]:
+		GameState.flags[flag] = true
+	GameState.location = {"map": "help_desk", "x": 8, "y": 6, "facing": "up"}
+	GameState.clock_running = true
+	SceneRouter.goto(Overworld.SCENE)
 
 
 func _heal() -> void:

@@ -1,6 +1,6 @@
 extends GutTest
 ## Help desk tickets v1 and the onboarding training (GDD §6 and §11): data/tickets.json, Progress, the TICKETS app,
-## Marge's "Do the onboarding training?" with "I KNOW THIS" for veterans.
+## Marge's "Do the onboarding training?" with "SKIP IT" for veterans.
 
 var world: Overworld
 
@@ -169,7 +169,7 @@ func test_a_veteran_can_skip_training() -> void:
 	world.allow_scene_change = false
 	world.auto_advance_text = true
 	world.auto_choice = true
-	world.auto_picks = [1]  # I KNOW THIS
+	world.auto_picks = [1]  # SKIP IT
 	add_child_autofree(world)
 	world.set_time_scale(0.0)
 	await wait_until(func() -> bool: return GameState.flags.get("kevin_left_help_desk", false) and world.is_idle(), 10.0)
@@ -180,7 +180,9 @@ func test_a_veteran_can_skip_training() -> void:
 
 
 func test_phone_has_tickets_and_kudos_apps() -> void:
-	var ids := Phone.new().app_ids()
+	var phone := Phone.new()
+	var ids := phone.app_ids()
+	phone.free()
 	assert_has(ids, "TICKETS")
 	assert_has(ids, "KUDOS")
 	for id in ids:
@@ -196,6 +198,17 @@ func test_reading_a_ticket() -> void:
 	assert_true(lines.any(func(l: String) -> bool: return l.begins_with("TIP: ")))
 	GameState.tickets["onb_catch"] = "resolved"
 	assert_eq(FieldMenus.ticket_lines("onb_catch")[-1], "STATUS: Resolved.")
+
+
+func test_ticket_rows_show_the_whole_title_and_closed_ones_say_ok() -> void:
+	Progress.open_ticket("onb_battle")
+	Progress.open_ticket("onb_catch")
+	GameState.tickets["onb_catch"] = "resolved"
+	var menus := FieldMenus.new()
+	var rows := menus.ticket_rows(["onb_battle", "onb_catch"] as Array[String])
+	menus.free()
+	assert_eq(rows[0], "P2 #0001 Forgeling Safety Training")
+	assert_eq(rows[1], "OK #0002 Asset Intake")
 
 
 # --- Act 1 side tickets ------------------------------------------------------

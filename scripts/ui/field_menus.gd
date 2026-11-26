@@ -938,15 +938,15 @@ func _pick_bag_item(title: String, filter: Callable) -> String:
 
 # --- tickets and Kudos ---------------------------------------------------------
 
-## One row per ticket: "P2 #0001 Forgeling Safety..." with a check mark once closed.
+## One row per ticket: "P2 #0001 Forgeling Safety Training"; closed ones show OK or -- instead of P1-P4.
 func ticket_rows(ids: Array[String]) -> PackedStringArray:
 	var rows := PackedStringArray()
 	for id in ids:
 		var t: Dictionary = DataRegistry.tickets[id]
 		var state: String = GameState.tickets[id]
-		var mark := "" if state == "open" else ("OK" if state == "resolved" else "--")
-		rows.append("%s %s %-19s %s" % [Progress.priority_label(t["priority"]), Progress.ticket_number(id),
-			String(t["title"]).left(19), mark])
+		# Closed tickets swap the priority for OK (resolved) or -- (skipped); titles fit up to 28 letters.
+		var tag: String = Progress.priority_label(t["priority"]) if state == "open" else ("OK" if state == "resolved" else "--")
+		rows.append("%s %s %s" % [tag, Progress.ticket_number(id), String(t["title"]).left(28)])
 	return rows
 
 

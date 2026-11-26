@@ -529,7 +529,7 @@
               ]
             },
             {
-              "label": "I KNOW THIS",
+              "label": "SKIP IT",
               "then": [
                 {
                   "speaker": "{player}",

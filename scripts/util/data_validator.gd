@@ -1101,6 +1101,8 @@ func _validate_tickets(raw: Variant) -> void:
 			if t.has(field):
 				_string(t, field, where)
 		_one_of(t, "priority", where, Progress.PRIORITIES)
+		if String(t.get("title", "")).length() > 28:
+			_err(where, "'title' is longer than 28 letters (the TICKETS list cuts it off)")
 		if _int(t, "number", where, 0, 9999):
 			if numbers.has(int(t["number"])):
 				_err(where, "ticket number %d is already used by '%s'" % [int(t["number"]), numbers[int(t["number"])]])
