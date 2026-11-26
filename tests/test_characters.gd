@@ -4,6 +4,14 @@ extends GutTest
 const ImportCharacter := preload("res://tools/art_import/import_character.gd")
 
 
+func before_each() -> void:
+	GameState.reset()  # a clean run: no ticket or Kudos messages left over from other tests
+
+
+func after_each() -> void:
+	GameState.reset()
+
+
 func test_importer_finds_poses_off_an_even_grid() -> void:
 	# 3x4 poses in a block that is centered with wide margins (like the ChatGPT sheets), so an even
 	# 3-way split of the canvas would cut through them.

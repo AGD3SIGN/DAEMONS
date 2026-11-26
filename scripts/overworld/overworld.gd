@@ -388,8 +388,8 @@ func interact() -> void:
 ## Help desk tickets and Kudos (Progress): pays and announces anything finished since the last check. Runs whenever
 ## the player gets control back (after talking, a trigger, the phone, a map change or a battle).
 func check_progress() -> void:
-	if not is_inside_tree() or not is_instance_valid(map):
-		return
+	if not is_inside_tree() or not is_instance_valid(map) or _leaving:
+		return  # on the way to a battle: the notes wait until you're back
 	var notes := Progress.collect()
 	if notes.is_empty():
 		return
@@ -410,6 +410,7 @@ func check_progress() -> void:
 ## Dialogue's "send_player" can't reload the map while the sign or NPC that started it is still running (the
 ## event would be freed mid-await), so it's queued and done here once the event is finished.
 var pending_send := ""
+var _leaving := false  # a battle is starting: this scene is about to go away
 
 
 func flush_pending_send() -> void:
@@ -501,6 +502,7 @@ func end_demo() -> void:
 
 
 func start_battle(config: Dictionary) -> void:
+	_leaving = allow_scene_change
 	_remember_location()
 	config["return_scene"] = SCENE
 	if not config.has("zone"):  # the battle arena's palette for this area (Battle Scene spec)

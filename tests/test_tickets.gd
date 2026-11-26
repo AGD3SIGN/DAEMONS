@@ -249,3 +249,42 @@ func test_moms_printer_ticket_comes_after_your_first_wild_win_and_a_reboot_fixes
 	assert_true(_logged("6:00:00"))
 	assert_eq(GameState.tickets["tkt_printer"], "resolved")
 	assert_eq(GameState.bag.get("coffee", 0), 3)
+
+
+# --- Kudos -------------------------------------------------------------------
+
+func test_kudos_unlock_once_and_are_all_reachable_in_the_demo() -> void:
+	GameState.flags["got_starter"] = true
+	var notes := Progress.collect().filter(func(n: Dictionary) -> bool: return n["kind"] == "kudos")
+	assert_eq(notes.map(func(n: Dictionary) -> String: return n["id"]), ["first_day"])
+	assert_eq(notes[0]["lines"][0], "Kudos unlocked: First Day!")
+	assert_true(Progress.collect().is_empty(), "only once")
+	for id: String in DataRegistry.kudos:
+		var goal: Dictionary = DataRegistry.kudos[id]["goal"]
+		assert_lte(int(goal.get("certs", 0)), 2, "%s: the demo ends at Cert 2" % id)
+
+
+func test_resolving_tickets_can_unlock_a_kudos_in_the_same_check() -> void:
+	for id in ["onb_battle", "onb_catch", "onb_items"]:
+		Progress.open_ticket(id)
+	Progress.count("wild_wins")
+	Progress.count("caught")
+	Progress.count("items_used")
+	var kinds := Progress.collect().map(func(n: Dictionary) -> String: return "%s:%s" % [n["kind"], n["id"]])
+	assert_has(kinds, "resolved:onb_items")
+	assert_has(kinds, "kudos:ticket_closer")
+	assert_has(kinds, "kudos:asset_tag")
+	assert_lt(kinds.find("resolved:onb_items"), kinds.find("kudos:ticket_closer"), "the ticket first, then its Kudos")
+
+
+func test_no_kudos_popup_on_the_way_into_a_battle() -> void:
+	GameState.add_daemon(_daemon("pingo", 5))
+	_open("route_1")
+	await wait_until(func() -> bool: return world.is_idle(), 5.0)
+	world.allow_scene_change = true
+	world._leaving = true
+	GameState.flags["got_starter"] = true
+	await world.check_progress()
+	assert_false(GameState.kudos.has("first_day"), "waits until you're back on the map")
+	world._leaving = false
+	world.allow_scene_change = false

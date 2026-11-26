@@ -1,1 +1,17 @@
-[]
+[
+  {"id": "first_day", "name": "First Day", "text": "Picked a Forgeling out of the e-waste bin. Warranty sticker still on.", "goal": {"flag": "got_starter"}},
+  {"id": "reply_all", "name": "Reply All", "text": "Survived your first battle with Kevin. He has already emailed everyone about it.", "goal": {"flag": "kevin_rival_1_done"}},
+  {"id": "hello_world", "name": "Hello, World", "text": "Won your first battle.", "goal": {"stat": "battles_won", "at_least": 1}},
+  {"id": "asset_tag", "name": "Asset Tag", "text": "Quarantined your first wild Forgeling.", "goal": {"stat": "caught", "at_least": 1}},
+  {"id": "ticket_closer", "name": "Ticket Closer", "text": "Resolved 3 help desk tickets. The queue noticed.", "goal": {"stat": "tickets_resolved", "at_least": 3}},
+  {"id": "tried_off_on", "name": "Have You Tried...", "text": "Fixed a printer by turning it off and on again. A classic for a reason.", "goal": {"flag": "fixed_mom_printer"}},
+  {"id": "could_not_reproduce", "name": "Could Not Reproduce", "text": "Looked into the 3-2-1 rule. Still no idea what it's for.", "goal": {"flag": "read_321_note"}},
+  {"id": "tested_fridays", "name": "Tested Fridays", "text": "Found an old backup tape with a label nobody remembers writing.", "goal": {"flag": "found_tape_label_1"}},
+  {"id": "version_two", "name": "Version 2.0", "text": "Upgraded a Forgeling to a new version. No restart required.", "goal": {"stat": "upgrades", "at_least": 1}},
+  {"id": "caffeinated", "name": "Caffeinated", "text": "Used 10 items. Mostly coffee, probably.", "goal": {"stat": "items_used", "at_least": 10}},
+  {"id": "peer_review", "name": "Peer Review", "text": "Beat 5 trainers in battle.", "goal": {"stat": "trainer_wins", "at_least": 5}},
+  {"id": "full_stack", "name": "Full Stack", "text": "Filled all six slots of your Active Stack. Very full-stack.", "goal": {"stack_size": 6}},
+  {"id": "inventory_audit", "name": "Inventory Audit", "text": "Quarantined 10 different kinds of Forgeling for the CMDB.", "goal": {"cmdb_caught": 10}},
+  {"id": "certified", "name": "Certified", "text": "Earned your first Certification. Frame it.", "goal": {"certs": 1}},
+  {"id": "two_certs", "name": "Double Certified", "text": "Earned two Certifications. Your email signature is getting long.", "goal": {"certs": 2}}
+]
