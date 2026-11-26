@@ -17,6 +17,13 @@ var danger := false            # DISCONNECT: orange text so the flee option stan
 var font: Font
 var font_size := 18
 var size_cap := 0              # set by share_size(): every button in a panel uses the same text size
+## A move's type: drawn bottom-right as its shape + 3-letter tag (TypeMarks), so type never relies on color alone.
+var type_id := "":
+	set(value):
+		type_id = value
+		queue_redraw()
+const TYPE_TAG_SIZE := 11
+const TYPE_MARK := 12.0
 
 
 func _init(p_text: String = "", p_hint: String = "") -> void:
@@ -65,10 +72,21 @@ func _draw() -> void:
 	if disabled:
 		text_color = Color(BattleStyle.TEXT_MUTED, 0.6)
 	var hint := shown_hint()
+	var sk := BattleStyle.silkscreen()
 	if not hint.is_empty():
-		var sk := BattleStyle.silkscreen()
-		draw_string(sk, Vector2(0, (size.y + sk.get_ascent(11)) / 2.0 - 1), hint, HORIZONTAL_ALIGNMENT_RIGHT,
+		var hint_y := (size.y + sk.get_ascent(11)) / 2.0 - 1
+		if not type_id.is_empty():
+			hint_y = roundf(size.y * 0.3 + sk.get_ascent(11) / 2.0)  # the type tag takes the lower half
+		draw_string(sk, Vector2(0, hint_y), hint, HORIZONTAL_ALIGNMENT_RIGHT,
 			size.x - 10, 11, BattleStyle.HINT_ON_HOST if sel else BattleStyle.TEXT_MUTED)
+	if not type_id.is_empty():
+		var tag := TypeMarks.tag(type_id)
+		var tag_w := sk.get_string_size(tag, HORIZONTAL_ALIGNMENT_LEFT, -1, TYPE_TAG_SIZE).x
+		var base_y := roundf(size.y * (0.72 if not hint.is_empty() else 0.5) + sk.get_ascent(TYPE_TAG_SIZE) / 2.0)
+		draw_string(sk, Vector2(size.x - 10 - tag_w, base_y), tag, HORIZONTAL_ALIGNMENT_LEFT, -1, TYPE_TAG_SIZE,
+			BattleStyle.ON_HOST if sel else BattleStyle.TEXT_PRIMARY)
+		TypeMarks.draw(self, Vector2(roundf(size.x - 10 - tag_w - 4 - TYPE_MARK / 2.0), base_y - sk.get_ascent(TYPE_TAG_SIZE) / 2.0),
+			TYPE_MARK, type_id)
 	var room := text_room()
 	var lines := fit_lines(f, label_text, room, size_cap if size_cap > 0 else font_size)
 	var s: int = lines[0]
@@ -88,6 +106,9 @@ func text_room() -> float:
 	if not key_hint.is_empty() or not hint_action.is_empty():
 		var longest := key_hint if hint_action.is_empty() else "[%s]" % InputPrompts.label(hint_action).to_upper()
 		hint_w = BattleStyle.silkscreen().get_string_size(longest, HORIZONTAL_ALIGNMENT_LEFT, -1, 11).x + 10
+	if not type_id.is_empty():  # "■ NET": the widest tag is reserved, so every move button fits the same way
+		hint_w = maxf(hint_w, BattleStyle.silkscreen().get_string_size("PER", HORIZONTAL_ALIGNMENT_LEFT, -1,
+			TYPE_TAG_SIZE).x + TYPE_MARK + 14)
 	return size.x - 20 - CARET_W - hint_w
 
 

@@ -230,6 +230,20 @@ func test_move_menu_and_back() -> void:
 	await wait_process_frames(1)
 
 
+func test_move_buttons_show_each_moves_type_as_a_shape_and_tag() -> void:
+	var menu := _menu()
+	var d := _daemon("pingo", 20)
+	_press_later(menu._move_back)
+	await menu.choose_move(d)
+	for i in 4:
+		var b: TermButton = menu._move_buttons[i]
+		if i < d.moves.size():
+			assert_eq(b.type_id, DataRegistry.get_move(d.moves[i]["id"])["type"], "slot %d" % i)
+		else:
+			assert_eq(b.type_id, "", "an empty slot has no type")
+	await wait_process_frames(1)
+
+
 ## Feedback #3 (2026-11-18): the move cursor starts on the move this Forgeling used last, for the whole battle.
 func test_move_cursor_remembers_the_last_move_per_forgeling() -> void:
 	var menu := _menu()

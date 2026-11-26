@@ -78,9 +78,11 @@ func choose_move(d: DaemonInstance, needs_pp: bool = false) -> int:
 		var button := _move_buttons[i]
 		if i < d.moves.size():
 			button.label_text = DataRegistry.get_move(d.moves[i]["id"])["name"]
+			button.type_id = String(DataRegistry.get_move(d.moves[i]["id"])["type"])
 			button.set_enabled(not needs_pp or int(d.moves[i]["pp"]) > 0)
 		else:
 			button.label_text = "-"
+			button.type_id = ""
 			button.set_enabled(false)
 	TermButton.share_size(_move_buttons)
 	_move_panel.visible = true
