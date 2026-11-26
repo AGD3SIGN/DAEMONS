@@ -1,0 +1,44 @@
+[
+  {
+    "id": "onb_battle",
+    "number": 1,
+    "title": "Forgeling Safety Training",
+    "from": "HR",
+    "priority": "high",
+    "category": "onboarding",
+    "text": "Mandatory safety training for all new hires. Please finish it before touching any equipment. (Too late? Finish it anyway.)",
+    "goal": {"stat": "wild_wins", "at_least": 1},
+    "goal_text": "Win a battle against a wild Forgeling.",
+    "how": "Wild Forgelings live in cable tangles, like the ones on Route 1. In battle, pick EXECUTE, then a move. Bring the foe's Uptime to zero to win.",
+    "resolved": "HR: Training complete. Your certificate has been emailed to you as a 40 MB attachment.",
+    "reward": {"credits": 100}
+  },
+  {
+    "id": "onb_catch",
+    "number": 2,
+    "title": "Asset Intake",
+    "from": "HR",
+    "priority": "high",
+    "category": "onboarding",
+    "text": "Every Forgeling on the network needs an owner on file. Please quarantine one wild Forgeling and register it to yourself.",
+    "goal": {"stat": "caught", "at_least": 1},
+    "goal_text": "Quarantine a wild Forgeling.",
+    "how": "Weaken it first. Then pick INVENTORY and use a Thumb Drive from QUARANTINE KEYS. The lower its Uptime, the better your odds.",
+    "resolved": "HR: Asset registered. Please don't name it after a coworker.",
+    "reward": {"items": {"thumb_drive": 3}}
+  },
+  {
+    "id": "onb_items",
+    "number": 3,
+    "title": "Break Room Orientation",
+    "from": "HR",
+    "priority": "medium",
+    "category": "onboarding",
+    "text": "Learn where the coffee is. This is the most important training you will receive.",
+    "goal": {"stat": "items_used", "at_least": 1},
+    "goal_text": "Use a Coffee on a tired Forgeling.",
+    "how": "Coffee restores Uptime. Outside battle, open BAG on your phone. In battle, pick INVENTORY.",
+    "resolved": "HR: Orientation complete. The coffee machine is now your problem too.",
+    "reward": {"items": {"coffee": 2}}
+  }
+]

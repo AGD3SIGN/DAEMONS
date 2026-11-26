@@ -7,6 +7,8 @@ extends Control
 ##   stack_screen()      summary, swap order, use an item on a Daemon
 ##   bag_screen()        4 pockets (left/right), use / toss
 ##   cmdb_screen()       every Daemon, seen/caught, entries
+##   tickets_screen()    help desk ticket queue: open tickets by priority, then closed ones; pick one to read it
+##   kudos_screen()      every Kudos: unlocked ones by name, locked ones as ??? until earned
 ##   rack_screen()       Server Rack: withdraw / deposit / move between 12 racks of 30
 ##   shop(stock)         Supply Closet: buy / sell
 ## Messages and yes/no questions go through the Overworld's text box (world.show_message / ask).
@@ -92,6 +94,10 @@ func open_pause(start_app: String = "") -> void:
 				await phone.maps()
 				if start_app == "MAP":
 					break  # the map button is a quick look: closing Maps puts the phone away
+			"TICKETS":
+				await tickets_screen()
+			"KUDOS":
+				await kudos_screen()
 			"CMDB":
 				await cmdb_screen()
 			"STACK":
@@ -662,6 +668,8 @@ func stack_screen() -> void:
 ## Uses an item on a Daemon, then asks about any move it wants but has no room for (Overclock Chip).
 func _use_on(item_id: String, d: DaemonInstance) -> void:
 	var result := ItemUse.use_on(item_id, d)
+	if result["ok"]:
+		Progress.count("items_used")
 	await _say_all(result["messages"])
 	for move_id: String in result.get("pending_moves", []):
 		await offer_move(d, move_id)
@@ -880,7 +888,10 @@ func _use_item(item_id: String) -> void:
 		if r["action"] == "pick":
 			await _use_on(item_id, GameState.active_stack[r["index"]])
 	else:
-		await _say_all(ItemUse.use_in_field(item_id)["messages"])
+		var result := ItemUse.use_in_field(item_id)
+		if result["ok"]:
+			Progress.count("items_used")
+		await _say_all(result["messages"])
 
 
 func _toss(item_id: String) -> void:
@@ -916,6 +927,79 @@ func _pick_bag_item(title: String, filter: Callable) -> String:
 
 
 # --- CMDB --------------------------------------------------------------------
+
+# --- tickets and Kudos ---------------------------------------------------------
+
+## One row per ticket: "P2 #0001 Forgeling Safety..." with a check mark once closed.
+func ticket_rows(ids: Array[String]) -> PackedStringArray:
+	var rows := PackedStringArray()
+	for id in ids:
+		var t: Dictionary = DataRegistry.tickets[id]
+		var state: String = GameState.tickets[id]
+		var mark := "" if state == "open" else ("OK" if state == "resolved" else "--")
+		rows.append("%s %s %-19s %s" % [Progress.priority_label(t["priority"]), Progress.ticket_number(id),
+			String(t["title"]).left(19), mark])
+	return rows
+
+
+func tickets_screen() -> void:
+	var ids := Progress.ticket_queue()
+	if ids.is_empty():
+		await _say("No tickets in your queue. Enjoy it while it lasts.")
+		return
+	var start := 0
+	while true:
+		var open := ids.filter(func(id: String) -> bool: return GameState.tickets[id] == "open").size()
+		list.describe = func(i: int) -> String:
+			return ("TO DO: " + String(DataRegistry.tickets[ids[i]]["goal_text"])) if GameState.tickets[ids[i]] == "open" else "Closed."
+		var r := await list.choose("TICKETS  %d OPEN" % open, ticket_rows(ids), [], start)
+		list.describe = Callable()
+		if r["action"] != "pick":
+			break
+		start = r["index"]
+		list.visible = false
+		await _say_all(ticket_lines(ids[start]))
+		_hide_talk()
+	list.close()
+
+
+## What reading a ticket says: who sent it, the body, the goal, a tip, and its state.
+static func ticket_lines(id: String) -> Array:
+	var t: Dictionary = DataRegistry.tickets[id]
+	var state: String = GameState.tickets.get(id, "open")
+	var lines := ["%s %s  %s  From: %s" % [Progress.ticket_number(id), String(t["title"]).to_upper(),
+		Progress.priority_label(t["priority"]), t["from"]], String(t["text"])]
+	match state:
+		"open":
+			lines.append("TO DO: " + String(t["goal_text"]))
+			if t.has("how"):
+				lines.append("TIP: " + String(t["how"]))
+		"resolved":
+			lines.append("STATUS: Resolved.")
+		_:
+			lines.append("STATUS: Closed (training skipped).")
+	return lines
+
+
+func kudos_screen() -> void:
+	var ids: Array = DataRegistry.kudos.keys()
+	if ids.is_empty():
+		await _say("No Kudos to earn yet.")
+		return
+	var rows := PackedStringArray()
+	for id: String in ids:
+		rows.append(("* " + String(DataRegistry.kudos[id]["name"])) if GameState.kudos.has(id) else "  ???")
+	list.describe = func(i: int) -> String:
+		return String(DataRegistry.kudos[ids[i]]["text"]) if GameState.kudos.has(ids[i]) else "Locked. Keep working."
+	var start := 0
+	while true:
+		var r := await list.choose("KUDOS  %d/%d" % [GameState.kudos.size(), ids.size()], rows, [], start)
+		if r["action"] != "pick":
+			break
+		start = r["index"]
+	list.describe = Callable()
+	list.close()
+
 
 func cmdb_screen() -> void:
 	var ids: Array = DataRegistry.species.keys()

@@ -20,6 +20,8 @@ const FILES := {
 	"level_caps": "level_caps.json",
 	"demo_roster": "demo_roster.json",
 	"whats_new": "whats_new.json",
+	"tickets": "tickets.json",
+	"kudos": "kudos.json",
 }
 const MAPS_DIR := "res://data/maps/"
 const DIALOGUE_DIR := "res://data/dialogue/"
@@ -44,6 +46,8 @@ var demo_roster: Dictionary = {}      # demo (Acts 1-2) areas + pending candidat
 var level_caps: Array = []          # caps[n] = highest level while holding n Certifications (data/level_caps.json)
 var demo_end: Dictionary = {}         # the end-of-demo card and credits (data/demo_end.json)
 var whats_new: Dictionary = {}        # update notes shown once on the title screen (data/whats_new.json)
+var tickets: Dictionary = {}          # help desk ticket id -> ticket (data/tickets.json, see Progress)
+var kudos: Dictionary = {}            # Kudos id -> {name, text, goal} (data/kudos.json)
 var region_map: Dictionary = {}       # the phone's Maps app: places, links, which maps belong where (data/region_map.json)
 
 var _validator: DataValidator
@@ -145,6 +149,8 @@ func load_from(raw: Dictionary, report: bool = true) -> bool:
 	level_caps = validator.level_caps
 	demo_roster = validator.demo_roster
 	whats_new = validator.whats_new
+	tickets = validator.tickets
+	kudos = validator.kudos
 	if report:
 		_report()
 	return errors.is_empty()

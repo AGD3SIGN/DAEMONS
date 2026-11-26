@@ -231,11 +231,15 @@ func test_after_the_first_fight_kevin_leaves_and_marge_sends_you_to_patch_town()
 	world.allow_scene_change = false
 	world.auto_advance_text = true
 	world.auto_choice = true
+	world.auto_picks = [0]  # Marge: "Do the onboarding training?" -> TRAIN ME
 	watch_signals(world)
 	add_child_autofree(world)
 	world.set_time_scale(0.0)
 	await wait_until(func() -> bool: return GameState.flags.get("kevin_left_help_desk", false) and world.is_idle(), 10.0)
 	assert_true(_logged("CC'ing my lawyer"), "Kevin had the last word")
+	for id in ["onb_battle", "onb_catch", "onb_items"]:
+		assert_eq(GameState.tickets.get(id), "open", "HR training ticket %s is in the queue" % id)
+	assert_eq(GameState.bag.get("coffee", 0), 1, "a Coffee for the break room ticket")
 	assert_true(_logged("Patch Town"), "and Marge gave the first assignment")
 	var kevin := world.find_npc("kevin_burst")
 	assert_eq(kevin.cell, kevin.home, "Kevin ran back out the door")

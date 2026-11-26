@@ -340,3 +340,19 @@ beam covers you after a turn you're walked back to `send_to`.
 is optional. 1-12 entries, text up to 80 characters. The title screen shows the newest update once to returning
 players (settings.cfg [news] last_seen_update); new players are just marked up to date. Screen details and the
 places the build differs from the design spec: docs/whats-new-spec.md.
+
+
+## tickets.json (help desk tickets, GDD §6)
+A list of tickets: `{"id", "number" (0-9999, unique, shown as #0001), "title", "from", "priority" (urgent/high/medium/low,
+shown P1-P4), "category" ("onboarding", "side", ...), "text", "how" (optional tip), "goal" (condition), "goal_text",
+"resolved" (optional line when it closes), "reward": {"credits": n, "items": {id: count}}, "opens_when" (optional
+condition; without it, dialogue `{"cmd": "open_ticket", "ticket": id}` opens the ticket)}`.
+`{"cmd": "skip_tickets", "category": "onboarding"}` closes a category's unresolved tickets as skipped and pays their rewards.
+An open ticket resolves (and pays) the next time the player is back in control after its goal is met.
+
+**Conditions** (tickets and Kudos; every key must hold): `{"flag": f}`, `{"any_flags": [f, ...]}`,
+`{"stat": s, "at_least": n}` (stats: battles_won, wild_wins, trainer_wins, caught, items_used, upgrades,
+tickets_resolved), `{"certs": n}`, `{"stack_size": n}`, `{"cmdb_caught": n}`.
+
+## kudos.json (achievements, GDD §6)
+A list of `{"id", "name", "text", "goal" (condition)}`. Unlocked Kudos show on the phone's KUDOS app.

@@ -19,7 +19,9 @@ var cmdb_seen: Dictionary = {}      # species_id -> true
 var cmdb_caught: Dictionary = {}    # species_id -> true
 var cmdb_found_at: Dictionary = {}  # species_id -> map name where it was first met in the wild
 var location: Dictionary = {}       # {"map": id, "x": cell x, "y": cell y, "facing": "down"}
-var counters: Dictionary = {}       # story/puzzle numbers (power load, pipeline stage), name -> int
+var counters: Dictionary = {}       # story/puzzle numbers (power load, pipeline stage), name -> int; play stats as "stat_<name>"
+var tickets: Dictionary = {}        # help desk ticket id -> "open" | "resolved" | "skipped" (see Progress)
+var kudos: Dictionary = {}          # Kudos id -> true once unlocked
 var visited: Dictionary = {}
 var quarantined: Array = []         # corrupted Forgelings you caught, waiting for a Help Desk clean (can't battle)
 var cmdb_compromised: Dictionary = {}  # species_id -> true once you've seen a corrupted one
@@ -62,6 +64,8 @@ func reset() -> void:
 	cmdb_recovered.clear()
 	cmdb_unknown.clear()
 	counters.clear()
+	tickets.clear()
+	kudos.clear()
 	repel_steps = 0
 	trainer_id = 0
 	last_help_desk = DEFAULT_HELP_DESK.duplicate()
@@ -102,6 +106,7 @@ func apply_story_upgrades() -> Array:
 			if not target.is_empty():
 				var old_name := d.display_name()
 				d.evolve(target)
+				Progress.count("upgrades")
 				cmdb_seen[target] = true
 				cmdb_caught[target] = true
 				done.append([old_name, d.display_name()])
@@ -257,6 +262,8 @@ func to_dict() -> Dictionary:
 		"cmdb_recovered": cmdb_recovered.keys(),
 		"cmdb_unknown": cmdb_unknown.keys(),
 		"counters": counters.duplicate(),
+		"tickets": tickets.duplicate(),
+		"kudos": kudos.keys(),
 		"last_help_desk": last_help_desk.duplicate(),
 		"repel_steps": repel_steps,
 	}
@@ -302,6 +309,10 @@ func from_dict(d: Dictionary) -> void:
 		cmdb_unknown[species_id] = true
 	for name: String in d.get("counters", {}):
 		counters[name] = int(d["counters"][name])
+	for id: String in d.get("tickets", {}):
+		tickets[id] = String(d["tickets"][id])
+	for id: String in d.get("kudos", []):
+		kudos[id] = true
 	for place: String in d.get("visited", []):
 		visited[place] = true
 	if not d.has("visited"):

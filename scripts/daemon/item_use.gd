@@ -82,6 +82,7 @@ static func _apply(effect: String, params: Dictionary, item_id: String, d: Daemo
 			var target := d.check_evolution("level")
 			if not target.is_empty() and not d.is_fainted():
 				d.evolve(target)
+				Progress.count("upgrades")
 				GameState.cmdb_seen[target] = true
 				GameState.cmdb_caught[target] = true
 				messages.append("%s upgraded into %s!" % [name, d.display_name()])
@@ -92,6 +93,7 @@ static func _apply(effect: String, params: Dictionary, item_id: String, d: Daemo
 			if into.is_empty():
 				return no_effect
 			d.evolve(into)
+			Progress.count("upgrades")
 			GameState.cmdb_seen[into] = true
 			GameState.cmdb_caught[into] = true
 			return {"ok": true, "messages": ["%s upgraded into %s!" % [name, d.display_name()]]}

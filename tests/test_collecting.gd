@@ -254,8 +254,7 @@ func test_pause_menu_opens_stack_summary_and_cmdb() -> void:
 	await _press("menu")
 	await wait_until(func() -> bool: return phone.mode == "home", 5.0)
 	assert_eq(phone.mode, "home", "the menu button opens your phone")
-	await _press("ui_right")   # MAPS -> CMDB
-	await _press("ui_right")   # CMDB -> STACK
+	await _press("ui_down")    # MAPS -> STACK (first app on row 2: MAPS TICKETS CMDB / STACK BAG BADGE)
 	await _press("ui_accept")
 	await wait_until(func() -> bool: return world.field_menus.list.is_choosing(), 5.0)
 	await _press("ui_accept")  # Pingo
@@ -266,7 +265,8 @@ func test_pause_menu_opens_stack_summary_and_cmdb() -> void:
 	await wait_until(func() -> bool: return world.field_menus.list.is_choosing(), 5.0)
 	await _press("ui_cancel")  # back to the phone
 	await wait_until(func() -> bool: return phone.mode == "home", 5.0)
-	await _press("ui_left")    # STACK -> CMDB
+	await _press("ui_up")      # STACK -> MAPS
+	await _press("ui_left")    # wraps to CMDB
 	await _press("ui_accept")
 	await wait_until(func() -> bool: return world.field_menus.list.is_choosing(), 5.0)
 	await _press("ui_cancel")

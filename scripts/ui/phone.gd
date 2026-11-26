@@ -18,13 +18,19 @@ const COLS := 3
 ## Glyphs (2026-11-18, Brandon: icons were hard to tell apart; was 8x8 doubled): '#' white, '+' the tile color
 ## darkened, 'o' a yellow highlight, '.' the tile. MAPS = location pin, CMDB = database, STACK = a
 ## Forgeling, BAG = backpack, ID CARD = badge, SAVE = floppy, CONTROLS = gamepad, SETTINGS = gear,
-## FEEDBACK = speech bubble, DEBUG = bug.
+## FEEDBACK = speech bubble, DEBUG = bug. TICKETS = clipboard, KUDOS = trophy (2026-11-26, GDD §6).
 const APPS := [
 	["MAP", "MAPS", "2fa86a", [
 		"................", ".....######.....", "....########....", "...###....###...",
 		"...##......##...", "...##......##...", "...###....###...", "....########....",
 		".....######.....", "......####......", ".......##.......", ".......##.......",
 		"....++++++++....", "...++......++...", "....++++++++....", "................",
+	]],
+	["TICKETS", "TICKETS", "2f9aa8", [
+		"................", "......####......", "...####oo####...", "...##########...",
+		"...#+++++++##...", "...##########...", "...#+++++####...", "...##########...",
+		"...#+++++++##...", "...##########...", "...#++++#####...", "...##########...",
+		"...##########...", "................", "................", "................",
 	]],
 	["CMDB", "CMDB", "3c8ee0", [
 		"................", "....########....", "..############..", "..#++++++++++#..",
@@ -49,6 +55,12 @@ const APPS := [
 		".#oooooooooooo#.", ".##############.", ".#+++#########..", ".#+++##++++++#..",
 		".#+++#########..", ".#+++##+++++##..", ".#+++#########..", ".##############.",
 		"................", "................", "................", "................",
+	]],
+	["KUDOS", "KUDOS", "5a6ad0", [
+		"................", "...##########...", ".####oooooo####.", ".#..#oooooo#..#.",
+		".#..#oooooo#..#.", "..###oooooo###..", "....##oooo##....", "......####......",
+		".......##.......", ".......##.......", ".....######.....", "....########....",
+		"....#++++++#....", "....########....", "................", "................",
 	]],
 	["SAVE", "SAVE", "4c5a78", [
 		"................", ".#############..", ".###+++++++####.", ".###++..+++####.",
@@ -412,10 +424,10 @@ func _draw_home() -> void:
 
 
 ## Under-icon names, at most 6 letters so neighbors don't touch; the full name shows at the bottom.
-const SHORT_LABELS := {"CARD": "BADGE", "CONTROLS": "INPUT", "OPTIONS": "CONFIG", "FEEDBACK": "REPORT"}
+const SHORT_LABELS := {"TICKETS": "TICKET", "CARD": "BADGE", "CONTROLS": "INPUT", "OPTIONS": "CONFIG", "FEEDBACK": "REPORT"}
 
 
-## Debug builds add a 4th row of apps; rows then pack tighter and the bottom name is dropped.
+## 11 apps (12 in debug builds) take a 4th row; rows then pack tighter and the bottom name is dropped.
 func _four_rows() -> bool:
 	return ceili(apps.size() / float(COLS)) > 3
 

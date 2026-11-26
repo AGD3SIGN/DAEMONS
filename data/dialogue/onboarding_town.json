@@ -491,6 +491,86 @@
           ]
         },
         {
+          "speaker": "Marge",
+          "text": "One more thing. HR needs you to finish onboarding training. Three tickets. They're on your phone already."
+        },
+        {
+          "choose": "Do the onboarding training?",
+          "speaker": "Marge",
+          "options": [
+            {
+              "label": "TRAIN ME",
+              "then": [
+                {
+                  "cmd": "open_ticket",
+                  "ticket": "onb_battle"
+                },
+                {
+                  "cmd": "open_ticket",
+                  "ticket": "onb_catch"
+                },
+                {
+                  "cmd": "open_ticket",
+                  "ticket": "onb_items"
+                },
+                {
+                  "speaker": "Marge",
+                  "text": "Here's a Coffee for the break room one. Don't ask why that's a ticket."
+                },
+                {
+                  "cmd": "give_item",
+                  "item": "coffee",
+                  "count": 1
+                },
+                {
+                  "speaker": "Marge",
+                  "text": "Open TICKETS on your phone any time to see what's left. The menu button opens your phone."
+                }
+              ]
+            },
+            {
+              "label": "I KNOW THIS",
+              "then": [
+                {
+                  "speaker": "{player}",
+                  "text": "Skip training. I've done this before."
+                },
+                {
+                  "speaker": "Marge",
+                  "text": "A veteran! HR will be thrilled. I'll mark it all as done and say you aced it."
+                },
+                {
+                  "cmd": "skip_tickets",
+                  "category": "onboarding"
+                }
+              ]
+            }
+          ],
+          "cancel": [
+            {
+              "speaker": "Marge",
+              "text": "I'll take that as a yes. They're on your phone."
+            },
+            {
+              "cmd": "open_ticket",
+              "ticket": "onb_battle"
+            },
+            {
+              "cmd": "open_ticket",
+              "ticket": "onb_catch"
+            },
+            {
+              "cmd": "open_ticket",
+              "ticket": "onb_items"
+            },
+            {
+              "cmd": "give_item",
+              "item": "coffee",
+              "count": 1
+            }
+          ]
+        },
+        {
           "cmd": "set_flag",
           "flag": "kevin_left_help_desk"
         }

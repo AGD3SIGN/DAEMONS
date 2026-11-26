@@ -30,6 +30,8 @@ extends RefCounted
 ##   {"cmd": "choose_starter", "options": ["chipmunk", "pingo", "glowbit"], "level": 5}
 ##        sets flags got_starter and starter_<species>
 ##   {"cmd": "move_player", "path": ["down"]}                     walk the player in a cutscene
+##   {"cmd": "open_ticket", "ticket": "onb_battle"}              put a help desk ticket in the queue (data/tickets.json)
+##   {"cmd": "skip_tickets", "category": "onboarding"}           close a category's tickets as skipped (rewards paid)
 ## Text can use {player} for the player's name and {var:load} for a counter's value.
 
 ## Until the intro asks for a name (Phase 7).
@@ -54,7 +56,7 @@ func run(steps: Array) -> void:
 
 func _run_step(step: Dictionary) -> void:
 	if step.has("text"):
-		await world.say(_fill(step["text"]), step.get("speaker", ""))
+		await world.say(_fill(step["text"]), _fill(step.get("speaker", "")))
 	elif step.has("choice"):
 		var yes := await world.ask(_fill(step["choice"]), step.get("speaker", ""))
 		await run(step.get("yes" if yes else "no", []))
@@ -172,6 +174,17 @@ func _command(step: Dictionary) -> void:
 				shown.appear()
 				if step.has("facing"):
 					shown.face(NpcEvent.FACINGS.get(step["facing"], shown.facing))
+		"open_ticket":
+			if Progress.open_ticket(step["ticket"]):
+				var t: Dictionary = DataRegistry.tickets[step["ticket"]]
+				AudioManager.play_sfx("select")
+				await world.show_message("New ticket %s from %s: %s" % [Progress.ticket_number(step["ticket"]), t["from"], t["title"]])
+		"skip_tickets":
+			var lines := Progress.skip_tickets(step["category"])
+			if not lines.is_empty():
+				AudioManager.play_sfx("confirm")
+				for line in lines:
+					await world.show_message(line)
 		"hide_npc":
 			var gone: NpcEvent = world.find_npc(step["npc"])
 			if gone != null:

@@ -229,6 +229,9 @@ func _run() -> void:
 				break  # safety net: never loop forever on an invalid action
 			continue
 		await _player.play(events)
+		for e: Dictionary in events:
+			if e["type"] == "item_used" and int(e.get("side", -1)) == BattleState.PLAYER:
+				Progress.count("items_used")
 	await _after_battle()
 	finished.emit(result)
 	var return_scene: String = config.get("return_scene", "")
@@ -356,6 +359,8 @@ func _after_battle() -> void:
 			await _play_upgrade(d, int(e["index"]), e["to"])
 	match state.outcome:
 		"player_won":
+			Progress.count("battles_won")
+			Progress.count("wild_wins" if state.is_wild else "trainer_wins")
 			AudioManager.play_music("victory")
 			if not state.is_wild:
 				await _player.foe_trainer_returns("defeated")
@@ -368,6 +373,7 @@ func _after_battle() -> void:
 			else:
 				await _black_out()
 	if state.outcome == "caught" and state.captured != null:
+		Progress.count("caught")
 		var caught := state.captured
 		caught.original_trainer_id = GameState.trainer_id
 		GameState.cmdb_caught[caught.species_id] = true
@@ -478,6 +484,7 @@ func _play_upgrade(d: DaemonInstance, index: int, target: String) -> void:
 	await flash.finished
 	var old_name := d.display_name()
 	d.evolve(target)
+	Progress.count("upgrades")
 	GameState.cmdb_seen[target] = true
 	GameState.cmdb_caught[target] = true
 	await text_box.show_text("%s upgraded into %s!" % [old_name, DataRegistry.get_species(target)["name"]])

@@ -136,7 +136,9 @@ func _check_arrival() -> void:
 			player.input_enabled = false
 			await event.run()
 			await flush_pending_send()
+			await check_progress()
 			return
+	await check_progress()  # e.g. back from a battle that finished a ticket
 
 
 func _spawn_events() -> void:
@@ -206,6 +208,7 @@ func _on_stepped(cell: Vector2i, _behavior: String) -> void:
 			player.input_enabled = false
 			await event.run()
 			await flush_pending_send()
+			await check_progress()
 			return
 	for event in events:
 		if event is NpcEvent and trainer_sees_player(event):
@@ -379,6 +382,29 @@ func interact() -> void:
 	_busy = false
 	player.input_enabled = true
 	await flush_pending_send()
+	await check_progress()
+
+
+## Help desk tickets and Kudos (Progress): pays and announces anything finished since the last check. Runs whenever
+## the player gets control back (after talking, a trigger, the phone, a map change or a battle).
+func check_progress() -> void:
+	if not is_inside_tree() or not is_instance_valid(map):
+		return
+	var notes := Progress.collect()
+	if notes.is_empty():
+		return
+	var was_busy := _busy
+	_busy = true
+	player.input_enabled = false
+	for note: Dictionary in notes:
+		AudioManager.play_sfx("select" if note["kind"] == "new_ticket" else "confirm")
+		for line: String in note["lines"]:
+			await say(line)
+	text_box.visible = false
+	_speaker_tab.visible = false
+	if not was_busy:
+		_busy = false
+		player.input_enabled = true
 
 
 ## Dialogue's "send_player" can't reload the map while the sign or NPC that started it is still running (the
@@ -512,6 +538,7 @@ func open_pause(app: String = "") -> void:
 	await field_menus.open_pause(app)
 	_busy = false
 	player.input_enabled = true
+	await check_progress()
 
 
 # --- UI ----------------------------------------------------------------------

@@ -43,6 +43,8 @@ const DIALOGUE_COMMANDS := {
 	"sfx": ["id"],
 	"clean_quarantined": [],
 	"demo_teaser": [],
+	"open_ticket": ["ticket"],
+	"skip_tickets": ["category"],
 }
 const EVENT_TYPES := {
 	"warp": ["to_map", "to_spawn"],
@@ -104,6 +106,8 @@ var demo_end: Dictionary = {}      # end-of-demo card and credits (data/demo_end
 var whats_new: Dictionary = {}     # update notes for the title screen (data/whats_new.json)
 var level_caps: Array = []         # level cap per Certification count (data/level_caps.json)
 var demo_roster: Dictionary = {}   # demo areas + pending candidates (data/demo_roster.json)
+var tickets: Dictionary = {}       # help desk tickets (data/tickets.json)
+var kudos: Dictionary = {}         # Kudos (data/kudos.json)
 
 
 ## raw = {"types": ..., "moves": ..., "species": ..., "items": ..., "config_profiles": ...}
@@ -130,6 +134,8 @@ func validate(raw: Dictionary) -> PackedStringArray:
 			numbers[n] = id
 	_validate_certifications(raw.get("certifications"))
 	_validate_trainers(raw.get("trainers", {}))
+	_validate_tickets(raw.get("tickets"))
+	_validate_kudos(raw.get("kudos"))
 	_validate_dialogue_files(raw.get("dialogue", {}))
 	_validate_encounters(raw.get("encounters", {}))
 	_validate_title_screen(raw.get("title_screen"))
@@ -502,6 +508,15 @@ func _validate_command(step: Dictionary, where: String) -> void:
 				_err(where, "unknown item '%s'" % str(step["item"]))
 			if step.has("count"):
 				_int(step, "count", where, 1, 99)
+		"open_ticket":
+			if not tickets.has(step["ticket"]):
+				_err(where, "unknown ticket '%s'" % str(step["ticket"]))
+		"skip_tickets":
+			var found := false
+			for t: Dictionary in tickets.values():
+				found = found or t.get("category") == step["category"]
+			if not found:
+				_err(where, "no ticket has category '%s'" % str(step["category"]))
 		"give_daemon":
 			if not species.has(step["species"]):
 				_err(where, "unknown species '%s'" % str(step["species"]))
@@ -1064,6 +1079,79 @@ func _validate_demo_roster(raw: Variant) -> void:
 				var id := String(slot.get("species", ""))
 				if species.has(id) and not species[id].get("demo", false) and not pending.has(id):
 					_err("encounters › %s" % area, "'%s' isn't in the demo roster (demo: false) and isn't a pending candidate" % id)
+
+
+# --- tickets and Kudos ---------------------------------------------------------
+
+## data/tickets.json: a list of tickets {id, number (0-9999, unique), title, from, priority (urgent/high/medium/low),
+## category, text (the ticket body), how (optional tip), goal (a Progress condition), goal_text, resolved
+## (optional line when it closes), reward {credits, items: {id: count}}, opens_when (optional condition: the ticket
+## opens by itself; otherwise dialogue "open_ticket" opens it)}.
+func _validate_tickets(raw: Variant) -> void:
+	tickets = _index(raw, "tickets")
+	var numbers := {}
+	for id: String in tickets:
+		var t: Dictionary = tickets[id]
+		var where := "tickets › " + id
+		for field in ["title", "from", "category", "text", "goal_text"]:
+			_string(t, field, where)
+		for field in ["how", "resolved"]:
+			if t.has(field):
+				_string(t, field, where)
+		_one_of(t, "priority", where, Progress.PRIORITIES)
+		if _int(t, "number", where, 0, 9999):
+			if numbers.has(int(t["number"])):
+				_err(where, "ticket number %d is already used by '%s'" % [int(t["number"]), numbers[int(t["number"])]])
+			numbers[int(t["number"])] = id
+		_validate_condition(t.get("goal"), where + " › goal")
+		if t.has("opens_when"):
+			_validate_condition(t["opens_when"], where + " › opens_when")
+		var reward: Variant = t.get("reward", {})
+		if typeof(reward) != TYPE_DICTIONARY:
+			_err(where, "'reward' must be an object")
+			continue
+		if reward.has("credits"):
+			_int(reward, "credits", where + " › reward", 0, 99999)
+		var reward_items: Variant = reward.get("items", {})
+		if typeof(reward_items) != TYPE_DICTIONARY:
+			_err(where, "'reward.items' must be an object of item id -> count")
+			continue
+		for item_id: String in reward_items:
+			if not items.has(item_id):
+				_err(where + " › reward", "unknown item '%s'" % item_id)
+			else:
+				_int(reward_items, item_id, where + " › reward", 1, 99)
+
+
+## data/kudos.json: a list of {id, name, text, goal (a Progress condition)}.
+func _validate_kudos(raw: Variant) -> void:
+	kudos = _index(raw, "kudos")
+	for id: String in kudos:
+		var where := "kudos › " + id
+		_string(kudos[id], "name", where)
+		_string(kudos[id], "text", where)
+		_validate_condition(kudos[id].get("goal"), where + " › goal")
+
+
+func _validate_condition(cond: Variant, where: String) -> void:
+	if typeof(cond) != TYPE_DICTIONARY or cond.is_empty():
+		_err(where, "must be a condition like {\"flag\": \"x\"} or {\"stat\": \"caught\", \"at_least\": 1}")
+		return
+	for key: String in cond:
+		if not key in Progress.CONDITION_KEYS:
+			_err(where, "unknown condition '%s' (use: %s)" % [key, ", ".join(Progress.CONDITION_KEYS)])
+	if cond.has("flag"):
+		_string(cond, "flag", where)
+	if cond.has("any_flags") and (typeof(cond["any_flags"]) != TYPE_ARRAY or cond["any_flags"].is_empty()):
+		_err(where, "'any_flags' must be a list of flags")
+	if cond.has("stat"):
+		_one_of(cond, "stat", where, Progress.STATS)
+		_int(cond, "at_least", where, 1, 99999)
+	elif cond.has("at_least"):
+		_err(where, "'at_least' goes with 'stat'")
+	for key in ["certs", "stack_size", "cmdb_caught"]:
+		if cond.has(key):
+			_int(cond, key, where, 1, 999)
 
 
 # --- level caps ----------------------------------------------------------------
