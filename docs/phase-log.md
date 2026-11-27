@@ -4,6 +4,22 @@ Newest entries at the top. Each entry: what's done, decisions, what's next.
 
 ---
 
+## 2026-11-26 — Eighteen more Forgelings (Nos. 062–079)
+
+Source art sorted into `08-Singles` (Badgerpot, Bowersort, Cellhog, Doublesting, Logster, Mantarray, Meerstat) and
+`24-Beavbit` … `28-Pupkey`. Brandon kept the stage names: Beavbit → Beavbyte (Lv 25), Lockling → Pangolock (Lv 30),
+Nutcache → Hoarddrive (Lv 26), Nymphscan → Quarantis (Lv 28), Pupkey → Keyberman (Lv 20) → Authound (Lv 36).
+Types lean on the thin ones: Security (was 2 species), Data and Software. All 18 imported, polished to 15 colors,
+back views already face the foe (no flips). 55 new moves (243 total), each line its own, no shared animations.
+
+Encounters: all post-demo. Basement (Logster, Cellhog, Nutcache), DevOps Heights (Meerstat, Beavbit, Pupkey,
+Nymphscan), Abandoned Data Center (Nutcache, Mantarray, Lockling), Power Plant (Beavbit, Doublesting, Beavbyte very
+rare), Cloud Summit (Bowersort, Meerstat, Mantarray, Hoarddrive very rare), SecOps Fortress (Badgerpot, Doublesting,
+Lockling; Pangolock, Keyberman, Quarantis very rare). Authound only comes from upgrading. Magpipe waits on a redraw.
+Suite 449/449.
+
+---
+
 ## 2026-11-26 — Ten new Forgelings (Nos. 052–061) and zone rarity
 
 Brandon moved the source art to `art_src/forgelings/` and added six folders of sheets (UUID file names). Organized
