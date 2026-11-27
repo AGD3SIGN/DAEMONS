@@ -4,40 +4,52 @@
     "cable_tangle": [
       {
         "species": "armadrive",
+        "rarity": "common",
         "min": 31,
-        "max": 33,
-        "weight": 20
-      },
-      {
-        "species": "servurtle",
-        "min": 31,
-        "max": 33,
-        "weight": 15,
-        "corrupted_chance": 0.3
+        "max": 33
       },
       {
         "species": "deskclaw",
+        "rarity": "common",
         "min": 31,
-        "max": 33,
-        "weight": 20
+        "max": 33
       },
       {
         "species": "proxferret",
+        "rarity": "uncommon",
+        "min": 31,
+        "max": 33
+      },
+      {
+        "species": "servurtle",
+        "rarity": "uncommon",
         "min": 31,
         "max": 33,
-        "weight": 15
+        "corrupted_chance": 0.3
       },
       {
         "species": "transistant",
+        "rarity": "uncommon",
         "min": 31,
-        "max": 33,
-        "weight": 15
+        "max": 33
       },
       {
         "species": "wormhole",
+        "rarity": "rare",
         "min": 31,
-        "max": 33,
-        "weight": 15
+        "max": 33
+      },
+      {
+        "species": "pufflet",
+        "rarity": "rare",
+        "min": 31,
+        "max": 33
+      },
+      {
+        "species": "bufferfish",
+        "rarity": "very_rare",
+        "min": 32,
+        "max": 33
       }
     ]
   }

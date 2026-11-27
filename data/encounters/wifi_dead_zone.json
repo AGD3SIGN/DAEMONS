@@ -3,76 +3,64 @@
   "zones": {
     "cable_tangle": [
       {
-        "species": "cablesnake",
-        "min": 11,
-        "max": 13,
-        "weight": 30
+        "species": "fanbat",
+        "rarity": "common",
+        "min": 12,
+        "max": 14
       },
       {
-        "species": "fanbat",
-        "min": 12,
-        "max": 14,
-        "weight": 20
+        "species": "cablesnake",
+        "rarity": "common",
+        "min": 11,
+        "max": 13
       },
       {
         "species": "ramster",
+        "rarity": "uncommon",
         "min": 11,
-        "max": 13,
-        "weight": 20
-      },
-      {
-        "species": "spigeon",
-        "min": 11,
-        "max": 13,
-        "weight": 20
-      },
-      {
-        "species": "floppit",
-        "min": 12,
-        "max": 13,
-        "weight": 10
-      },
-      {
-        "species": "clawptop",
-        "min": 11,
-        "max": 13,
-        "weight": 15
-      },
-      {
-        "species": "coolippo",
-        "min": 12,
-        "max": 14,
-        "weight": 10
-      },
-      {
-        "species": "tieweaver",
-        "min": 12,
-        "max": 14,
-        "weight": 10
-      },
-      {
-        "species": "pixelsier",
-        "min": 10,
-        "max": 11,
-        "weight": 5
-      },
-      {
-        "species": "spinode",
-        "min": 11,
-        "max": 13,
-        "weight": 12
+        "max": 13
       },
       {
         "species": "hummodem",
+        "rarity": "uncommon",
         "min": 11,
-        "max": 13,
-        "weight": 8
+        "max": 13
+      },
+      {
+        "species": "clawptop",
+        "rarity": "uncommon",
+        "min": 11,
+        "max": 13
+      },
+      {
+        "species": "floppit",
+        "rarity": "rare",
+        "min": 12,
+        "max": 13
+      },
+      {
+        "species": "tieweaver",
+        "rarity": "rare",
+        "min": 12,
+        "max": 14
+      },
+      {
+        "species": "coolippo",
+        "rarity": "rare",
+        "min": 12,
+        "max": 14
       },
       {
         "species": "cumulonimbyte",
+        "rarity": "rare",
         "min": 10,
-        "max": 14,
-        "weight": 6
+        "max": 14
+      },
+      {
+        "species": "pixelsier",
+        "rarity": "very_rare",
+        "min": 10,
+        "max": 11
       }
     ]
   }

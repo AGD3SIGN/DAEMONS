@@ -4,45 +4,45 @@
     "cable_tangle": [
       {
         "species": "calfiber",
+        "rarity": "common",
         "min": 12,
-        "max": 14,
-        "weight": 25
-      },
-      {
-        "species": "proxkit",
-        "min": 12,
-        "max": 14,
-        "weight": 25
+        "max": 14
       },
       {
         "species": "cablesnake",
+        "rarity": "common",
         "min": 12,
-        "max": 14,
-        "weight": 20
+        "max": 14
       },
       {
-        "species": "spinode",
+        "species": "proxkit",
+        "rarity": "uncommon",
         "min": 12,
-        "max": 13,
-        "weight": 15
-      },
-      {
-        "species": "tieweaver",
-        "min": 13,
-        "max": 14,
-        "weight": 15
+        "max": 14
       },
       {
         "species": "jellyband",
+        "rarity": "uncommon",
         "min": 12,
-        "max": 14,
-        "weight": 20
+        "max": 14
       },
       {
         "species": "phishgill",
+        "rarity": "uncommon",
         "min": 12,
-        "max": 14,
-        "weight": 15
+        "max": 14
+      },
+      {
+        "species": "spinode",
+        "rarity": "rare",
+        "min": 12,
+        "max": 13
+      },
+      {
+        "species": "tieweaver",
+        "rarity": "rare",
+        "min": 13,
+        "max": 14
       }
     ]
   }

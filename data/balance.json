@@ -7,6 +7,12 @@
     "offset": 10
   },
   "uptime_bonus": 20,
+  "encounter_rarity": {
+    "common": 40,
+    "uncommon": 15,
+    "rare": 4,
+    "very_rare": 1
+  },
   "damage": {
     "level_offset": 4,
     "divisor": 108

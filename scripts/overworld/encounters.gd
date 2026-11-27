@@ -1,6 +1,7 @@
 class_name Encounters
 extends RefCounted
-## Wild encounter rolls. Each step on a hot_zone (or water) tile rolls the map's rate
+## Wild encounter rolls. Each zone has a few common Forgelings and rarer extras (slot "rarity").
+## Each step on a hot_zone (or water) tile rolls the map's rate
 ## (data/encounters/<map>.json); a hit picks a slot by weight and a level in its range.
 ## A Firewall Rule (repel) blocks anything below the lead Daemon's level.
 
@@ -27,14 +28,22 @@ static func roll(map_id: String, tile_name: String, rng: RandomNumberGenerator, 
 	return {"species": slot["species"], "level": level, "corrupted": corrupted}
 
 
+## A slot's weight: its "rarity" tier (common / uncommon / rare / very_rare, weights in
+## data/balance.json › encounter_rarity) or a raw "weight".
+static func slot_weight(slot: Dictionary) -> int:
+	if slot.has("rarity"):
+		return int(DataRegistry.balance.get("encounter_rarity", {}).get(slot["rarity"], 1))
+	return int(slot.get("weight", 1))
+
+
 ## Weighted pick.
 static func pick_slot(slots: Array, rng: RandomNumberGenerator) -> Dictionary:
 	var total := 0
 	for slot: Dictionary in slots:
-		total += int(slot["weight"])
+		total += slot_weight(slot)
 	var roll_value := rng.randi_range(1, total)
 	for slot: Dictionary in slots:
-		roll_value -= int(slot["weight"])
+		roll_value -= slot_weight(slot)
 		if roll_value <= 0:
 			return slot
 	return slots[-1]

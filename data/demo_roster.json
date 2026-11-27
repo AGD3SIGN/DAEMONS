@@ -23,7 +23,7 @@
       "number": 31,
       "name": "Antsistor",
       "areas": [
-        "route_1"
+        "route_2"
       ],
       "also_on_trainers": []
     },
@@ -41,7 +41,6 @@
       "number": 36,
       "name": "Dillodisk",
       "areas": [
-        "route_1",
         "route_2"
       ],
       "also_on_trainers": []
@@ -50,9 +49,7 @@
       "species": "pasteslug",
       "number": 38,
       "name": "Pasteslug",
-      "areas": [
-        "route_1"
-      ],
+      "areas": [],
       "also_on_trainers": []
     },
     {
@@ -71,9 +68,8 @@
       "number": 40,
       "name": "Tieweaver",
       "areas": [
-        "port_city",
-        "route_2",
-        "wifi_dead_zone"
+        "wifi_dead_zone",
+        "port_city"
       ],
       "also_on_trainers": [
         "Lineworker Lou",
@@ -85,9 +81,8 @@
       "number": 41,
       "name": "Spinode",
       "areas": [
-        "port_city",
         "route_2",
-        "wifi_dead_zone"
+        "port_city"
       ],
       "also_on_trainers": [
         "Department Head Ping",
@@ -111,8 +106,8 @@
       "number": 46,
       "name": "Proxkit",
       "areas": [
-        "port_city",
-        "route_2"
+        "route_2",
+        "port_city"
       ],
       "also_on_trainers": [
         "Department Head Ping",

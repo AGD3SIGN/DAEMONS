@@ -3,52 +3,52 @@
   "zones": {
     "cable_tangle": [
       {
-        "species": "spinode",
-        "min": 9,
-        "max": 11,
-        "weight": 20
-      },
-      {
         "species": "cablesnake",
+        "rarity": "common",
         "min": 9,
-        "max": 12,
-        "weight": 20
+        "max": 12
       },
       {
         "species": "spigeon",
+        "rarity": "common",
         "min": 9,
-        "max": 11,
-        "weight": 15
+        "max": 11
       },
       {
-        "species": "tieweaver",
-        "min": 10,
-        "max": 12,
-        "weight": 15
-      },
-      {
-        "species": "dillodisk",
-        "min": 10,
-        "max": 12,
-        "weight": 15
+        "species": "spinode",
+        "rarity": "uncommon",
+        "min": 9,
+        "max": 11
       },
       {
         "species": "proxkit",
+        "rarity": "uncommon",
         "min": 10,
-        "max": 12,
-        "weight": 15
+        "max": 12
       },
       {
-        "species": "hummodem",
-        "min": 9,
-        "max": 11,
-        "weight": 15
+        "species": "dillodisk",
+        "rarity": "uncommon",
+        "min": 10,
+        "max": 12
       },
       {
         "species": "captchat",
+        "rarity": "rare",
         "min": 10,
-        "max": 12,
-        "weight": 10
+        "max": 12
+      },
+      {
+        "species": "hummodem",
+        "rarity": "rare",
+        "min": 9,
+        "max": 11
+      },
+      {
+        "species": "antsistor",
+        "rarity": "very_rare",
+        "min": 10,
+        "max": 11
       }
     ]
   }

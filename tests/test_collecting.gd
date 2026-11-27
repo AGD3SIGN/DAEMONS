@@ -62,9 +62,9 @@ func test_encounter_tables_and_rolls() -> void:
 	var total := 0.0
 	var dust_weight := 0.0
 	for slot: Dictionary in slots:
-		total += float(slot["weight"])
+		total += float(Encounters.slot_weight(slot))
 		if slot["species"] == "dustbunny":
-			dust_weight = float(slot["weight"])
+			dust_weight = float(Encounters.slot_weight(slot))
 	var expected := 2000.0 * dust_weight / total
 	assert_between(int(species_seen["dustbunny"]), int(expected * 0.8), int(expected * 1.2), "matches its weight")
 	assert_lt(int(species_seen["floppit"]), int(species_seen["spigeon"]), "rare slot is rarer")

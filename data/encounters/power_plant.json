@@ -4,40 +4,46 @@
     "cable_tangle": [
       {
         "species": "fanbat",
+        "rarity": "common",
         "min": 24,
         "max": 26,
-        "weight": 20,
         "corrupted_chance": 0.5
       },
       {
         "species": "transistant",
+        "rarity": "common",
         "min": 25,
-        "max": 27,
-        "weight": 20
+        "max": 27
       },
       {
         "species": "coolippo",
+        "rarity": "uncommon",
         "min": 24,
-        "max": 26,
-        "weight": 20
+        "max": 26
       },
       {
         "species": "pasteslug",
+        "rarity": "uncommon",
         "min": 25,
-        "max": 27,
-        "weight": 15
+        "max": 27
       },
       {
         "species": "deskclaw",
+        "rarity": "uncommon",
         "min": 25,
-        "max": 27,
-        "weight": 15
+        "max": 27
       },
       {
         "species": "coolapotamus",
+        "rarity": "rare",
         "min": 27,
-        "max": 28,
-        "weight": 10
+        "max": 28
+      },
+      {
+        "species": "pufflet",
+        "rarity": "rare",
+        "min": 24,
+        "max": 26
       }
     ]
   }

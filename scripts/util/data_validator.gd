@@ -9,6 +9,8 @@ const STATS: PackedStringArray = ["uptime", "throughput", "hardening", "compute"
 ## Stats that can be raised/lowered in battle (Uptime can't; accuracy/evasion can).
 const STAGE_STATS: PackedStringArray = ["throughput", "hardening", "compute", "encryption", "bandwidth", "accuracy", "evasion"]
 const STATUSES: PackedStringArray = ["throttled", "infected", "overheated", "standby", "hung", "looping"]
+## Wild encounter rarity tiers, most to least common (weights in balance.json › encounter_rarity).
+const RARITY_TIERS: PackedStringArray = ["common", "uncommon", "rare", "very_rare"]
 const CATEGORIES: PackedStringArray = ["physical", "special", "status"]
 const GROWTH_RATES: PackedStringArray = ["fast", "medium_fast", "medium_slow", "slow", "erratic", "fluctuating"]
 const POCKETS: PackedStringArray = ["items", "keys", "scripts", "key_items"]
@@ -100,6 +102,7 @@ var trainers: Dictionary = {}    # trainer id -> {name, team, ai, prize, sight, 
 var certifications: Dictionary = {}  # cert id -> {id, name, department, type, order}
 var title_screen: Dictionary = {}  # tagline, prompt, boot_log, featured legendaries (data/title_screen.json)
 var feedback: Dictionary = {}      # Feedback form config (data/feedback.json)
+var rarity_weights: Dictionary = {}  # balance.json › encounter_rarity, read before the encounter tables
 var balance: Dictionary = {}       # EXP rate and blackout penalty (data/balance.json)
 var region_map: Dictionary = {}    # phone Maps app layout (data/region_map.json)
 var demo_end: Dictionary = {}      # end-of-demo card and credits (data/demo_end.json)
@@ -137,6 +140,8 @@ func validate(raw: Dictionary) -> PackedStringArray:
 	_validate_tickets(raw.get("tickets"))
 	_validate_kudos(raw.get("kudos"))
 	_validate_dialogue_files(raw.get("dialogue", {}))
+	var bal: Variant = raw.get("balance")
+	rarity_weights = bal.get("encounter_rarity", {}) if typeof(bal) == TYPE_DICTIONARY else {}
 	_validate_encounters(raw.get("encounters", {}))
 	_validate_title_screen(raw.get("title_screen"))
 	_validate_feedback(raw.get("feedback"))
@@ -678,7 +683,12 @@ func _validate_encounters(raw: Variant) -> void:
 					_err(sw, "unknown species '%s'" % str(slot.get("species")))
 				if _int(slot, "min", sw, 1, 100) and _int(slot, "max", sw, 1, 100) and slot["min"] > slot["max"]:
 					_err(sw, "'min' can't be above 'max'")
-				_int(slot, "weight", sw, 1, 1000)
+				# Either a rarity tier (balance.json › encounter_rarity) or a raw weight.
+				if slot.has("rarity"):
+					if not rarity_weights.has(slot["rarity"]):
+						_err(sw, "'rarity' must be one of %s" % ", ".join(PackedStringArray(rarity_weights.keys())))
+				else:
+					_int(slot, "weight", sw, 1, 1000)
 				if slot.has("corrupted_chance"):
 					var cc: Variant = slot["corrupted_chance"]
 					if not (typeof(cc) == TYPE_FLOAT or typeof(cc) == TYPE_INT) or float(cc) < 0.0 or float(cc) > 1.0:
@@ -1303,6 +1313,12 @@ func _validate_balance(raw: Variant) -> void:
 		if not (typeof(v) == TYPE_INT or typeof(v) == TYPE_FLOAT) or float(v) < 1.0 or float(v) > 20.0:
 			_err("balance", "'%s' must be a number from 1 to 20" % field)
 	_int(raw, "uptime_bonus", "balance", 0, 100)
+	var rarity: Variant = raw.get("encounter_rarity")
+	if typeof(rarity) != TYPE_DICTIONARY:
+		_err("balance", "'encounter_rarity' must be an object of tier → weight")
+	else:
+		for tier: String in RARITY_TIERS:
+			_int(rarity, tier, "balance › encounter_rarity", 1, 1000)
 	var scaling: Variant = raw.get("exp_scaling")
 	if typeof(scaling) != TYPE_DICTIONARY:
 		_err("balance", "'exp_scaling' must be an object with power (0 = off) and offset")

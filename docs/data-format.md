@@ -143,10 +143,13 @@ Every file is an object of `dialogue id → list of steps`. Ids must be unique a
 ## encounters/<map id>.json
 ```json
 { "rate": 0.12,
-  "zones": { "cable_tangle": [ { "species": "dustbunny", "min": 2, "max": 4, "weight": 35 } ] } }
+  "zones": { "cable_tangle": [ { "species": "dustbunny", "rarity": "common", "min": 2, "max": 4 } ] } }
 ```
 `rate` is the chance per step on a hot_zone (or water) tile. Zones are keyed by tile name. Slots are
-picked by weight; level is random in min..max. A Firewall Rule blocks results below the lead's level.
+picked by `rarity`: common / uncommon / rare / very_rare, with weights in `balance.json › encounter_rarity`
+(40 / 15 / 4 / 1). A raw `"weight"` still works in place of `rarity` (tests use it). Rules (tests/test_encounter_rarity.gd):
+Acts 1-2 zones have one or two common Forgelings, no upgraded forms, and Route 1 has at most 6 slots; wild
+upgraded forms are very_rare and at or above their upgrade level. Level is random in min..max. A Firewall Rule blocks results below the lead's level.
 
 ### More dialogue commands
 | command | example |

@@ -4,57 +4,39 @@
     "cable_tangle": [
       {
         "species": "dustbunny",
+        "rarity": "common",
         "min": 2,
-        "max": 4,
-        "weight": 35
+        "max": 4
       },
       {
         "species": "wormby",
+        "rarity": "common",
         "min": 2,
-        "max": 4,
-        "weight": 25
-      },
-      {
-        "species": "cablesnake",
-        "min": 3,
-        "max": 5,
-        "weight": 20
+        "max": 4
       },
       {
         "species": "spigeon",
+        "rarity": "uncommon",
         "min": 2,
-        "max": 4,
-        "weight": 15
+        "max": 4
       },
       {
-        "species": "floppit",
-        "min": 4,
-        "max": 5,
-        "weight": 5
+        "species": "cablesnake",
+        "rarity": "uncommon",
+        "min": 3,
+        "max": 5
       },
       {
         "species": "ramster",
+        "rarity": "rare",
         "min": 3,
-        "max": 5,
-        "weight": 10
+        "max": 5
       },
       {
-        "species": "antsistor",
-        "min": 2,
-        "max": 4,
-        "weight": 15
-      },
-      {
-        "species": "dillodisk",
-        "min": 3,
-        "max": 5,
-        "weight": 10
-      },
-      {
-        "species": "pasteslug",
-        "min": 3,
-        "max": 5,
-        "weight": 5
+        "species": "floppit",
+        "rarity": "rare",
+        "min": 4,
+        "max": 5
       }
     ]
   }

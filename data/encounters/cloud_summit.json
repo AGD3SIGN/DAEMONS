@@ -4,52 +4,88 @@
     "cable_tangle": [
       {
         "species": "botgeon",
+        "rarity": "common",
         "min": 28,
-        "max": 30,
-        "weight": 20
+        "max": 30
       },
       {
         "species": "meshpider",
+        "rarity": "common",
         "min": 28,
-        "max": 30,
-        "weight": 20
+        "max": 30
       },
       {
         "species": "patchviper",
+        "rarity": "uncommon",
         "min": 28,
-        "max": 30,
-        "weight": 15
+        "max": 30
       },
       {
         "species": "deskclaw",
+        "rarity": "uncommon",
         "min": 28,
-        "max": 30,
-        "weight": 15
+        "max": 30
+      },
+      {
+        "species": "llambda",
+        "rarity": "uncommon",
+        "min": 28,
+        "max": 30
+      },
+      {
+        "species": "ternlet",
+        "rarity": "uncommon",
+        "min": 28,
+        "max": 30
       },
       {
         "species": "armadrive",
+        "rarity": "rare",
         "min": 29,
-        "max": 31,
-        "weight": 15
+        "max": 31
       },
       {
         "species": "fanbat",
+        "rarity": "rare",
         "min": 29,
         "max": 31,
-        "weight": 15,
         "corrupted_chance": 0.4
       },
       {
         "species": "murmuroute",
+        "rarity": "rare",
         "min": 28,
-        "max": 30,
-        "weight": 10
+        "max": 30
       },
       {
         "species": "storkache",
+        "rarity": "rare",
         "min": 29,
-        "max": 31,
-        "weight": 15
+        "max": 31
+      },
+      {
+        "species": "fogfrog",
+        "rarity": "rare",
+        "min": 29,
+        "max": 31
+      },
+      {
+        "species": "saasgull",
+        "rarity": "rare",
+        "min": 29,
+        "max": 31
+      },
+      {
+        "species": "serverllama",
+        "rarity": "very_rare",
+        "min": 30,
+        "max": 31
+      },
+      {
+        "species": "migratern",
+        "rarity": "very_rare",
+        "min": 30,
+        "max": 31
       }
     ]
   }

@@ -4,6 +4,21 @@ Newest entries at the top. Each entry: what's done, decisions, what's next.
 
 ---
 
+## 2026-11-26 — Ten new Forgelings (Nos. 052–061) and zone rarity
+
+Brandon moved the source art to `art_src/forgelings/` and added six folders of sheets (UUID file names). Organized
+into the usual `<NN-Line>/<id>_gpt_v<stage>.png`: Fogfrog and Saasgull in `08-Singles`, then `20-Llambda`,
+`21-Pufflet`, `22-Synclet`, `23-Ternlet`. Stage-2 names are proposals: Serverllama, Bufferfish, Monarchive, Migratern.
+All ten imported (6x2), polished to 15 colors, facing matches the roster (no flips). 28 new moves (188 total).
+
+Zone rarity: encounter slots now use `"rarity"`: common / uncommon / rare / very_rare (weights 40/15/4/1 in
+`balance.json › encounter_rarity`). Acts 1–2 zones have one or two commons and no upgraded forms; Route 1 dropped from
+9 species to 6 (Antsistor moved to Route 2 as very rare; Dillodisk and Pasteslug moved later). The new Forgelings all
+live after the demo (Basement onward), and wild upgraded forms are very rare. Rules in tests/test_encounter_rarity.gd.
+Suite 448/448.
+
+---
+
 ## 2026-11-15 — Creatures renamed: Hexforged → Forgelings
 
 Brandon (playing on his phone): "Wild Hexforged hide in tangled cables" didn't flow. The game stays HEXFORGED; the
