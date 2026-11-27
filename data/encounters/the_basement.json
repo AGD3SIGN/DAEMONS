@@ -33,6 +33,12 @@
         "max": 18
       },
       {
+        "species": "logster",
+        "rarity": "uncommon",
+        "min": 16,
+        "max": 18
+      },
+      {
         "species": "servurtle",
         "rarity": "rare",
         "min": 16,
@@ -46,6 +52,18 @@
       },
       {
         "species": "synclet",
+        "rarity": "rare",
+        "min": 15,
+        "max": 17
+      },
+      {
+        "species": "cellhog",
+        "rarity": "rare",
+        "min": 16,
+        "max": 18
+      },
+      {
+        "species": "nutcache",
         "rarity": "rare",
         "min": 15,
         "max": 17

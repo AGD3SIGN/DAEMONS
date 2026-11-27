@@ -39,6 +39,12 @@
         "max": 30
       },
       {
+        "species": "bowersort",
+        "rarity": "uncommon",
+        "min": 28,
+        "max": 30
+      },
+      {
         "species": "armadrive",
         "rarity": "rare",
         "min": 29,
@@ -76,6 +82,18 @@
         "max": 31
       },
       {
+        "species": "meerstat",
+        "rarity": "rare",
+        "min": 29,
+        "max": 31
+      },
+      {
+        "species": "mantarray",
+        "rarity": "rare",
+        "min": 29,
+        "max": 31
+      },
+      {
         "species": "serverllama",
         "rarity": "very_rare",
         "min": 30,
@@ -86,6 +104,12 @@
         "rarity": "very_rare",
         "min": 30,
         "max": 31
+      },
+      {
+        "species": "hoarddrive",
+        "rarity": "very_rare",
+        "min": 29,
+        "max": 30
       }
     ]
   }

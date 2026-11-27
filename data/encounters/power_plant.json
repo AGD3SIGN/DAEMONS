@@ -34,6 +34,12 @@
         "max": 27
       },
       {
+        "species": "beavbit",
+        "rarity": "uncommon",
+        "min": 24,
+        "max": 26
+      },
+      {
         "species": "coolapotamus",
         "rarity": "rare",
         "min": 27,
@@ -44,6 +50,18 @@
         "rarity": "rare",
         "min": 24,
         "max": 26
+      },
+      {
+        "species": "doublesting",
+        "rarity": "rare",
+        "min": 25,
+        "max": 27
+      },
+      {
+        "species": "beavbyte",
+        "rarity": "very_rare",
+        "min": 26,
+        "max": 27
       }
     ]
   }

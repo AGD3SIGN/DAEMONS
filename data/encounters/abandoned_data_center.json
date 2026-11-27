@@ -35,6 +35,12 @@
         "corrupted_chance": 0.5
       },
       {
+        "species": "nutcache",
+        "rarity": "uncommon",
+        "min": 20,
+        "max": 22
+      },
+      {
         "species": "coolippo",
         "rarity": "rare",
         "min": 21,
@@ -45,6 +51,18 @@
         "rarity": "rare",
         "min": 20,
         "max": 22
+      },
+      {
+        "species": "mantarray",
+        "rarity": "rare",
+        "min": 21,
+        "max": 23
+      },
+      {
+        "species": "lockling",
+        "rarity": "rare",
+        "min": 21,
+        "max": 23
       },
       {
         "species": "monarchive",

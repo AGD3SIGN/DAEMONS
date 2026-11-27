@@ -57,7 +57,8 @@ func test_wild_upgraded_forms_are_rare_and_above_their_upgrade_level() -> void:
 		for evo: Dictionary in DataRegistry.species[id].get("evolutions", []):
 			if evo.get("trigger") == "level":
 				level_of[evo["to"]] = int(evo["level"])
-	for id: String in ["serverllama", "bufferfish", "monarchive", "migratern"]:
+	for id: String in ["serverllama", "bufferfish", "monarchive", "migratern", "beavbyte", "pangolock", "hoarddrive",
+			"quarantis", "keyberman"]:
 		for area: String in DataRegistry.encounters:
 			for slot: Dictionary in _slots(area):
 				if slot["species"] == id:
@@ -90,3 +91,19 @@ func test_validator_catches_an_unknown_rarity() -> void:
 	raw["encounters"]["route_1"]["zones"]["cable_tangle"][0]["rarity"] = "legendary"
 	var errors := "\n".join(DataValidator.new().validate(raw))
 	assert_string_contains(errors, "'rarity' must be one of")
+
+
+## Nos. 062-079 (2026-11-26): every new Forgeling except Authound (a stage 3 that only comes from upgrading) is in the
+## wild, and only after the demo zones.
+func test_second_batch_lives_in_the_wild_after_the_demo() -> void:
+	var wild := {}
+	for area: String in DataRegistry.encounters:
+		for slot: Dictionary in _slots(area):
+			wild[slot["species"]] = area
+	for id: String in ["badgerpot", "bowersort", "cellhog", "doublesting", "logster", "mantarray", "meerstat", "beavbit",
+			"beavbyte", "lockling", "pangolock", "nutcache", "hoarddrive", "nymphscan", "quarantis", "pupkey", "keyberman"]:
+		assert_true(wild.has(id), id)
+		for area: String in EARLY:
+			for slot: Dictionary in _slots(area):
+				assert_ne(slot["species"], id, "%s in %s" % [id, area])
+	assert_false(wild.has("authound"), "Authound only comes from upgrading Keyberman")
