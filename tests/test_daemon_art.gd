@@ -99,7 +99,7 @@ func test_importer_handles_cut_out_sheets_and_halos() -> void:
 
 
 func test_import_all_finds_sheets_in_character_folders() -> void:
-	var found := ImportSheet.find_sources(ProjectSettings.globalize_path("res://art_src/daemons/"))
+	var found := ImportSheet.find_sources(ProjectSettings.globalize_path("res://art_src/forgelings/"))
 	var ids := found.map(func(pair: Array) -> String: return pair[1])
 	for species_id in ["chipmunk", "munkboard", "mainmunk", "pingo", "pengwan", "emperoute"]:
 		assert_has(ids, species_id)

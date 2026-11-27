@@ -56,7 +56,7 @@ godot --headless --path . res://scenes/debug/console_battle.tscn
 | `autoload/` | DataRegistry, GameState, SaveManager, AudioManager, SceneRouter, ScreenFitter, Settings, InputPrompts, TouchControls, AppLifecycle |
 | `assets/sprites/daemons/` | One battle sheet per Forgelings: `<id>_sheet.png`, 4x4 poses of 64x64 |
 | `assets/sprites/characters/` | Overworld walking sheets: `<id>.png`, 3 frames x 4 directions of 20x28 |
-| `art_src/daemons/`, `art_src/characters/` | Source art (ChatGPT sheets). Not shipped in builds |
+| `art_src/forgelings/`, `art_src/characters/` | Source art (ChatGPT sheets). Not shipped in builds |
 | `services/feedback-worker/` | Cloudflare Worker that files in-game feedback as private GitHub issues ([setup](services/feedback-worker/README.md)) |
 | `tools/` | Feedback report, art importer and polish script, art-prompt generator, iOS export and Simulator scripts |
 | `docs/` | [Design doc](docs/design.md), [phase log](docs/phase-log.md), [data formats](docs/data-format.md), [builds](docs/build.md), [art prompts](docs/art-prompts/README.md) |
@@ -64,7 +64,7 @@ godot --headless --path . res://scenes/debug/console_battle.tscn
 ## Art
 Forgelings sprites go from a ChatGPT prompt to the game in four steps (details in [docs/art-prompts/README.md](docs/art-prompts/README.md)):
 1. Generate a sheet with the prompt for that Forgeling's stage (`docs/art-prompts/`, built by `tools/art_prompts/build_prompts.py`).
-2. Save it as `art_src/daemons/<NN-Line>/<id>_gpt_v<stage>.png` (or `.webp`). 4x4 (16 poses) and 6x2 (12 poses) layouts both work.
+2. Save it as `art_src/forgelings/<NN-Line>/<id>_gpt_v<stage>.png` (or `.webp`). 4x4 (16 poses) and 6x2 (12 poses) layouts both work.
 3. Import every sheet: `godot --headless -s tools/art_import/import_sheet.gd -- --all` (background removed, poses cut to 64x64).
 4. Polish to ~15 colors with Aseprite through the Aseprite MCP: `tools/art_import/polish_sheet.py` (setup in the vault's Assets > Tools).
 

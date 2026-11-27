@@ -12,7 +12,7 @@ tests, saves or published URLs, so each group notes what would break.
 ## Files and folders
 - `scripts/daemon/` (daemon_instance.gd, item_use.gd, growth_rate.gd ...)
 - `scripts/battle/ui/daemon_sprites.gd`, `scripts/debug/daemon_lab.gd`, `scenes/debug/daemon_lab.tscn`
-- `assets/sprites/daemons/` (every battle sheet), `art_src/daemons/` (source art)
+- `assets/sprites/daemons/` (every battle sheet) (source art moved to `art_src/forgelings/` on 2026-11-26)
 - Tests: `test_daemon_art.gd`, `test_daemon_instance.gd`, `test_daemon_lab.gd`, plus test names like
   `test_every_daemon_has_art`
 

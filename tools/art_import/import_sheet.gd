@@ -5,7 +5,7 @@ extends SceneTree
 ##   godot --headless -s tools/art_import/import_sheet.gd -- <source image> <species_id>
 ##   godot --headless -s tools/art_import/import_sheet.gd -- --all
 ##
-## --all imports every art_src/daemons/**/<species_id>_gpt*.png|webp (e.g. 02-Pingo/pengwan_gpt_v2.png);
+## --all imports every art_src/forgelings/**/<species_id>_gpt*.png|webp (e.g. 02-Pingo/pengwan_gpt_v2.png);
 ## the species id is the part of the file name before "_gpt".
 ##
 ## Per cell: removes the background (already-transparent pixels; magenta anywhere; any other flat color
@@ -23,7 +23,7 @@ extends SceneTree
 ##     idle pose for "evolve", and the idle pose for overheated, throttled and icon.
 
 const OUT_DIR := "res://assets/sprites/daemons/"
-const SRC_DIR := "res://art_src/daemons/"
+const SRC_DIR := "res://art_src/forgelings/"
 const FRAME := 64
 const GRID := 4
 
