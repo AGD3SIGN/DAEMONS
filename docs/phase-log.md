@@ -6,8 +6,8 @@ Newest entries at the top. Each entry: what's done, decisions, what's next.
 
 ## 2026-11-27 — Eleven more Forgelings (Nos. 080–090)
 
-Source art sorted into `08-Singles` (Cryptleech, Tracktick) and `29-Cuckling` … `32-Wigglog`. Stage names are
-proposals: Cuckling → Cuckoload (Lv 27), Hashling → Crocksum (Lv 22) → Saltigator (Lv 40), Ratkit → Ratmin (Lv 25),
+Source art sorted into `08-Singles` (Cryptleech, Tracktick) and `29-Cuckling` … `32-Wigglog`. Brandon kept the
+stage names: Cuckling → Cuckoload (Lv 27), Hashling → Crocksum (Lv 22) → Saltigator (Lv 40), Ratkit → Ratmin (Lv 25),
 Wigglog → Flylogger (Lv 24). This batch is the malware side of IT: cryptojacking, tracking cookies, trojans, remote
 access tools and keyloggers, plus a hash/checksum/salt line on the defending side. Malware (was 5 species) and Software
 (was 7) get most of it. All 11 imported (6x2), polished to 15 colors, back views already face the foe (no flips).
