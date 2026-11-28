@@ -47,8 +47,8 @@ func test_real_data_has_no_errors() -> void:
 
 func test_expected_counts() -> void:
 	assert_eq(DataRegistry.types.size(), 12)
-	assert_eq(DataRegistry.moves.size(), 243, "242 learnable + Force Quit (2026-11-26: +12 for Nos. 023-025, +28 for Nos. 052-061, +55 for Nos. 062-079)")
-	assert_eq(DataRegistry.species.size(), 78, "22 + Pyrewall + 13 Hardware + 7 Network expansion + 4 Network/Cloud singles + Nos. 023-025 + Nos. 052-079")
+	assert_eq(DataRegistry.moves.size(), 273, "272 learnable + Force Quit (2026-11-26: +12 for Nos. 023-025, +28 for Nos. 052-061, +55 for Nos. 062-079; 2026-11-27: +30 for Nos. 080-090)")
+	assert_eq(DataRegistry.species.size(), 89, "22 + Pyrewall + 13 Hardware + 7 Network expansion + 4 Network/Cloud singles + Nos. 023-025 + Nos. 052-090")
 	assert_eq(DataRegistry.items.size(), 12)
 
 
