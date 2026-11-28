@@ -41,6 +41,12 @@
         "max": 22
       },
       {
+        "species": "ratkit",
+        "rarity": "uncommon",
+        "min": 20,
+        "max": 22
+      },
+      {
         "species": "coolippo",
         "rarity": "rare",
         "min": 21,
@@ -60,6 +66,18 @@
       },
       {
         "species": "lockling",
+        "rarity": "rare",
+        "min": 21,
+        "max": 23
+      },
+      {
+        "species": "wigglog",
+        "rarity": "rare",
+        "min": 21,
+        "max": 23
+      },
+      {
+        "species": "cryptleech",
         "rarity": "rare",
         "min": 21,
         "max": 23

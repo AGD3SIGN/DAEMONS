@@ -52,6 +52,12 @@
         "max": 32
       },
       {
+        "species": "hashling",
+        "rarity": "uncommon",
+        "min": 31,
+        "max": 33
+      },
+      {
         "species": "wormhole",
         "rarity": "rare",
         "min": 31,
@@ -59,6 +65,12 @@
       },
       {
         "species": "pufflet",
+        "rarity": "rare",
+        "min": 31,
+        "max": 33
+      },
+      {
+        "species": "cuckling",
         "rarity": "rare",
         "min": 31,
         "max": 33

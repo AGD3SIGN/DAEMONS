@@ -39,6 +39,12 @@
         "max": 18
       },
       {
+        "species": "wigglog",
+        "rarity": "uncommon",
+        "min": 15,
+        "max": 17
+      },
+      {
         "species": "servurtle",
         "rarity": "rare",
         "min": 16,
@@ -67,6 +73,12 @@
         "rarity": "rare",
         "min": 15,
         "max": 17
+      },
+      {
+        "species": "ratkit",
+        "rarity": "rare",
+        "min": 16,
+        "max": 18
       }
     ]
   }

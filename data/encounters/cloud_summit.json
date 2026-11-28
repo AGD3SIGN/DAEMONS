@@ -94,6 +94,12 @@
         "max": 31
       },
       {
+        "species": "tracktick",
+        "rarity": "rare",
+        "min": 29,
+        "max": 31
+      },
+      {
         "species": "serverllama",
         "rarity": "very_rare",
         "min": 30,
@@ -109,6 +115,18 @@
         "species": "hoarddrive",
         "rarity": "very_rare",
         "min": 29,
+        "max": 30
+      },
+      {
+        "species": "cuckoload",
+        "rarity": "very_rare",
+        "min": 29,
+        "max": 30
+      },
+      {
+        "species": "ratmin",
+        "rarity": "very_rare",
+        "min": 28,
         "max": 30
       }
     ]

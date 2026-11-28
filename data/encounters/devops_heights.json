@@ -51,6 +51,18 @@
         "max": 19
       },
       {
+        "species": "cuckling",
+        "rarity": "uncommon",
+        "min": 18,
+        "max": 20
+      },
+      {
+        "species": "tracktick",
+        "rarity": "uncommon",
+        "min": 17,
+        "max": 19
+      },
+      {
         "species": "pixelsier",
         "rarity": "rare",
         "min": 18,
@@ -79,6 +91,12 @@
         "rarity": "rare",
         "min": 18,
         "max": 20
+      },
+      {
+        "species": "hashling",
+        "rarity": "rare",
+        "min": 17,
+        "max": 19
       }
     ]
   }

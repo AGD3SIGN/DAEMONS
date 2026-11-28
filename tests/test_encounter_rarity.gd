@@ -58,7 +58,7 @@ func test_wild_upgraded_forms_are_rare_and_above_their_upgrade_level() -> void:
 			if evo.get("trigger") == "level":
 				level_of[evo["to"]] = int(evo["level"])
 	for id: String in ["serverllama", "bufferfish", "monarchive", "migratern", "beavbyte", "pangolock", "hoarddrive",
-			"quarantis", "keyberman"]:
+			"quarantis", "keyberman", "cuckoload", "crocksum", "ratmin", "flylogger"]:
 		for area: String in DataRegistry.encounters:
 			for slot: Dictionary in _slots(area):
 				if slot["species"] == id:
@@ -107,3 +107,19 @@ func test_second_batch_lives_in_the_wild_after_the_demo() -> void:
 			for slot: Dictionary in _slots(area):
 				assert_ne(slot["species"], id, "%s in %s" % [id, area])
 	assert_false(wild.has("authound"), "Authound only comes from upgrading Keyberman")
+
+
+## Nos. 080-090 (2026-11-27): every new Forgeling except Saltigator (a stage 3 that only comes from upgrading) is in the
+## wild, and only after the demo zones.
+func test_third_batch_lives_in_the_wild_after_the_demo() -> void:
+	var wild := {}
+	for area: String in DataRegistry.encounters:
+		for slot: Dictionary in _slots(area):
+			wild[slot["species"]] = area
+	for id: String in ["cryptleech", "tracktick", "cuckling", "cuckoload", "hashling", "crocksum", "ratkit", "ratmin",
+			"wigglog", "flylogger"]:
+		assert_true(wild.has(id), id)
+		for area: String in EARLY:
+			for slot: Dictionary in _slots(area):
+				assert_ne(slot["species"], id, "%s in %s" % [id, area])
+	assert_false(wild.has("saltigator"), "Saltigator only comes from upgrading Crocksum")
