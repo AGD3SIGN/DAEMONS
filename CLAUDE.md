@@ -71,13 +71,27 @@ Never put the GitHub token in the game or in git; it lives only as a Worker secr
 
 ## Folder layout
 res://
-  autoload/        DataRegistry, GameState, SaveManager, AudioManager, SceneRouter
-  data/            species, moves, types, items, config_profiles, tiles (.json), maps/, encounters/, dialogue/, trainers/
-  scenes/          overworld/, battle/, ui/, menus/
-  scripts/         battle/sim/, battle/ui/, overworld/, ui/, util/
-  assets/          sprites/daemons/, sprites/characters/, tiles/, ui/, fonts/, audio/
-  tests/
-  docs/            design.md, phase-log.md, data-format.md, build.md, art-prompts/
-  art_src/         source art (ChatGPT sheets) per evolution line; gdignored, excluded from exports
+  autoload/        DataRegistry, GameState, SaveManager, AudioManager, SceneRouter, ScreenFitter, Settings,
+                   InputPrompts, TouchControls, AppLifecycle
+  data/            species, moves, types, items, config_profiles, tiles, balance, level_caps, region_map, tickets,
+                   kudos, certifications, demo_roster, demo_end, title_screen, whats_new, feedback, build_info (.json);
+                   maps/, encounters/, dialogue/ (per-town files + hx_* story placeholders), trainers/
+  scenes/          overworld/, battle/, ui/, debug/, menus/ (empty for now)
+  scripts/         battle/ (battle_scene.gd, sim/, ui/), overworld/ (+ events/), ui/ (+ title/), daemon/, util/, debug/
+  assets/          sprites/daemons/ (<id>_sheet.png), sprites/characters/, tiles/, ui/, fonts/, audio/
+  tests/           test_*.gd (GUT, flat)
+  docs/            gdd.md, design.md, phase-log.md, data-format.md, build.md, story-outline.md, story-demo-draft.md,
+                   battle-scene-spec.md, whats-new-spec.md, slice-audit.md, gdd-gap-report.md, rename-leftovers.md,
+                   art-prompts/
+  art_src/         source art (ChatGPT sheets): forgelings/<NN-Line>/<id>_gpt_v<stage>[_rN].png|webp, characters/;
+                   gdignored and excluded from exports, but committed to git
   services/        feedback-worker/ (Cloudflare Worker: in-game feedback -> private AGD3SIGN/daemons-feedback issues)
-  tools/           feedback/ (feedback_report.sh, run by the SessionStart hook), art_import/ (import_sheet.gd, import_character.gd, polish_sheet.py), art_prompts/, export_ios.sh, run_ios_simulator.sh
+  tools/           feedback/ (feedback_report.sh, run by the SessionStart hook), art_import/ (import_sheet.gd,
+                   import_character.gd, pixel_map_sheet.gd, polish_sheet.py), art_prompts/ (build_prompts.py),
+                   export_ios.sh, run_ios_simulator.sh, serve_web.sh, smoke_test_mac_build.sh, setup_input_map.gd,
+                   build_placeholder_tiles.gd
+  web/             touch_deck.js (on-screen controls for the web build, copied into the export)
+  addons/          gut/ (GUT test framework, third-party)
+  build/           export output per platform (gitignored)
+  .github/         workflows/web.yml (tests, then web export to GitHub Pages on every push to main)
+  .claude/         launch.json, settings, skills/
